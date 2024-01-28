@@ -1,0 +1,12 @@
+Start
+  Check if data exists in react-query cache
+    Yes: Check if data needs to be revalidated
+      Yes: Check if there is network connection
+        Yes: Make network call -> Service worker caches response in browser cache + react-query caches response
+        No: Use stale data from react-query cache. React-query will attempt the network call on reconnection
+      No: Use valid react-query cache
+    No: Check if user has network connection 
+      Yes: Make network call -> Service worker caches response in browser cache + react-query caches response
+      No: Check if data exists in browser's cache 
+        Yes: Use browser cache. React-query will then retry the network call on reconnection
+        No:  Display "No network" placeholder. React-query will attempt the network call on reconnection

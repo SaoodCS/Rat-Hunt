@@ -1,0 +1,7 @@
+coverage/*
+dist/*
+dev-dist/*
+public/*
+src/global/firebase/sw
+src/global/config/script
+pwa-assets.config.ts

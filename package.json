@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "frontend:install": "cd frontend && npm install",
+    "backend:install": "cd backend && npm install",
+    "frontend:start": "cd frontend && npm start"
+  },
   "engines": {
     "node": "18.19.0"
   }

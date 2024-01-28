@@ -1,0 +1,75 @@
+{
+   "env": {
+      "browser": true,
+      "es2021": true
+   },
+   "overrides": [],
+   "parser": "@typescript-eslint/parser",
+   "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module",
+      "project": "frontend/tsconfig.json"
+   },
+   "settings": {
+      "react": {
+         "version": "detect"
+      },
+
+      "import/resolver": {
+         "typescript": true,
+         "node": true
+      }
+   },
+   "plugins": ["react", "@typescript-eslint", "unused-imports", "import", "prettier", "security"],
+   "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:import/typescript",
+      "plugin:prettier/recommended"
+   ],
+   "rules": {
+      "prettier/prettier": ["warn", { "endOfLine": "auto" }],
+      "@typescript-eslint/naming-convention": [
+         "warn",
+         {
+            "selector": "parameter",
+            "format": ["camelCase"]
+         },
+         {
+            "selector": "typeLike",
+            "format": ["PascalCase"]
+         }
+      ],
+      "@typescript-eslint/consistent-type-imports": "error",
+      "no-else-return": "error",
+      "no-useless-return": "error",
+      "no-param-reassign": "error",
+      "@typescript-eslint/no-unused-vars": "off",
+      "unused-imports/no-unused-imports": "warn",
+      "unused-imports/no-unused-vars": ["warn", { "vars": "all" }],
+      "no-console": "warn",
+      "prefer-const": "warn",
+      "@typescript-eslint/await-thenable": "error",
+      "@typescript-eslint/no-floating-promises": "error",
+      "no-await-in-loop": "error",
+      "prefer-template": "error",
+      "import/no-unresolved": "error",
+      "security/detect-non-literal-regexp": "error",
+      "security/detect-non-literal-fs-filename": "error",
+      "security/detect-no-csrf-before-method-override": "error",
+      "security/detect-eval-with-expression": "error",
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-no-useless-fragment": "off",
+      "@typescript-eslint/explicit-function-return-type": [
+         "error",
+         {
+            "allowExpressions": true,
+            "allowTypedFunctionExpressions": true
+            //"allowHigherOrderFunctions": true,
+            //"allowConciseArrowFunctionExpressionsStartingWithVoid": true
+         }
+      ],
+      "@typescript-eslint/no-namespace": "off"
+   }
+}
