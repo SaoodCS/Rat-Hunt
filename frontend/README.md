@@ -13,5 +13,5 @@
 
 ## Scripts
 - `npm run f-start` - Starts the front-end development server
-- `npm run f-deploy` - builds & deploys the front-end to firebase hosting (current domain is: https://rat-hunt.web.app/main/home)
-- `npm run f-install` - installs all dependencies for the front-end
+- `npm run f-deploy` - Builds & deploys the front-end to firebase hosting (current domain is: https://rat-hunt.web.app/main/home)
+- `npm run f-install` - Installs all dependencies for the front-end
