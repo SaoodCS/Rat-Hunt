@@ -32,3 +32,4 @@ public/firebase-messaging-sw.js
 ShortcutsList.md
 env
 .cert
+#.env
