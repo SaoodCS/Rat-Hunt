@@ -1,8 +1,9 @@
 {
   "scripts": {
-    "frontend:install": "cd frontend && npm install",
-    "backend:install": "cd backend && npm install",
-    "frontend:start": "cd frontend && npm start"
+    "f-install": "cd frontend && npm install",
+    "b-install": "cd backend && npm install",
+    "f-start": "cd frontend && npm start",
+    "f-deploy": "cd frontend && npm run deploy"
   },
   "engines": {
     "node": "18.19.0"
