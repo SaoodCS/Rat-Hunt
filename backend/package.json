@@ -1,0 +1,16 @@
+{
+    "name": "rat-hunt",
+    "version": "1.0.0",
+    "description": "A rat-hunt game web app",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node app.js"
+    },
+    "author": "Joe Graham",
+    "license": "MIT",
+    "dependencies": {
+        "socket.io": "^4.7.4",
+        "uuid": "^9.0.1"
+    }
+}
