@@ -5,8 +5,7 @@ var users = [];
 // users by room
 var rooms = {};
 // grid by room
-var active_grids = {};
-
+var active_topic = {};
 
 function getTopics(){
     // get topics from topic.js
@@ -60,7 +59,7 @@ function addRoom(roomId) {
 function deleteRoomIfEmpty(roomId){
     if (rooms[roomId].length === 0) {
         delete rooms[roomId];
-        delete active_grids[roomId];
+        delete active_topic[roomId];
     }
 }
 
