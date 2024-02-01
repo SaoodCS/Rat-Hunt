@@ -1,9 +1,17 @@
+
+const topics = require("./topics");
 // an array of all users
 var users = [];
 // users by room
 var rooms = {};
 // grid by room
 var active_grids = {};
+
+
+function getTopics(){
+    // get topics from topic.js
+    return topics.flatMap(topic => topic.key)
+}
 
 // remove a user from an array
 function removeUser(username, array) {
@@ -74,4 +82,5 @@ module.exports = {
     currentTopic,
     roomExists,
     getUsers,
+    getTopics,
 };

@@ -11,7 +11,7 @@ const io = socketIo(server);
 
 app.get('/api/topics', (req, res) => {
     // get topics from topics.js
-    res.json({topics: gameLogic.getTopics()});
+    res.json({topics: dbLogic.getTopics()});
 });
 
 // Socket real-time magic
