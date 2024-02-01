@@ -7,7 +7,12 @@ const dbLogic = require("./db_interaction")
 
 const app = express()
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socketIo(server, {
+    cors: {
+      origin: 'http://localhost:5173',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    }
+  });
 
 app.get('/api/topics', (req, res) => {
     // get topics from topics.js
@@ -54,6 +59,7 @@ io.on('connection', function (socket) {
             socket.emit('usernametaken');
             return;
         }
+        console.log("Creating Game")
         // Generate UUID using UUID package. Shorten to 4 characters
         const roomId = uuid.v4().slice(0,4);
         dbLogic.addUserToRoom(username, roomId);
