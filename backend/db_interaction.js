@@ -22,7 +22,7 @@ function removeUser(username, array) {
 }
 
 function getUsers(roomId) {
-    return users.at(rooms[roomId]);
+    return rooms[roomId];
 }
 
 // is a username available?
@@ -64,9 +64,13 @@ function deleteRoomIfEmpty(roomId){
 }
 
 function currentTopic(roomId, topic) {
-    if(topic !== null){
+    console.log(`roomId: ${roomId}, topic: ${topic}`);
+    console.log(active_topic[roomId])
+    if(topic !== undefined){
         active_topic[roomId] = topic;
+        console.log(`Set active topic as: ${active_topic[roomId]}`)
     }
+    console.log(`Getting active topic: ${active_topic[roomId]}`)
     return active_topic[roomId];
 }
 

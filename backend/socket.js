@@ -66,7 +66,7 @@ io.on('connection', function (socket) {
         dbLogic.currentTopic(roomId, topic);
         socket.join(roomId);
         // Emit event that room is created
-        io.emit('gamehosted', [roomId, topic, username]);
+        io.emit('gamehosted', roomId, topic, username);
     })
 
     socket.on('joingame', function(username, roomId) {
@@ -95,6 +95,7 @@ io.on('connection', function (socket) {
     // Assign roles event
     socket.on("startround", function (roomId) {
         // Get active topic
+        console.log(`looking for active topic for room: ${roomId}`);
         const activeTopic = dbLogic.currentTopic(roomId);
 
         // get words and assign targetWord
@@ -104,8 +105,8 @@ io.on('connection', function (socket) {
         // get users and assign a rat
         const users = dbLogic.getUsers(roomId);
         const ratName = users[gameLogic.getRandomChoice(users.length)];
-        console.log(`users: ${users}, words: ${words}, targetWord: ${targetWord}`);
-        io.in(roomId).emit("giveassigment", { words:words, targetWord:targetWord, ratName:ratName });
+        console.log(`active topic: ${activeTopic} users: ${users}, words: ${words}, targetWord: ${targetWord}`);
+        io.in(roomId).emit("giveassigment", { receivedWords:words, receivedTargetWord:targetWord, receivedRatName:ratName });
     });
 });
 
