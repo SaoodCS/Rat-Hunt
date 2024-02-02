@@ -7,11 +7,16 @@ const dbLogic = require("./db_interaction")
 
 const app = express()
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socketIo(server, {
+    cors: {
+      origin: 'http://localhost:5173',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    }
+  });
 
 app.get('/api/topics', (req, res) => {
     // get topics from topics.js
-    res.json({topics: gameLogic.getTopics()});
+    res.json({topics: dbLogic.getTopics()});
 });
 
 // Socket real-time magic
@@ -54,13 +59,14 @@ io.on('connection', function (socket) {
             socket.emit('usernametaken');
             return;
         }
+        console.log("Creating Game")
         // Generate UUID using UUID package. Shorten to 4 characters
         const roomId = uuid.v4().slice(0,4);
         dbLogic.addUserToRoom(username, roomId);
         dbLogic.currentTopic(roomId, topic);
         socket.join(roomId);
         // Emit event that room is created
-        io.emit('gamehosted', [roomId, topic, username]);
+        io.emit('gamehosted', roomId, topic, username);
     })
 
     socket.on('joingame', function(username, roomId) {
@@ -89,6 +95,7 @@ io.on('connection', function (socket) {
     // Assign roles event
     socket.on("startround", function (roomId) {
         // Get active topic
+        console.log(`looking for active topic for room: ${roomId}`);
         const activeTopic = dbLogic.currentTopic(roomId);
 
         // get words and assign targetWord
@@ -98,7 +105,8 @@ io.on('connection', function (socket) {
         // get users and assign a rat
         const users = dbLogic.getUsers(roomId);
         const ratName = users[gameLogic.getRandomChoice(users.length)];
-        io.in(roomId).emit("giveassigment", [words, targetWord, ratName]);
+        console.log(`active topic: ${activeTopic} users: ${users}, words: ${words}, targetWord: ${targetWord}`);
+        io.in(roomId).emit("giveassigment", { receivedWords:words, receivedTargetWord:targetWord, receivedRatName:ratName });
     });
 });
 
