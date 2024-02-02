@@ -6,7 +6,7 @@
     "b-start": "cd backend && node socket.js",
     "f-deploy": "cd frontend && npm run deploy",
     "app-start": "npm-run-all -p f-start b-start",
-    "app-install": "npm run f-install && npm run b-install"
+    "app-install": "npm run f-install && npm run b-install && npm install"
   },
   "engines": {
     "node": "18.19.0"
