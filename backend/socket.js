@@ -104,7 +104,8 @@ io.on('connection', function (socket) {
         // get users and assign a rat
         const users = dbLogic.getUsers(roomId);
         const ratName = users[gameLogic.getRandomChoice(users.length)];
-        io.in(roomId).emit("giveassigment", [words, targetWord, ratName]);
+        console.log(`users: ${users}, words: ${words}, targetWord: ${targetWord}`);
+        io.in(roomId).emit("giveassigment", { words:words, targetWord:targetWord, ratName:ratName });
     });
 });
 
