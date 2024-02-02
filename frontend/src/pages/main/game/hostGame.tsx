@@ -12,7 +12,6 @@ const HostGame: React.FC = () => {
   useEffect(() => {
     fetchTopicsFromServer();
     socket.on('gamehosted', (roomId, topic, user) => {
-      setUsername(user);
       console.log(`Game hosted by ${user} with roomId: ${roomId}, topic: ${topic}`);
       localStorage.setItem('username', user);
       localStorage.setItem('hosted', 'true');

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import socket from '../../../socket';
 
-const currentUser = localStorage.getItem('username');
-const isHost = localStorage.getItem('hosted') === 'true';
-const roomId = localStorage.getItem('roomId');
-const initialTopic = localStorage.getItem('initialTopic');
-const serverURL = 'http://localhost:3000'
-
 const MainGame: React.FC = () => {
+  const currentUser = localStorage.getItem('username');
+  const isHost = localStorage.getItem('hosted') === 'true';
+  const roomId = localStorage.getItem('roomId');
+  const initialTopic = localStorage.getItem('initialTopic');
+  const serverURL = 'http://localhost:3000'
+
   const [words, setWords] = useState<string[]>([]);
   const [targetWord, setTargetWord] = useState<string>('');
   const [newTopic, setNewTopic] = useState<string>('');
@@ -18,6 +18,7 @@ const MainGame: React.FC = () => {
     fetchTopicsFromServer();
     // Set up event listeners for socket events
     socket.on('giveassigment', ({receivedWords, receivedTargetWord, receivedRatName}) => {
+      console.log(`received words: ${receivedWords}, received target word: ${receivedTargetWord}, receivedRat: ${receivedRatName}`)
       setWords(receivedWords);
       setTargetWord(receivedTargetWord);
       // Check if the current user is the rat
@@ -51,6 +52,7 @@ const MainGame: React.FC = () => {
 
   const startRound = () => {
     // Emit startRound event to the server
+    console.log('Starting round with roomId: ' + roomId);
     socket.emit('startround', roomId);
   };
 
