@@ -17,7 +17,7 @@ const MainGame: React.FC = () => {
   useEffect(() => {
     fetchTopicsFromServer();
     // Set up event listeners for socket events
-    socket.on('giveassigment', ([receivedWords, receivedTargetWord, receivedRatName]) => {
+    socket.on('giveassigment', ({receivedWords, receivedTargetWord, receivedRatName}) => {
       setWords(receivedWords);
       setTargetWord(receivedTargetWord);
       // Check if the current user is the rat
