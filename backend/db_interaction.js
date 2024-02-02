@@ -1,9 +1,16 @@
+
+const topics = require("./topics");
 // an array of all users
 var users = [];
 // users by room
 var rooms = {};
 // grid by room
-var active_grids = {};
+var active_topic = {};
+
+function getTopics(){
+    // get topics from topic.js
+    return topics.flatMap(topic => topic.key)
+}
 
 // remove a user from an array
 function removeUser(username, array) {
@@ -15,7 +22,7 @@ function removeUser(username, array) {
 }
 
 function getUsers(roomId) {
-    return users.at(rooms[roomId]);
+    return rooms[roomId];
 }
 
 // is a username available?
@@ -52,14 +59,18 @@ function addRoom(roomId) {
 function deleteRoomIfEmpty(roomId){
     if (rooms[roomId].length === 0) {
         delete rooms[roomId];
-        delete active_grids[roomId];
+        delete active_topic[roomId];
     }
 }
 
 function currentTopic(roomId, topic) {
-    if(topic !== null){
+    console.log(`roomId: ${roomId}, topic: ${topic}`);
+    console.log(active_topic[roomId])
+    if(topic !== undefined){
         active_topic[roomId] = topic;
+        console.log(`Set active topic as: ${active_topic[roomId]}`)
     }
+    console.log(`Getting active topic: ${active_topic[roomId]}`)
     return active_topic[roomId];
 }
 
@@ -74,4 +85,5 @@ module.exports = {
     currentTopic,
     roomExists,
     getUsers,
+    getTopics,
 };

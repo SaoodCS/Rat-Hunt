@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import socket from '../../../socket';
 
-const JoinGame = () => {
+const JoinGame: React.FC = () => {
   const [username, setUsername] = useState<string>('');
   const [roomId, setRoomId] = useState<string>('');
+  const navigate = useNavigate();
 
   useEffect(() => {
-
     socket.on('acceptuser', ([acceptedUsername, acceptedRoomId]) => {
       console.log(`User ${acceptedUsername} accepted into room ${acceptedRoomId}`);
       // Show user joined room
-      socket.join(acceptedRoomId)
       localStorage.setItem('username', acceptedUsername);
       localStorage.setItem('hosted', 'false');
       localStorage.setItem('roomId', acceptedRoomId);
       // Display mainGame.js
-      history.push('/mainGame');
-      
+      navigate('/main/game');
     });
 
     socket.on('updateonline', (users) => {
@@ -27,7 +26,6 @@ const JoinGame = () => {
 
   const handleJoinGame = () => {
     // function to send request to server to join game
-
     socket.emit('joingame', username, roomId);
   };
 
