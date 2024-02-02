@@ -5,7 +5,8 @@
     "f-start": "cd frontend && npm start",
     "b-start": "cd backend && node socket.js",
     "f-deploy": "cd frontend && npm run deploy",
-    "app-start": "npm run f-start && npm run b-start"
+    "app-start": "npm-run-all -p f-start b-start",
+    "app-install":"npm run f-install && npm run b-install"
   },
   "engines": {
     "node": "18.19.0"
