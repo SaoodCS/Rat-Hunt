@@ -41,10 +41,10 @@ export default function SplashScreen(props: ISplashScreen): JSX.Element {
                   height="100dvh"
                   width="100dvw"
                >
-                  <LogoText size={'5em'} style={{ marginBottom: '0.5em' }}>
+                  <LogoText size={'4.5em'} style={{ marginBottom: '0.25em' }}>
                      RAT HUNT
                   </LogoText>
-                  <RatExterminationLogo size="20em" />
+                  <RatExterminationLogo size="16em" />
                </FlexColumnWrapper>
                <SplashScreenFooter>{'Rat Hunt'} v0.1.0</SplashScreenFooter>
             </OpaqueOverlay>
