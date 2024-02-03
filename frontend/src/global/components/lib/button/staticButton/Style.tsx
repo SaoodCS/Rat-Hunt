@@ -33,14 +33,14 @@ export const StaticButton = styled.button.attrs<IStaticButtonAttrs>(({ isDisable
               isDisabled ? 0.5 : 1,
            )
          : isWarningBtn
-         ? Color.setRgbOpacity(
-              isDarkTheme ? Color.darkThm.warning : Color.lightThm.warning,
-              isDisabled ? 0.5 : 1,
-           )
-         : Color.setRgbOpacity(
-              isDarkTheme ? Color.darkThm.accent : Color.lightThm.accent,
-              isDisabled ? 0.5 : 1,
-           )};
+           ? Color.setRgbOpacity(
+                isDarkTheme ? Color.darkThm.warning : Color.lightThm.warning,
+                isDisabled ? 0.5 : 1,
+             )
+           : Color.setRgbOpacity(
+                isDarkTheme ? Color.darkThm.accent : Color.lightThm.accent,
+                isDisabled ? 0.5 : 1,
+             )};
    transition: background-color 0.3s ease-out;
    backdrop-filter: blur(30px);
 

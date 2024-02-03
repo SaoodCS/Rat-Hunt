@@ -18,12 +18,12 @@ export const InlineTxtBtn = styled.span<{
               isDisabled ? 0.5 : 1,
            )
          : isWarningBtn
-         ? Color.setRgbOpacity(
-              isDarkTheme ? Color.darkThm.warning : Color.lightThm.warning,
-              isDisabled ? 0.5 : 1,
-           )
-         : Color.setRgbOpacity(
-              isDarkTheme ? Color.darkThm.accent : Color.lightThm.accent,
-              isDisabled ? 0.5 : 1,
-           )};
+           ? Color.setRgbOpacity(
+                isDarkTheme ? Color.darkThm.warning : Color.lightThm.warning,
+                isDisabled ? 0.5 : 1,
+             )
+           : Color.setRgbOpacity(
+                isDarkTheme ? Color.darkThm.accent : Color.lightThm.accent,
+                isDisabled ? 0.5 : 1,
+             )};
 `;

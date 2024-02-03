@@ -96,13 +96,13 @@ export const PMItemContainer = styled.div<{
          ? warningItem
             ? Color.darkThm.warning
             : dangerItem
-            ? Color.darkThm.error
-            : Color.darkThm.txt
+              ? Color.darkThm.error
+              : Color.darkThm.txt
          : warningItem
-         ? Color.lightThm.warning
-         : dangerItem
-         ? Color.lightThm.error
-         : Color.lightThm.txt};
+           ? Color.lightThm.warning
+           : dangerItem
+             ? Color.lightThm.error
+             : Color.lightThm.txt};
 
    & > *:nth-child(2) {
       height: 15px;

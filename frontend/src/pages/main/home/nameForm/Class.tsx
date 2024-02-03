@@ -1,4 +1,5 @@
-import FormHelper, { InputArray } from '../../../../global/helpers/react/form/FormHelper';
+import type { InputArray } from '../../../../global/helpers/react/form/FormHelper';
+import FormHelper from '../../../../global/helpers/react/form/FormHelper';
 
 export interface INameFormClass {
    name: string;

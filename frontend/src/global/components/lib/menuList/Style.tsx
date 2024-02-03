@@ -88,10 +88,10 @@ export const ItemContainer = styled.div<{
             ? Color.darkThm.error
             : Color.lightThm.error
          : warningItem
-         ? isDarkTheme
-            ? Color.darkThm.warning
-            : Color.lightThm.warning
-         : undefined};
+           ? isDarkTheme
+              ? Color.darkThm.warning
+              : Color.lightThm.warning
+           : undefined};
    &:hover:active {
       background-color: ${({ isDarkTheme }) =>
          Color.setRgbOpacity(isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt, 0.1)};

@@ -68,8 +68,8 @@ export const SidebarItem = styled.div<{ isActive: boolean; isDarkTheme: boolean 
       isActive && isDarkTheme
          ? Color.darkThm.bg
          : isActive && !isDarkTheme
-         ? Color.lightThm.bg
-         : 'transparent'};
+           ? Color.lightThm.bg
+           : 'transparent'};
    ::before {
       content: '';
       position: absolute;
@@ -82,8 +82,8 @@ export const SidebarItem = styled.div<{ isActive: boolean; isDarkTheme: boolean 
          isActive && isDarkTheme
             ? `-1px 20px 0 0 ${Color.darkThm.bg}`
             : isActive && !isDarkTheme
-            ? `-1px 20px 0 0 ${Color.lightThm.bg}`
-            : 'none'};
+              ? `-1px 20px 0 0 ${Color.lightThm.bg}`
+              : 'none'};
       transform: scaleX(-1);
    }
 
@@ -98,8 +98,8 @@ export const SidebarItem = styled.div<{ isActive: boolean; isDarkTheme: boolean 
          isActive && isDarkTheme
             ? `0 20px 0 0 ${Color.darkThm.bg}`
             : isActive && !isDarkTheme
-            ? `0 20px 0 0 ${Color.lightThm.bg}`
-            : 'none'};
+              ? `0 20px 0 0 ${Color.lightThm.bg}`
+              : 'none'};
       transform: scaleY(-1);
       bottom: 0;
       top: 55px;

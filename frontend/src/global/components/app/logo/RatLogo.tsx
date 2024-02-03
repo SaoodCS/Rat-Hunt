@@ -1,9 +1,9 @@
-interface I_RatLogo {
+interface IRatLogo {
    color?: string;
    size?: string;
 }
 
-export default function RatLogo(props: I_RatLogo) {
+export default function RatLogo(props: IRatLogo): JSX.Element {
    const { color, size } = props;
    const defaultColor = '#6C32D1';
    const defaultSize = '512px';
