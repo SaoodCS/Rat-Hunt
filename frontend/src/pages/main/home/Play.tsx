@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { StyledLink } from '../../../global/components/app/layout/footer/Style';
 import { LogoText } from '../../../global/components/app/logo/LogoText';
 import RatExterminationLogo from '../../../global/components/app/logo/RatExterminationLogo';
 import RatLogo from '../../../global/components/app/logo/RatLogo';
 import Fader from '../../../global/components/lib/animation/fader/Fader';
 import { StaticButton } from '../../../global/components/lib/button/staticButton/Style';
+import { TextColourizer } from '../../../global/components/lib/font/textColorizer/TextColourizer';
 import { StyledForm } from '../../../global/components/lib/form/form/Style';
 import InputCombination from '../../../global/components/lib/form/inputCombination/InputCombination';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
@@ -13,8 +15,6 @@ import useApiErrorContext from '../../../global/context/widget/apiError/hooks/us
 import HeaderHooks from '../../../global/context/widget/header/hooks/HeaderHooks';
 import useForm from '../../../global/hooks/useForm';
 import NameFormClass from './nameForm/Class';
-import { TextColourizer } from '../../../global/components/lib/font/textColorizer/TextColourizer';
-import { StyledLink } from '../../../global/components/app/layout/footer/Style';
 
 function LogoFader(): JSX.Element {
    // This component fades in the RatExterminationLogo and then fades out the RatExterminationLogo and fades in the RatLogo every 3 seconds:
@@ -38,7 +38,7 @@ function LogoFader(): JSX.Element {
    );
 }
 
-export default function Homepage(): JSX.Element {
+export default function Play(): JSX.Element {
    HeaderHooks.useOnMount.setHeaderTitle('Rat Hunt');
    const { isDarkTheme } = useThemeContext();
    const { apiError } = useApiErrorContext();
@@ -76,9 +76,7 @@ export default function Homepage(): JSX.Element {
                   />
                ))}
 
-            <StaticButton isDarkTheme={isDarkTheme}>
-               Submit
-            </StaticButton>
+            <StaticButton isDarkTheme={isDarkTheme}>Submit</StaticButton>
          </StyledForm>
       </FlexColumnWrapper>
    );
