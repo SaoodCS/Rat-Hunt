@@ -1,8 +1,8 @@
-import { Settings } from '@styled-icons/fluentui-system-filled/Settings';
-import { Dashboard } from '@styled-icons/material-rounded/Dashboard';
+import { Help } from '@styled-icons/ionicons-outline/Help';
+import { PestControlRodent } from '@styled-icons/material/PestControlRodent';
 
 export namespace NavItems {
-   export type IFooterNames = 'home' | 'settings';
+   export type IFooterNames = 'play' | 'guide';
    interface IFooter {
       name: IFooterNames;
       icon: JSX.Element;
@@ -10,12 +10,12 @@ export namespace NavItems {
 
    export const footer: IFooter[] = [
       {
-         name: 'home',
-         icon: <Dashboard />,
+         name: 'play',
+         icon: <PestControlRodent />,
       },
       {
-         name: 'settings',
-         icon: <Settings />,
+         name: 'guide',
+         icon: <Help />,
       },
    ];
 

@@ -18,12 +18,12 @@ export const FooterItem = styled.div<{ isActive: boolean; isDarkTheme: boolean }
    font-size: 0.8em;
    color: ${({ isDarkTheme, isActive }) =>
       isActive && isDarkTheme
-         ? Color.darkThm.txt
+         ? Color.darkThm.accent
          : !isActive && isDarkTheme
-         ? Color.setRgbOpacity(Color.darkThm.txt, 0.6)
-         : isActive && !isDarkTheme
-         ? Color.lightThm.txt
-         : Color.setRgbOpacity(Color.lightThm.txt, 0.6)};
+           ? Color.setRgbOpacity(Color.darkThm.txt, 0.6)
+           : isActive && !isDarkTheme
+             ? Color.lightThm.accent
+             : Color.setRgbOpacity(Color.lightThm.txt, 0.6)};
    & > :first-child {
       height: 2em;
       padding-bottom: 0.25em;
@@ -49,7 +49,7 @@ export const FooterContainer = styled.div<{ isDarkTheme: boolean }>`
    width: 100dvw;
    height: 10%;
    display: flex;
-   justify-content: space-between;
+   justify-content: space-evenly;
    bottom: 0px;
    border-top-left-radius: 10px;
    border-top-right-radius: 10px;
