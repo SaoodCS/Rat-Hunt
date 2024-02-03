@@ -1,13 +1,20 @@
 import LogoFader from '../../../global/components/app/logo/LogoFader';
 import { StaticButton } from '../../../global/components/lib/button/staticButton/Style';
+import FetchError from '../../../global/components/lib/fetch/fetchError/FetchError';
+import OfflineFetch from '../../../global/components/lib/fetch/offlineFetch/offlineFetch';
+import { IDropDownOption } from '../../../global/components/lib/form/dropDown/DropDownInput';
 import { StyledForm } from '../../../global/components/lib/form/form/Style';
 import InputCombination from '../../../global/components/lib/form/inputCombination/InputCombination';
+import Loader from '../../../global/components/lib/loader/fullScreen/Loader';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import useThemeContext from '../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import HeaderHooks from '../../../global/context/widget/header/hooks/HeaderHooks';
+import ArrayHelper from '../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
+import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../global/hooks/useForm';
 import PlayFormClass from './playForm/Class';
+import ServerClass from './serverClass/Class';
 
 export default function Play(): JSX.Element {
    HeaderHooks.useOnMount.setHeaderTitle('Rat Hunt');
@@ -18,20 +25,60 @@ export default function Play(): JSX.Element {
       PlayFormClass.form.initialErrors,
       PlayFormClass.form.validate,
    );
+   const { isLoading, error, isPaused, data } = ServerClass.getTopicsQuery();
 
    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
       const { isFormValid } = initHandleSubmit(e);
       console.log('isFormValid', isFormValid);
-      // eslint-disable-next-line no-useless-return
       if (!isFormValid) return;
+      if (form.joinOrHost === 'host') {
+         console.log('hosting');
+         handleHostGame();
+         return;
+      }
+      console.log('joining');
+      handleJoinGame();
    }
+
+   function handleHostGame(): void {
+      // TODO: Functionality for hosting a game goes here...
+   }
+
+   function handleJoinGame(): void {
+      // TODO: Functionality for joining a game goes here...
+   }
+
+   function dropDownOptions(
+      input: (typeof PlayFormClass.form.inputs)[0],
+   ): IDropDownOption[] | undefined {
+      if (!input.isDropDown) return;
+      if (input.name === 'topic') {
+         if (!MiscHelper.isNotFalsyOrEmpty(data)) return input.dropDownOptions;
+         const { topics } = data;
+         const dropDownOptions: IDropDownOption[] = [];
+         const topicLabels = ArrayHelper.capFirstLetterOfWords(topics);
+         for (let i = 0; i < topics.length; i++) {
+            dropDownOptions.push({ value: topics[i], label: topicLabels[i] });
+         }
+         return dropDownOptions;
+      }
+      return input.dropDownOptions;
+   }
+
+   if (isLoading && !isPaused) return <Loader isDisplayed />;
+   if (isPaused) return <OfflineFetch />;
+   if (error) return <FetchError />;
+
+   const showRoomIdField = form.joinOrHost === 'join';
+   const showTopicField = MiscHelper.isNotFalsyOrEmpty(data) && form.joinOrHost === 'host';
 
    return (
       <FlexColumnWrapper justifyContent="center" alignItems="center" height="100%">
          <LogoFader />
          <StyledForm onSubmit={handleSubmit} apiError={apiError} padding={1}>
             {PlayFormClass.form.inputs
-               .filter((input) => input.name !== 'joinSessionId' || form.joinOrHost === 'join')
+               .filter((input) => input.name !== 'roomId' || showRoomIdField)
+               .filter((input) => input.name !== 'topic' || showTopicField)
                .map((input) => (
                   <InputCombination
                      key={input.id}
@@ -44,7 +91,7 @@ export default function Play(): JSX.Element {
                      error={errors[input.name]}
                      type={input.type}
                      value={form[input.name]}
-                     dropDownOptions={input.dropDownOptions}
+                     dropDownOptions={dropDownOptions(input)}
                   />
                ))}
 
