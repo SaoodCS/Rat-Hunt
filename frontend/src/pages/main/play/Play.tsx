@@ -67,7 +67,7 @@ export default function Play(): JSX.Element {
 
    if (isLoading && !isPaused) return <Loader isDisplayed />;
    if (isPaused) return <OfflineFetch />;
-   if (error) return <FetchError />;
+   // if (error) return <FetchError />;
 
    const showRoomIdField = form.joinOrHost === 'join';
    const showTopicField = MiscHelper.isNotFalsyOrEmpty(data) && form.joinOrHost === 'host';
