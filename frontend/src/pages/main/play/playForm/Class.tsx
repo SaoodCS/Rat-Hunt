@@ -4,7 +4,8 @@ import FormHelper from '../../../../global/helpers/react/form/FormHelper';
 export interface IPlayFormClass {
    name: string;
    joinOrHost: 'join' | 'host';
-   joinSessionId: string;
+   roomId: string;
+   topic: string;
 }
 
 export default class PlayFormClass {
@@ -39,13 +40,26 @@ export default class PlayFormClass {
          },
       },
       {
-         name: 'joinSessionId',
-         id: 'join-session-id',
-         placeholder: 'Session Id',
+         name: 'roomId',
+         id: 'join-room-id',
+         placeholder: 'Room Id',
          type: 'string',
          isRequired: true,
          validator: (value: string): string | true => {
-            if (!value) return 'Please enter the session id';
+            if (!value) return 'Please enter the room id';
+            return true;
+         },
+      },
+      {
+         name: 'topic',
+         id: 'select-topic',
+         placeholder: 'Select Topic',
+         type: 'select',
+         isRequired: true,
+         isDropDown: true,
+         dropDownOptions: [],
+         validator: (value: string): string | true => {
+            if (!value) return 'Please select a topic';
             return true;
          },
       },
@@ -59,7 +73,7 @@ export default class PlayFormClass {
 
    private static validate(formValues: IPlayFormClass): Record<keyof IPlayFormClass, string> {
       const formValidation = FormHelper.validation(formValues, PlayFormClass.inputs);
-      if (formValues.joinOrHost === 'host') formValidation.joinSessionId = '';
+      if (formValues.joinOrHost === 'host') formValidation.roomId = '';
       return formValidation;
    }
 

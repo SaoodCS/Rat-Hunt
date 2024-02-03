@@ -1,4 +1,5 @@
 import { FirebaseError } from 'firebase/app';
+import ObjectOfObjects from '../../../helpers/dataTypes/objectOfObjects/objectsOfObjects';
 
 export namespace APIHelper {
    export interface IErrorRes {
@@ -66,6 +67,26 @@ export namespace APIHelper {
       }
 
       return 'Unknown Error';
+   }
+
+   export async function fetcher<T>(
+      body: BodyInit | null | undefined,
+      method: string,
+      endpointURL: string,
+   ): Promise<T> {
+      const headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      const fetchParams = body ? { method, body, headers } : { method, headers };
+      try {
+         const response = await fetch(endpointURL, fetchParams);
+         const data = await response.json();
+         if (!response.ok) {
+            throw new ErrorThrower(data.error);
+         }
+         return data as T;
+      } catch (error) {
+         throw new ErrorThrower(APIHelper.handleError(error));
+      }
    }
 }
 
