@@ -1,9 +1,9 @@
-interface I_RatExterminationLogo {
+interface IRatExterminationLogo {
    color?: string;
    size?: string;
 }
 
-export default function RatExterminationLogo(props: I_RatExterminationLogo) {
+export default function RatExterminationLogo(props: IRatExterminationLogo): JSX.Element {
    const { color, size } = props;
    const defaultColor = '#6C32D1';
    const defaultSize = '512px';
