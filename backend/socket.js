@@ -6,13 +6,14 @@ const gameLogic = require("./game");
 const dbLogic = require("./db_interaction");
 
 const app = express();
+const allowedOrigins = ["http://localhost:5173", "https://rat-hunt.web.app"];
 
-// set cors policy for express (middleware)
+// set cors policy for express
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", [
-    "http://localhost:5173",
-    "https://rat-hunt.web.app/",
-  ]);
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.header("Access-Control-Allow-Headers", "Content-Type");
   next();
@@ -21,8 +22,8 @@ app.use((req, res, next) => {
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: ["http://localhost:5173", "https://rat-hunt.web.app/"],
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
   },
 });
 
