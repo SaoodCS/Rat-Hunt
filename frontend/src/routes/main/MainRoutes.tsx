@@ -3,8 +3,8 @@ import MainLayout from '../../pages/main/MainLayout';
 import HostGame from '../../pages/main/game/hostGame';
 import JoinGame from '../../pages/main/game/joinGame';
 import MainGame from '../../pages/main/game/mainGame';
-import Play from '../../pages/main/home/Play';
-import Guide from '../../pages/main/settings/Guide';
+import Guide from '../../pages/main/guide/Guide';
+import Play from '../../pages/main/play/Play';
 
 export default function MainRoutes(): JSX.Element {
    return (
