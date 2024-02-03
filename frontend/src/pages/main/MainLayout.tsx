@@ -7,6 +7,7 @@ import {
    StyledBackArr,
 } from '../../global/components/app/layout/header/Header';
 import Sidebar from '../../global/components/app/layout/sidebar/Sidebar';
+import { LogoText } from '../../global/components/app/logo/LogoText';
 import ConditionalRender from '../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import useThemeContext from '../../global/context/theme/hooks/useThemeContext';
 import useHeaderContext from '../../global/context/widget/header/hooks/useHeaderContext';
@@ -25,7 +26,7 @@ export default function MainLayout(): JSX.Element {
                   darktheme={BoolHelper.boolToStr(isDarkTheme)}
                />
             </ConditionalRender>
-            {headerTitle}
+            <LogoText size={'2em'}>{headerTitle}</LogoText>
             <HeaderRightElWrapper isDarkTheme={isDarkTheme}>
                {headerRightElement}
             </HeaderRightElWrapper>
