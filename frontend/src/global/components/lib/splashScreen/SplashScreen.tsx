@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import logo from '../../../../../resources/icons/logo-192x192.png';
 import useThemeContext from '../../../context/theme/hooks/useThemeContext';
+import { LogoText } from '../../app/logo/LogoText';
+import RatExterminationLogo from '../../app/logo/RatExterminationLogo';
 import Fader from '../animation/fader/Fader';
 import { OpaqueOverlay } from '../overlay/opaqueOverlay/Style';
-import { CenterWrapper } from '../positionModifiers/centerers/CenterWrapper';
+import { FlexColumnWrapper } from '../positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import ConditionalRender from '../renderModifiers/conditionalRender/ConditionalRender';
 import { SplashScreenFooter } from './Style';
 
@@ -34,9 +35,17 @@ export default function SplashScreen(props: ISplashScreen): JSX.Element {
       <ConditionalRender condition={renderSplashScreen}>
          <Fader fadeInCondition={isDisplayed}>
             <OpaqueOverlay isDarkTheme={isDarkTheme}>
-               <CenterWrapper centerOfScreen>
-                  <img src={logo} alt="Logo" width="200px" height="200px" />
-               </CenterWrapper>
+               <FlexColumnWrapper
+                  justifyContent="center"
+                  alignItems="center"
+                  height="100dvh"
+                  width="100dvw"
+               >
+                  <LogoText size={'5em'} style={{ marginBottom: '0.5em' }}>
+                     RAT HUNT
+                  </LogoText>
+                  <RatExterminationLogo size="20em" />
+               </FlexColumnWrapper>
                <SplashScreenFooter>{'Rat Hunt'} v0.1.0</SplashScreenFooter>
             </OpaqueOverlay>
          </Fader>
