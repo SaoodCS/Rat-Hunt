@@ -128,6 +128,7 @@ io.on("connection", function (socket) {
 });
 
 // Listen
+// TODO: when running the server locally, you can only access it's endpoints from the same machine, not from other devices on the same network...
 const port = process.env.PORT || 3000;
 server.listen(port, function () {
   console.log("Listening on port " + port);
