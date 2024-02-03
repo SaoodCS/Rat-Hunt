@@ -1,14 +1,14 @@
 import type { InputArray } from '../../../../global/helpers/react/form/FormHelper';
 import FormHelper from '../../../../global/helpers/react/form/FormHelper';
 
-export interface INameFormClass {
+export interface IPlayFormClass {
    name: string;
    joinOrHost: 'join' | 'host';
    joinSessionId: string;
 }
 
-export default class NameFormClass {
-   private static inputs: InputArray<INameFormClass> = [
+export default class PlayFormClass {
+   private static inputs: InputArray<IPlayFormClass> = [
       {
          name: 'name',
          id: 'user-name',
@@ -51,22 +51,22 @@ export default class NameFormClass {
       },
    ];
 
-   private static initialState: INameFormClass = FormHelper.createInitialState<INameFormClass>(
-      NameFormClass.inputs,
+   private static initialState: IPlayFormClass = FormHelper.createInitialState<IPlayFormClass>(
+      PlayFormClass.inputs,
    );
 
-   private static initialErrors = FormHelper.createInitialErrors(NameFormClass.inputs);
+   private static initialErrors = FormHelper.createInitialErrors(PlayFormClass.inputs);
 
-   private static validate(formValues: INameFormClass): Record<keyof INameFormClass, string> {
-      const formValidation = FormHelper.validation(formValues, NameFormClass.inputs);
+   private static validate(formValues: IPlayFormClass): Record<keyof IPlayFormClass, string> {
+      const formValidation = FormHelper.validation(formValues, PlayFormClass.inputs);
       if (formValues.joinOrHost === 'host') formValidation.joinSessionId = '';
       return formValidation;
    }
 
    static form = {
-      inputs: NameFormClass.inputs,
-      initialState: NameFormClass.initialState,
-      initialErrors: NameFormClass.initialErrors,
-      validate: NameFormClass.validate,
+      inputs: PlayFormClass.inputs,
+      initialState: PlayFormClass.initialState,
+      initialErrors: PlayFormClass.initialErrors,
+      validate: PlayFormClass.validate,
    };
 }

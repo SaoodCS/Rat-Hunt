@@ -7,16 +7,16 @@ import useThemeContext from '../../../global/context/theme/hooks/useThemeContext
 import useApiErrorContext from '../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import HeaderHooks from '../../../global/context/widget/header/hooks/HeaderHooks';
 import useForm from '../../../global/hooks/useForm';
-import NameFormClass from './nameForm/Class';
+import PlayFormClass from './playForm/Class';
 
 export default function Play(): JSX.Element {
    HeaderHooks.useOnMount.setHeaderTitle('Rat Hunt');
    const { isDarkTheme } = useThemeContext();
    const { apiError } = useApiErrorContext();
    const { form, errors, handleChange, initHandleSubmit } = useForm(
-      NameFormClass.form.initialState,
-      NameFormClass.form.initialErrors,
-      NameFormClass.form.validate,
+      PlayFormClass.form.initialState,
+      PlayFormClass.form.initialErrors,
+      PlayFormClass.form.validate,
    );
 
    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
@@ -30,7 +30,7 @@ export default function Play(): JSX.Element {
       <FlexColumnWrapper justifyContent="center" alignItems="center" height="100%">
          <LogoFader />
          <StyledForm onSubmit={handleSubmit} apiError={apiError} padding={1}>
-            {NameFormClass.form.inputs
+            {PlayFormClass.form.inputs
                .filter((input) => input.name !== 'joinSessionId' || form.joinOrHost === 'join')
                .map((input) => (
                   <InputCombination
