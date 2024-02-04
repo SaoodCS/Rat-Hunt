@@ -1,6 +1,6 @@
 import type { UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
-import APIHelper from '../../../../global/firebase/apis/helper/NApiHelper';
+import APIHelper from '../../global/firebase/apis/helper/NApiHelper';
 
 interface ITopics {
    topics: string[];

@@ -10,12 +10,14 @@ import Sidebar from '../../global/components/app/layout/sidebar/Sidebar';
 import { LogoText } from '../../global/components/app/logo/LogoText';
 import ConditionalRender from '../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import useThemeContext from '../../global/context/theme/hooks/useThemeContext';
+import HeaderHooks from '../../global/context/widget/header/hooks/HeaderHooks';
 import useHeaderContext from '../../global/context/widget/header/hooks/useHeaderContext';
 import BoolHelper from '../../global/helpers/dataTypes/bool/BoolHelper';
 
 export default function MainLayout(): JSX.Element {
    const { isDarkTheme, isPortableDevice } = useThemeContext();
    const { headerTitle, showBackBtn, handleBackBtnClick, headerRightElement } = useHeaderContext();
+   HeaderHooks.useOnMount.setHeaderTitle('Rat Hunt');
 
    return (
       <>
