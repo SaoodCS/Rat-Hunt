@@ -1,6 +1,7 @@
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import LogoFader from '../../../global/components/app/logo/LogoFader';
 import { StaticButton } from '../../../global/components/lib/button/staticButton/Style';
-import FetchError from '../../../global/components/lib/fetch/fetchError/FetchError';
 import OfflineFetch from '../../../global/components/lib/fetch/offlineFetch/offlineFetch';
 import { IDropDownOption } from '../../../global/components/lib/form/dropDown/DropDownInput';
 import { StyledForm } from '../../../global/components/lib/form/form/Style';
@@ -9,15 +10,14 @@ import Loader from '../../../global/components/lib/loader/fullScreen/Loader';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import useThemeContext from '../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../global/context/widget/apiError/hooks/useApiErrorContext';
-import HeaderHooks from '../../../global/context/widget/header/hooks/HeaderHooks';
 import ArrayHelper from '../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../global/hooks/useForm';
-import PlayFormClass from './playForm/Class';
-import ServerClass from './serverClass/Class';
+import ServerClass from '../../../helper/serverClass/Class';
+import socket from '../../../socket';
+import PlayFormClass from './components/playForm/Class';
 
 export default function Play(): JSX.Element {
-   HeaderHooks.useOnMount.setHeaderTitle('Rat Hunt');
    const { isDarkTheme } = useThemeContext();
    const { apiError } = useApiErrorContext();
    const { form, errors, handleChange, initHandleSubmit } = useForm(
@@ -26,6 +26,18 @@ export default function Play(): JSX.Element {
       PlayFormClass.form.validate,
    );
    const { isLoading, error, isPaused, data } = ServerClass.getTopicsQuery();
+   const navigation = useNavigate();
+
+   useEffect(() => {
+      // Game Hosting Event Listener:
+      socket.on('gamehosted', (roomId, topic, user) => {
+         console.log(`Game hosted by ${user} with roomId: ${roomId}, topic: ${topic}`);
+         navigation('/main/waitingroom');
+      });
+      return () => {
+         socket.off('gamehosted');
+      };
+   }, []);
 
    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
       const { isFormValid } = initHandleSubmit(e);
@@ -41,7 +53,8 @@ export default function Play(): JSX.Element {
    }
 
    function handleHostGame(): void {
-      // TODO: Functionality for hosting a game goes here...
+      // TODO: Any other functionality for hosting a game goes here...
+      socket.emit('hostgame', form.name, form.topic);
    }
 
    function handleJoinGame(): void {

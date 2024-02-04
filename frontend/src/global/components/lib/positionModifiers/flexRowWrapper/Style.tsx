@@ -7,6 +7,10 @@ export const FlexRowWrapper = styled.div<{
    height?: string;
    alignItems?: string;
    position?: string;
+   bgColor?: string;
+   margin?: string;
+   color?: string;
+   borderRadius?: string;
 }>`
    display: flex;
    flex-direction: row;
@@ -17,4 +21,8 @@ export const FlexRowWrapper = styled.div<{
    width: ${({ width }): string => (width ? width : 'auto')};
    height: ${({ height }): string => (height ? height : 'auto')};
    position: ${({ position }): string => (position ? position : 'static')};
+   background-color: ${({ bgColor }) => bgColor};
+   margin: ${({ margin }): string => (margin ? margin : '0')};
+   color: ${({ color }) => color};
+   border-radius: ${({ borderRadius }) => borderRadius};
 `;
