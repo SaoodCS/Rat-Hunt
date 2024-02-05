@@ -9,14 +9,22 @@ import { TextColourizer } from '../../../global/components/lib/font/textColorize
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { FlexRowWrapper } from '../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
 import Color from '../../../global/css/colors';
+import useLocalStorage from '../../../global/hooks/useLocalStorage';
+import socket from '../../../socket';
 
 export default function WaitingRoom(): JSX.Element {
    const [allUsers, setAllUsers] = useState<string[]>([]);
    const [disableStartBtn, setDisableStartBtn] = useState<boolean>(true);
    const navigation = useNavigate();
+   const [clientRoom, setClientRoom] = useLocalStorage('clientRoom', '');
+   const [clientUser, setUsername] = useLocalStorage('clientUser', '');
 
    useEffect(() => {
-      // TODO: Add a socket.io event listener which listens for changes the the users in the room, and sets all users to the updated array of users.
+      socket.on('updateonline', () => {
+         // (if this event listener isn't triggered when navigated from the waitingRoom, use useContext)
+         // TODO: get users from the firebase realtime db using room
+         // TODO: run setAllUsers(users from db)
+      });
    }, []);
 
    useEffect(() => {
@@ -46,20 +54,6 @@ export default function WaitingRoom(): JSX.Element {
                   </TextBtn>
                </FlexRowWrapper>
             </FlexRowWrapper>
-            {/* TODO: UI Example of mapped user (Code between the commented ... can be deleted once getting all users in room functionality works) */}
-            {/* ... */}
-            <FlexRowWrapper
-               alignItems="center"
-               bgColor={Color.darkThm.accentAlt}
-               margin="1em 0em 0em 0em"
-               borderRadius="1em"
-            >
-               <CircleUser size="1.75em" color={Color.darkThm.accent} />
-               <TextColourizer padding="0em 0em 0em 1em" bold color={Color.darkThm.accent}>
-                  Saood
-               </TextColourizer>
-            </FlexRowWrapper>
-            {/* ... */}
             {allUsers.map((user, index) => (
                <FlexRowWrapper
                   alignItems="center"

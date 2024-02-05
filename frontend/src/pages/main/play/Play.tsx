@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LogoFader from '../../../global/components/app/logo/LogoFader';
 import { StaticButton } from '../../../global/components/lib/button/staticButton/Style';
@@ -13,9 +13,10 @@ import useApiErrorContext from '../../../global/context/widget/apiError/hooks/us
 import ArrayHelper from '../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../global/hooks/useForm';
+import useLocalStorage from '../../../global/hooks/useLocalStorage';
+import TopicClass from '../../../helper/topicsClass/TopicClass';
 import socket from '../../../socket';
 import PlayFormClass from './components/playForm/Class';
-import TopicClass from '../../../helper/topicsClass/TopicClass';
 
 export default function Play(): JSX.Element {
    const { isDarkTheme } = useThemeContext();
@@ -27,11 +28,43 @@ export default function Play(): JSX.Element {
    );
    const { isLoading, error, isPaused, data } = TopicClass.getTopicsQuery();
    const navigation = useNavigate();
+   const [clientUser, setClientUser] = useLocalStorage('clientUser', '');
+   const [clientRoom, setClientRoom] = useLocalStorage('clientRoom', '');
 
    useEffect(() => {
       // Game Hosting Event Listener:
-      socket.on('gamehosted', (roomId, topic, user) => {
-         console.log(`Game hosted by ${user} with roomId: ${roomId}, topic: ${topic}`);
+      socket.on('gamehosted', (roomId) => {
+         // TODO: Get user from realtime db using socket.id
+         console.log(`Game hosted by ${form.name} with roomId: ${roomId}, topic: ${form.topic}`);
+         // Add username to local storage and roomId
+         setClientUser(form.name);
+         setClientRoom(roomId);
+         navigation('/main/waitingroom');
+      });
+      return () => {
+         socket.off('gamehosted');
+      };
+   }, []);
+
+   useEffect(() => {
+      socket.on('usernametaken', () => {
+         alert('Be Original, Ben');
+      });
+   }, []);
+
+   useEffect(() => {
+      socket.on('roomnotexists', () => {
+         alert('Room does not exist');
+      });
+   });
+
+   useEffect(() => {
+      socket.on('userjoined', () => {
+         // TODO: Get user and roomId from realtime database
+         console.log(`User ${form.name} with roomId: ${form.roomId}`);
+         // Add username to local storage and roomId
+         setClientUser(form.name);
+         setClientRoom(form.roomId);
          navigation('/main/waitingroom');
       });
       return () => {
@@ -53,12 +86,13 @@ export default function Play(): JSX.Element {
    }
 
    function handleHostGame(): void {
-      // TODO: Any other functionality for hosting a game goes here...
+      // emit event to server with game deats
       socket.emit('hostgame', form.name, form.topic);
    }
 
    function handleJoinGame(): void {
       // TODO: Functionality for joining a game goes here...
+      socket.emit('joingame', form.name, form.roomId);
    }
 
    function dropDownOptions(
