@@ -36,17 +36,18 @@ app.get("/api/topics", (req, res) => {
 io.on("connection", function (socket) {
   console.log("A user connected.");
 
-  // locals
-  var username;
-  var roomId;
-
   // Disconnect
-  socket.on("disconnect", function () {
+  socket.on("disconnect", function (username, roomId) {
+    // Get socket.id from socket
+    const socketId = socket.id;
+    // Check if socketId exists in real-time db. If does, get associated user
+    // TODO: If user exists in db, delete from db and remove from room.
     if (username !== undefined && room !== undefined) {
       dbLogic.removeUser(username, rooms[roomId]);
       console.log(`User ${username} disconnected from room ${roomId}.`);
-      io.in(roomId).emit('updateonline', dbLogic.getUsers(roomId));
+      io.in(roomId).emit("updateonline");
       socket.leave(roomId);
+      // Check firebase realtime room. If empty, delete.
       dbLogic.deleteRoomIfEmpty(roomId);
     } else {
       console.log("Unregistered user disconnected");
@@ -55,10 +56,11 @@ io.on("connection", function (socket) {
 
   // Leaveroom event
   socket.on("leaveroom", function (username, roomId) {
+    // TODO: Same as Above (Should always have associated user)
     if (username !== undefined && roomId !== undefined) {
       dbLogic.removeUser(username, rooms[roomId]);
       console.log(`User ${username} disconnected from room ${roomId}.`);
-      io.in(roomId).emit('updateonline', dbLogic.getUsers(roomId));
+      io.in(roomId).emit("updateonline", dbLogic.getUsers(roomId));
       socket.leave(roomId);
       dbLogic.deleteRoomIfEmpty(roomId);
     } else {
@@ -67,37 +69,44 @@ io.on("connection", function (socket) {
   });
 
   socket.on("hostgame", function (username, topic) {
-    if (!dbLogic.isUsernameAvailable(username)) {
-      console.log("Username taken.");
-      socket.emit("usernametaken");
-      return;
-    }
     console.log("Creating Game");
     // Generate UUID using UUID package. Shorten to 4 characters
     const roomId = uuid.v4().slice(0, 4);
+    // TODO: check the generated roomId against already existing ones, run a while loop until the room id is unique
+    // TODO: Create a new Game in Firebase Realtime db:
+    // const userData = {username, socket.id}
+    // dbLogic.addUserToRoom(userData, roomId)
     dbLogic.addUserToRoom(username, roomId);
+    // TODO: Set currentTopic as topic
     dbLogic.currentTopic(roomId, topic);
+    // Join the client to the game room
     socket.join(roomId);
     // Emit event that room is created
-    io.emit("gamehosted", roomId, topic, username);
+    // TODO: realtime database will contain roomId, topic, username, so it won't have to be sent to the client from here
+    // Send event to client that game is hosted
+    socket.emit("gamehosted", roomId);
+    // Broadcast event to all clients connected to room to update online users
+    io.in(roomId).emit("updateonline");
   });
 
   socket.on("joingame", function (username, roomId) {
-    if (!dbLogic.isUsernameAvailable(username)) {
-      console.log("Username taken.");
-      socket.emit("usernametaken");
-      return;
-    }
     // Check if room exists
     if (!dbLogic.roomExists(roomId)) {
       console.log("Room does not exist");
+      socket.emit("roomnotexists");
+      return;
+    }
+    // TODO: check user exists in room.
+    if (!dbLogic.isUsernameAvailable(username)) {
+      console.log(`Username ${username} taken.`);
+      socket.emit("usernametaken");
       return;
     }
     // Add user to room
     dbLogic.addUserToRoom(username, roomId);
     socket.join(roomId);
-    socket.emit("acceptuser", [username, roomId]);
-    io.in(roomId).emit("updateonline", dbLogic.getUsers(roomId));
+    socket.emit("userjoined");
+    io.in(roomId).emit("updateonline");
   });
 
   socket.on("selecttopic", function (roomId, topic) {
