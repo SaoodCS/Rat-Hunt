@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LogoFader from '../../../global/components/app/logo/LogoFader';
 import { StaticButton } from '../../../global/components/lib/button/staticButton/Style';
@@ -8,14 +8,15 @@ import { StyledForm } from '../../../global/components/lib/form/form/Style';
 import InputCombination from '../../../global/components/lib/form/inputCombination/InputCombination';
 import Loader from '../../../global/components/lib/loader/fullScreen/Loader';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
+import { DeviceContext } from '../../../global/context/device/DeviceContext';
 import useThemeContext from '../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import ArrayHelper from '../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../global/hooks/useForm';
-import ServerClass from '../../../helper/serverClass/Class';
 import socket from '../../../socket';
 import PlayFormClass from './components/playForm/Class';
+import TopicClass from '../../../helper/topicsClass/TopicClass';
 
 export default function Play(): JSX.Element {
    const { isDarkTheme } = useThemeContext();
@@ -25,7 +26,7 @@ export default function Play(): JSX.Element {
       PlayFormClass.form.initialErrors,
       PlayFormClass.form.validate,
    );
-   const { isLoading, error, isPaused, data } = ServerClass.getTopicsQuery();
+   const { isLoading, error, isPaused, data } = TopicClass.getTopicsQuery();
    const navigation = useNavigate();
 
    useEffect(() => {
@@ -65,9 +66,9 @@ export default function Play(): JSX.Element {
       input: (typeof PlayFormClass.form.inputs)[0],
    ): IDropDownOption[] | undefined {
       if (!input.isDropDown) return;
-      if (input.name === 'topic') {
+      if (input.name === 'topic' && MiscHelper.isNotFalsyOrEmpty(data)) {
+         const topics = data.flatMap((topic) => topic.key);
          if (!MiscHelper.isNotFalsyOrEmpty(data)) return input.dropDownOptions;
-         const { topics } = data;
          const dropDownOptions: IDropDownOption[] = [];
          const topicLabels = ArrayHelper.capFirstLetterOfWords(topics);
          for (let i = 0; i < topics.length; i++) {

@@ -45,6 +45,7 @@ io.on("connection", function (socket) {
     if (username !== undefined && room !== undefined) {
       dbLogic.removeUser(username, rooms[roomId]);
       console.log(`User ${username} disconnected from room ${roomId}.`);
+      io.in(roomId).emit('updateonline', dbLogic.getUsers(roomId));
       socket.leave(roomId);
       dbLogic.deleteRoomIfEmpty(roomId);
     } else {
@@ -57,6 +58,7 @@ io.on("connection", function (socket) {
     if (username !== undefined && roomId !== undefined) {
       dbLogic.removeUser(username, rooms[roomId]);
       console.log(`User ${username} disconnected from room ${roomId}.`);
+      io.in(roomId).emit('updateonline', dbLogic.getUsers(roomId));
       socket.leave(roomId);
       dbLogic.deleteRoomIfEmpty(roomId);
     } else {
