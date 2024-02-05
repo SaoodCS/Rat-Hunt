@@ -8,7 +8,6 @@ import { StyledForm } from '../../../global/components/lib/form/form/Style';
 import InputCombination from '../../../global/components/lib/form/inputCombination/InputCombination';
 import Loader from '../../../global/components/lib/loader/fullScreen/Loader';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
-import { DeviceContext } from '../../../global/context/device/DeviceContext';
 import useThemeContext from '../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import ArrayHelper from '../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
