@@ -4,6 +4,17 @@ const socketIo = require("socket.io");
 const uuid = require("uuid");
 const gameLogic = require("./game");
 const dbLogic = require("./db_interaction");
+var admin = require("firebase-admin");
+var serviceAccount = require("./serviceKey/fbServiceKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://rat-hunt-default-rtdb.firebaseio.com/",
+});
+
+var db = admin.database();
+
+
 
 const app = express();
 const allowedOrigins = ["http://localhost:5173", "https://rat-hunt.web.app"];

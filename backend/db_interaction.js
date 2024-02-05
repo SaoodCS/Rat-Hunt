@@ -1,10 +1,4 @@
-var admin = require("firebase-admin");
-var serviceAccount = require("./serviceKey/fbServiceKey.json");
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://rat-hunt-default-rtdb.firebaseio.com/",
-});
 
 const topics = require("./topics");
 // an array of all users
