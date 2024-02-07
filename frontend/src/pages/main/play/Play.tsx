@@ -1,3 +1,4 @@
+import { get, onDisconnect, push, ref, set } from 'firebase/database';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LogoFader from '../../../global/components/app/logo/LogoFader';
@@ -10,12 +11,12 @@ import Loader from '../../../global/components/lib/loader/fullScreen/Loader';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import useThemeContext from '../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../global/context/widget/apiError/hooks/useApiErrorContext';
+import { realtime } from '../../../global/firebase/config/config';
 import ArrayHelper from '../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../global/hooks/useForm';
 import useLocalStorage from '../../../global/hooks/useLocalStorage';
 import TopicClass from '../../../helper/topicsClass/TopicClass';
-import socket from '../../../socket';
 import PlayFormClass from './components/playForm/Class';
 
 export default function Play(): JSX.Element {
@@ -28,51 +29,15 @@ export default function Play(): JSX.Element {
    );
    const { isLoading, error, isPaused, data } = TopicClass.getTopicsQuery();
    const navigation = useNavigate();
-   const [clientUser, setClientUser] = useLocalStorage('clientUser', '');
-   const [clientRoom, setClientRoom] = useLocalStorage('clientRoom', '');
+   const [savedUserName, setSavedUserName] = useLocalStorage('userName', '');
+   const [savedRoomId, setSavedRoomId] = useLocalStorage('roomId', '');
 
    useEffect(() => {
-      // Game Hosting Event Listener:
-      socket.on('gamehosted', (roomId) => {
-         // TODO: Get user from realtime db using socket.id
-         console.log(`Game hosted by ${form.name} with roomId: ${roomId}, topic: ${form.topic}`);
-         // Add username to local storage and roomId
-         setClientUser(form.name);
-         setClientRoom(roomId);
-         navigation('/main/waitingroom');
-      });
-      return () => {
-         socket.off('gamehosted');
-      };
-   }, []);
-
-   useEffect(() => {
-      socket.on('usernametaken', () => {
-         alert('Be Original, Ben');
-      });
-   }, []);
-
-   useEffect(() => {
-      socket.on('roomnotexists', () => {
-         alert('Room does not exist');
-      });
-   });
-
-   useEffect(() => {
-      socket.on('userjoined', () => {
-         // TODO: Get user and roomId from realtime database
-         console.log(`User ${form.name} with roomId: ${form.roomId}`);
-         // Add username to local storage and roomId
-         setClientUser(form.name);
-         setClientRoom(form.roomId);
-         navigation('/main/waitingroom');
-      });
-      return () => {
-         socket.off('gamehosted');
-      };
+      // If the user is already in a room, redirect them to the waiting room
    }, []);
 
    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
+      console.log(form);
       const { isFormValid } = initHandleSubmit(e);
       console.log('isFormValid', isFormValid);
       if (!isFormValid) return;
@@ -85,14 +50,60 @@ export default function Play(): JSX.Element {
       handleJoinGame();
    }
 
-   function handleHostGame(): void {
-      // emit event to server with game deats
-      socket.emit('hostgame', form.name, form.topic);
+   async function handleHostGame(): Promise<void> {
+      try {
+         const roomRef = push(ref(realtime, 'rooms'));
+         const roomId = roomRef.key;
+         if (!roomId) {
+            alert('Error creating room');
+            return;
+         }
+         // Add the user to the room and set the connected status to true:
+         await set(ref(realtime, `rooms/${roomId}/users/${form.name}/connected`), true);
+         await set(ref(realtime, `rooms/${roomId}/topic`), form.topic);
+         setSavedUserName(form.name);
+         setSavedRoomId(roomId);
+         onDisconnect(ref(realtime, `rooms/${roomId}/users/${form.name}/connected`)).set(false);
+         navigation('/main/waitingroom');
+      } catch (e) {
+         console.error('Error hosting game', e);
+      }
    }
 
-   function handleJoinGame(): void {
-      // TODO: Functionality for joining a game goes here...
-      socket.emit('joingame', form.name, form.roomId);
+   async function handleJoinGame(): Promise<void> {
+      try {
+         // Check if the room exists
+         const roomSnapshot = await get(ref(realtime, `rooms/${form.roomId}`));
+         if (!roomSnapshot.exists()) {
+            alert('Room does not exist');
+            return;
+         }
+         // Check if the user already exists in the room
+         const userSnapshot = await get(ref(realtime, `rooms/${form.roomId}/users/${form.name}`));
+         if (userSnapshot.exists()) {
+            alert('Username already taken, try a different one');
+            return;
+         }
+
+         // Check if the game has already started through if the gameStarted node is true. If it has, then tell the user that the game has already started and they cannot join.
+         const gameStartedSnapshot = await get(ref(realtime, `rooms/${form.roomId}/gameStarted`));
+         if (gameStartedSnapshot.exists() && gameStartedSnapshot.val() === true) {
+            alert('Cannot Join. Game has already started');
+            return;
+         }
+
+         // Add the user to the room and set the connected status to true:
+         await set(ref(realtime, `rooms/${form.roomId}/users/${form.name}/connected`), true);
+         setSavedUserName(form.name);
+         setSavedRoomId(form.roomId);
+         // If the user disconnects, do not remove them from the room, but set their connected status to false:
+         onDisconnect(ref(realtime, `rooms/${form.roomId}/users/${form.name}/connected`)).set(
+            false,
+         );
+         navigation('/main/waitingroom');
+      } catch (e) {
+         console.error('Error joining game', e);
+      }
    }
 
    function dropDownOptions(

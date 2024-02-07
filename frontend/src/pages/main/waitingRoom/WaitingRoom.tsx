@@ -1,5 +1,16 @@
 import { PlayCircleFill } from '@styled-icons/bootstrap/PlayCircleFill';
 import { CircleUser } from '@styled-icons/fa-solid/CircleUser';
+import {
+   get,
+   onChildAdded,
+   onChildChanged,
+   onChildMoved,
+   onChildRemoved,
+   onDisconnect,
+   push,
+   ref,
+   set,
+} from 'firebase/database';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogoText } from '../../../global/components/app/logo/LogoText';
@@ -9,32 +20,41 @@ import { TextColourizer } from '../../../global/components/lib/font/textColorize
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { FlexRowWrapper } from '../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
 import Color from '../../../global/css/colors';
+import { realtime } from '../../../global/firebase/config/config';
 import useLocalStorage from '../../../global/hooks/useLocalStorage';
-import socket from '../../../socket';
 
 export default function WaitingRoom(): JSX.Element {
    const [allUsers, setAllUsers] = useState<string[]>([]);
-   const [disableStartBtn, setDisableStartBtn] = useState<boolean>(true);
    const navigation = useNavigate();
-   const [clientRoom, setClientRoom] = useLocalStorage('clientRoom', '');
-   const [clientUser, setUsername] = useLocalStorage('clientUser', '');
+   const [savedUserName, setSavedUserName] = useLocalStorage('userName', '');
+   const [savedRoomId, setSavedRoomId] = useLocalStorage('roomId', '');
 
    useEffect(() => {
-      socket.on('updateonline', () => {
-         // (if this event listener isn't triggered when navigated from the waitingRoom, use useContext)
-         // TODO: get users from the firebase realtime db using room
-         // TODO: run setAllUsers(users from db)
+      // get all current users in the room and set the state of the array to the users. Also, listen for any changes to the users in the room and update the state of the array accordingly
+      console.log('savedRoomId', savedRoomId);
+      const roomRef = ref(realtime, `rooms/${savedRoomId}/users`);
+      get(roomRef).then((roomSnapshot) => {
+         const users: string[] = [];
+         roomSnapshot.forEach((user) => {
+            users.push(user.key);
+         });
+         setAllUsers(users);
+      });
+      const usersRef = ref(realtime, `rooms/${savedRoomId}/users`);
+      onChildAdded(usersRef, (userSnapshot) => {
+         const user = userSnapshot.key;
+         
+         if (user) {
+            setAllUsers((prev) => [...prev, user]);
+         }
+      });
+      onChildRemoved(usersRef, (userSnapshot) => {
+         const user = userSnapshot.key;
+         if (user) {
+            setAllUsers((prev) => prev.filter((u) => u !== user));
+         }
       });
    }, []);
-
-   useEffect(() => {
-      // This useEffect enables the start button when there are at least 3 users in the room
-      if (allUsers.length >= 3) {
-         setDisableStartBtn(false);
-      } else {
-         setDisableStartBtn(true);
-      }
-   }, [allUsers]);
 
    function handleStartGame(): void {
       // TODO: Add any functionality for here that needs to be executed before / when navigating to the startedgame page...
@@ -47,6 +67,7 @@ export default function WaitingRoom(): JSX.Element {
             <FlexRowWrapper justifyContent="left" position="relative" alignItems="center">
                <LogoText size={'1.75em'} color={Color.darkThm.accentAlt}>
                   Waiting Room <AnimatedDots count={3} />
+                  {savedRoomId && ` - Room ID: ${savedRoomId}`}
                </LogoText>
                <FlexRowWrapper position="absolute" style={{ right: 0 }}>
                   <TextBtn isDarkTheme isDisabled={false} onClick={() => handleStartGame()}>
