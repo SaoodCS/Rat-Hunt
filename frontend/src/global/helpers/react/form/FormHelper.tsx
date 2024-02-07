@@ -4,7 +4,7 @@ type InputObject<FieldName, ValueType> = {
    name: FieldName;
    id: string;
    placeholder: string;
-   type: string;
+   type: 'text' | 'password' | 'email' | 'number' | 'date' | 'checkbox' | 'select' | 'boolean';
    isRequired: boolean;
    autoComplete?: 'current-password' | 'new-password';
    validator: (value: ValueType) => string | true;
