@@ -43,7 +43,7 @@ export default class PlayFormClass {
          name: 'roomId',
          id: 'join-room-id',
          placeholder: 'Room Id',
-         type: 'string',
+         type: 'text',
          isRequired: true,
          validator: (value: string): string | true => {
             if (!value) return 'Please enter the room id';
