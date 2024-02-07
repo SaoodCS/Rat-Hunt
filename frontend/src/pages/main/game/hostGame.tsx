@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import socket from '../../../socket';
@@ -27,7 +28,7 @@ const HostGame: React.FC = () => {
       });
    }, []);
 
-   const fetchTopicsFromServer = async () => {
+   const fetchTopicsFromServer = async (): Promise<void> => {
       try {
          // Make a request to your backend to fetch topics
          const response = await fetch(`${serverURL}/api/topics`);
@@ -40,7 +41,7 @@ const HostGame: React.FC = () => {
       }
    };
 
-   const handleHostGame = () => {
+   const handleHostGame = (): void => {
       // Additional validation or user prompts can be added here
       socket.emit('hostgame', username, topic);
    };

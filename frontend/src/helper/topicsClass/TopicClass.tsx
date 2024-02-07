@@ -24,15 +24,14 @@ export default class TopicClass {
       });
    }
 
-   private static async getTopics() {
+   private static async getTopics(): Promise<ITopics[]> {
       try {
          const docRef = doc(firestore, 'topics', 'topics');
          const docSnap = await getDoc(docRef);
          if (docSnap.exists()) {
             return docSnap.data().topics;
-         } else {
-            throw new APIHelper.ErrorThrower('Error: Document Does Not Exist');
          }
+         throw new APIHelper.ErrorThrower('Error: Document Does Not Exist');
       } catch (e) {
          throw new APIHelper.ErrorThrower(APIHelper.handleError(e));
       }

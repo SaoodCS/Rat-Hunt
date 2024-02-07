@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import React, { useEffect, useState } from 'react';
 import socket from '../../../socket';
 
@@ -39,7 +40,7 @@ const MainGame: React.FC = () => {
       };
    }, []); // Empty dependency array ensures that this effect runs only once on component mount
 
-   const fetchTopicsFromServer = async () => {
+   const fetchTopicsFromServer = async (): Promise<void> => {
       try {
          // Make a request to your backend to fetch topics
          const response = await fetch(`${serverURL}/api/topics`);
@@ -52,17 +53,17 @@ const MainGame: React.FC = () => {
       }
    };
 
-   const startRound = () => {
+   const startRound = (): void => {
       // Emit startRound event to the server
       console.log(`Starting round with roomId: ${roomId}`);
       socket.emit('startround', roomId);
    };
 
-   const handleTopicChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+   const handleTopicChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
       setNewTopic(e.target.value);
    };
 
-   const changeTopic = () => {
+   const changeTopic = (): void => {
       // Emit changeTopic event to server with new topic
       socket.emit('selecttopic', newTopic);
    };

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import LogoFader from '../../../global/components/app/logo/LogoFader';
 import { StaticButton } from '../../../global/components/lib/button/staticButton/Style';
 import OfflineFetch from '../../../global/components/lib/fetch/offlineFetch/offlineFetch';
-import { IDropDownOption } from '../../../global/components/lib/form/dropDown/DropDownInput';
+import type { IDropDownOption } from '../../../global/components/lib/form/dropDown/DropDownInput';
 import { StyledForm } from '../../../global/components/lib/form/form/Style';
 import InputCombination from '../../../global/components/lib/form/inputCombination/InputCombination';
 import Loader from '../../../global/components/lib/loader/fullScreen/Loader';
