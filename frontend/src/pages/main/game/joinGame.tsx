@@ -24,7 +24,7 @@ const JoinGame: React.FC = () => {
       });
    }, [username, roomId]);
 
-   const handleJoinGame = () => {
+   const handleJoinGame = (): void => {
       // function to send request to server to join game
       socket.emit('joingame', username, roomId);
    };

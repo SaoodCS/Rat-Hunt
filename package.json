@@ -6,7 +6,7 @@
     "f-start": "cd frontend && npm start",
     "b-start": "cd backend && node socket.js",
     "app-start": "npm-run-all -p f-start b-start",
-    "f-lint": "cd frontend && npm run lint",
+    "f-lint": "cd frontend && npm run lint-ts",
     "b-lint": "cd backend && npm run lint",
     "f-deploy": "cd frontend && npm run deploy",
     "b-deploy": "cd backend && npm run deploy",

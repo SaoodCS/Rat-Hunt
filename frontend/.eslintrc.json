@@ -8,9 +8,7 @@
    "parserOptions": {
       "ecmaVersion": "latest",
       "sourceType": "module",
-      // "project": "frontend/tsconfig.json" makes ESLint work in opened files when I've opened the root of the project in VS Code, however it leads to parsing errors when i run "npm run lint-ts" in the terminal.
-      // Current Solution = change prop to "project": "tsconfig.json" and open the frontend folder in VS Code instead of the root folder. That way linting works in opened files and in terminal.
-      "project": "frontend/tsconfig.json"
+      "project": true
    },
    "settings": {
       "react": {
