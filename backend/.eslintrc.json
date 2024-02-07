@@ -1,0 +1,27 @@
+{
+   "env": {
+      "browser": true,
+      "commonjs": true,
+      "es2021": true
+   },
+   "overrides": [],
+   "plugins": ["unused-imports", "import", "prettier", "security"],
+   "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+   "parserOptions": {
+      "ecmaVersion": "latest"
+   },
+   "rules": {
+      "no-unused-vars": "warn",
+      "no-console": "off",
+      "prettier/prettier": ["warn", { "endOfLine": "auto" }],
+      "security/detect-non-literal-regexp": "error",
+      "security/detect-non-literal-fs-filename": "error",
+      "security/detect-no-csrf-before-method-override": "error",
+      "security/detect-eval-with-expression": "error",
+      "unused-imports/no-unused-imports": "warn",
+      "unused-imports/no-unused-vars": ["warn", { "vars": "all" }],
+      "prefer-const": "warn",
+      "prefer-template": "error",
+      "import/no-unresolved": "error"
+   }
+}

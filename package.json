@@ -2,11 +2,15 @@
   "scripts": {
     "f-install": "cd frontend && npm install",
     "b-install": "cd backend && npm install",
+    "app-install": "npm run f-install && npm run b-install && npm install",
     "f-start": "cd frontend && npm start",
     "b-start": "cd backend && node socket.js",
-    "f-deploy": "cd frontend && npm run deploy",
     "app-start": "npm-run-all -p f-start b-start",
-    "app-install": "npm run f-install && npm run b-install && npm install"
+    "f-lint": "cd frontend && npm run lint",
+    "b-lint": "cd backend && npm run lint",
+    "f-deploy": "cd frontend && npm run deploy",
+    "b-deploy": "cd backend && npm run deploy",
+    "app-deploy": "npm-run-all -p f-deploy b-deploy"
   },
   "engines": {
     "node": "18.19.0"
