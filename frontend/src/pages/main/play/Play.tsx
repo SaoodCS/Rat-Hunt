@@ -29,6 +29,7 @@ export default function Play(): JSX.Element {
       PlayFormClass.form.validate,
    );
    const { isLoading, isPaused, data } = FirestoreDB.Topics.getTopicsQuery();
+   const { data: allRoomIds } = FirestoreDB.Game.getAllRoomIdsQuery();
    const navigation = useNavigate();
    const [clientUser, setClientUser] = useLocalStorage(LocalDB.key.clientName, '');
    const [clientRoom, setClientRoom] = useLocalStorage(LocalDB.key.clientRoom, '');
@@ -85,10 +86,11 @@ export default function Play(): JSX.Element {
    }
 
    async function handleHostGame(): Promise<void> {
+      const generatedRoomId = FirestoreDB.Room.generateUniqueId(allRoomIds ?? ['']);
       const room: FirestoreDB.Room.IRoom = {
          activeTopic: form.topic,
          gameStarted: false,
-         roomId: '', // TODO - generate roomId
+         roomId: generatedRoomId,
          users: [
             {
                deliberateExit: false,
@@ -98,7 +100,8 @@ export default function Play(): JSX.Element {
          ],
       };
       await setRoomData.mutateAsync(room);
-      setClientRoom(''); // TODO - generated roomId
+
+      setClientRoom(generatedRoomId);
       setClientUser(form.name);
       navigation('/main/waitingroom');
    }
