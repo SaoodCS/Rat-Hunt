@@ -10,7 +10,6 @@ import { FlexColumnWrapper } from '../../../global/components/lib/positionModifi
 import { FlexRowWrapper } from '../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
 import Color from '../../../global/css/colors';
 import useLocalStorage from '../../../global/hooks/useLocalStorage';
-import socket from '../../../socket';
 import LocalDB from '../class/LocalDb';
 
 export default function WaitingRoom(): JSX.Element {
@@ -19,14 +18,6 @@ export default function WaitingRoom(): JSX.Element {
    const navigation = useNavigate();
    const [clientRoom, setClientRoom] = useLocalStorage(LocalDB.key.clientRoom, '');
    const [clientUser, setUsername] = useLocalStorage(LocalDB.key.clientName, '');
-
-   useEffect(() => {
-      socket.on('updateonline', () => {
-         // (if this event listener isn't triggered when navigated from the waitingRoom, use useContext)
-         // TODO: get users from the firebase realtime db using room
-         // TODO: run setAllUsers(users from db)
-      });
-   }, []);
 
    useEffect(() => {
       // This useEffect enables the start button when there are at least 3 users in the room

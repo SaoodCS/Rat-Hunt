@@ -1,5 +1,4 @@
 import { FirebaseError } from 'firebase/app';
-import ObjectOfObjects from '../../../helpers/dataTypes/objectOfObjects/objectsOfObjects';
 
 export namespace APIHelper {
    export interface IErrorRes {
