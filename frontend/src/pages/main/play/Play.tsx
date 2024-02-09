@@ -74,13 +74,13 @@ export default function Play(): JSX.Element {
             ArrayOfObjects.calcSumOfKeyValue(roomData.users, 'score') / roomData.users.length;
          const user = { deliberateExit: false, score: averageScore, userId: form.name };
          const updatedRoomData = { ...roomData, users: [...roomData.users, user] };
-         await setDoc(docRef, { room: updatedRoomData });
+         await setDoc(docRef, { ...updatedRoomData });
          navigation('/main/startedgame');
       }
       if (roomData.gameStarted === false) {
          const user = { deliberateExit: false, score: 0, userId: form.name };
          const updatedRoomData = { ...roomData, users: [...roomData.users, user] };
-         await setDoc(docRef, { room: updatedRoomData });
+         await setDoc(docRef, { ...updatedRoomData });
          navigation('/main/waitingroom');
       }
    }

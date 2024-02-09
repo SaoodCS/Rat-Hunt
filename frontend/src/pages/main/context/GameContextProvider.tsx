@@ -17,38 +17,40 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
 
    const [clientUser, setClientUser] = useLocalStorage(LocalDB.key.clientName, '');
    const [clientRoom, setClientRoom] = useLocalStorage(LocalDB.key.clientRoom, '');
-   const { data: roomData } = FirestoreDB.Room.getRoomQuery(clientRoom);
+   const { data: roomData, isLoading } = FirestoreDB.Room.getRoomQuery(clientRoom);
 
    const navigation = useNavigate();
 
    useEffect(() => {
-      const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
-      if (!roomDataExists) {
-         setClientRoom('');
-         setClientUser('');
-         navigation('/main/play');
-         return;
-      }
+      if (!isLoading) {
+         const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
+         if (!roomDataExists) {
+            setClientRoom('');
+            setClientUser('');
+            navigation('/main/play');
+            return;
+         }
 
-      const clientUserExistsInRoom = roomData.users.some((user) => user.userId === clientUser);
-      if (roomDataExists && !clientUserExistsInRoom) {
-         alert('LOOOOOL PEAK');
-         setClientRoom('');
-         setClientUser('');
-         navigation('/main/play');
-         return;
-      }
+         const clientUserExistsInRoom = roomData.users.some((user) => user.userId === clientUser);
+         if (roomDataExists && !clientUserExistsInRoom) {
+            alert('You have been removed from the room!');
+            setClientRoom('');
+            setClientUser('');
+            navigation('/main/play');
+            return;
+         }
 
-      if (roomDataExists && clientUserExistsInRoom) {
-         const userIds = roomData.users.map((user) => user.userId);
-         setAllUsers(userIds);
-         if (roomData.gameStarted) {
-            navigation('/main/startedgame');
-         } else {
-            navigation('/main/waitingroom');
+         if (roomDataExists && clientUserExistsInRoom) {
+            const userIds = roomData.users.map((user) => user.userId);
+            setAllUsers(userIds);
+            if (roomData.gameStarted) {
+               navigation('/main/startedgame');
+            } else {
+               navigation('/main/waitingroom');
+            }
          }
       }
-   }, []);
+   }, [isLoading]);
 
    return <GameContext.Provider value={{ allUsers, setAllUsers }}>{children}</GameContext.Provider>;
 }

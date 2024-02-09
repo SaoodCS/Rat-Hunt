@@ -4,7 +4,7 @@ import Guide from '../../pages/main/guide/Guide';
 import Play from '../../pages/main/play/Play';
 import StartedGame from '../../pages/main/startedGame/StartedGame';
 import WaitingRoom from '../../pages/main/waitingRoom/WaitingRoom';
-// TODO: When project is completed and front & back-end are deployed, update the realtime database and firestore rules in the console
+// TODO: When project is completed and front & back-end are deployed, update the firestore rules in the console
 
 export default function MainRoutes(): JSX.Element {
    return (
