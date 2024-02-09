@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -14,15 +15,15 @@ interface IGameContextProvider {
 export default function GameContextProvider(props: IGameContextProvider): JSX.Element {
    const { children } = props;
    const [allUsers, setAllUsers] = useState<string[]>([]);
-
    const [clientUser, setClientUser] = useLocalStorage(LocalDB.key.clientName, '');
    const [clientRoom, setClientRoom] = useLocalStorage(LocalDB.key.clientRoom, '');
    const { data: roomData, isLoading } = FirestoreDB.Room.getRoomQuery(clientRoom);
-
+   const [ranBefore, setRanBefore] = useState(false);
    const navigation = useNavigate();
 
    useEffect(() => {
-      if (!isLoading) {
+      if (!isLoading && !ranBefore) {
+         setRanBefore(true);
          const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
          if (!roomDataExists) {
             setClientRoom('');

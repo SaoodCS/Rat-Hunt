@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import LogoFader from '../../../global/components/app/logo/LogoFader';
@@ -31,14 +32,13 @@ export default function Play(): JSX.Element {
    const { isLoading, isPaused, data } = FirestoreDB.Topics.getTopicsQuery();
    const { data: allRoomIds } = FirestoreDB.Game.getAllRoomIdsQuery();
    const navigation = useNavigate();
-   const [clientUser, setClientUser] = useLocalStorage(LocalDB.key.clientName, '');
-   const [clientRoom, setClientRoom] = useLocalStorage(LocalDB.key.clientRoom, '');
+   const [, setClientUser] = useLocalStorage(LocalDB.key.clientName, '');
+   const [, setClientRoom] = useLocalStorage(LocalDB.key.clientRoom, '');
 
    const setRoomData = FirestoreDB.Room.setRoomMutation({});
 
    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
       const { isFormValid } = initHandleSubmit(e);
-      console.log('isFormValid', isFormValid);
       if (!isFormValid) return;
       if (form.joinOrHost === 'host') {
          await handleHostGame();
@@ -49,7 +49,6 @@ export default function Play(): JSX.Element {
    }
 
    async function handleJoinGame(): Promise<void> {
-      // Check to see if the room exists in firestore by running the query
       const docRef = doc(firestore, FirestoreDB.Room.key.collection, form.roomId);
       const docSnap = await getDoc(docRef);
       if (!docSnap.exists()) {
