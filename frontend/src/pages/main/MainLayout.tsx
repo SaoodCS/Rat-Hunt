@@ -13,6 +13,7 @@ import useThemeContext from '../../global/context/theme/hooks/useThemeContext';
 import HeaderHooks from '../../global/context/widget/header/hooks/HeaderHooks';
 import useHeaderContext from '../../global/context/widget/header/hooks/useHeaderContext';
 import BoolHelper from '../../global/helpers/dataTypes/bool/BoolHelper';
+import GameContextProvider from './context/GameContextProvider';
 
 export default function MainLayout(): JSX.Element {
    const { isDarkTheme, isPortableDevice } = useThemeContext();
@@ -21,27 +22,29 @@ export default function MainLayout(): JSX.Element {
 
    return (
       <>
-         <Header isDarkTheme={isDarkTheme}>
-            <ConditionalRender condition={showBackBtn}>
-               <StyledBackArr
-                  onClick={handleBackBtnClick}
-                  darktheme={BoolHelper.boolToStr(isDarkTheme)}
-               />
+         <GameContextProvider>
+            <Header isDarkTheme={isDarkTheme}>
+               <ConditionalRender condition={showBackBtn}>
+                  <StyledBackArr
+                     onClick={handleBackBtnClick}
+                     darktheme={BoolHelper.boolToStr(isDarkTheme)}
+                  />
+               </ConditionalRender>
+               <LogoText size={'2em'}>{headerTitle}</LogoText>
+               <HeaderRightElWrapper isDarkTheme={isDarkTheme}>
+                  {headerRightElement}
+               </HeaderRightElWrapper>
+            </Header>
+            <Body isDarkTheme={isDarkTheme}>
+               <Outlet />
+            </Body>
+            <ConditionalRender condition={!isPortableDevice}>
+               <Sidebar />
             </ConditionalRender>
-            <LogoText size={'2em'}>{headerTitle}</LogoText>
-            <HeaderRightElWrapper isDarkTheme={isDarkTheme}>
-               {headerRightElement}
-            </HeaderRightElWrapper>
-         </Header>
-         <Body isDarkTheme={isDarkTheme}>
-            <Outlet />
-         </Body>
-         <ConditionalRender condition={!isPortableDevice}>
-            <Sidebar />
-         </ConditionalRender>
-         <ConditionalRender condition={isPortableDevice}>
-            <Footer />
-         </ConditionalRender>
+            <ConditionalRender condition={isPortableDevice}>
+               <Footer />
+            </ConditionalRender>
+         </GameContextProvider>
       </>
    );
 }

@@ -11,13 +11,14 @@ import { FlexRowWrapper } from '../../../global/components/lib/positionModifiers
 import Color from '../../../global/css/colors';
 import useLocalStorage from '../../../global/hooks/useLocalStorage';
 import socket from '../../../socket';
+import LocalDB from '../class/LocalDb';
 
 export default function WaitingRoom(): JSX.Element {
    const [allUsers, setAllUsers] = useState<string[]>([]);
    const [disableStartBtn, setDisableStartBtn] = useState<boolean>(true);
    const navigation = useNavigate();
-   const [clientRoom, setClientRoom] = useLocalStorage('clientRoom', '');
-   const [clientUser, setUsername] = useLocalStorage('clientUser', '');
+   const [clientRoom, setClientRoom] = useLocalStorage(LocalDB.key.clientRoom, '');
+   const [clientUser, setUsername] = useLocalStorage(LocalDB.key.clientName, '');
 
    useEffect(() => {
       socket.on('updateonline', () => {

@@ -14,9 +14,10 @@ import ArrayHelper from '../../../global/helpers/dataTypes/arrayHelper/ArrayHelp
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../global/hooks/useForm';
 import useLocalStorage from '../../../global/hooks/useLocalStorage';
-import TopicClass from '../../../helper/topicsClass/TopicClass';
 import socket from '../../../socket';
-import PlayFormClass from './components/playForm/Class';
+import LocalDB from '../class/LocalDb';
+import PlayFormClass from '../class/PlayForm';
+import FirestoreDB from '../class/FirestoreDb';
 
 export default function Play(): JSX.Element {
    const { isDarkTheme } = useThemeContext();
@@ -26,10 +27,10 @@ export default function Play(): JSX.Element {
       PlayFormClass.form.initialErrors,
       PlayFormClass.form.validate,
    );
-   const { isLoading, error, isPaused, data } = TopicClass.getTopicsQuery();
+   const { isLoading, error, isPaused, data } = FirestoreDB.Topics.getTopicsQuery();
    const navigation = useNavigate();
-   const [clientUser, setClientUser] = useLocalStorage('clientUser', '');
-   const [clientRoom, setClientRoom] = useLocalStorage('clientRoom', '');
+   const [clientUser, setClientUser] = useLocalStorage(LocalDB.key.clientName, '');
+   const [clientRoom, setClientRoom] = useLocalStorage(LocalDB.key.clientRoom, '');
 
    useEffect(() => {
       // Game Hosting Event Listener:
