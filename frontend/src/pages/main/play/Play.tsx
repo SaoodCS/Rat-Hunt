@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import LogoFader from '../../../global/components/app/logo/LogoFader';
 import { StaticButton } from '../../../global/components/lib/button/staticButton/Style';
@@ -10,14 +10,15 @@ import Loader from '../../../global/components/lib/loader/fullScreen/Loader';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import useThemeContext from '../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../global/context/widget/apiError/hooks/useApiErrorContext';
+import { firestore } from '../../../global/firebase/config/config';
 import ArrayHelper from '../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
+import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../global/hooks/useForm';
 import useLocalStorage from '../../../global/hooks/useLocalStorage';
-import socket from '../../../socket';
+import FirestoreDB from '../class/FirestoreDb';
 import LocalDB from '../class/LocalDb';
 import PlayFormClass from '../class/PlayForm';
-import FirestoreDB from '../class/FirestoreDb';
 
 export default function Play(): JSX.Element {
    const { isDarkTheme } = useThemeContext();
@@ -27,73 +28,79 @@ export default function Play(): JSX.Element {
       PlayFormClass.form.initialErrors,
       PlayFormClass.form.validate,
    );
-   const { isLoading, error, isPaused, data } = FirestoreDB.Topics.getTopicsQuery();
+   const { isLoading, isPaused, data } = FirestoreDB.Topics.getTopicsQuery();
    const navigation = useNavigate();
    const [clientUser, setClientUser] = useLocalStorage(LocalDB.key.clientName, '');
    const [clientRoom, setClientRoom] = useLocalStorage(LocalDB.key.clientRoom, '');
 
-   useEffect(() => {
-      // Game Hosting Event Listener:
-      socket.on('gamehosted', (roomId) => {
-         // TODO: Get user from realtime db using socket.id
-         console.log(`Game hosted by ${form.name} with roomId: ${roomId}, topic: ${form.topic}`);
-         // Add username to local storage and roomId
-         setClientUser(form.name);
-         setClientRoom(roomId);
-         navigation('/main/waitingroom');
-      });
-      return () => {
-         socket.off('gamehosted');
-      };
-   }, []);
-
-   useEffect(() => {
-      socket.on('usernametaken', () => {
-         alert('Be Original, Ben');
-      });
-   }, []);
-
-   useEffect(() => {
-      socket.on('roomnotexists', () => {
-         alert('Room does not exist');
-      });
-   });
-
-   useEffect(() => {
-      socket.on('userjoined', () => {
-         // TODO: Get user and roomId from realtime database
-         console.log(`User ${form.name} with roomId: ${form.roomId}`);
-         // Add username to local storage and roomId
-         setClientUser(form.name);
-         setClientRoom(form.roomId);
-         navigation('/main/waitingroom');
-      });
-      return () => {
-         socket.off('gamehosted');
-      };
-   }, []);
+   const setRoomData = FirestoreDB.Room.setRoomMutation({});
 
    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
       const { isFormValid } = initHandleSubmit(e);
       console.log('isFormValid', isFormValid);
       if (!isFormValid) return;
       if (form.joinOrHost === 'host') {
-         console.log('hosting');
-         handleHostGame();
+         await handleHostGame();
+
          return;
       }
-      console.log('joining');
-      handleJoinGame();
+      await handleJoinGame();
    }
 
-   function handleHostGame(): void {
-      // emit event to server with game deats
-      socket.emit('hostgame', form.name, form.topic);
+   async function handleJoinGame(): Promise<void> {
+      // Check to see if the room exists in firestore by running the query
+      const docRef = doc(firestore, FirestoreDB.Room.key.collection, form.roomId);
+      const docSnap = await getDoc(docRef);
+      if (!docSnap.exists()) {
+         alert('Room does not exist!');
+         return;
+      }
+      const roomData = docSnap.data() as FirestoreDB.Room.IRoom;
+      const clientUserExistsInRoom = roomData.users.some((user) => user.userId === form.name);
+      if (clientUserExistsInRoom) {
+         alert('Be original, Ben');
+         return;
+      }
+      const roomIsFull = roomData.users.length >= 10;
+      if (roomIsFull) {
+         alert('Room is full');
+         return;
+      }
+      setClientRoom(form.roomId);
+      setClientUser(form.name);
+      if (roomData.gameStarted) {
+         const averageScore =
+            ArrayOfObjects.calcSumOfKeyValue(roomData.users, 'score') / roomData.users.length;
+         const user = { deliberateExit: false, score: averageScore, userId: form.name };
+         const updatedRoomData = { ...roomData, users: [...roomData.users, user] };
+         await setDoc(docRef, { room: updatedRoomData });
+         navigation('/main/startedgame');
+      }
+      if (roomData.gameStarted === false) {
+         const user = { deliberateExit: false, score: 0, userId: form.name };
+         const updatedRoomData = { ...roomData, users: [...roomData.users, user] };
+         await setDoc(docRef, { room: updatedRoomData });
+         navigation('/main/waitingroom');
+      }
    }
 
-   function handleJoinGame(): void {
-      // TODO: Functionality for joining a game goes here...
-      socket.emit('joingame', form.name, form.roomId);
+   async function handleHostGame(): Promise<void> {
+      const room: FirestoreDB.Room.IRoom = {
+         activeTopic: form.topic,
+         gameStarted: false,
+         roomId: '', // TODO - generate roomId
+         users: [
+            {
+               deliberateExit: false,
+               score: 0,
+               userId: form.name,
+            },
+         ],
+      };
+      await setRoomData.mutateAsync(room);
+      setClientRoom(''); // TODO - generated roomId
+      setClientUser(form.name);
+      navigation('/main/waitingroom');
    }
 
    function dropDownOptions(
