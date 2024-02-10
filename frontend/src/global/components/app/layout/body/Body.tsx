@@ -5,10 +5,10 @@ export const Body = styled.div<{ isDarkTheme: boolean }>`
    position: fixed;
    width: 100dvw;
    top: 10%;
-   bottom: 10%;
+   bottom: 0;
    @media (min-width: ${MyCSS.PortableBp.asPx}) {
-      left: 15%;
-      width: 85dvw;
-      bottom: 0;
+      margin-top: 20px;
+      left: 5vw;
+      width: 90dvw;
    }
 `;

@@ -18,11 +18,11 @@ export const Header = styled.div<{ isDarkTheme: boolean }>`
    align-items: center;
    font-size: 1.1em;
    @media (min-width: ${MyCSS.PortableBp.asPx}) {
-      left: 15%;
-      width: 85dvw;
+      left: 5dvw;
+      width: 90dvw;
       border-bottom: none;
-      justify-content: start;
-      padding-left: 1.5em;
+      justify-content: center;
+      padding-top: 20px;
       font-size: 3em;
    }
    z-index: 1;

@@ -1,12 +1,10 @@
 import { Outlet } from 'react-router-dom';
 import { Body } from '../../global/components/app/layout/body/Body';
-import Footer from '../../global/components/app/layout/footer/Footer';
 import {
    Header,
    HeaderRightElWrapper,
    StyledBackArr,
 } from '../../global/components/app/layout/header/Header';
-import Sidebar from '../../global/components/app/layout/sidebar/Sidebar';
 import { LogoText } from '../../global/components/app/logo/LogoText';
 import ConditionalRender from '../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import useThemeContext from '../../global/context/theme/hooks/useThemeContext';
@@ -23,7 +21,7 @@ export default function MainLayout(): JSX.Element {
    return (
       <>
          <GameContextProvider>
-            <Header isDarkTheme={isDarkTheme}>
+            <Header isDarkTheme={isDarkTheme} style={{ border: '1px solid red' }}>
                <ConditionalRender condition={showBackBtn}>
                   <StyledBackArr
                      onClick={handleBackBtnClick}
@@ -35,15 +33,9 @@ export default function MainLayout(): JSX.Element {
                   {headerRightElement}
                </HeaderRightElWrapper>
             </Header>
-            <Body isDarkTheme={isDarkTheme}>
+            <Body isDarkTheme={isDarkTheme} style={{ border: '1px solid red' }}>
                <Outlet />
             </Body>
-            <ConditionalRender condition={!isPortableDevice}>
-               <Sidebar />
-            </ConditionalRender>
-            <ConditionalRender condition={isPortableDevice}>
-               <Footer />
-            </ConditionalRender>
          </GameContextProvider>
       </>
    );

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useLocalStorage from '../../../global/hooks/useLocalStorage';
 import FirestoreDB from '../class/FirestoreDb';
@@ -10,6 +10,8 @@ import { GameContext } from './GameContext';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { firestore } from '../../../global/firebase/config/config';
 import { useQueryClient } from '@tanstack/react-query';
+import useHeaderContext from '../../../global/context/widget/header/hooks/useHeaderContext';
+import GuideAndLeaveRoom from '../components/GuideAndLeaveRoom';
 
 interface IGameContextProvider {
    children: ReactNode;
@@ -22,9 +24,14 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
    const [localDbRoom, setLocalDbRoom] = useLocalStorage(LocalDB.key.localDbRoom, '');
    const { data: roomData, isLoading, refetch } = FirestoreDB.Room.getRoomQuery(localDbRoom);
    const [ranBefore, setRanBefore] = useState(false);
+   const { setHeaderRightElement } = useHeaderContext();
    const navigation = useNavigate();
-
+   const location = useLocation();
    const queryClient = useQueryClient();
+
+   useEffect(() => {
+      setHeaderRightElement(<GuideAndLeaveRoom currentPath={location.pathname} />);
+   }, [location.pathname]);
 
    useEffect(() => {
       if (MiscHelper.isNotFalsyOrEmpty(localDbRoom)) {
