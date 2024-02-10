@@ -13,6 +13,8 @@ import useHeaderContext from '../../global/context/widget/header/hooks/useHeader
 import BoolHelper from '../../global/helpers/dataTypes/bool/BoolHelper';
 import GameContextProvider from './context/GameContextProvider';
 
+// TODO NEXT: Get all the leave game functionality and logic working (including the timer to rejoin etc.)
+
 export default function MainLayout(): JSX.Element {
    const { isDarkTheme } = useThemeContext();
    const { headerTitle, showBackBtn, handleBackBtnClick, headerRightElement } = useHeaderContext();
