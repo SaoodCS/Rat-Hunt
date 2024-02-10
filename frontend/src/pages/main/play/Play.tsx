@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import LogoFader from '../../../global/components/app/logo/LogoFader';
 import { StaticButton } from '../../../global/components/lib/button/staticButton/Style';
@@ -16,14 +16,15 @@ import ArrayHelper from '../../../global/helpers/dataTypes/arrayHelper/ArrayHelp
 import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../global/hooks/useForm';
-import useLocalStorage from '../../../global/hooks/useLocalStorage';
 import FirestoreDB from '../class/FirestoreDb';
-import LocalDB from '../class/LocalDb';
 import PlayFormClass from '../class/PlayForm';
+import { useContext } from 'react';
+import { GameContext } from '../context/GameContext';
 
 export default function Play(): JSX.Element {
    const { isDarkTheme } = useThemeContext();
    const { apiError } = useApiErrorContext();
+   const { setLocalDbRoom, setLocalDbUser } = useContext(GameContext);
    const { form, errors, handleChange, initHandleSubmit } = useForm(
       PlayFormClass.form.initialState,
       PlayFormClass.form.initialErrors,
@@ -32,8 +33,6 @@ export default function Play(): JSX.Element {
    const { isLoading, isPaused, data } = FirestoreDB.Topics.getTopicsQuery();
    const { data: allRoomIds } = FirestoreDB.Game.getAllRoomIdsQuery();
    const navigation = useNavigate();
-   const [, setClientUser] = useLocalStorage(LocalDB.key.clientName, '');
-   const [, setClientRoom] = useLocalStorage(LocalDB.key.clientRoom, '');
 
    const setRoomData = FirestoreDB.Room.setRoomMutation({});
 
@@ -66,22 +65,18 @@ export default function Play(): JSX.Element {
          alert('Room is full');
          return;
       }
-      setClientRoom(form.roomId);
-      setClientUser(form.name);
-      if (roomData.gameStarted) {
-         const averageScore =
-            ArrayOfObjects.calcSumOfKeyValue(roomData.users, 'score') / roomData.users.length;
-         const user = { deliberateExit: false, score: averageScore, userId: form.name };
-         const updatedRoomData = { ...roomData, users: [...roomData.users, user] };
-         await setDoc(docRef, { ...updatedRoomData });
-         navigation('/main/startedgame');
-      }
-      if (roomData.gameStarted === false) {
-         const user = { deliberateExit: false, score: 0, userId: form.name };
-         const updatedRoomData = { ...roomData, users: [...roomData.users, user] };
-         await setDoc(docRef, { ...updatedRoomData });
-         navigation('/main/waitingroom');
-      }
+      const user = {
+         deliberateExit: false,
+         score: roomData.gameStarted
+            ? ArrayOfObjects.calcSumOfKeyValue(roomData.users, 'score') / roomData.users.length
+            : 0,
+         userId: form.name,
+      };
+      const updatedRoomData = { ...roomData, users: [...roomData.users, user] };
+      await setRoomData.mutateAsync(updatedRoomData);
+      setLocalDbRoom(form.roomId);
+      setLocalDbUser(form.name);
+      navigation(roomData.gameStarted ? '/main/startedgame' : '/main/waitingroom');
    }
 
    async function handleHostGame(): Promise<void> {
@@ -100,8 +95,8 @@ export default function Play(): JSX.Element {
       };
       await setRoomData.mutateAsync(room);
 
-      setClientRoom(generatedRoomId);
-      setClientUser(form.name);
+      setLocalDbRoom(generatedRoomId);
+      setLocalDbUser(form.name);
       navigation('/main/waitingroom');
    }
 

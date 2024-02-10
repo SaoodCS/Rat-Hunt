@@ -65,6 +65,7 @@ export namespace FirestoreDB {
             queryKey: [key.getRoom],
             queryFn: async (): Promise<IRoom> => {
                try {
+                  console.log('roomId:', roomId);
                   // const roomId = localStorage.getItem(LocalDB.key.clientRoom) ?? '';
                   if (roomId === '') return {} as IRoom;
                   const docRef = doc(firestore, key.collection, roomId);

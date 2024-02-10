@@ -15,33 +15,39 @@ interface IGameContextProvider {
 export default function GameContextProvider(props: IGameContextProvider): JSX.Element {
    const { children } = props;
    const [allUsers, setAllUsers] = useState<string[]>([]);
-   const [clientUser, setClientUser] = useLocalStorage(LocalDB.key.clientName, '');
-   const [clientRoom, setClientRoom] = useLocalStorage(LocalDB.key.clientRoom, '');
-   const { data: roomData, isLoading } = FirestoreDB.Room.getRoomQuery(clientRoom);
+   const [localDbUser, setLocalDbUser] = useLocalStorage(LocalDB.key.localDbName, '');
+   const [localDbRoom, setLocalDbRoom] = useLocalStorage(LocalDB.key.localDbRoom, '');
+   const { data: roomData, isLoading, refetch } = FirestoreDB.Room.getRoomQuery(localDbRoom);
    const [ranBefore, setRanBefore] = useState(false);
    const navigation = useNavigate();
+
+   useEffect(() => {
+      if (MiscHelper.isNotFalsyOrEmpty(localDbRoom)) {
+         refetch();
+      }
+   }, [localDbRoom]);
 
    useEffect(() => {
       if (!isLoading && !ranBefore) {
          setRanBefore(true);
          const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
          if (!roomDataExists) {
-            setClientRoom('');
-            setClientUser('');
+            setLocalDbRoom('');
+            setLocalDbUser('');
             navigation('/main/play');
             return;
          }
 
-         const clientUserExistsInRoom = roomData.users.some((user) => user.userId === clientUser);
-         if (roomDataExists && !clientUserExistsInRoom) {
+         const localDbUserExistsInRoom = roomData.users.some((user) => user.userId === localDbUser);
+         if (roomDataExists && !localDbUserExistsInRoom) {
             alert('You have been removed from the room!');
-            setClientRoom('');
-            setClientUser('');
+            setLocalDbRoom('');
+            setLocalDbUser('');
             navigation('/main/play');
             return;
          }
 
-         if (roomDataExists && clientUserExistsInRoom) {
+         if (roomDataExists && localDbUserExistsInRoom) {
             const userIds = roomData.users.map((user) => user.userId);
             setAllUsers(userIds);
             if (roomData.gameStarted) {
@@ -53,5 +59,11 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
       }
    }, [isLoading]);
 
-   return <GameContext.Provider value={{ allUsers, setAllUsers }}>{children}</GameContext.Provider>;
+   return (
+      <GameContext.Provider
+         value={{ allUsers, setAllUsers, localDbRoom, setLocalDbRoom, localDbUser, setLocalDbUser }}
+      >
+         {children}
+      </GameContext.Provider>
+   );
 }

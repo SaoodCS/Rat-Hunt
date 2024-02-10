@@ -11,19 +11,15 @@ import { FlexColumnWrapper } from '../../../global/components/lib/positionModifi
 import { FlexRowWrapper } from '../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
 import { ToastContext } from '../../../global/context/widget/toast/ToastContext';
 import Color from '../../../global/css/colors';
-import useLocalStorage from '../../../global/hooks/useLocalStorage';
-import LocalDB from '../class/LocalDb';
 import { GameContext } from '../context/GameContext';
 import FirestoreDB from '../class/FirestoreDb';
 import StringHelper from '../../../global/helpers/dataTypes/string/StringHelper';
-// TODO: when a new user joins and the same new user is navigated to this waiting room, the allUsers array is not updated -- fix this..
+import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 // TODO: when a new user joins or a user leaves the room, the allUsers array isn't updated for all users -- fix this...
 
 export default function WaitingRoom(): JSX.Element {
-   const { allUsers } = useContext(GameContext);
+   const { allUsers, setAllUsers, localDbRoom, localDbUser } = useContext(GameContext);
    const navigation = useNavigate();
-   const [clientRoom] = useLocalStorage(LocalDB.key.clientRoom, '');
-   const [clientUser] = useLocalStorage(LocalDB.key.clientName, '');
    const {
       toggleToast,
       setToastMessage,
@@ -32,14 +28,19 @@ export default function WaitingRoom(): JSX.Element {
       setHorizontalPos,
       setToastZIndex,
    } = useContext(ToastContext);
-   const { data: roomData } = FirestoreDB.Room.getRoomQuery(clientRoom);
+   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom, {
+      onSuccess: (data) => {
+         const allUsers = ArrayOfObjects.getArrOfValuesFromKey(data.users, 'userId');
+         setAllUsers(allUsers);
+      },
+   });
 
    function handleStartGame(): void {
       navigation('/main/startedgame');
    }
 
    async function copyToClipboard(): Promise<void> {
-      await navigator.clipboard.writeText(clientRoom);
+      await navigator.clipboard.writeText(localDbRoom);
       setToastMessage('Room ID Copied!');
       setWidth('200px');
       setVerticalPos('bottom');
@@ -72,7 +73,7 @@ export default function WaitingRoom(): JSX.Element {
                color={Color.darkThm.accentAlt}
             >
                <TextColourizer bold>Room ID:&nbsp;</TextColourizer>
-               <TextColourizer>{clientRoom}</TextColourizer>
+               <TextColourizer>{localDbRoom}</TextColourizer>
                <Copy
                   size="1em"
                   onClick={copyToClipboard}
@@ -99,12 +100,12 @@ export default function WaitingRoom(): JSX.Element {
                >
                   <CircleUser
                      size="1.75em"
-                     color={clientUser === user ? Color.darkThm.error : Color.darkThm.accent}
+                     color={localDbUser === user ? Color.darkThm.error : Color.darkThm.accent}
                   />
                   <TextColourizer
                      padding="0em 0em 0em 1em"
                      bold
-                     color={clientUser === user ? Color.darkThm.error : Color.darkThm.accent}
+                     color={localDbUser === user ? Color.darkThm.error : Color.darkThm.accent}
                   >
                      {user}
                   </TextColourizer>
