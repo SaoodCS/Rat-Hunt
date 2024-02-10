@@ -14,14 +14,14 @@ import BoolHelper from '../../global/helpers/dataTypes/bool/BoolHelper';
 import GameContextProvider from './context/GameContextProvider';
 
 export default function MainLayout(): JSX.Element {
-   const { isDarkTheme, isPortableDevice } = useThemeContext();
+   const { isDarkTheme } = useThemeContext();
    const { headerTitle, showBackBtn, handleBackBtnClick, headerRightElement } = useHeaderContext();
    HeaderHooks.useOnMount.setHeaderTitle('Rat Hunt');
 
    return (
       <>
          <GameContextProvider>
-            <Header isDarkTheme={isDarkTheme} style={{ border: '1px solid red' }}>
+            <Header isDarkTheme={isDarkTheme}>
                <ConditionalRender condition={showBackBtn}>
                   <StyledBackArr
                      onClick={handleBackBtnClick}
@@ -33,7 +33,7 @@ export default function MainLayout(): JSX.Element {
                   {headerRightElement}
                </HeaderRightElWrapper>
             </Header>
-            <Body isDarkTheme={isDarkTheme} style={{ border: '1px solid red' }}>
+            <Body isDarkTheme={isDarkTheme}>
                <Outlet />
             </Body>
          </GameContextProvider>
