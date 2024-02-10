@@ -30,7 +30,7 @@ export default function WaitingRoom(): JSX.Element {
       setHorizontalPos,
       setToastZIndex,
    } = useContext(ToastContext);
-   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
+   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom, {});
 
    useEffect(() => {
       if (MiscHelper.isNotFalsyOrEmpty(roomData)) {

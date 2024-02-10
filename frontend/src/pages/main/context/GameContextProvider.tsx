@@ -32,6 +32,9 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
          const unsubscribe = onSnapshot(docRef, (doc) => {
             const roomData = doc.data();
             if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
+               // NOTE: When this is called, it changes the cached data locally and does not call the getRoomQuery. So onSuccess etc. events are not triggered when this is called.
+               // However, the data deconstructed from the getRoomQuery in updated (as this is a reference to the data in the cache)
+               // So if you want to run an event when the data is updated, you can use a useEffect which runs every time roomData is updated.
                queryClient.setQueryData([FirestoreDB.Room.key.getRoom], roomData);
             }
          });

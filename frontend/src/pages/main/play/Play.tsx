@@ -94,7 +94,6 @@ export default function Play(): JSX.Element {
          ],
       };
       await setRoomData.mutateAsync(room);
-
       setLocalDbRoom(generatedRoomId);
       setLocalDbUser(form.name);
       navigation('/main/waitingroom');
