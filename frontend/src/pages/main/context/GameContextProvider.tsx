@@ -7,6 +7,8 @@ import useLocalStorage from '../../../global/hooks/useLocalStorage';
 import FirestoreDB from '../class/FirestoreDb';
 import LocalDB from '../class/LocalDb';
 import { GameContext } from './GameContext';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { firestore } from '../../../global/firebase/config/config';
 
 interface IGameContextProvider {
    children: ReactNode;
@@ -20,6 +22,23 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
    const { data: roomData, isLoading, refetch } = FirestoreDB.Room.getRoomQuery(localDbRoom);
    const [ranBefore, setRanBefore] = useState(false);
    const navigation = useNavigate();
+   
+
+   useEffect(() => {
+      if (MiscHelper.isNotFalsyOrEmpty(localDbRoom)) {
+         const docRef = doc(firestore, FirestoreDB.Room.key.collection, localDbRoom);
+         const unsubscribe = onSnapshot(docRef, (doc) => {
+            const roomData = doc.data();
+            if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
+               refetch();
+            }
+         });
+
+         return () => {
+            unsubscribe();
+         };
+      }
+   }, [localDbRoom]);
 
    useEffect(() => {
       if (MiscHelper.isNotFalsyOrEmpty(localDbRoom)) {
