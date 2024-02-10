@@ -15,6 +15,8 @@ import { GameContext } from '../context/GameContext';
 import FirestoreDB from '../class/FirestoreDb';
 import StringHelper from '../../../global/helpers/dataTypes/string/StringHelper';
 import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import { useEffect } from 'react';
+import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 // TODO: when a new user joins or a user leaves the room, the allUsers array isn't updated for all users -- fix this...
 
 export default function WaitingRoom(): JSX.Element {
@@ -28,12 +30,14 @@ export default function WaitingRoom(): JSX.Element {
       setHorizontalPos,
       setToastZIndex,
    } = useContext(ToastContext);
-   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom, {
-      onSuccess: (data) => {
-         const allUsers = ArrayOfObjects.getArrOfValuesFromKey(data.users, 'userId');
+   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
+
+   useEffect(() => {
+      if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
+         const allUsers = ArrayOfObjects.getArrOfValuesFromKey(roomData.users, 'userId');
          setAllUsers(allUsers);
-      },
-   });
+      }
+   }, [roomData]);
 
    function handleStartGame(): void {
       navigation('/main/startedgame');

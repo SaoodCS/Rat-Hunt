@@ -9,6 +9,7 @@ import LocalDB from '../class/LocalDb';
 import { GameContext } from './GameContext';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { firestore } from '../../../global/firebase/config/config';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface IGameContextProvider {
    children: ReactNode;
@@ -22,7 +23,8 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
    const { data: roomData, isLoading, refetch } = FirestoreDB.Room.getRoomQuery(localDbRoom);
    const [ranBefore, setRanBefore] = useState(false);
    const navigation = useNavigate();
-   
+
+   const queryClient = useQueryClient();
 
    useEffect(() => {
       if (MiscHelper.isNotFalsyOrEmpty(localDbRoom)) {
@@ -30,7 +32,7 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
          const unsubscribe = onSnapshot(docRef, (doc) => {
             const roomData = doc.data();
             if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
-               refetch();
+               queryClient.setQueryData([FirestoreDB.Room.key.getRoom], roomData);
             }
          });
 
