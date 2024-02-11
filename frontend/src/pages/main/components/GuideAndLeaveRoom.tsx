@@ -26,10 +26,13 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
       toggleModal(true);
    }
 
+   function waitingOrStartedPage(): boolean {
+      return currentPath.includes('waiting') || currentPath.includes('started');
+   }
+
    return (
       <>
-         {currentPath.includes('waiting') ||
-            (currentPath.includes('started') && <LogOut onClick={handleLeaveRoom} />)}
+         {waitingOrStartedPage() && <LogOut onClick={handleLeaveRoom} />}
          <Help onClick={handleHelpGuide} />
       </>
    );
