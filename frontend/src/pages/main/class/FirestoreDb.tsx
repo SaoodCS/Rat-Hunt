@@ -1,6 +1,6 @@
 import type { UseMutationOptions, UseMutationResult } from '@tanstack/react-query';
 import { useQuery, type UseQueryOptions, type UseQueryResult } from '@tanstack/react-query';
-import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
 import APIHelper from '../../../global/firebase/apis/helper/NApiHelper';
 import { firestore } from '../../../global/firebase/config/config';
 import { useCustomMutation } from '../../../global/hooks/useCustomMutation';
@@ -89,6 +89,28 @@ export namespace FirestoreDB {
                try {
                   const docRef = doc(firestore, key.collection, roomData.roomId);
                   await setDoc(docRef, { ...roomData });
+               } catch (e) {
+                  throw new APIHelper.ErrorThrower(APIHelper.handleError(e));
+               }
+            },
+            { ...options },
+         );
+      }
+
+      interface IUpdateGameStartedParam {
+         gameStarted: boolean;
+         roomId: string;
+      }
+
+      export function updateGameStartedMutation(
+         options: UseMutationOptions<void, unknown, IUpdateGameStartedParam>,
+      ): UseMutationResult<void, unknown, IUpdateGameStartedParam, void> {
+         return useCustomMutation(
+            async (params: IUpdateGameStartedParam) => {
+               const { gameStarted, roomId } = params;
+               try {
+                  const docRef = doc(firestore, key.collection, roomId);
+                  await updateDoc(docRef, { gameStarted });
                } catch (e) {
                   throw new APIHelper.ErrorThrower(APIHelper.handleError(e));
                }

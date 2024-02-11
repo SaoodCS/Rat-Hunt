@@ -17,7 +17,6 @@ import StringHelper from '../../../global/helpers/dataTypes/string/StringHelper'
 import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import { useEffect } from 'react';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-// TODO: when a new user joins or a user leaves the room, the allUsers array isn't updated for all users -- fix this...
 
 export default function WaitingRoom(): JSX.Element {
    const { allUsers, setAllUsers, localDbRoom, localDbUser } = useContext(GameContext);
@@ -30,17 +29,25 @@ export default function WaitingRoom(): JSX.Element {
       setHorizontalPos,
       setToastZIndex,
    } = useContext(ToastContext);
-   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom, {});
+   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
+
+   const updateGameStarted = FirestoreDB.Room.updateGameStartedMutation({});
 
    useEffect(() => {
       if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
          const allUsers = ArrayOfObjects.getArrOfValuesFromKey(roomData.users, 'userId');
          setAllUsers(allUsers);
+         if (roomData.gameStarted) {
+            navigation('/main/startedgame');
+         }
       }
    }, [roomData]);
 
-   function handleStartGame(): void {
-      navigation('/main/startedgame');
+   async function handleStartGame(): Promise<void> {
+      await updateGameStarted.mutateAsync({
+         gameStarted: true,
+         roomId: localDbRoom,
+      });
    }
 
    async function copyToClipboard(): Promise<void> {

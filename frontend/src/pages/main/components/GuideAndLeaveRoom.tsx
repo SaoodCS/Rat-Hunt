@@ -28,7 +28,8 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
 
    return (
       <>
-         {currentPath.includes('waiting' || 'started') && <LogOut onClick={handleLeaveRoom} />}
+         {currentPath.includes('waiting') ||
+            (currentPath.includes('started') && <LogOut onClick={handleLeaveRoom} />)}
          <Help onClick={handleHelpGuide} />
       </>
    );
