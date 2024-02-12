@@ -65,8 +65,9 @@ export default function Play(): JSX.Element {
          alert('Room is full');
          return;
       }
-      const user = {
-         deliberateExit: false,
+      const user: FirestoreDB.Room.IUser = {
+         userStatus: 'connected',
+         lastOnline: new Date().toUTCString(),
          score: roomData.gameStarted
             ? ArrayOfObjects.calcSumOfKeyValue(roomData.users, 'score') / roomData.users.length
             : 0,
@@ -87,7 +88,8 @@ export default function Play(): JSX.Element {
          roomId: generatedRoomId,
          users: [
             {
-               deliberateExit: false,
+               userStatus: 'connected',
+               lastOnline: new Date().toUTCString(),
                score: 0,
                userId: form.name,
             },

@@ -50,7 +50,8 @@ export namespace FirestoreDB {
    export namespace Room {
       export interface IUser {
          // TODO: get rid of deliberateExit field
-         deliberateExit: boolean;
+         userStatus: 'connected' | 'disconnected';
+         lastOnline: string;
          score: number;
          userId: string;
       }
