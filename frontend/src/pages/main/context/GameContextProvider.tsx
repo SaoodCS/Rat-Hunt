@@ -28,6 +28,26 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
    const navigation = useNavigate();
    const location = useLocation();
    const queryClient = useQueryClient();
+   const deleteRoomMutation = FirestoreDB.Room.deleteRoomMutation({});
+
+   useEffect(() => {
+      if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
+         // check if the user exists in the room, and if they do not, navigate them to the play page:
+         const userExists = roomData.users.some((user) => user.userId === localDbUser);
+         if (!userExists) {
+            setLocalDbRoom('');
+            setLocalDbUser('');
+            navigation('/main/play');
+         }
+         // if there is no user in the room
+         if (roomData.users.length === 0) {
+            deleteRoomMutation.mutateAsync({ roomId: localDbRoom });
+            setLocalDbRoom('');
+            setLocalDbUser('');
+            navigation('/main/play');
+         }
+      }
+   }, [roomData]);
 
    useEffect(() => {
       // This useEffect renders the Leave Room icon and Guide icon in the header if the user is in the waiting room or started game, otherwise it renders the Guide icon only

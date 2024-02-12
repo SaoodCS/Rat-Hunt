@@ -1,6 +1,15 @@
 import type { UseMutationOptions, UseMutationResult } from '@tanstack/react-query';
 import { useQuery, type UseQueryOptions, type UseQueryResult } from '@tanstack/react-query';
-import { collection, doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
+import {
+   arrayRemove,
+   collection,
+   deleteDoc,
+   doc,
+   getDoc,
+   getDocs,
+   setDoc,
+   updateDoc,
+} from 'firebase/firestore';
 import APIHelper from '../../../global/firebase/apis/helper/NApiHelper';
 import { firestore } from '../../../global/firebase/config/config';
 import { useCustomMutation } from '../../../global/hooks/useCustomMutation';
@@ -111,6 +120,49 @@ export namespace FirestoreDB {
                try {
                   const docRef = doc(firestore, key.collection, roomId);
                   await updateDoc(docRef, { gameStarted });
+               } catch (e) {
+                  throw new APIHelper.ErrorThrower(APIHelper.handleError(e));
+               }
+            },
+            { ...options },
+         );
+      }
+
+      interface IDeleteUserParam {
+         roomData: FirestoreDB.Room.IRoom;
+         user: IUser | undefined;
+      }
+
+      export function deleteUserMutation(
+         options: UseMutationOptions<void, unknown, IDeleteUserParam>,
+      ): UseMutationResult<void, unknown, IDeleteUserParam, void> {
+         return useCustomMutation(
+            async (userData: IDeleteUserParam) => {
+               try {
+                  const docRef = doc(firestore, key.collection, userData.roomData.roomId);
+                  await updateDoc(docRef, {
+                     users: arrayRemove(userData.user),
+                  });
+               } catch (e) {
+                  throw new APIHelper.ErrorThrower(APIHelper.handleError(e));
+               }
+            },
+            { ...options },
+         );
+      }
+
+      interface IDeleteRoomParam {
+         roomId: string;
+      }
+
+      export function deleteRoomMutation(
+         options: UseMutationOptions<void, unknown, IDeleteRoomParam>,
+      ): UseMutationResult<void, unknown, IDeleteRoomParam, void> {
+         return useCustomMutation(
+            async (params: IDeleteRoomParam) => {
+               try {
+                  const docRef = doc(firestore, key.collection, params.roomId);
+                  await deleteDoc(docRef);
                } catch (e) {
                   throw new APIHelper.ErrorThrower(APIHelper.handleError(e));
                }
