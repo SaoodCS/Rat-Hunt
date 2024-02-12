@@ -57,7 +57,7 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
    useEffect(() => {
       // This useEffect listens to changes in the firestore room document and updates the roomData cache when the document is updated (doesn't re-run the getRoomQuery, so onSuccess etc. query events are not triggered)
       if (MiscHelper.isNotFalsyOrEmpty(localDbRoom)) {
-         const docRef = doc(firestore, FirestoreDB.Room.key.collection, localDbRoom);
+         const docRef = doc(firestore, FirestoreDB.Room.key.collection, `room-${localDbRoom}`);
          const unsubscribe = onSnapshot(docRef, (doc) => {
             const roomData = doc.data();
             if (MiscHelper.isNotFalsyOrEmpty(roomData)) {

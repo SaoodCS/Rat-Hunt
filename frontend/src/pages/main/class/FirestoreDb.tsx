@@ -49,6 +49,7 @@ export namespace FirestoreDB {
 
    export namespace Room {
       export interface IUser {
+         // TODO: get rid of deliberateExit field
          deliberateExit: boolean;
          score: number;
          userId: string;
@@ -76,7 +77,7 @@ export namespace FirestoreDB {
                try {
                   console.log('Get Room Query Is Running: ', roomId);
                   if (roomId === '') return {} as IRoom;
-                  const docRef = doc(firestore, key.collection, roomId);
+                  const docRef = doc(firestore, key.collection, `room-${roomId}`);
                   const docSnap = await getDoc(docRef);
                   if (docSnap.exists()) {
                      return docSnap.data() as IRoom;
@@ -96,7 +97,7 @@ export namespace FirestoreDB {
          return useCustomMutation(
             async (roomData: IRoom) => {
                try {
-                  const docRef = doc(firestore, key.collection, roomData.roomId);
+                  const docRef = doc(firestore, key.collection, `room-${roomData.roomId}`);
                   await setDoc(docRef, { ...roomData });
                } catch (e) {
                   throw new APIHelper.ErrorThrower(APIHelper.handleError(e));
@@ -118,7 +119,7 @@ export namespace FirestoreDB {
             async (params: IUpdateGameStartedParam) => {
                const { gameStarted, roomId } = params;
                try {
-                  const docRef = doc(firestore, key.collection, roomId);
+                  const docRef = doc(firestore, key.collection, `room-${roomId}`);
                   await updateDoc(docRef, { gameStarted });
                } catch (e) {
                   throw new APIHelper.ErrorThrower(APIHelper.handleError(e));
@@ -139,7 +140,7 @@ export namespace FirestoreDB {
          return useCustomMutation(
             async (userData: IDeleteUserParam) => {
                try {
-                  const docRef = doc(firestore, key.collection, userData.roomData.roomId);
+                  const docRef = doc(firestore, key.collection, `room-${userData.roomData.roomId}`);
                   await updateDoc(docRef, {
                      users: arrayRemove(userData.user),
                   });
@@ -161,7 +162,7 @@ export namespace FirestoreDB {
          return useCustomMutation(
             async (params: IDeleteRoomParam) => {
                try {
-                  const docRef = doc(firestore, key.collection, params.roomId);
+                  const docRef = doc(firestore, key.collection, `room-${params.roomId}`);
                   await deleteDoc(docRef);
                } catch (e) {
                   throw new APIHelper.ErrorThrower(APIHelper.handleError(e));
