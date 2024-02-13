@@ -1,38 +1,40 @@
-import * as firebase from 'firebase-admin';
-
-// Initialize Firebase Admin SDK with your service account credentials
-const serviceAccount = require('./serviceKey/fbServiceKey.json'); // Replace with your actual key path
-
-firebase.initializeApp({
-    credential: firebase.credential.cert(serviceAccount)
-});
+import { initializeApp, FirebaseOptions } from "firebase/app";
+import { getDatabase, ref, set, serverTimestamp, DatabaseReference, onDisconnect } from "firebase/database";
+import { firebaseRTDB } from "../../../global/firebase/config/config";
 
 // Get references to Firebase Realtime Database
-const db = firebase.database();
+const db = firebaseRTDB
 
-// Define types for online and offline states
-type OnlineState = {
-   userState: 'online';
-   lastOnline: typeof firebase.database.ServerValue.TIMESTAMP;
-};
+// // Define types for online and offline states
+// type OnlineState = {
+//    userState: 'online';
+//    lastOnline: typeof serverTimestamp;
+// };
 
-type OfflineState = {
-   userState: 'offline';
-   lastOnline: typeof firebase.database.ServerValue.TIMESTAMP;
-};
+// type OfflineState = {
+//    userState: 'offline';
+//    lastOnline: typeof serverTimestamp
+// };
 
-// Function to set the user's status on initial load
-export function setUserStatus(status: OnlineState | OfflineState, userId: string, roomId: string) {
-   if (!userId || !roomId) {
-      console.error('User ID or Room not available. status cannot be set.');
-      return;
-   }
-   const userStatusRef = db.ref(`/rooms/${roomId}/${userId}`);
-   userStatusRef.set(status);
+// Function to set the user's status on initial load or update
+export function setUserStatus(userId: string, roomId: string) {
+    if (!userId || !roomId) {
+        console.error('User ID or Room not available. Status cannot be set.');
+        return;
+    }
 
-   // Set user status offline on disconnect
-   userStatusRef.onDisconnect().set({ userStatus: 'offline', last_online: firebase.database.ServerValue.TIMESTAMP });
+    const userStatusRef: DatabaseReference = ref(db, `/rooms/${roomId}/${userId}`);
+
+    // Set user status to connected and log the TIMESTAMP
+    const connectedStatus = {
+        userState: 'connected',
+        lastOnline: serverTimestamp(),
+    };
+    set(userStatusRef,connectedStatus);
+
+    // Set user status to offline on disconnect
+    onDisconnect(userStatusRef).set({
+        userState: 'disconnected',
+        lastOnline: serverTimestamp(),
+    });
 }
-export const firebaseRTDB = {
-   setUserStatus,
-};

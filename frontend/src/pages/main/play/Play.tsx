@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
+import * as firebase from 'firebase-admin';
 import { doc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import LogoFader from '../../../global/components/app/logo/LogoFader';
@@ -17,6 +18,7 @@ import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arr
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../global/hooks/useForm';
 import FirestoreDB from '../class/FirestoreDb';
+import { setUserStatus } from '../class/firebaseRTDB';
 import PlayFormClass from '../class/PlayForm';
 import { useContext } from 'react';
 import { GameContext } from '../context/GameContext';
@@ -77,6 +79,7 @@ export default function Play(): JSX.Element {
       await setRoomData.mutateAsync(updatedRoomData);
       setLocalDbRoom(form.roomId);
       setLocalDbUser(form.name);
+      setUserStatus(form.name, form.roomId);
       navigation(roomData.gameStarted ? '/main/startedgame' : '/main/waitingroom');
    }
 
@@ -98,6 +101,7 @@ export default function Play(): JSX.Element {
       await setRoomData.mutateAsync(room);
       setLocalDbRoom(generatedRoomId);
       setLocalDbUser(form.name);
+      setUserStatus(form.name, generatedRoomId);
       navigation('/main/waitingroom');
    }
 
