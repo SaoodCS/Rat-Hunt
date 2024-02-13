@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import * as firebase from 'firebase-admin';
 import { doc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import LogoFader from '../../../global/components/app/logo/LogoFader';

@@ -30,7 +30,7 @@ export function setUserStatus(userId: string, roomId: string) {
         userState: 'connected',
         lastOnline: serverTimestamp(),
     };
-    set(userStatusRef,connectedStatus);
+    set(userStatusRef, connectedStatus);
 
     // Set user status to offline on disconnect
     onDisconnect(userStatusRef).set({

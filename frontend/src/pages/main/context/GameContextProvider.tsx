@@ -12,6 +12,7 @@ import FirestoreDB from '../class/FirestoreDb';
 import LocalDB from '../class/LocalDb';
 import GuideAndLeaveRoom from '../components/GuideAndLeaveRoom';
 import { GameContext } from './GameContext';
+import { setUserStatus } from '../class/firebaseRTDB';
 
 interface IGameContextProvider {
    children: ReactNode;
@@ -78,6 +79,7 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
          const localDbUserInRoom = roomData?.users?.some((user) => user.userId === localDbUser);
          if (roomDataExists && localDbUserInRoom) {
             navigation(roomData.gameStarted ? '/main/startedgame' : '/main/waitingroom');
+            setUserStatus(localDbUser, roomData.roomId);
             return;
          }
          if (roomDataExists && !localDbUserInRoom) alert('You have been removed from the room!');
