@@ -12,13 +12,13 @@ const db = firebase.database();
 
 // Define types for online and offline states
 type OnlineState = {
-   state: 'online';
-   last_changed: typeof firebase.database.ServerValue.TIMESTAMP;
+   userState: 'online';
+   lastOnline: typeof firebase.database.ServerValue.TIMESTAMP;
 };
 
 type OfflineState = {
-   state: 'offline';
-   last_changed: typeof firebase.database.ServerValue.TIMESTAMP;
+   userState: 'offline';
+   lastOnline: typeof firebase.database.ServerValue.TIMESTAMP;
 };
 
 // Function to set the user's status on initial load
@@ -31,7 +31,7 @@ export function setUserStatus(status: OnlineState | OfflineState, userId: string
    userStatusRef.set(status);
 
    // Set user status offline on disconnect
-   userStatusRef.onDisconnect().set({ state: 'offline', last_changed: firebase.database.ServerValue.TIMESTAMP });
+   userStatusRef.onDisconnect().set({ userStatus: 'offline', last_online: firebase.database.ServerValue.TIMESTAMP });
 }
 export const firebaseRTDB = {
    setUserStatus,
