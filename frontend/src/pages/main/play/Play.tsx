@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { doc, getDoc } from 'firebase/firestore';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LogoFader from '../../../global/components/app/logo/LogoFader';
 import { StaticButton } from '../../../global/components/lib/button/staticButton/Style';
@@ -17,9 +18,8 @@ import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arr
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../global/hooks/useForm';
 import FirestoreDB from '../class/FirestoreDb';
-import { setUserStatus } from '../class/firebaseRTDB';
 import PlayFormClass from '../class/PlayForm';
-import { useContext } from 'react';
+import { setUserStatus } from '../class/firebaseRTDB';
 import { GameContext } from '../context/GameContext';
 
 export default function Play(): JSX.Element {
@@ -49,7 +49,7 @@ export default function Play(): JSX.Element {
    }
 
    async function handleJoinGame(): Promise<void> {
-      const docRef = doc(firestore, FirestoreDB.Room.key.collection, form.roomId);
+      const docRef = doc(firestore, FirestoreDB.Room.key.collection, `room-${form.roomId}`);
       const docSnap = await getDoc(docRef);
       if (!docSnap.exists()) {
          alert('Room does not exist!');

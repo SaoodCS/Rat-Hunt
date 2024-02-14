@@ -10,9 +10,9 @@ import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper'
 import useLocalStorage from '../../../global/hooks/useLocalStorage';
 import FirestoreDB from '../class/FirestoreDb';
 import LocalDB from '../class/LocalDb';
+import { setUserStatus } from '../class/firebaseRTDB';
 import GuideAndLeaveRoom from '../components/GuideAndLeaveRoom';
 import { GameContext } from './GameContext';
-import { setUserStatus } from '../class/firebaseRTDB';
 
 interface IGameContextProvider {
    children: ReactNode;
@@ -47,6 +47,12 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
             setLocalDbUser('');
             navigation('/main/play');
          }
+
+         // TODO: this is a temporary console.log to check if the cloud function correctly updates the roomData on the front end when a user disconnects:
+         const disconnectedUsers = roomData.users.filter(
+            (user) => user.userStatus === 'disconnected',
+         );
+         console.log('disconnectedUsers:', disconnectedUsers);
       }
    }, [roomData]);
 
