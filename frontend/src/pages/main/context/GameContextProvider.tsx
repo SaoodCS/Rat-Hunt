@@ -53,6 +53,7 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
             (user) => user.userStatus === 'disconnected',
          );
          console.log('disconnectedUsers:', disconnectedUsers);
+         // TODO: TEST RESULTS: The realtimedb field userStatus correctly updates when a user disconnects, however the cloud function isn't triggered. However when I manually update the userStatus field in realtime database, the cloud function is triggered and the userStatus field in firestore is updated correctly.
       }
    }, [roomData]);
 
