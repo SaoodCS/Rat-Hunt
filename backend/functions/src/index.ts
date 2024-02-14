@@ -10,7 +10,6 @@ if (!admin.apps.length) {
 export const onDataChange = functions.database
   .ref("/")
   .onWrite(async (change, context) => {
-    console.log("hello");
     const newValue = change.after.val();
     const original = change.before.val();
 
