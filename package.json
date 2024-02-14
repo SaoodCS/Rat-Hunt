@@ -9,7 +9,7 @@
     "f-lint": "cd frontend && npm run lint-ts",
     "b-lint": "cd backend && npm run lint",
     "f-deploy": "cd frontend && npm run deploy",
-    "b-deploy": "cd backend && npm run deploy",
+    "b-deploy": "cd backend && firebase deploy",
     "app-deploy": "npm run f-deploy && npm run b-deploy"
   },
   "engines": {
