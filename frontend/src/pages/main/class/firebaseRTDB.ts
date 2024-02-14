@@ -1,9 +1,10 @@
-import { initializeApp, FirebaseOptions } from "firebase/app";
-import { getDatabase, ref, set, serverTimestamp, DatabaseReference, onDisconnect } from "firebase/database";
-import { firebaseRTDB } from "../../../global/firebase/config/config";
+/* eslint-disable @typescript-eslint/no-floating-promises */
+import type { DatabaseReference } from 'firebase/database';
+import { ref, set, serverTimestamp, onDisconnect } from 'firebase/database';
+import { firebaseRTDB } from '../../../global/firebase/config/config';
 
 // Get references to Firebase Realtime Database
-const db = firebaseRTDB
+const db = firebaseRTDB;
 
 // // Define types for online and offline states
 // type OnlineState = {
@@ -17,24 +18,24 @@ const db = firebaseRTDB
 // };
 
 // Function to set the user's status on initial load or update
-export function setUserStatus(userId: string, roomId: string) {
-    if (!userId || !roomId) {
-        console.error('User ID or Room not available. Status cannot be set.');
-        return;
-    }
+export function setUserStatus(userId: string, roomId: string): void {
+   if (!userId || !roomId) {
+      console.error('User ID or Room not available. Status cannot be set.');
+      return;
+   }
 
-    const userStatusRef: DatabaseReference = ref(db, `/rooms/${roomId}/${userId}`);
+   const userStatusRef: DatabaseReference = ref(db, `/rooms/${roomId}/${userId}`);
 
-    // Set user status to connected and log the TIMESTAMP
-    const connectedStatus = {
-        userState: 'connected',
-        lastOnline: serverTimestamp(),
-    };
-    set(userStatusRef, connectedStatus);
+   // Set user status to connected and log the TIMESTAMP
+   const connectedStatus = {
+      userState: 'connected',
+      lastOnline: serverTimestamp(),
+   };
+   set(userStatusRef, connectedStatus);
 
-    // Set user status to offline on disconnect
-    onDisconnect(userStatusRef).set({
-        userState: 'disconnected',
-        lastOnline: serverTimestamp(),
-    });
+   // Set user status to offline on disconnect
+   onDisconnect(userStatusRef).set({
+      userState: 'disconnected',
+      lastOnline: serverTimestamp(),
+   });
 }
