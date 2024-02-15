@@ -68,7 +68,7 @@ export default function Play(): JSX.Element {
       }
       const user: FirestoreDB.Room.IUser = {
          userStatus: 'connected',
-         lastOnline: new Date().toUTCString(),
+         statusUpdatedAt: new Date().toUTCString(),
          score: roomData.gameStarted
             ? ArrayOfObjects.calcSumOfKeyValue(roomData.users, 'score') / roomData.users.length
             : 0,
@@ -91,7 +91,7 @@ export default function Play(): JSX.Element {
          users: [
             {
                userStatus: 'connected',
-               lastOnline: new Date().toUTCString(),
+               statusUpdatedAt: new Date().toUTCString(),
                score: 0,
                userId: form.name,
             },

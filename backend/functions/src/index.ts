@@ -22,9 +22,10 @@ export const onDataChange = functions.database
     if (roomData === undefined) return;
     const users = roomData.users as IUser[];
     const userIndex = users.findIndex((user) => user.userId === userId);
+    if (userIndex === -1) return;
     const user = users[userIndex];
     user[field as "userStatus"] = value as IUser["userStatus"];
-    user["lastOnline"] = new Date().toUTCString();
+    user["statusUpdatedAt"] = new Date().toUTCString();
     users[userIndex] = user;
     await roomRef.update({ users });
 
@@ -36,11 +37,22 @@ export const onDataChange = functions.database
       if (roomData === undefined) return;
       const users = roomData.users as IUser[];
       const userIndex = users.findIndex((user) => user.userId === userId);
+      if (userIndex === -1) return;
       const user = users[userIndex];
       if (user.userStatus === "disconnected") {
-        await roomRef.update({
-          users: FieldValue.arrayRemove(user),
-        });
+        const userRefRealtime = admin
+          .database()
+          .ref(`/rooms/${roomId}/${userId}`);
+        const roomRefRealtime = admin.database().ref(`/rooms/${roomId}`);
+        if (users.length === 1) {
+          await roomRefRealtime.remove();
+          await roomRef.delete();
+        } else {
+          await userRefRealtime.remove();
+          await roomRef.update({
+            users: FieldValue.arrayRemove(user),
+          });
+        }
       }
     }, 300000);
   });

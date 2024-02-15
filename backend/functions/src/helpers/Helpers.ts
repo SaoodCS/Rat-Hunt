@@ -1,5 +1,5 @@
 export interface IUser {
-  lastOnline: string;
+  statusUpdatedAt: string;
   score: number;
   userStatus: "connected" | "disconnected";
   userId: string;

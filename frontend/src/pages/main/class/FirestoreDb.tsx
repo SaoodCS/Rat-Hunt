@@ -50,7 +50,7 @@ export namespace FirestoreDB {
    export namespace Room {
       export interface IUser {
          userStatus: 'connected' | 'disconnected';
-         lastOnline: string;
+         statusUpdatedAt: string;
          score: number;
          userId: string;
       }
