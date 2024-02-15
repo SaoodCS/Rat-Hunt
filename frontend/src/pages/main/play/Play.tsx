@@ -19,7 +19,7 @@ import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper'
 import useForm from '../../../global/hooks/useForm';
 import FirestoreDB from '../class/FirestoreDb';
 import PlayFormClass from '../class/PlayForm';
-import { setUserStatus } from '../class/firebaseRTDB';
+import RTDB from '../class/firebaseRTDB';
 import { GameContext } from '../context/GameContext';
 
 export default function Play(): JSX.Element {
@@ -78,7 +78,7 @@ export default function Play(): JSX.Element {
       await setRoomData.mutateAsync(updatedRoomData);
       setLocalDbRoom(form.roomId);
       setLocalDbUser(form.name);
-      setUserStatus(form.name, form.roomId);
+      RTDB.setUserStatus(form.name, form.roomId);
       navigation(roomData.gameStarted ? '/main/startedgame' : '/main/waitingroom');
    }
 
@@ -100,7 +100,7 @@ export default function Play(): JSX.Element {
       await setRoomData.mutateAsync(room);
       setLocalDbRoom(generatedRoomId);
       setLocalDbUser(form.name);
-      setUserStatus(form.name, generatedRoomId);
+      RTDB.setUserStatus(form.name, generatedRoomId);
       navigation('/main/waitingroom');
    }
 

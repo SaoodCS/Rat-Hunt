@@ -5,13 +5,10 @@ import { ModalContext } from '../../../global/context/widget/modal/ModalContext'
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import FirestoreDB from '../class/FirestoreDb';
 import { GameContext } from '../context/GameContext';
+import RTDB from '../class/firebaseRTDB';
 
 interface IGuideAndLeaveRoom {
    currentPath: string;
-}
-
-function LeaveRoomModal(): JSX.Element {
-   return <p>Leave Room Confirmation and onClick Button Goes Here</p>;
 }
 
 export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Element {
@@ -30,11 +27,6 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    }
 
    async function handleLeaveRoom(): Promise<void> {
-      // setModalHeader('Leave Room');
-      // setModalContent(<LeaveRoomModal />);
-      // setModalZIndex(100);
-      // toggleModal(true);
-      // get the user from the room:
       if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
          const user = roomData.users.find((u) => u.userId === localDbUser);
          await deleteUserFromFs.mutateAsync({
