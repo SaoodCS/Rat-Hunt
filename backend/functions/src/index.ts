@@ -14,6 +14,7 @@ export const onDataChange = functions.database
   .onWrite(async (change, context) => {
     const { before, after } = change;
     const changedStatus = FBHelp.getChangedStatus(before, after);
+    if (!MiscHelp.isNotFalsyOrEmpty(changedStatus)) return;
     const { roomId, userId, userStatus } = changedStatus;
     const { roomRefFS, roomRefRT, userRefRT } = FBHelp.getRefs(roomId, userId);
     const roomData = await FBHelp.getRoomFromFS(roomRefFS);

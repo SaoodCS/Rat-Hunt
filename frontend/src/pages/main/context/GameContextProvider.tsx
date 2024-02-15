@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useHeaderContext from '../../../global/context/widget/header/hooks/useHeaderContext';
 import { firestore } from '../../../global/firebase/config/config';
-import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useLocalStorage from '../../../global/hooks/useLocalStorage';
 import FirestoreDB from '../class/FirestoreDb';
@@ -30,26 +29,6 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
    const navigation = useNavigate();
    const location = useLocation();
    const queryClient = useQueryClient();
-   const deleteRoomMutation = FirestoreDB.Room.deleteRoomMutation({});
-
-   useEffect(() => {
-      if (MiscHelper.isNotFalsyOrEmpty(roomData) && !initialRender) {
-         // check if the user exists in the room, and if they do not, navigate them to the play page:
-         const user = ArrayOfObjects.getObjWithKeyValuePair(roomData.users, 'userId', localDbUser);
-         const userExists = MiscHelper.isNotFalsyOrEmpty(user);
-         const roomHasNoUsers = roomData.users.length === 0;
-         if (!userExists || roomHasNoUsers) {
-            if (!userExists) RTDB.deleteUser(localDbUser, localDbRoom);
-            if (roomHasNoUsers) {
-               deleteRoomMutation.mutateAsync({ roomId: localDbRoom });
-               RTDB.deleteRoom(localDbRoom);
-            };
-            setLocalDbRoom('');
-            setLocalDbUser('');
-            navigation('/main/play');
-         }
-      }
-   }, [roomData]);
 
    useEffect(() => {
       // This useEffect renders the Leave Room icon and Guide icon in the header if the user is in the waiting room or started game, otherwise it renders the Guide icon only

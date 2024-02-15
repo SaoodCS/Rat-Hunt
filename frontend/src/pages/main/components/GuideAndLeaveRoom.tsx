@@ -1,11 +1,13 @@
 import { LogOut } from '@styled-icons/boxicons-regular/LogOut';
 import { Help } from '@styled-icons/ionicons-outline/Help';
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ModalContext } from '../../../global/context/widget/modal/ModalContext';
+import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import FirestoreDB from '../class/FirestoreDb';
-import { GameContext } from '../context/GameContext';
 import RTDB from '../class/firebaseRTDB';
+import { GameContext } from '../context/GameContext';
 
 interface IGuideAndLeaveRoom {
    currentPath: string;
@@ -15,9 +17,11 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    const { currentPath } = props;
    const { setModalContent, setModalHeader, setModalZIndex, toggleModal } =
       useContext(ModalContext);
-   const { localDbRoom, localDbUser } = useContext(GameContext);
+   const { localDbRoom, localDbUser, setLocalDbRoom, setLocalDbUser } = useContext(GameContext);
    const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
    const deleteUserFromFs = FirestoreDB.Room.deleteUserMutation({});
+   const deleteRoomMutation = FirestoreDB.Room.deleteRoomMutation({});
+   const navigation = useNavigate();
 
    function handleHelpGuide(): void {
       setModalHeader('Help Guide');
@@ -28,11 +32,21 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
 
    async function handleLeaveRoom(): Promise<void> {
       if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
-         const user = roomData.users.find((u) => u.userId === localDbUser);
-         await deleteUserFromFs.mutateAsync({
-            roomData: roomData,
-            user: user,
-         });
+         const user = ArrayOfObjects.getObjWithKeyValuePair(roomData.users, 'userId', localDbUser);
+         const isLastUser = roomData.users.length === 1;
+         if (isLastUser) {
+            await deleteRoomMutation.mutateAsync({ roomId: localDbRoom });
+            await RTDB.deleteRoom(localDbRoom);
+         } else {
+            await deleteUserFromFs.mutateAsync({
+               roomData: roomData,
+               user: user,
+            });
+            await RTDB.deleteUser(localDbUser, localDbRoom);
+         }
+         setLocalDbRoom('');
+         setLocalDbUser('');
+         navigation('/main/play');
       }
    }
 
