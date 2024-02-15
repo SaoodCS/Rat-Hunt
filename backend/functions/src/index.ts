@@ -26,4 +26,10 @@ export const onDataChange = functions.database
     user["lastOnline"] = new Date().toUTCString();
     users[userIndex] = user;
     await roomRef.update({ users });
+    // can also implement logic here to delete the room if all userStatuses in the room are "disconnected"
+    // how are we gonna delete the user if they're disconnected for a certain amount of time?
   });
+
+// export const firestoreCleanup = functions.pubsub
+//   .schedule("every 5 minutes")
+//   .onRun(async () => {});
