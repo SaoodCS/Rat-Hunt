@@ -1,5 +1,5 @@
 import type { DatabaseReference } from 'firebase/database';
-import { onDisconnect, ref, set } from 'firebase/database';
+import { onDisconnect, ref, remove, set } from 'firebase/database';
 import { firebaseRTDB } from '../../../global/firebase/config/config';
 
 export default class RTDB {
@@ -30,7 +30,7 @@ export default class RTDB {
       }
 
       const userStatusRef: DatabaseReference = ref(firebaseRTDB, `/rooms/${roomId}/${userId}`);
-      await set(userStatusRef, null);
+      await remove(userStatusRef);
    }
 
    public static async deleteRoom(roomId: string): Promise<void> {

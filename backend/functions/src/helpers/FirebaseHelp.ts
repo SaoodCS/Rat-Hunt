@@ -1,6 +1,5 @@
 import * as admin from "firebase-admin";
 import { DocumentReference } from "firebase-admin/firestore";
-import * as functions from "firebase-functions";
 
 export interface IUser {
   statusUpdatedAt: string;
@@ -28,12 +27,10 @@ interface NestedObject {
 
 export class FBHelp {
   public static getChangedStatus<T extends NestedObject>(
-    before: functions.database.DataSnapshot,
-    after: functions.database.DataSnapshot,
+    originalValue: T,
+    newValue: T,
     path = ""
   ): IChangeDetails {
-    const originalValue = before.val() as T;
-    const newValue = after.val() as T;
     for (const key in newValue) {
       if (typeof newValue[key] === "object") {
         const currentPath = path ? `${path}/${key}` : key;
@@ -74,5 +71,14 @@ export class FBHelp {
     const roomRefRT = admin.database().ref(`/rooms/${roomId}`);
     const userRefRT = admin.database().ref(`/rooms/${roomId}/${userId}`);
     return { roomRefRT, userRefRT, roomRefFS };
+  }
+
+  public static getUser(usersArr: IUser[], userId: string) {
+    const userIndex = usersArr.findIndex((user) => user.userId === userId);
+    if (userIndex === -1) return undefined;
+    return {
+      userIndex,
+      user: usersArr[userIndex],
+    };
   }
 }
