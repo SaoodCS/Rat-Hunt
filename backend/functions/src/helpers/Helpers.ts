@@ -1,13 +1,27 @@
+export interface IUser {
+  lastOnline: string;
+  score: number;
+  userStatus: string;
+  userId: string;
+}
+
+export interface IRoom {
+  activeTopic: string;
+  gameStarted: boolean;
+  roomId: string;
+  users: IUser[];
+}
+
 interface NestedObject {
   [key: string]: NestedObject | any;
 }
 
 interface IChangeDetails {
   fullPath: string;
-  roomId: string;
-  userId: string;
-  field: string;
-  value: string | number;
+  roomId: IRoom["roomId"];
+  userId: IUser["userId"];
+  field: keyof IUser;
+  value: IUser[keyof IUser];
 }
 
 export default class Helpers {
@@ -30,7 +44,7 @@ export default class Helpers {
           const changedPath = path ? `${path}/${key}` : key;
           const roomId = changedPath.split("/")[1];
           const userId = changedPath.split("/")[2];
-          const field = changedPath.split("/")[3];
+          const field = changedPath.split("/")[3] as keyof IUser;
 
           return {
             fullPath: changedPath,

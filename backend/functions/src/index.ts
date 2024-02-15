@@ -1,6 +1,6 @@
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
-import Helpers from "./helpers/Helpers";
+import Helpers, { IRoom, IUser } from "./helpers/Helpers";
 
 if (!admin.apps.length) {
   admin.initializeApp();
@@ -17,12 +17,12 @@ export const onDataChange = functions.database
     );
     const roomRef = admin.firestore().collection("games").doc(`room-${roomId}`);
     const roomSnapshot = await roomRef.get();
-    const roomData = roomSnapshot.data();
+    const roomData = roomSnapshot.data() as IRoom | undefined;
     if (roomData === undefined) return;
-    const users = roomData.users;
-    const userIndex = users.findIndex((user: any) => user.userId === userId);
+    const users = roomData.users as IUser[];
+    const userIndex = users.findIndex((user) => user.userId === userId);
     const user = users[userIndex];
-    user[field] = value;
+    user[field as "userStatus"] = value as IUser["userStatus"];
     user["lastOnline"] = new Date().toUTCString();
     users[userIndex] = user;
     await roomRef.update({ users });
