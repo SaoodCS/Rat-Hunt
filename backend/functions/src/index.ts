@@ -1,4 +1,5 @@
 import * as admin from "firebase-admin";
+import { FieldValue } from "firebase-admin/firestore";
 import * as functions from "firebase-functions";
 import Helpers, { IRoom, IUser } from "./helpers/Helpers";
 
@@ -26,8 +27,22 @@ export const onDataChange = functions.database
     user["lastOnline"] = new Date().toUTCString();
     users[userIndex] = user;
     await roomRef.update({ users });
-    // can also implement logic here to delete the room if all userStatuses in the room are "disconnected"
-    // how are we gonna delete the user if they're disconnected for a certain amount of time?
+
+    // set a timer for 5 minutes to check if the userStatus of the user is still "disconnected":
+    // if it is, delete the user from the room
+    setTimeout(async () => {
+      const roomSnapshot = await roomRef.get();
+      const roomData = roomSnapshot.data() as IRoom | undefined;
+      if (roomData === undefined) return;
+      const users = roomData.users as IUser[];
+      const userIndex = users.findIndex((user) => user.userId === userId);
+      const user = users[userIndex];
+      if (user.userStatus === "disconnected") {
+        await roomRef.update({
+          users: FieldValue.arrayRemove(user),
+        });
+      }
+    }, 300000);
   });
 
 // export const firestoreCleanup = functions.pubsub
