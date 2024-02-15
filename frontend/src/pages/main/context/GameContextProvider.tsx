@@ -40,20 +40,13 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
             setLocalDbUser('');
             navigation('/main/play');
          }
-         // if there is no user in the room
+         // if there is no user in the room, delete the room
          if (roomData.users.length === 0) {
             deleteRoomMutation.mutateAsync({ roomId: localDbRoom });
             setLocalDbRoom('');
             setLocalDbUser('');
             navigation('/main/play');
          }
-
-         // TODO: this is a temporary console.log to check if the cloud function correctly updates the roomData on the front end when a user disconnects:
-         const disconnectedUsers = roomData.users.filter(
-            (user) => user.userStatus === 'disconnected',
-         );
-         console.log('disconnectedUsers:', disconnectedUsers);
-         // TODO: TEST RESULTS: The realtimedb field userStatus correctly updates when a user disconnects, however the cloud function isn't triggered. However when I manually update the userStatus field in realtime database, the cloud function is triggered and the userStatus field in firestore is updated correctly.
       }
    }, [roomData]);
 
