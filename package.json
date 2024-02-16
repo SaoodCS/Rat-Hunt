@@ -3,7 +3,7 @@
     "f-install": "cd frontend && npm install",
     "b-install": "cd backend && npm install",
     "app-install": "npm run f-install && npm run b-install && npm install",
-    "f-start": "cd frontend && npm start",
+    "start": "cd frontend && npm start",
     "b-start": "cd backend && firebase serve",
     "app-start": "concurrently \"npm run f-start\" \"npm run b-start\" --prefix-colors \"bgBlue.bold,bgMagenta.bold\" --names \"FRONTEND,BACKEND\"",
     "f-lint": "cd frontend && npm run lint-ts",

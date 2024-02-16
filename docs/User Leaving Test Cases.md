@@ -15,7 +15,7 @@
    - [ ] Room in reatime database should be deleted straight away
    - [ ] Room in firestore should be deleted straight away
    - [ ] Cloud function should have 1 request that doesn't change firestore or realtime db
-   <!-- TODO: WORKING (15/02/24)  -->
+   <!-- WORKING (15/02/24)  -->
 
 3. There are 2 users in the room and one unintentionally disconnects:
 
@@ -35,4 +35,6 @@
 
 <!-- TODO:
 Bug: when a user deliberately leaves, the room is deleted from the realtime database. Then, when the user refreshes the page, they are suddenly back in the room (even tho localdbuser and localdbroom are both null)...
+
+Might be due to the way the onDisconnect is set up? (it's not in a useEffect + there's no removal of event listener on unmount)
 -->
