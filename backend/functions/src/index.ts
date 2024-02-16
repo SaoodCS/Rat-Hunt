@@ -24,7 +24,8 @@ export const onDataChange = functions.database
     if (!MiscHelp.isNotFalsyOrEmpty(thisUser)) return;
     const { userIndex, user } = thisUser;
     user["userStatus"] = userStatus;
-    user["statusUpdatedAt"] = new Date().toUTCString();
+    const functionExecutedAt = new Date().toUTCString();
+    user["statusUpdatedAt"] = functionExecutedAt;
     users[userIndex] = user;
     await roomRefFS.update({ users });
     // if userStatus in disconnected then set a timeout which will remove the user if it remains disconnected for 5 minutes
@@ -36,6 +37,7 @@ export const onDataChange = functions.database
       const thisUserFS = FBHelp.getUser(usersFS, userId);
       if (!MiscHelp.isNotFalsyOrEmpty(thisUserFS)) return;
       const { user: userFS } = thisUserFS;
+      if (userFS.statusUpdatedAt !== functionExecutedAt) return;
       if (userFS.userStatus !== "disconnected") return;
       if (usersFS.length <= 1) {
         await roomRefFS.delete();
