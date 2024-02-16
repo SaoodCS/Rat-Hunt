@@ -11,9 +11,8 @@ import useThemeContext from '../../global/context/theme/hooks/useThemeContext';
 import HeaderHooks from '../../global/context/widget/header/hooks/HeaderHooks';
 import useHeaderContext from '../../global/context/widget/header/hooks/useHeaderContext';
 import BoolHelper from '../../global/helpers/dataTypes/bool/BoolHelper';
+import TopicGrid from '../../temp/TopicGrid';
 import GameContextProvider from './context/GameContextProvider';
-
-// TODO NEXT: Get all the leave game functionality and logic working (including the timer to rejoin etc.)
 
 export default function MainLayout(): JSX.Element {
    const { isDarkTheme } = useThemeContext();
@@ -36,6 +35,7 @@ export default function MainLayout(): JSX.Element {
                </HeaderRightElWrapper>
             </Header>
             <Body isDarkTheme={isDarkTheme}>
+               {/* <TopicGrid /> */}
                <Outlet />
             </Body>
          </GameContextProvider>
