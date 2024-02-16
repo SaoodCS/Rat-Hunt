@@ -35,7 +35,6 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
 
    async function handleLeaveRoom(): Promise<void> {
       if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
-         const user = ArrayOfObjects.getObjWithKeyValuePair(roomData.users, 'userId', localDbUser);
          const isLastUser = roomData.users.length === 1;
          if (isLastUser) {
             await deleteRoomMutation.mutateAsync({ roomId: localDbRoom });
@@ -43,7 +42,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
          } else {
             await deleteUserFromFs.mutateAsync({
                roomData: roomData,
-               user: user,
+               userId: localDbUser,
             });
             await RTDB.deleteUser(localDbUser, localDbRoom);
          }

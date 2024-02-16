@@ -14,7 +14,6 @@ import useThemeContext from '../../../global/context/theme/hooks/useThemeContext
 import useApiErrorContext from '../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import { firestore } from '../../../global/firebase/config/config';
 import ArrayHelper from '../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
-import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../global/hooks/useForm';
 import FirestoreDB from '../class/FirestoreDb';
@@ -36,13 +35,13 @@ export default function Play(): JSX.Element {
    const navigation = useNavigate();
 
    const setRoomData = FirestoreDB.Room.setRoomMutation({});
+   const addUserToRoom = FirestoreDB.Room.addUserToRoomMutation({});
 
    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
       const { isFormValid } = initHandleSubmit(e);
       if (!isFormValid) return;
       if (form.joinOrHost === 'host') {
          await handleHostGame();
-
          return;
       }
       await handleJoinGame();
@@ -69,13 +68,22 @@ export default function Play(): JSX.Element {
       const user: FirestoreDB.Room.IUser = {
          userStatus: 'connected',
          statusUpdatedAt: new Date().toUTCString(),
-         score: roomData.gameStarted
-            ? ArrayOfObjects.calcSumOfKeyValue(roomData.users, 'score') / roomData.users.length
-            : 0,
          userId: form.name,
       };
-      const updatedRoomData = { ...roomData, users: [...roomData.users, user] };
-      await setRoomData.mutateAsync(updatedRoomData);
+      const userState: FirestoreDB.Room.IUserStates = {
+         userId: form.name,
+         totalScore: 0,
+         roundScore: 0,
+         clue: '',
+         guess: '',
+         votedFor: '',
+      };
+      await addUserToRoom.mutateAsync({
+         roomId: form.roomId,
+         userObjForUsers: user,
+         userObjForUserState: userState,
+         gameStateObj: roomData.gameState,
+      });
       setLocalDbRoom(form.roomId);
       setLocalDbUser(form.name);
       RTDB.setUserStatus(form.name, form.roomId);
@@ -85,17 +93,33 @@ export default function Play(): JSX.Element {
    async function handleHostGame(): Promise<void> {
       const generatedRoomId = FirestoreDB.Room.generateUniqueId(allRoomIds ?? ['']);
       const room: FirestoreDB.Room.IRoom = {
-         activeTopic: form.topic,
          gameStarted: false,
          roomId: generatedRoomId,
          users: [
             {
                userStatus: 'connected',
                statusUpdatedAt: new Date().toUTCString(),
-               score: 0,
                userId: form.name,
             },
          ],
+         gameState: {
+            activeTopic: '',
+            activeWord: '',
+            currentRat: '',
+            currentRound: 1,
+            numberOfRoundsSet: 5,
+            currentTurn: '',
+            userStates: [
+               {
+                  userId: form.name,
+                  totalScore: 0,
+                  roundScore: 0,
+                  clue: '',
+                  guess: '',
+                  votedFor: '',
+               },
+            ],
+         },
       };
       await setRoomData.mutateAsync(room);
       setLocalDbRoom(generatedRoomId);

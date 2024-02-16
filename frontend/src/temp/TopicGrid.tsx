@@ -1,4 +1,3 @@
-import { LocationCity } from '@styled-icons/material-twotone/LocationCity';
 import styled from 'styled-components';
 import { LogoText } from '../global/components/app/logo/LogoText';
 import { TextColourizer } from '../global/components/lib/font/textColorizer/TextColourizer';
@@ -65,15 +64,13 @@ export default function TopicGrid(): JSX.Element {
                </TextColourizer>
             </FlexRowWrapper>
             <FlexRowWrapper padding="0em 0em 0.3em 1em">
-               <TextColourizer color={Color.darkThm.accentAlt}>JC's Clue: Buildings</TextColourizer>
+               <TextColourizer color={Color.darkThm.accentAlt}>JCs Clue: Buildings</TextColourizer>
             </FlexRowWrapper>
             <FlexRowWrapper padding="0em 0em 0.3em 1em">
-               <TextColourizer color={Color.darkThm.accentAlt}>Ben's Clue: Gay</TextColourizer>
+               <TextColourizer color={Color.darkThm.accentAlt}>Bens Clue: Gay</TextColourizer>
             </FlexRowWrapper>
             <FlexRowWrapper padding="0em 0em 0.3em 1em">
-               <TextColourizer color={Color.darkThm.accentAlt}>
-                  Emma's's Clue: Ugands
-               </TextColourizer>
+               <TextColourizer color={Color.darkThm.accentAlt}>Emmas Clue: Ugands</TextColourizer>
             </FlexRowWrapper>
          </GameStateWrapper>
          {/*  */}

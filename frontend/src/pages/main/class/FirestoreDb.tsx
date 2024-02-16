@@ -2,6 +2,7 @@ import type { UseMutationOptions, UseMutationResult } from '@tanstack/react-quer
 import { useQuery, type UseQueryOptions, type UseQueryResult } from '@tanstack/react-query';
 import {
    arrayRemove,
+   arrayUnion,
    collection,
    deleteDoc,
    doc,
@@ -12,6 +13,7 @@ import {
 } from 'firebase/firestore';
 import APIHelper from '../../../global/firebase/apis/helper/NApiHelper';
 import { firestore } from '../../../global/firebase/config/config';
+import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import { useCustomMutation } from '../../../global/hooks/useCustomMutation';
 
 export namespace FirestoreDB {
@@ -51,15 +53,32 @@ export namespace FirestoreDB {
       export interface IUser {
          userStatus: 'connected' | 'disconnected';
          statusUpdatedAt: string;
-         score: number;
+         //score: number;
          userId: string;
       }
-
+      export interface IUserStates {
+         userId: string;
+         totalScore: number; // totalScore = totalScore + roundScore at the end of each round (not reset)
+         roundScore: number; // set based on the score system + reset to 0 at start of each round
+         clue: string; // set when user's turn + reset to empty string at start of each round
+         guess: string; // only the rat guesses the word at the end of the round + then reset at the start of each round
+         votedFor: string; // set when user votes for who they think the rat is at the end of the round + reset to empty string at start of each round
+      }
+      export interface IGameState {
+         activeTopic: string; // set randomly at the start of each round
+         activeWord: string; // set randomly at the start of each round
+         currentRat: string; // set randomly at the start of each round
+         currentRound: number; // starts at 1 when game starts and increments by 1 at the start of each round
+         numberOfRoundsSet: number; // default value of 5. Can implement logic for the room creator to set this value later
+         currentTurn: string; // when implementing this, ensure that no user has more than one turn (e.g. by using a queue system or checking which user's clue field is an empty string)
+         userStates: IUserStates[];
+      }
       export interface IRoom {
-         activeTopic: string;
+         //activeTopic: string;
          gameStarted: boolean;
          roomId: string;
          users: IUser[];
+         gameState: IGameState;
       }
 
       export const key = {
@@ -107,6 +126,36 @@ export namespace FirestoreDB {
          );
       }
 
+      interface IAddUserToRoomMutation {
+         roomId: string;
+         userObjForUsers: IUser;
+         userObjForUserState: IUserStates;
+         gameStateObj: IGameState;
+      }
+
+      export function addUserToRoomMutation(
+         options: UseMutationOptions<void, unknown, IAddUserToRoomMutation>,
+      ): UseMutationResult<void, unknown, IAddUserToRoomMutation, void> {
+         return useCustomMutation(
+            async (params: IAddUserToRoomMutation) => {
+               try {
+                  const { roomId, userObjForUsers, userObjForUserState, gameStateObj } = params;
+                  const docRef = doc(firestore, key.collection, `room-${roomId}`);
+                  await updateDoc(docRef, {
+                     users: arrayUnion(userObjForUsers),
+                     gameState: {
+                        ...gameStateObj,
+                        userStates: [...gameStateObj.userStates, userObjForUserState],
+                     },
+                  });
+               } catch (e) {
+                  throw new APIHelper.ErrorThrower(APIHelper.handleError(e));
+               }
+            },
+            { ...options },
+         );
+      }
+
       interface IUpdateGameStartedParam {
          gameStarted: boolean;
          roomId: string;
@@ -131,7 +180,7 @@ export namespace FirestoreDB {
 
       interface IDeleteUserParam {
          roomData: FirestoreDB.Room.IRoom;
-         user: IUser | undefined;
+         userId: string;
       }
 
       export function deleteUserMutation(
@@ -140,9 +189,26 @@ export namespace FirestoreDB {
          return useCustomMutation(
             async (userData: IDeleteUserParam) => {
                try {
-                  const docRef = doc(firestore, key.collection, `room-${userData.roomData.roomId}`);
+                  const { roomData, userId } = userData;
+                  const docRef = doc(firestore, key.collection, `room-${roomData.roomId}`);
+                  if (!userId) return;
+                  const userInUsers = ArrayOfObjects.getObjWithKeyValuePair(
+                     roomData.users,
+                     'userId',
+                     userId,
+                  );
+                  const updatedUserStates = ArrayOfObjects.filterOut(
+                     roomData.gameState.userStates,
+                     'userId',
+                     userId,
+                  );
+
                   await updateDoc(docRef, {
-                     users: arrayRemove(userData.user),
+                     users: arrayRemove(userInUsers),
+                     gameState: {
+                        ...roomData.gameState,
+                        userStates: updatedUserStates,
+                     },
                   });
                } catch (e) {
                   throw new APIHelper.ErrorThrower(APIHelper.handleError(e));

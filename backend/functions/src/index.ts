@@ -3,7 +3,11 @@ import { FieldValue } from "firebase-admin/firestore";
 import * as functions from "firebase-functions";
 import { FBHelp } from "./helpers/FirebaseHelp";
 import { MiscHelp } from "./helpers/MiscHelp";
+
+const test = false;
 const thirtySeconds = 30000;
+const fiveMinutes = 300000;
+const TIMER = test ? thirtySeconds : fiveMinutes;
 
 if (!admin.apps.length) {
   admin.initializeApp();
@@ -20,7 +24,7 @@ export const onDataChange = functions.database
     const roomData = await FBHelp.getRoomFromFS(roomRefFS);
     if (!MiscHelp.isNotFalsyOrEmpty(roomData)) return;
     const users = roomData.users;
-    const thisUser = FBHelp.getUser(users, userId);
+    const thisUser = FBHelp.getUserInUsers(users, userId);
     if (!MiscHelp.isNotFalsyOrEmpty(thisUser)) return;
     const { userIndex, user } = thisUser;
     user["userStatus"] = userStatus;
@@ -34,19 +38,25 @@ export const onDataChange = functions.database
       const roomDataFS = await FBHelp.getRoomFromFS(roomRefFS);
       if (!MiscHelp.isNotFalsyOrEmpty(roomDataFS)) return;
       const usersFS = roomDataFS.users;
-      const thisUserFS = FBHelp.getUser(usersFS, userId);
-      if (!MiscHelp.isNotFalsyOrEmpty(thisUserFS)) return;
-      const { user: userFS } = thisUserFS;
-      if (userFS.statusUpdatedAt !== functionExecutedAt) return;
-      if (userFS.userStatus !== "disconnected") return;
+      const thisUserInUsersFS = FBHelp.getUserInUsers(usersFS, userId);
+      if (!MiscHelp.isNotFalsyOrEmpty(thisUserInUsersFS)) return;
+      const { user: userInUsersFS } = thisUserInUsersFS;
+      if (userInUsersFS.statusUpdatedAt !== functionExecutedAt) return;
+      if (userInUsersFS.userStatus !== "disconnected") return;
       if (usersFS.length <= 1) {
         await roomRefFS.delete();
         await roomRefRT.remove();
-      } else {
-        await roomRefFS.update({
-          users: FieldValue.arrayRemove(userFS),
-        });
-        await userRefRT.remove();
+        return;
       }
-    }, thirtySeconds);
+      const userStatesFS = roomDataFS.gameState.userStates;
+      const updatedUserStates = userStatesFS.filter((u) => u.userId !== userId);
+      await roomRefFS.update({
+        users: FieldValue.arrayRemove(userInUsersFS),
+        gameState: {
+          ...roomDataFS.gameState,
+          userStates: updatedUserStates,
+        },
+      });
+      await userRefRT.remove();
+    }, TIMER);
   });

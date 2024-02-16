@@ -1,7 +1,7 @@
 import { PlayCircleFill } from '@styled-icons/bootstrap/PlayCircleFill';
 import { CircleUser } from '@styled-icons/fa-solid/CircleUser';
 import { Copy } from '@styled-icons/fluentui-system-regular/Copy';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogoText } from '../../../global/components/app/logo/LogoText';
 import { TextBtn } from '../../../global/components/lib/button/textBtn/Style';
@@ -11,12 +11,11 @@ import { FlexColumnWrapper } from '../../../global/components/lib/positionModifi
 import { FlexRowWrapper } from '../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
 import { ToastContext } from '../../../global/context/widget/toast/ToastContext';
 import Color from '../../../global/css/colors';
-import { GameContext } from '../context/GameContext';
-import FirestoreDB from '../class/FirestoreDb';
-import StringHelper from '../../../global/helpers/dataTypes/string/StringHelper';
 import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import { useEffect } from 'react';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
+import StringHelper from '../../../global/helpers/dataTypes/string/StringHelper';
+import FirestoreDB from '../class/FirestoreDb';
+import { GameContext } from '../context/GameContext';
 
 export default function WaitingRoom(): JSX.Element {
    const { allUsers, setAllUsers, localDbRoom, localDbUser } = useContext(GameContext);
@@ -98,7 +97,7 @@ export default function WaitingRoom(): JSX.Element {
             >
                <TextColourizer bold>Topic:&nbsp;</TextColourizer>
                <TextColourizer>
-                  {StringHelper.firstLetterToUpper(roomData?.activeTopic ?? '')}
+                  {StringHelper.firstLetterToUpper(roomData?.gameState?.activeTopic ?? '')}
                </TextColourizer>
             </FlexRowWrapper>
             {allUsers.map((user, index) => (

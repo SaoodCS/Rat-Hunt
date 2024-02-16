@@ -2,17 +2,32 @@ import * as admin from "firebase-admin";
 import { DocumentReference } from "firebase-admin/firestore";
 
 export interface IUser {
-  statusUpdatedAt: string;
-  score: number;
   userStatus: "connected" | "disconnected";
+  statusUpdatedAt: string;
   userId: string;
 }
-
-export interface IRoom {
+export interface IUserStates {
+  userId: string;
+  totalScore: number;
+  roundScore: number;
+  clue: string;
+  guess: string;
+  votedFor: string;
+}
+export interface IGameState {
   activeTopic: string;
+  activeWord: string;
+  currentRat: string;
+  currentRound: number;
+  numberOfRoundsSet: number;
+  currentTurn: string;
+  userStates: IUserStates[];
+}
+export interface IRoom {
   gameStarted: boolean;
   roomId: string;
   users: IUser[];
+  gameState: IGameState;
 }
 
 interface IChangeDetails {
@@ -73,12 +88,21 @@ export class FBHelp {
     return { roomRefRT, userRefRT, roomRefFS };
   }
 
-  public static getUser(usersArr: IUser[], userId: string) {
+  public static getUserInUsers(usersArr: IUser[], userId: string) {
     const userIndex = usersArr.findIndex((user) => user.userId === userId);
     if (userIndex === -1) return undefined;
     return {
       userIndex,
       user: usersArr[userIndex],
+    };
+  }
+
+  public static getUserState(userStatesArr: IUserStates[], userId: string) {
+    const userIndex = userStatesArr.findIndex((user) => user.userId === userId);
+    if (userIndex === -1) return undefined;
+    return {
+      userIndex,
+      user: userStatesArr[userIndex],
     };
   }
 }
