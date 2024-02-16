@@ -1,8 +1,11 @@
 import { LogOut } from '@styled-icons/boxicons-regular/LogOut';
 import { Help } from '@styled-icons/ionicons-outline/Help';
+import type { DatabaseReference } from 'firebase/database';
+import { onDisconnect, ref } from 'firebase/database';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ModalContext } from '../../../global/context/widget/modal/ModalContext';
+import { firebaseRTDB } from '../../../global/firebase/config/config';
 import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import FirestoreDB from '../class/FirestoreDb';
@@ -44,6 +47,11 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
             });
             await RTDB.deleteUser(localDbUser, localDbRoom);
          }
+         const userStatusRef: DatabaseReference = ref(
+            firebaseRTDB,
+            `/rooms/${localDbRoom}/${localDbUser}`,
+         );
+         await onDisconnect(userStatusRef).cancel();
          setLocalDbRoom('');
          setLocalDbUser('');
          navigation('/main/play');
