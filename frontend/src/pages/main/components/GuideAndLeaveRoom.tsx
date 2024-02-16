@@ -2,7 +2,7 @@ import { LogOut } from '@styled-icons/boxicons-regular/LogOut';
 import { Help } from '@styled-icons/ionicons-outline/Help';
 import type { DatabaseReference } from 'firebase/database';
 import { onDisconnect, ref } from 'firebase/database';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ModalContext } from '../../../global/context/widget/modal/ModalContext';
 import { firebaseRTDB } from '../../../global/firebase/config/config';

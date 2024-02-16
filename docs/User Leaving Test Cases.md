@@ -32,9 +32,3 @@
    - [ ] User in firestore should be deleted straight away (but not room)
    - [ ] Cloud function should have 1 request that doesn't change firestore or realtime db
    <!-- WORKING (15/02/24) -->
-
-<!-- TODO:
-Bug: when a user deliberately leaves, the room is deleted from the realtime database. Then, when the user refreshes the page, they are suddenly back in the room (even tho localdbuser and localdbroom are both null)...
-
-Might be due to the way the onDisconnect is set up? (it's not in a useEffect + there's no removal of event listener on unmount)
--->
