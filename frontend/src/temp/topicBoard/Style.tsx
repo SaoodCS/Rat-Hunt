@@ -1,13 +1,19 @@
 import styled from 'styled-components';
 import Color from '../../global/css/colors';
 
-export const CellValue = styled.div``;
+export const CellValue = styled.div`
+   width: 80%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   text-align: center;
+`;
 
 export const CellUID = styled.div`
    position: absolute;
    top: 0px;
    left: 0px;
-   padding: 0.75em;
+   padding: 0.5em;
 `;
 
 export const BoardCell = styled.div`

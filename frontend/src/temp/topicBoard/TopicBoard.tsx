@@ -1,77 +1,21 @@
+import { useContext } from 'react';
 import { LogoText } from '../../global/components/app/logo/LogoText';
 import { FlexColumnWrapper } from '../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import Color from '../../global/css/colors';
+import FirestoreDB from '../../pages/main/class/FirestoreDb';
+import { GameContext } from '../../pages/main/context/GameContext';
 import { BoardCell, BoardContainer, BoardRow, CellUID, CellValue } from './Style';
 
 export default function TopicBoard(): JSX.Element {
-   const currentWord = 'New York';
-   const isUserRat = false;
-   const topicWords = [
-      {
-         cellId: 'A1',
-         word: 'London',
-      },
-      {
-         cellId: 'A2',
-         word: 'New York',
-      },
-      {
-         cellId: 'A3',
-         word: 'Paris',
-      },
-      {
-         cellId: 'A4',
-         word: 'Tokyo',
-      },
-      {
-         cellId: 'B1',
-         word: 'Rome',
-      },
-      {
-         cellId: 'B2',
-         word: 'Berlin',
-      },
-      {
-         cellId: 'B3',
-         word: 'Sydney',
-      },
-      {
-         cellId: 'B4',
-         word: 'Moscow',
-      },
-      {
-         cellId: 'C1',
-         word: 'Cairo',
-      },
-      {
-         cellId: 'C2',
-         word: 'Beijing',
-      },
-      {
-         cellId: 'C3',
-         word: 'Athens',
-      },
-      {
-         cellId: 'C4',
-         word: 'Rio',
-      },
-      {
-         cellId: 'D1',
-         word: 'Delhi',
-      },
-      {
-         cellId: 'D2',
-         word: 'Bangkok',
-      },
-      {
-         cellId: 'D3',
-         word: 'Havana',
-      },
-      {
-         cellId: 'D4',
-         word: 'Lima',
-      },
-   ];
+   const { allUsers, setAllUsers, localDbRoom, localDbUser } = useContext(GameContext);
+   const { data: topicsData } = FirestoreDB.Topics.getTopicsQuery();
+   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
+   const currentWord = 'The Bible'; // roomData?.gameState?.activeWord
+   const isUserRat = false; // TODO set this correctly
+   const topicWords = FirestoreDB.Room.getActiveTopicWords(
+      topicsData || [],
+      roomData?.gameState?.activeTopic || '',
+   );
 
    const rowA = topicWords.filter((word) => word.cellId.charAt(0) === 'A');
    const rowB = topicWords.filter((word) => word.cellId.charAt(0) === 'B');
@@ -95,12 +39,12 @@ export default function TopicBoard(): JSX.Element {
                   {row.map((item, index) => (
                      <BoardCell key={index}>
                         <CellUID>
-                           <LogoText size="0.8em" color={setColor(item.word)}>
+                           <LogoText size="0.6em" color={setColor(item.word)}>
                               {item.cellId}
                            </LogoText>
                         </CellUID>
                         <CellValue>
-                           <LogoText size="0.8em" color={setColor(item.word)}>
+                           <LogoText size="0.65em" color={setColor(item.word)}>
                               {item.word}
                            </LogoText>
                         </CellValue>

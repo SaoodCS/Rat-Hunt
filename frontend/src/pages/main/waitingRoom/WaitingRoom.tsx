@@ -70,7 +70,7 @@ export default function WaitingRoom(): JSX.Element {
                <FlexRowWrapper position="absolute" style={{ right: 0 }}>
                   <TextBtn
                      isDarkTheme
-                     isDisabled={allUsers.length < 3}
+                     isDisabled={allUsers.length < 0} // TODO: change to 3 after testing
                      onClick={() => handleStartGame()}
                   >
                      <PlayCircleFill size="2.5em" />

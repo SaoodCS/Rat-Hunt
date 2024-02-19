@@ -1,28 +1,30 @@
+import { useContext } from 'react';
 import { LogoText } from '../../global/components/app/logo/LogoText';
 import { TextBtn } from '../../global/components/lib/button/textBtn/Style';
 import { FlexRowWrapper } from '../../global/components/lib/positionModifiers/flexRowWrapper/Style';
 import Color from '../../global/css/colors';
 import HTMLEntities from '../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import Unicode from '../../global/helpers/dataTypes/unicode/Unicode';
+import FirestoreDB from '../../pages/main/class/FirestoreDb';
+import { GameContext } from '../../pages/main/context/GameContext';
 import { GameDetailsContainer, ScoreboardBtnContainer } from './Style';
 
 export default function GameHeader(): JSX.Element {
-   const topic = 'Cities';
-   const word = 'A2';
-   const round = '1/5';
-
+   const { allUsers, setAllUsers, localDbRoom, localDbUser } = useContext(GameContext);
+   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
+   const { data: topicsData } = FirestoreDB.Topics.getTopicsQuery();
    const gameHeaderDetails = [
       {
          label: 'Topic',
-         value: topic,
+         value: roomData?.gameState?.activeTopic,
       },
       {
          label: 'Word',
-         value: word,
+         value: roomData?.gameState?.activeWord,
       },
       {
          label: 'Round',
-         value: round,
+         value: roomData?.gameState?.currentRound + ' / ' + roomData?.gameState?.numberOfRoundsSet,
       },
    ];
 

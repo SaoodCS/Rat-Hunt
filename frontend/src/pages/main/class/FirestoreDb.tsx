@@ -18,7 +18,7 @@ import { useCustomMutation } from '../../../global/hooks/useCustomMutation';
 
 export namespace FirestoreDB {
    export namespace Topics {
-      interface ITopics {
+      export interface ITopics {
          key: string;
          values: string[];
       }
@@ -246,6 +246,33 @@ export namespace FirestoreDB {
             idExists = existingRoomIds.includes(newId);
          }
          return newId;
+      }
+
+      interface IActiveTopicWords {
+         cellId: string;
+         word: string;
+      }
+
+      export function getActiveTopicWords(
+         topics: Topics.ITopics[],
+         activeTopic: string,
+      ): IActiveTopicWords[] {
+         const topicObj = ArrayOfObjects.getObjWithKeyValuePair(topics, 'key', activeTopic);
+         const words = topicObj.values;
+         // cut it down to 16 words:
+         const words16 = words.slice(0, 16);
+         // create an array of objects of length 16, where each object is a word with a cell id as A1, A2, A3, A4, B1, B2, B3, B4, C1, C2, C3, C4, D1, D2, D3, D4:
+         const wordsWithCellIds: IActiveTopicWords[] = [];
+         const letters = ['A', 'B', 'C', 'D'];
+         for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
+               wordsWithCellIds.push({
+                  cellId: letters[i] + (j + 1),
+                  word: words16[i * 4 + j],
+               });
+            }
+         }
+         return wordsWithCellIds;
       }
    }
 
