@@ -103,7 +103,7 @@ export default function Play(): JSX.Element {
             },
          ],
          gameState: {
-            activeTopic: '',
+            activeTopic: form.topic,
             activeWord: '',
             currentRat: '',
             currentRound: 1,
