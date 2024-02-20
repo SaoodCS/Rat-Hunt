@@ -34,14 +34,10 @@ export const CompletedBar = styled.div<{
 }>`
    position: absolute;
    height: 100%;
-   background-image: ${({ isDarkTheme, completedPercentage }) =>
-      isDarkTheme
-         ? `linear-gradient(90deg, ${'rgba(0,0,0,0)'} -50%, ${Color.darkThm.accent} ${
-              100 - completedPercentage + 100
-           }%)`
-         : `linear-gradient(90deg, ${'rgba(0,0,0,0)'} -50%, ${Color.lightThm.accentAlt} ${
-              100 - completedPercentage + 100
-           }%)`};
+   background-image: ${({ completedPercentage }) =>
+      `linear-gradient(90deg, ${'rgba(0,0,0,0)'} -50%, ${Color.darkThm.accent} ${
+         100 - completedPercentage + 100
+      }%)`};
 
    border-top-right-radius: 10px;
    border-bottom-right-radius: 10px;
@@ -56,15 +52,13 @@ export const BarBackground = styled.div<{
 }>`
    position: relative;
    display: flex;
-   background-color: ${({ isDarkTheme }) =>
-      isDarkTheme ? Color.darkThm.inactive : Color.lightThm.inactive};
+   background-color: ${Color.setRgbOpacity(Color.darkThm.inactive, 0.7)};
    border-top-right-radius: 10px;
    border-bottom-right-radius: 10px;
    width: ${({ barWidth }) => barWidth || '20em'};
    height: ${({ barHeight }) => barHeight || '2em'};
    &:hover {
-      border: ${({ isDarkTheme }) =>
-         `1px solid ${isDarkTheme ? Color.darkThm.accent : Color.lightThm.border}`};
+      border: ${Color.darkThm.accent};
       border-left: none;
       box-sizing: border-box;
    }

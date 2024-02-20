@@ -1,18 +1,15 @@
+import { useContext } from 'react';
+import { GameContext } from '../../../../pages/main/context/GameContext';
 import useThemeContext from '../../../context/theme/hooks/useThemeContext';
 import Color from '../../../css/colors';
 import NumberHelper from '../../../helpers/dataTypes/number/NumberHelper';
 import { LogoText } from '../../app/logo/LogoText';
 import { TextColourizer } from '../font/textColorizer/TextColourizer';
 import { FlexColumnWrapper } from '../positionModifiers/flexColumnWrapper/FlexColumnWrapper';
+import { FlexRowWrapper } from '../positionModifiers/flexRowWrapper/Style';
 import type { ITooltipPositioning } from '../tooltip/Tooltip';
 import Tooltip from '../tooltip/Tooltip';
-import {
-   BarAndInfoWrapper,
-   BarAndPercentageWrapper,
-   BarBackground,
-   BarTitle,
-   CompletedBar,
-} from './Style';
+import { BarAndInfoWrapper, BarAndPercentageWrapper, BarBackground, CompletedBar } from './Style';
 
 export interface IProgressBarChartData {
    label: string;
@@ -35,6 +32,10 @@ interface IProgressBarChart {
 
 export default function ProgressBarChart(props: IProgressBarChart): JSX.Element {
    const { data, tooltipOptions, barHeight, barWidth } = props;
+   const { localDbUser } = useContext(GameContext);
+   function isLocalDbUser(userId: string): boolean {
+      return userId === localDbUser;
+   }
    const {
       positioning: toolTipPos,
       width: toolTipWidth,
@@ -46,15 +47,10 @@ export default function ProgressBarChart(props: IProgressBarChart): JSX.Element 
       return NumberHelper.calcPercentage(completedAmnt, target, true);
    }
 
-   function getRemainingAmount(completed: number, target: number): number {
-      return target - completed;
-   }
-
    return (
       <>
          {data.map((item) => (
             <BarAndInfoWrapper key={item.label}>
-               {/* <BarTitle>{item.label}</BarTitle> */}
                <BarAndPercentageWrapper>
                   <BarBackground
                      barWidth={barWidth || '20em'}
@@ -67,9 +63,6 @@ export default function ProgressBarChart(props: IProgressBarChart): JSX.Element 
                         height={toolTipHeight}
                         content={
                            <FlexColumnWrapper>
-                              {/* <TextColourizer padding="0em 0em 0.5em 0em" color={Color.darkThm.txt}>
-                                 Target: {NumberHelper.asCurrencyStr(item.target)}
-                              </TextColourizer> */}
                               <TextColourizer
                                  padding="0em 0em 0em 0em"
                                  color={Color.darkThm.txt}
@@ -93,36 +86,43 @@ export default function ProgressBarChart(props: IProgressBarChart): JSX.Element 
                               item.target,
                            )}
                            isDarkTheme={isDarkTheme}
+                           style={{
+                              background: isLocalDbUser(item.label)
+                                 ? Color.setRgbOpacity(Color.darkThm.accentAlt, 0.5)
+                                 : '',
+                           }}
                         />
                      </Tooltip>
                   </BarBackground>
-                  <div
-                     style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        position: 'absolute',
-                        right: 0,
-                        left: barWidth || '20em',
-                        paddingLeft: '1em',
-                        paddingRight: '1em',
-                     }}
+                  <FlexRowWrapper
+                     alignItems="center"
+                     justifyContent="space-between"
+                     position="absolute"
+                     right={'0em'}
+                     left={barWidth || '20em'}
+                     padding="0em 1em 0em 1em"
                   >
                      <LogoText
-                        color={Color.setRgbOpacity(Color.darkThm.txt, 0.75)}
+                        color={Color.setRgbOpacity(
+                           isLocalDbUser(item.label) ? Color.darkThm.accentAlt : Color.darkThm.txt,
+                           0.75,
+                        )}
                         size="0.75em"
                         style={{ padding: '0em 0em 0em 0.5em' }}
                      >
                         {item.label}
                      </LogoText>
                      <LogoText
-                        color={Color.setRgbOpacity(Color.darkThm.txt, 0.75)}
+                        color={Color.setRgbOpacity(
+                           isLocalDbUser(item.label) ? Color.darkThm.accentAlt : Color.darkThm.txt,
+                           0.75,
+                        )}
                         size="0.75em"
                         style={{ padding: '0em 0em 0em 0.5em' }}
                      >
                         {item.completedAmnt}
                      </LogoText>
-                  </div>
+                  </FlexRowWrapper>
                </BarAndPercentageWrapper>
             </BarAndInfoWrapper>
          ))}
