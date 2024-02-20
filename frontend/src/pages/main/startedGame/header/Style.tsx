@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Color from '../../global/css/colors';
-import MyCSS from '../../global/css/MyCSS';
+import Color from '../../../../global/css/colors';
+import MyCSS from '../../../../global/css/MyCSS';
 
 export const ScoreboardBtnContainer = styled.div`
    position: absolute;

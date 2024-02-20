@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 import type { SetValue } from '../../../global/hooks/useLocalStorage';
-import FirestoreDB from '../class/FirestoreDb';
+import type FirestoreDB from '../class/FirestoreDb';
 
 export interface IGameContext {
    allUsers: string[];

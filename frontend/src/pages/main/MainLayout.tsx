@@ -12,7 +12,6 @@ import HeaderHooks from '../../global/context/widget/header/hooks/HeaderHooks';
 import useHeaderContext from '../../global/context/widget/header/hooks/useHeaderContext';
 import BoolHelper from '../../global/helpers/dataTypes/bool/BoolHelper';
 import GameContextProvider from './context/GameContextProvider';
-import GamePageLayout from '../../temp/GamePageLayout';
 
 export default function MainLayout(): JSX.Element {
    const { isDarkTheme } = useThemeContext();

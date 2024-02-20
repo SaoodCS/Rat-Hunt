@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Color from '../../global/css/colors';
+import Color from '../../../../global/css/colors';
 
 export const CellValue = styled.div`
    width: 80%;
@@ -35,11 +35,9 @@ export const BoardRow = styled.div`
 `;
 
 export const BoardContainer = styled.div`
-
    border: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 1)};
    height: 100%;
    width: 100%;
    border-radius: 1em;
    background-color: ${Color.darkThm.bg};
-  
 `;

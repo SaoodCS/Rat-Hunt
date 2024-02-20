@@ -61,17 +61,19 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
          const allUsers = ArrayOfObjects.getArrOfValuesFromKey(roomData.users, 'userId');
          setAllUsers(allUsers);
       }
-   }, [roomData?.users]); //TODO: change to roomData?.users and see if still works
+   }, [roomData?.users]);
 
    useEffect(() => {
-      if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
+      const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
+      const topicsDataExists = MiscHelper.isNotFalsyOrEmpty(topicsData);
+      if (roomDataExists && topicsDataExists) {
          const activeTopicWords = FirestoreDB.Room.getActiveTopicWords(
-            topicsData || [],
-            roomData?.gameState.activeTopic,
+            topicsData,
+            roomData.gameState.activeTopic,
          );
          setActiveTopicWords(activeTopicWords);
       }
-   }, [roomData?.gameState?.activeWord]);
+   }, [roomData?.gameState?.activeWord, topicsData]);
 
    useEffect(() => {
       // This useEffect runs only once after the app finishes it's first attempt to fetch the roomData from firestore

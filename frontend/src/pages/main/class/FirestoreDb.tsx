@@ -94,7 +94,6 @@ export namespace FirestoreDB {
             queryKey: [key.getRoom],
             queryFn: async (): Promise<IRoom> => {
                try {
-                  console.log('Get Room Query Is Running: ', roomId);
                   if (roomId === '') return {} as IRoom;
                   const docRef = doc(firestore, key.collection, `room-${roomId}`);
                   const docSnap = await getDoc(docRef);
@@ -289,9 +288,7 @@ export namespace FirestoreDB {
       ): IActiveTopicWords[] {
          const topicObj = ArrayOfObjects.getObjWithKeyValuePair(topics, 'key', activeTopic);
          const words = topicObj.values;
-         // cut it down to 16 words:
          const words16 = words.slice(0, 16);
-         // create an array of objects of length 16, where each object is a word with a cell id as A1, A2, A3, A4, B1, B2, B3, B4, C1, C2, C3, C4, D1, D2, D3, D4:
          const wordsWithCellIds: IActiveTopicWords[] = [];
          const letters = ['A', 'B', 'C', 'D'];
          for (let i = 0; i < 4; i++) {
@@ -312,7 +309,6 @@ export namespace FirestoreDB {
          getAllRoomIds: 'getAllRoomIds',
       };
 
-      // get the document id's of all the documents in the collection and return them as an array of strings:
       export function getAllRoomIdsQuery(
          options: UseQueryOptions<string[]> = {},
       ): UseQueryResult<string[], unknown> {

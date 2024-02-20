@@ -11,8 +11,8 @@ export const FlexRowWrapper = styled.div<{
    margin?: string;
    color?: string;
    borderRadius?: string;
-   left: string;
-   right: string;
+   left?: string;
+   right?: string;
 }>`
    display: flex;
    flex-direction: row;

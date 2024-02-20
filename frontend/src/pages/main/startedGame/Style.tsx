@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Color from '../global/css/colors';
+import Color from '../../../global/css/colors';
 
 export const GamePageWrapper = styled.div`
    background: linear-gradient(
@@ -40,5 +40,4 @@ export const TopicBoardWrapper = styled.div`
    width: 100%;
    bottom: 0;
    top: 50%;
-
 `;

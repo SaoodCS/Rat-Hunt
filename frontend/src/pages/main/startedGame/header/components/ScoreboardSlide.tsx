@@ -1,12 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
-import { E } from 'styled-icons/fa-solid';
-import ProgressBarChart, {
-   IProgressBarChartData,
-} from '../../../global/components/lib/progressBarChart/ProgressBarChart';
-import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import FirestoreDB from '../../../pages/main/class/FirestoreDb';
-import { GameContext } from '../../../pages/main/context/GameContext';
 import { ScoreboardContainer } from '../Style';
+import { GameContext } from '../../../context/GameContext';
+import FirestoreDB from '../../../class/FirestoreDb';
+import type { IProgressBarChartData } from '../../../../../global/components/lib/progressBarChart/ProgressBarChart';
+import ProgressBarChart from '../../../../../global/components/lib/progressBarChart/ProgressBarChart';
+import ArrayOfObjects from '../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 
 export default function ScoreboardSlide(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);

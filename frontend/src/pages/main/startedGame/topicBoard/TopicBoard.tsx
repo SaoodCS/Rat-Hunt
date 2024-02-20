@@ -1,28 +1,31 @@
-import { useContext } from 'react';
-import { LogoText } from '../../global/components/app/logo/LogoText';
-import { FlexColumnWrapper } from '../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
-import Color from '../../global/css/colors';
-import FirestoreDB from '../../pages/main/class/FirestoreDb';
-import { GameContext } from '../../pages/main/context/GameContext';
+import { useContext, useEffect, useState } from 'react';
 import { BoardCell, BoardContainer, BoardRow, CellUID, CellValue } from './Style';
+import { GameContext } from '../../context/GameContext';
+import FirestoreDB from '../../class/FirestoreDb';
+import Color from '../../../../global/css/colors';
+import { FlexColumnWrapper } from '../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
+import { LogoText } from '../../../../global/components/app/logo/LogoText';
 
 export default function TopicBoard(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
    const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
-   const currentWord = roomData?.gameState?.activeWord;
-   const isUserRat = localDbUser === roomData?.gameState?.currentRat;
-   const rowA = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'A');
-   const rowB = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'B');
-   const rowC = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'C');
-   const rowD = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'D');
-   const rows = [rowA, rowB, rowC, rowD];
+   const [rows, setRows] = useState<FirestoreDB.Room.IActiveTopicWords[][]>([[]]);
+
+   useEffect(() => {
+      const rowA = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'A');
+      const rowB = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'B');
+      const rowC = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'C');
+      const rowD = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'D');
+      setRows([rowA, rowB, rowC, rowD]);
+   }, [activeTopicWords]);
 
    function setColor(word: string): string {
+      const currentWord = roomData?.gameState?.activeWord;
+      const isUserRat = localDbUser === roomData?.gameState?.currentRat;
       if (word === currentWord && !isUserRat) {
          return Color.darkThm.error;
-      } else {
-         return Color.setRgbOpacity(Color.darkThm.txt, 0.7);
       }
+      return Color.setRgbOpacity(Color.darkThm.txt, 0.7);
    }
 
    return (

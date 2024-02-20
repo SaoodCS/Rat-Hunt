@@ -1,16 +1,19 @@
-import { TextBtn } from '../../global/components/lib/button/textBtn/Style';
-import { CarouselContainer, CarouselSlide } from '../../global/components/lib/carousel/Carousel';
-import useCarousel from '../../global/components/lib/carousel/hooks/useCarousel';
-import { FlexColumnWrapper } from '../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
-import Color from '../../global/css/colors';
-import Unicode from '../../global/helpers/dataTypes/unicode/Unicode';
+import { TextBtn } from '../../../../global/components/lib/button/textBtn/Style';
+import {
+   CarouselContainer,
+   CarouselSlide,
+} from '../../../../global/components/lib/carousel/Carousel';
+import useCarousel from '../../../../global/components/lib/carousel/hooks/useCarousel';
+import { FlexColumnWrapper } from '../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
+import Color from '../../../../global/css/colors';
+import Unicode from '../../../../global/helpers/dataTypes/unicode/Unicode';
 import { ScoreboardBtnContainer } from './Style';
 import GameDetailsSlide from './components/GameDetailsSlide';
 import ScoreboardSlide from './components/ScoreboardSlide';
 
 export default function GameHeader(): JSX.Element {
    const { containerRef, scrollToSlide } = useCarousel(1, 'headerCarousel.currentSlide');
-   function handleOpenScoreboard() {
+   function handleOpenScoreboard(): void {
       scrollToSlide(2);
    }
 
