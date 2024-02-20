@@ -19,6 +19,7 @@ export default class Color {
    static darkThm = {
       bg: 'rgb(2,8,23)',
       accent: 'rgb(108, 50, 209)',
+      accentDarkerShade: 'rgb(39, 18, 76)',
       accentAlt: 'rgb(151, 209, 50)',
       border: 'rgba(255, 255, 255, 0.1)',
       txt: 'rgb(255, 255, 255)',

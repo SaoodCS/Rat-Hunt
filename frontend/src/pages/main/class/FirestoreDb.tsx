@@ -178,6 +178,28 @@ export namespace FirestoreDB {
          );
       }
 
+      interface IUpdateGameStateMutation {
+         gameState: IGameState;
+         roomId: string;
+      }
+
+      export function updateGameStateMutation(
+         options: UseMutationOptions<void, unknown, IUpdateGameStateMutation>,
+      ): UseMutationResult<void, unknown, IUpdateGameStateMutation, void> {
+         return useCustomMutation(
+            async (params: IUpdateGameStateMutation) => {
+               const { gameState, roomId } = params;
+               try {
+                  const docRef = doc(firestore, key.collection, `room-${roomId}`);
+                  await updateDoc(docRef, { gameState });
+               } catch (e) {
+                  throw new APIHelper.ErrorThrower(APIHelper.handleError(e));
+               }
+            },
+            { ...options },
+         );
+      }
+
       interface IDeleteUserParam {
          roomData: FirestoreDB.Room.IRoom;
          userId: string;
@@ -248,7 +270,15 @@ export namespace FirestoreDB {
          return newId;
       }
 
-      interface IActiveTopicWords {
+      export function randNewTopicKey(
+         activeTopic: string,
+         topicData: FirestoreDB.Topics.ITopics[],
+      ): string {
+         const newTopic = topicData[Math.floor(Math.random() * topicData.length)].key;
+         return newTopic === activeTopic ? randNewTopicKey(activeTopic, topicData) : newTopic;
+      }
+
+      export interface IActiveTopicWords {
          cellId: string;
          word: string;
       }

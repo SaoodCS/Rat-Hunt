@@ -7,20 +7,14 @@ import { GameContext } from '../../pages/main/context/GameContext';
 import { BoardCell, BoardContainer, BoardRow, CellUID, CellValue } from './Style';
 
 export default function TopicBoard(): JSX.Element {
-   const { allUsers, setAllUsers, localDbRoom, localDbUser } = useContext(GameContext);
-   const { data: topicsData } = FirestoreDB.Topics.getTopicsQuery();
+   const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
    const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
-   const currentWord = 'The Bible'; // roomData?.gameState?.activeWord
-   const isUserRat = false; // TODO set this correctly
-   const topicWords = FirestoreDB.Room.getActiveTopicWords(
-      topicsData || [],
-      roomData?.gameState?.activeTopic || '',
-   );
-
-   const rowA = topicWords.filter((word) => word.cellId.charAt(0) === 'A');
-   const rowB = topicWords.filter((word) => word.cellId.charAt(0) === 'B');
-   const rowC = topicWords.filter((word) => word.cellId.charAt(0) === 'C');
-   const rowD = topicWords.filter((word) => word.cellId.charAt(0) === 'D');
+   const currentWord = roomData?.gameState?.activeWord;
+   const isUserRat = localDbUser === roomData?.gameState?.currentRat;
+   const rowA = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'A');
+   const rowB = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'B');
+   const rowC = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'C');
+   const rowD = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'D');
    const rows = [rowA, rowB, rowC, rowD];
 
    function setColor(word: string): string {

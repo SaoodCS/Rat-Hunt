@@ -11,7 +11,6 @@ import { FlexColumnWrapper } from '../../../global/components/lib/positionModifi
 import { FlexRowWrapper } from '../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
 import { ToastContext } from '../../../global/context/widget/toast/ToastContext';
 import Color from '../../../global/css/colors';
-import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import StringHelper from '../../../global/helpers/dataTypes/string/StringHelper';
 import FirestoreDB from '../class/FirestoreDb';
@@ -33,14 +32,10 @@ export default function WaitingRoom(): JSX.Element {
    const updateGameStarted = FirestoreDB.Room.updateGameStartedMutation({});
 
    useEffect(() => {
-      if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
-         const allUsers = ArrayOfObjects.getArrOfValuesFromKey(roomData.users, 'userId');
-         setAllUsers(allUsers);
-         if (roomData.gameStarted) {
-            navigation('/main/startedgame');
-         }
+      if (MiscHelper.isNotFalsyOrEmpty(roomData) && roomData.gameStarted) {
+         navigation('/main/startedgame');
       }
-   }, [roomData]);
+   }, [roomData?.gameStarted]);
 
    async function handleStartGame(): Promise<void> {
       await updateGameStarted.mutateAsync({

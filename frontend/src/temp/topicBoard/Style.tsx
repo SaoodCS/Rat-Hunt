@@ -26,6 +26,7 @@ export const BoardCell = styled.div`
    justify-content: center;
    align-items: center;
    position: relative;
+   background-color: ${Color.setRgbOpacity(Color.darkThm.accent, 0.1)};
 `;
 
 export const BoardRow = styled.div`
@@ -34,8 +35,11 @@ export const BoardRow = styled.div`
 `;
 
 export const BoardContainer = styled.div`
-   //border: 3px solid ${Color.darkThm.accent};
+
+   border: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 1)};
    height: 100%;
    width: 100%;
    border-radius: 1em;
+   background-color: ${Color.darkThm.bg};
+  
 `;

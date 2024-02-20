@@ -18,7 +18,6 @@ export default function MainLayout(): JSX.Element {
    const { isDarkTheme } = useThemeContext();
    const { headerTitle, showBackBtn, handleBackBtnClick, headerRightElement } = useHeaderContext();
    HeaderHooks.useOnMount.setHeaderTitle('Rat Hunt');
-
    return (
       <>
          <GameContextProvider>

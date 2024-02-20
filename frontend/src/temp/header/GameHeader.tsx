@@ -1,8 +1,12 @@
 import { useContext } from 'react';
 import { LogoText } from '../../global/components/app/logo/LogoText';
 import { TextBtn } from '../../global/components/lib/button/textBtn/Style';
+import { FlexColumnWrapper } from '../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { FlexRowWrapper } from '../../global/components/lib/positionModifiers/flexRowWrapper/Style';
+import ConditionalRender from '../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
+import { ModalContext } from '../../global/context/widget/modal/ModalContext';
 import Color from '../../global/css/colors';
+import ArrayOfObjects from '../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import HTMLEntities from '../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import Unicode from '../../global/helpers/dataTypes/unicode/Unicode';
 import FirestoreDB from '../../pages/main/class/FirestoreDb';
@@ -10,44 +14,63 @@ import { GameContext } from '../../pages/main/context/GameContext';
 import { GameDetailsContainer, ScoreboardBtnContainer } from './Style';
 
 export default function GameHeader(): JSX.Element {
-   const { allUsers, setAllUsers, localDbRoom, localDbUser } = useContext(GameContext);
+   const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
    const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
-   const { data: topicsData } = FirestoreDB.Topics.getTopicsQuery();
    const gameHeaderDetails = [
+      {
+         label: 'Round',
+         value: roomData?.gameState?.currentRound + ' / ' + roomData?.gameState?.numberOfRoundsSet,
+      },
       {
          label: 'Topic',
          value: roomData?.gameState?.activeTopic,
       },
       {
          label: 'Word',
-         value: roomData?.gameState?.activeWord,
-      },
-      {
-         label: 'Round',
-         value: roomData?.gameState?.currentRound + ' / ' + roomData?.gameState?.numberOfRoundsSet,
+         value:
+            roomData?.gameState.currentRat === localDbUser
+               ? 'YOU ARE THE RAT'
+               : ArrayOfObjects.getObjWithKeyValuePair(
+                    activeTopicWords,
+                    'word',
+                    roomData?.gameState?.activeWord || '',
+                 )?.cellId,
       },
    ];
 
+   function handleOpenScoreboard() {
+      
+   }
+
    return (
-      <>
+      <FlexColumnWrapper position="relative" width="100%">
          <GameDetailsContainer>
             {gameHeaderDetails.map((detail, index) => (
-               <FlexRowWrapper alignItems="center" key={index} padding="0em 0em 0.5em 0em">
-                  <LogoText size={'1.5em'} color={Color.darkThm.accent}>
-                     {detail.label}
-                     {HTMLEntities.space} {Unicode.rightArrow()} {HTMLEntities.space}
-                  </LogoText>
-                  <LogoText size={'1.5em'} color={Color.darkThm.accentAlt}>
+               <FlexRowWrapper alignItems="center" key={index} padding="0em 0em 0em 0em">
+                  <ConditionalRender condition={!detail.value?.includes('THE RAT')}>
+                     <LogoText size={'1.25em'} color={Color.darkThm.accent}>
+                        {detail.label}
+                        {HTMLEntities.space} {Unicode.rightArrow()} {HTMLEntities.space}
+                     </LogoText>
+                  </ConditionalRender>
+                  <LogoText
+                     size={'1.25em'}
+                     color={
+                        detail.value?.includes('THE RAT')
+                           ? Color.darkThm.error
+                           : Color.darkThm.accentAlt
+                     }
+                  >
                      {detail.value}
                   </LogoText>
                </FlexRowWrapper>
             ))}
          </GameDetailsContainer>
          <ScoreboardBtnContainer>
-            <TextBtn isDarkTheme style={{ fontSize: '1em' }}>
-               Scoreboard
+            <TextBtn isDarkTheme onClick={handleOpenScoreboard}>
+               Scoreboard {Unicode.rightArrow()}
             </TextBtn>
          </ScoreboardBtnContainer>
-      </>
+      </FlexColumnWrapper>
    );
 }

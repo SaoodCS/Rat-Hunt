@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useHeaderContext from '../../../global/context/widget/header/hooks/useHeaderContext';
 import { firestore } from '../../../global/firebase/config/config';
+import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useLocalStorage from '../../../global/hooks/useLocalStorage';
 import FirestoreDB from '../class/FirestoreDb';
@@ -21,9 +22,13 @@ interface IGameContextProvider {
 export default function GameContextProvider(props: IGameContextProvider): JSX.Element {
    const { children } = props;
    const [allUsers, setAllUsers] = useState<string[]>([]);
+   const [activeTopicWords, setActiveTopicWords] = useState<FirestoreDB.Room.IActiveTopicWords[]>(
+      [],
+   );
    const [localDbUser, setLocalDbUser] = useLocalStorage(LocalDB.key.localDbName, '');
    const [localDbRoom, setLocalDbRoom] = useLocalStorage(LocalDB.key.localDbRoom, '');
    const { data: roomData, isLoading } = FirestoreDB.Room.getRoomQuery(localDbRoom);
+   const { data: topicsData } = FirestoreDB.Topics.getTopicsQuery();
    const [initialRender, setInitialRender] = useState(true);
    const { setHeaderRightElement } = useHeaderContext();
    const navigation = useNavigate();
@@ -52,6 +57,23 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
    }, [localDbRoom]);
 
    useEffect(() => {
+      if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
+         const allUsers = ArrayOfObjects.getArrOfValuesFromKey(roomData.users, 'userId');
+         setAllUsers(allUsers);
+      }
+   }, [roomData?.users]); //TODO: change to roomData?.users and see if still works
+
+   useEffect(() => {
+      if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
+         const activeTopicWords = FirestoreDB.Room.getActiveTopicWords(
+            topicsData || [],
+            roomData?.gameState.activeTopic,
+         );
+         setActiveTopicWords(activeTopicWords);
+      }
+   }, [roomData?.gameState?.activeWord]);
+
+   useEffect(() => {
       // This useEffect runs only once after the app finishes it's first attempt to fetch the roomData from firestore
       if (!isLoading && initialRender) {
          setInitialRender(false);
@@ -71,7 +93,16 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
 
    return (
       <GameContext.Provider
-         value={{ allUsers, setAllUsers, localDbRoom, setLocalDbRoom, localDbUser, setLocalDbUser }}
+         value={{
+            allUsers,
+            setAllUsers,
+            localDbRoom,
+            setLocalDbRoom,
+            localDbUser,
+            setLocalDbUser,
+            activeTopicWords,
+            setActiveTopicWords,
+         }}
       >
          {children}
       </GameContext.Provider>
