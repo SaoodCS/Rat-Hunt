@@ -8,6 +8,8 @@ import GlobalUtils from './global/config/GlobalConfig';
 import DeviceContextProvider from './global/context/device/DeviceContextProvider';
 import ThemeContextProvider from './global/context/theme/ThemeContextProvider';
 
+GlobalUtils.config.chartJSRegister;
+
 function Root(): JSX.Element {
    return (
       <StrictMode>

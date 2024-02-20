@@ -1,6 +1,7 @@
 import useThemeContext from '../../../context/theme/hooks/useThemeContext';
 import Color from '../../../css/colors';
 import NumberHelper from '../../../helpers/dataTypes/number/NumberHelper';
+import { LogoText } from '../../app/logo/LogoText';
 import { TextColourizer } from '../font/textColorizer/TextColourizer';
 import { FlexColumnWrapper } from '../positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import type { ITooltipPositioning } from '../tooltip/Tooltip';
@@ -53,7 +54,7 @@ export default function ProgressBarChart(props: IProgressBarChart): JSX.Element 
       <>
          {data.map((item) => (
             <BarAndInfoWrapper key={item.label}>
-               <BarTitle>{item.label}</BarTitle>
+               {/* <BarTitle>{item.label}</BarTitle> */}
                <BarAndPercentageWrapper>
                   <BarBackground
                      barWidth={barWidth || '20em'}
@@ -66,17 +67,22 @@ export default function ProgressBarChart(props: IProgressBarChart): JSX.Element 
                         height={toolTipHeight}
                         content={
                            <FlexColumnWrapper>
-                              <TextColourizer padding="0em 0em 0.5em 0em" color={Color.darkThm.txt}>
+                              {/* <TextColourizer padding="0em 0em 0.5em 0em" color={Color.darkThm.txt}>
                                  Target: {NumberHelper.asCurrencyStr(item.target)}
+                              </TextColourizer> */}
+                              <TextColourizer
+                                 padding="0em 0em 0em 0em"
+                                 color={Color.darkThm.txt}
+                                 fontSize="0.75em"
+                              >
+                                 User: {item.label}
                               </TextColourizer>
-                              <TextColourizer padding="0em 0em 0.5em 0em" color={Color.darkThm.txt}>
-                                 Current: {NumberHelper.asCurrencyStr(item.completedAmnt)}
-                              </TextColourizer>
-                              <TextColourizer padding="0em 0em 0.5em 0em" color={Color.darkThm.txt}>
-                                 Remaining:
-                                 {NumberHelper.asCurrencyStr(
-                                    getRemainingAmount(item.completedAmnt, item.target),
-                                 )}
+                              <TextColourizer
+                                 padding="0em 0em 0em 0em"
+                                 color={Color.darkThm.txt}
+                                 fontSize="0.75em"
+                              >
+                                 Score: {item.completedAmnt}
                               </TextColourizer>
                            </FlexColumnWrapper>
                         }
@@ -90,17 +96,33 @@ export default function ProgressBarChart(props: IProgressBarChart): JSX.Element 
                         />
                      </Tooltip>
                   </BarBackground>
-
-                  <TextColourizer
-                     color={Color.setRgbOpacity(
-                        isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt,
-                        0.8,
-                     )}
-                     fontSize="0.9em"
-                     padding="0em 0em 0em 0.75em"
+                  <div
+                     style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        position: 'absolute',
+                        right: 0,
+                        left: barWidth || '20em',
+                        paddingLeft: '1em',
+                        paddingRight: '1em',
+                     }}
                   >
-                     {getCompletedPercentage(item.completedAmnt, item.target)}%
-                  </TextColourizer>
+                     <LogoText
+                        color={Color.setRgbOpacity(Color.darkThm.txt, 0.75)}
+                        size="0.75em"
+                        style={{ padding: '0em 0em 0em 0.5em' }}
+                     >
+                        {item.label}
+                     </LogoText>
+                     <LogoText
+                        color={Color.setRgbOpacity(Color.darkThm.txt, 0.75)}
+                        size="0.75em"
+                        style={{ padding: '0em 0em 0em 0.5em' }}
+                     >
+                        {item.completedAmnt}
+                     </LogoText>
+                  </div>
                </BarAndPercentageWrapper>
             </BarAndInfoWrapper>
          ))}

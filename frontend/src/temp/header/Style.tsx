@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Color from '../../global/css/colors';
+import MyCSS from '../../global/css/MyCSS';
 
 export const ScoreboardBtnContainer = styled.div`
    position: absolute;
@@ -12,15 +13,6 @@ export const ScoreboardBtnContainer = styled.div`
    border-radius: 1em;
 `;
 
-export const BackBtnContainer = styled.div`
-   position: absolute;
-   top: 0;
-   left: 0;
-   border-radius: 1em;
-   width: 100%;
-   height: 15%;
-`;
-
 export const GameDetailsContainer = styled.div`
    height: 100%;
    display: flex;
@@ -31,7 +23,9 @@ export const GameDetailsContainer = styled.div`
 
 export const ScoreboardContainer = styled.div`
    position: absolute;
-   top: 15%;
-   bottom: 0px;
+   top: 0.5em;
+   bottom: 0.5em;
    width: 100%;
+   overflow: scroll;
+   ${MyCSS.Scrollbar.hide};
 `;

@@ -1,4 +1,16 @@
 import { QueryClient } from '@tanstack/react-query';
+import {
+   ArcElement,
+   CategoryScale,
+   Chart as ChartJS,
+   Filler,
+   Legend,
+   LineElement,
+   LinearScale,
+   PointElement,
+   Title,
+   Tooltip,
+} from 'chart.js';
 import NumberHelper from '../helpers/dataTypes/number/NumberHelper';
 
 export default class GlobalUtils {
@@ -17,5 +29,16 @@ export default class GlobalUtils {
             },
          },
       }),
+      chartJSRegister: ChartJS.register(
+         CategoryScale,
+         LinearScale,
+         PointElement,
+         LineElement,
+         ArcElement,
+         Title,
+         Tooltip,
+         Filler,
+         Legend,
+      ),
    };
 }

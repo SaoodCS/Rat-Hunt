@@ -24,7 +24,7 @@ export const BarTitle = styled.div`
 `;
 
 export const BarAndInfoWrapper = styled.div`
-   margin-bottom: 1em;
+   margin-bottom: 0.5em;
 `;
 
 export const CompletedBar = styled.div<{
@@ -36,10 +36,10 @@ export const CompletedBar = styled.div<{
    height: 100%;
    background-image: ${({ isDarkTheme, completedPercentage }) =>
       isDarkTheme
-         ? `linear-gradient(90deg, ${'rgba(0,0,0,0)'} -50%, ${Color.darkThm.success} ${
+         ? `linear-gradient(90deg, ${'rgba(0,0,0,0)'} -50%, ${Color.darkThm.accent} ${
               100 - completedPercentage + 100
            }%)`
-         : `linear-gradient(90deg, ${'rgba(0,0,0,0)'} -50%, ${Color.lightThm.success} ${
+         : `linear-gradient(90deg, ${'rgba(0,0,0,0)'} -50%, ${Color.lightThm.accentAlt} ${
               100 - completedPercentage + 100
            }%)`};
 
@@ -64,7 +64,7 @@ export const BarBackground = styled.div<{
    height: ${({ barHeight }) => barHeight || '2em'};
    &:hover {
       border: ${({ isDarkTheme }) =>
-         `1px solid ${isDarkTheme ? Color.darkThm.border : Color.lightThm.border}`};
+         `1px solid ${isDarkTheme ? Color.darkThm.accent : Color.lightThm.border}`};
       border-left: none;
       box-sizing: border-box;
    }

@@ -1,11 +1,10 @@
 import { TextBtn } from '../../global/components/lib/button/textBtn/Style';
 import { CarouselContainer, CarouselSlide } from '../../global/components/lib/carousel/Carousel';
 import useCarousel from '../../global/components/lib/carousel/hooks/useCarousel';
-import { ArrowCircleLeftIcon } from '../../global/components/lib/icons/arrows/ArrowCircleLeft';
 import { FlexColumnWrapper } from '../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import Color from '../../global/css/colors';
 import Unicode from '../../global/helpers/dataTypes/unicode/Unicode';
-import { BackBtnContainer, ScoreboardBtnContainer } from './Style';
+import { ScoreboardBtnContainer } from './Style';
 import GameDetailsSlide from './components/GameDetailsSlide';
 import ScoreboardSlide from './components/ScoreboardSlide';
 
@@ -13,10 +12,6 @@ export default function GameHeader(): JSX.Element {
    const { containerRef, scrollToSlide } = useCarousel(1, 'headerCarousel.currentSlide');
    function handleOpenScoreboard() {
       scrollToSlide(2);
-   }
-
-   function handleOpenGameDetails() {
-      scrollToSlide(1);
    }
 
    return (
@@ -34,9 +29,6 @@ export default function GameHeader(): JSX.Element {
          <CarouselSlide height="auto">
             <FlexColumnWrapper width="100dvw" position="relative">
                <ScoreboardSlide />
-               <BackBtnContainer onClick={handleOpenGameDetails}>
-                  <ArrowCircleLeftIcon darktheme="true" height="1.75em" />
-               </BackBtnContainer>
             </FlexColumnWrapper>
          </CarouselSlide>
       </CarouselContainer>
