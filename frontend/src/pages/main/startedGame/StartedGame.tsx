@@ -3,9 +3,15 @@ import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arr
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import FirestoreDB from '../class/FirestoreDb';
 import { GameContext } from '../context/GameContext';
-import { GameHeaderWrapper, GamePageWrapper, GameplayWrapper, TopicBoardWrapper } from './Style';
 import GameHeader from './header/GameHeader';
+import {
+   GameHeaderWrapper,
+   GamePageWrapper,
+   GameplayWrapper,
+   TopicBoardWrapper,
+} from './style/Style';
 import TopicBoard from './topicBoard/TopicBoard';
+import Gameplay from './gameplay/Gameplay';
 
 export default function StartedGame(): JSX.Element {
    const { allUsers, localDbRoom, localDbUser } = useContext(GameContext);
@@ -46,7 +52,9 @@ export default function StartedGame(): JSX.Element {
          <GameHeaderWrapper>
             <GameHeader />
          </GameHeaderWrapper>
-         <GameplayWrapper></GameplayWrapper>
+         <GameplayWrapper>
+            <Gameplay />
+         </GameplayWrapper>
          <TopicBoardWrapper>
             <TopicBoard />
          </TopicBoardWrapper>
