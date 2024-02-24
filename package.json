@@ -12,7 +12,7 @@
     "f-deploy": "cd frontend && npm run deploy",
     "b-deploy": "cd backend && firebase deploy",
     "app-deploy": "npm run f-deploy && npm run b-deploy",
-    "git-sync": "git pull && npx git-removed-branches --prune"
+    "git-sync": "git pull && git remote update origin --prune && npx git-removed-branches --prune --force"
   },
   "engines": {
     "node": "18.19.0"
