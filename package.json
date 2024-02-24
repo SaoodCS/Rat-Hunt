@@ -11,7 +11,8 @@
     "b-lint": "cd backend && npm run lint",
     "f-deploy": "cd frontend && npm run deploy",
     "b-deploy": "cd backend && firebase deploy",
-    "app-deploy": "npm run f-deploy && npm run b-deploy"
+    "app-deploy": "npm run f-deploy && npm run b-deploy",
+    "git-sync": "git pull && npx git-removed-branches --prune"
   },
   "engines": {
     "node": "18.19.0"
