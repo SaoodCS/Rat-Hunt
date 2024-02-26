@@ -1,7 +1,8 @@
 import { initializeApp } from 'firebase/app';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
 import { getDatabase } from 'firebase/database';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
    apiKey: import.meta.env.VITE_APIKEY,
@@ -12,8 +13,17 @@ const firebaseConfig = {
    appId: import.meta.env.VITE_APPID,
    measurementId: import.meta.env.VITE_MEASUREMENTID,
 };
-
 const app = initializeApp(firebaseConfig);
+
+if (import.meta.env.VITE_RUNNING === 'local') {
+   type Self = typeof self;
+   type TSelf = Self & { FIREBASE_APPCHECK_DEBUG_TOKEN: string };
+   (self as TSelf).FIREBASE_APPCHECK_DEBUG_TOKEN = import.meta.env.VITE_APPCHECKDEBUGTOKEN;
+}
+initializeAppCheck(app, {
+   provider: new ReCaptchaEnterpriseProvider(import.meta.env.VITE_RECAPTCHASITEKEY),
+   isTokenAutoRefreshEnabled: true,
+});
 export default app;
 export const auth = getAuth(app);
 export const firestore = getFirestore(app);
