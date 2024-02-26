@@ -6,7 +6,7 @@
    "scripts": {
       "dev": "vite",
       "preview": "vite preview",
-      "build": "tsc && vite build",
+      "build": "tsc && vite build --mode production",
       "ts-errors": "tsc --noEmit --pretty",
       "lint": "eslint . --ignore-path .eslintignore",
       "lint-ts": "concurrently \"npm run ts-errors\" \"npm run lint\" --success all --prefix-colors \"bgBlue.bold,bgMagenta.bold\" --group --names \"TS-ERROR-CHECK,LINT-ERROR-CHECK\"",
@@ -17,7 +17,7 @@
       "view-unused-exports": "npx unimported",
       "del-dev-dist-old": "node src/global/config/script/delDevDistOld.js",
       "deploy": "npm run build && firebase deploy --only hosting --project rat-hunt",
-      "start": "npm run del-dev-dist-old && vite --host",
+      "start": "npm run del-dev-dist-old && vite --host --mode development",
       "generate-pwa-assets": "pwa-assets-generator public/icons/logo-512x512.png"
    },
    "dependencies": {

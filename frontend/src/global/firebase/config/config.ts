@@ -15,7 +15,7 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 
-if (import.meta.env.VITE_RUNNING === 'local') {
+if (import.meta.env.MODE === 'development') {
    type Self = typeof self;
    type TSelf = Self & { FIREBASE_APPCHECK_DEBUG_TOKEN: string };
    (self as TSelf).FIREBASE_APPCHECK_DEBUG_TOKEN = import.meta.env.VITE_APPCHECKDEBUGTOKEN;
