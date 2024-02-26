@@ -12,7 +12,6 @@ export default function ScoreboardSlide(): JSX.Element {
    const [chartData, setChartData] = useState<IProgressBarChartData[]>([]);
 
    useEffect(() => {
-      const barOutOf = (roomData?.gameState?.numberOfRoundsSet || 1) * 2;
       const totalScores = ArrayOfObjects.getArrOfValuesFromKey(
          roomData?.gameState?.userStates || [],
          'totalScore',
@@ -22,6 +21,7 @@ export default function ScoreboardSlide(): JSX.Element {
          'roundScore',
       );
       const roundScoresPlusTotal = roundScores.map((score, index) => score + totalScores[index]);
+      const barOutOf = Math.max(...roundScoresPlusTotal);
       const labels = ArrayOfObjects.getArrOfValuesFromKey(
          roomData?.gameState?.userStates || [],
          'userId',
@@ -40,9 +40,8 @@ export default function ScoreboardSlide(): JSX.Element {
       <ScoreboardContainer>
          <ProgressBarChart
             data={ArrayOfObjects.sort(chartData, 'completedAmnt', true)}
-            barHeight="0.8em"
-            barWidth="65%"
-            tooltipOptions={{ positioning: 'center-right' }}
+            barHeight="1em"
+            barWidth="95%"
          />
       </ScoreboardContainer>
    );

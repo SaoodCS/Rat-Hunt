@@ -33,7 +33,7 @@ export default function GameDetailsSlide(): JSX.Element {
          {
             label: 'Word',
             value:
-               roomData?.gameState.currentRat === localDbUser
+               roomData?.gameState?.currentRat === localDbUser
                   ? 'YOU ARE THE RAT'
                   : ArrayOfObjects.getObjWithKeyValuePair(
                        activeTopicWords,
