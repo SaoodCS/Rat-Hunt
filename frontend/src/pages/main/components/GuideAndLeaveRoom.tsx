@@ -27,7 +27,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    const navigation = useNavigate();
 
    function handleHelpGuide(): void {
-      setModalHeader('Help Guide');
+      setModalHeader('How To Play?');
       setModalContent(<HelpGuide />);
       setModalZIndex(100);
       toggleModal(true);
