@@ -10,6 +10,7 @@ import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper'
 import FirestoreDB from '../class/FirestoreDb';
 import RTDB from '../class/firebaseRTDB';
 import { GameContext } from '../context/GameContext';
+import HelpGuide from './HelpGuide';
 
 interface IGuideAndLeaveRoom {
    currentPath: string;
@@ -27,7 +28,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
 
    function handleHelpGuide(): void {
       setModalHeader('Help Guide');
-      setModalContent(<p>Help Guide Component Goes Here</p>);
+      setModalContent(<HelpGuide />);
       setModalZIndex(100);
       toggleModal(true);
    }

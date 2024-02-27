@@ -1,5 +1,6 @@
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
+import Color from './colors';
 
 export namespace MyCSS {
    export class PortableBp {
@@ -108,10 +109,10 @@ export namespace MyCSS {
                linear,
                left bottom,
                left top,
-               color-stop(0.44, rgba(255, 255, 255, 0.586)),
-               color-stop(0.72, rgba(152, 152, 152, 0.695)),
-               color-stop(0.86, rgb(71, 71, 71)),
-               color-stop(1, rgb(7, 7, 7))
+               color-stop(0.44, ${Color.setRgbOpacity(Color.darkThm.accent, 0.7)}),
+               color-stop(0.72, ${Color.setRgbOpacity(Color.darkThm.accent, 0.5)}),
+               color-stop(0.86, ${Color.setRgbOpacity(Color.darkThm.accent, 0.3)}),
+               color-stop(1, ${Color.setRgbOpacity(Color.darkThm.accent, 0.1)})
             );
             border-radius: 8px;
          }

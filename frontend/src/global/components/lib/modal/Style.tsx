@@ -23,7 +23,7 @@ export const ModalHeaderContainer = styled.div<{ isDarkTheme: boolean }>`
    justify-content: space-between;
    align-items: center;
    border-bottom: ${({ isDarkTheme }) =>
-      isDarkTheme ? `1px solid ${Color.darkThm.border}` : `1px solid ${Color.lightThm.border}`};
+      isDarkTheme ? `1px solid ${Color.darkThm.accent}` : `1px solid ${Color.lightThm.accent}`};
    border-radius: 5px;
    font-size: 1em;
    font-weight: 500;
@@ -34,12 +34,14 @@ export const ModalContainer = styled.div<{ isDarkTheme: boolean }>`
    border-radius: 10px;
    background-color: ${({ isDarkTheme }) =>
       isDarkTheme
-         ? Color.setRgbOpacity(Color.darkThm.dialog, 0.8)
-         : Color.setRgbOpacity(Color.lightThm.dialog, 0.8)};
+         ? Color.setRgbOpacity(Color.darkThm.dialog, 1)
+         : Color.setRgbOpacity(Color.lightThm.dialog, 1)};
    color: ${({ isDarkTheme }) => (isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt)};
    border: ${({ isDarkTheme }) =>
-      isDarkTheme ? `1px solid ${Color.darkThm.border}` : `1px solid ${Color.lightThm.border}`};
-   backdrop-filter: blur(10px);
+      isDarkTheme ? `1px solid ${Color.darkThm.accent}` : `1px solid ${Color.lightThm.accent}`};
+   backdrop-filter: blur(50px);
+   // increase the brightness of the modal
+   filter: brightness(1.25);
 `;
 
 export const ModalCloseButton = styled(Close)`
