@@ -34,11 +34,13 @@ export default function StartedGame(): JSX.Element {
          const newTopic = !isRoundOne ? randNewTopicKey(activeTopic, topicsData) : activeTopic;
          const newWords = getActiveTopicWords(topicsData, newTopic);
          const newWord = newWords[Math.floor(Math.random() * newWords.length)].word;
+         const updatedCurrentTurn = users[0].userId;
          const updatedGameState: FirestoreDB.Room.IGameState = {
             ...roomData.gameState,
             activeTopic: newTopic,
             activeWord: newWord,
             currentRat: newRat,
+            currentTurn: updatedCurrentTurn,
          };
          updateGameStateMutation.mutate({
             roomId: localDbRoom,

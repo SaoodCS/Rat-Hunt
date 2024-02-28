@@ -16,7 +16,7 @@ export const RowContainer = styled.div<{ isThisUser?: boolean; currentTurn?: boo
    ${LogoText} {
       color: ${({ isThisUser, currentTurn }) => {
          if (currentTurn) {
-            return Color.darkThm.error;
+            return Color.setRgbOpacity(Color.darkThm.txt, 0.8);
          }
          if (isThisUser) {
             return Color.darkThm.accentAlt;
