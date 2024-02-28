@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Color from '../../../../../global/css/colors';
 import { LogoText } from '../../../../../global/components/app/logo/LogoText';
+import MyCSS from '../../../../../global/css/MyCSS';
 
 export const Cell = styled.div`
    width: calc(100% / 3);
@@ -31,7 +32,8 @@ export const UserRowsWrapper = styled.div`
    top: 2.5em;
    bottom: 0px;
    width: 100%;
-   overflow: scroll;
+   overflow-y: scroll;
+   ${MyCSS.Scrollbar.gradientStyle};
 `;
 
 export const HeaderRowContainer = styled.div`
