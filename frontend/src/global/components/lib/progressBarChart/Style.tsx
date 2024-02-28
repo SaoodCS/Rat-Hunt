@@ -15,6 +15,8 @@ const slideIn = keyframes`
 export const BarAndPercentageWrapper = styled.div`
    display: flex;
    align-items: center;
+   height: 100%;
+   position: relative;
 `;
 
 export const BarTitle = styled.div`

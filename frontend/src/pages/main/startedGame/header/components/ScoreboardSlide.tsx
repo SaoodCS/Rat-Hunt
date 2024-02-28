@@ -40,7 +40,7 @@ export default function ScoreboardSlide(): JSX.Element {
       <ScoreboardContainer>
          <ProgressBarChart
             data={ArrayOfObjects.sort(chartData, 'completedAmnt', true)}
-            barHeight="1em"
+            barHeight="1.5em"
             barWidth="95%"
          />
       </ScoreboardContainer>

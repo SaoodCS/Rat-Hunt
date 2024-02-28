@@ -42,31 +42,18 @@ export default function ProgressBarChart(props: IProgressBarChart): JSX.Element 
       <>
          {data.map((item) => (
             <BarAndInfoWrapper key={item.label}>
-               <BarAndPercentageWrapper style={{ position: 'relative' }}>
+               <BarAndPercentageWrapper>
                   <BarBackground
                      barWidth={barWidth || '20em'}
                      barHeight={barHeight || '2em'}
                      isDarkTheme={isDarkTheme}
-                     style={{
-                        position: 'relative',
-                        boxSizing: 'border-box',
-                        borderTop: isLocalDbUser(item.label)
-                           ? `1px solid ${Color.darkThm.accentAlt}`
-                           : '',
-                        borderBottom: isLocalDbUser(item.label)
-                           ? `1px solid ${Color.darkThm.accentAlt}`
-                           : '',
-                        borderRight: isLocalDbUser(item.label)
-                           ? `1px solid ${Color.darkThm.accentAlt}`
-                           : '',
-                     }}
                   >
                      <LogoText
                         color={Color.setRgbOpacity(
                            isLocalDbUser(item.label) ? Color.darkThm.accentAlt : Color.darkThm.txt,
                            0.75,
                         )}
-                        size="0.75em"
+                        size="0.85em"
                         style={{
                            padding: '0em 0em 0em 0.5em',
                            height: '100%',
@@ -81,7 +68,7 @@ export default function ProgressBarChart(props: IProgressBarChart): JSX.Element 
                            isLocalDbUser(item.label) ? Color.darkThm.accentAlt : Color.darkThm.txt,
                            0.75,
                         )}
-                        size="0.75em"
+                        size="0.85em"
                         style={{
                            padding: '0em 0.75em 0em 0em',
                            position: 'absolute',

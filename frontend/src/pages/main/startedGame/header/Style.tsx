@@ -2,15 +2,11 @@ import styled from 'styled-components';
 import Color from '../../../../global/css/colors';
 import MyCSS from '../../../../global/css/MyCSS';
 
-export const ScoreboardBtnContainer = styled.div`
-   position: absolute;
-   top: 0;
-   right: 0;
+export const BtnContainer = styled.div`
    border: 1px solid ${Color.darkThm.accent};
-   height: fit-content;
-   margin-top: 1em;
-   margin-right: 1em;
    border-radius: 1em;
+   margin-bottom: 0.5em;
+   margin-top: 0.5em;
 `;
 
 export const GameDetailsContainer = styled.div`
