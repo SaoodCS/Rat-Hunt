@@ -1,7 +1,12 @@
+import GameplayForm from './form/GameplayForm';
+import GameDataTable from './gameDataTable/GameDataTable';
+import { GameplayWrapper } from './style/Style';
+
 export default function Gameplay(): JSX.Element {
    return (
-      <div>
-         <h1>Gameplay</h1>
-      </div>
+      <GameplayWrapper>
+         <GameplayForm />
+         <GameDataTable />
+      </GameplayWrapper>
    );
 }
