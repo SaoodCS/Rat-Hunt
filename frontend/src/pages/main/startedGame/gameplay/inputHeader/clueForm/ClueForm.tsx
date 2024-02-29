@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-import { StaticButton } from '../../../../../../global/components/lib/button/staticButton/Style';
 import { StyledForm } from '../../../../../../global/components/lib/form/form/Style';
 import InputCombination from '../../../../../../global/components/lib/form/inputCombination/InputCombination';
 import useThemeContext from '../../../../../../global/context/theme/hooks/useThemeContext';
@@ -10,6 +9,9 @@ import useForm from '../../../../../../global/hooks/useForm';
 import FirestoreDB from '../../../../class/FirestoreDb';
 import { GameContext } from '../../../../context/GameContext';
 import ClueFormClass from './class/ClueFormClass';
+import { TextBtn } from '../../../../../../global/components/lib/button/textBtn/Style';
+import { Send } from '@styled-icons/ionicons-sharp/Send';
+import { gameFormStyles } from '../style/Style';
 
 export default function ClueForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -66,7 +68,7 @@ export default function ClueForm(): JSX.Element {
    }
 
    return (
-      <StyledForm onSubmit={handleSubmit} apiError={apiError} padding={1}>
+      <StyledForm onSubmit={handleSubmit} apiError={apiError} style={gameFormStyles}>
          {ClueFormClass.form.inputs.map((input) => (
             <InputCombination
                key={input.id}
@@ -82,9 +84,9 @@ export default function ClueForm(): JSX.Element {
             />
          ))}
 
-         <StaticButton isDarkTheme={isDarkTheme} type="submit">
-            Submit
-         </StaticButton>
+         <TextBtn isDarkTheme={isDarkTheme} type="submit">
+            <Send size="1.5em" />
+         </TextBtn>
       </StyledForm>
    );
 }

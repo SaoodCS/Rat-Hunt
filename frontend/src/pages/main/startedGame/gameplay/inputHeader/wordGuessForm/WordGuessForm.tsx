@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-import { StaticButton } from '../../../../../../global/components/lib/button/staticButton/Style';
 import type { IDropDownOption } from '../../../../../../global/components/lib/form/dropDown/DropDownInput';
 import { StyledForm } from '../../../../../../global/components/lib/form/form/Style';
 import InputCombination from '../../../../../../global/components/lib/form/inputCombination/InputCombination';
@@ -11,6 +10,9 @@ import FirestoreDB from '../../../../class/FirestoreDb';
 import { GameContext } from '../../../../context/GameContext';
 import WordGuessFormClass from './class/WordGuessFormClass';
 import ArrayOfObjects from '../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import { TextBtn } from '../../../../../../global/components/lib/button/textBtn/Style';
+import { Send } from '@styled-icons/ionicons-sharp/Send';
+import { gameFormStyles } from '../style/Style';
 
 export default function WordGuessForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -66,7 +68,7 @@ export default function WordGuessForm(): JSX.Element {
    }
 
    return (
-      <StyledForm onSubmit={handleSubmit} apiError={apiError} padding={1}>
+      <StyledForm onSubmit={handleSubmit} apiError={apiError} style={gameFormStyles}>
          {WordGuessFormClass.form.inputs.map((input) => (
             <InputCombination
                key={input.id}
@@ -83,9 +85,9 @@ export default function WordGuessForm(): JSX.Element {
             />
          ))}
 
-         <StaticButton isDarkTheme={isDarkTheme} type="submit">
-            Submit
-         </StaticButton>
+         <TextBtn isDarkTheme={isDarkTheme} type="submit">
+            <Send size="1.5em" />
+         </TextBtn>
       </StyledForm>
    );
 }

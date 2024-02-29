@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-import { StaticButton } from '../../../../../../global/components/lib/button/staticButton/Style';
 import type { IDropDownOption } from '../../../../../../global/components/lib/form/dropDown/DropDownInput';
 import { StyledForm } from '../../../../../../global/components/lib/form/form/Style';
 import InputCombination from '../../../../../../global/components/lib/form/inputCombination/InputCombination';
@@ -11,6 +10,9 @@ import RatVoteFormClass from './class/RatVoteFormClass';
 import { GameContext } from '../../../../context/GameContext';
 import MiscHelper from '../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import ArrayOfObjects from '../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import { gameFormStyles } from '../style/Style';
+import { TextBtn } from '../../../../../../global/components/lib/button/textBtn/Style';
+import { Send } from '@styled-icons/ionicons-sharp/Send';
 
 export default function RatVoteForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -73,7 +75,7 @@ export default function RatVoteForm(): JSX.Element {
    }
 
    return (
-      <StyledForm onSubmit={handleSubmit} apiError={apiError} padding={1}>
+      <StyledForm onSubmit={handleSubmit} apiError={apiError} style={gameFormStyles}>
          {RatVoteFormClass.form.inputs.map((input) => (
             <InputCombination
                key={input.id}
@@ -90,9 +92,9 @@ export default function RatVoteForm(): JSX.Element {
             />
          ))}
 
-         <StaticButton isDarkTheme={isDarkTheme} type="submit">
-            Submit
-         </StaticButton>
+         <TextBtn isDarkTheme={isDarkTheme} type="submit">
+            <Send size="1.5em" />
+         </TextBtn>
       </StyledForm>
    );
 }

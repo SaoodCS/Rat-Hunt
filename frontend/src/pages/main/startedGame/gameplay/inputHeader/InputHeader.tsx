@@ -34,6 +34,7 @@ export default function InputHeader(): JSX.Element {
       const { gameState } = roomData;
       const { userStates, currentRat } = gameState;
       const ratUserState = ArrayOfObjects.getObjWithKeyValuePair(userStates, 'userId', currentRat);
+      if (!MiscHelper.isNotFalsyOrEmpty(ratUserState)) return;
       const isPlayerRat = currentRat === localDbUser;
       const allCluesExist = ArrayOfObjects.isKeyInAllObjsNotValuedAs(userStates, 'clue', '');
       const allVotesExist = ArrayOfObjects.isKeyInAllObjsNotValuedAs(userStates, 'votedFor', '');
@@ -59,7 +60,7 @@ export default function InputHeader(): JSX.Element {
    }, [roomData?.gameState.currentTurn, localDbUser]);
 
    return (
-      <FlexRowWrapper position="absolute" height="1em">
+      <FlexRowWrapper position="absolute" height="4em" width="100%">
          <ConditionalRender condition={showClueForm}>
             <ClueForm />
          </ConditionalRender>

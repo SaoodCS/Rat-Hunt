@@ -47,7 +47,7 @@ export const HeaderRowContainer = styled.div`
 
 export const DataTableWrapper = styled.div`
    position: absolute;
-   top: 2em;
+   top: 4em;
    bottom: 0;
    right: 1em;
    left: 1em;
