@@ -10,9 +10,10 @@ import FirestoreDB from '../../../../class/FirestoreDb';
 import RatVoteFormClass from './class/RatVoteFormClass';
 import { GameContext } from '../../../../context/GameContext';
 import MiscHelper from '../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
+import ArrayOfObjects from '../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 
 export default function RatVoteForm(): JSX.Element {
-   const { localDbRoom } = useContext(GameContext);
+   const { localDbRoom, localDbUser } = useContext(GameContext);
    const { isDarkTheme } = useThemeContext();
    const { apiError } = useApiErrorContext();
    const { form, errors, handleChange, initHandleSubmit } = useForm(
@@ -21,12 +22,26 @@ export default function RatVoteForm(): JSX.Element {
       RatVoteFormClass.form.validate,
    );
    const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
+   const updateGameStateMutation = FirestoreDB.Room.updateGameStateMutation({});
 
    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
       const { isFormValid } = initHandleSubmit(e);
-      // eslint-disable-next-line no-useless-return
       if (!isFormValid) return;
-      // TODO: API to submit rat vote here
+      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
+      const { gameState } = roomData;
+      const userStates = gameState.userStates;
+      const userStatesWithoutThisUser = ArrayOfObjects.filterOut(userStates, 'userId', localDbUser);
+      const userState = ArrayOfObjects.getObjWithKeyValuePair(userStates, 'userId', localDbUser);
+      const updatedUserState: typeof userState = { ...userState, votedFor: form.vote };
+      const updatedUserStates: (typeof userState)[] = [
+         ...userStatesWithoutThisUser,
+         updatedUserState,
+      ];
+      const updatedGameState: typeof gameState = { ...gameState, userStates: updatedUserStates };
+      await updateGameStateMutation.mutateAsync({
+         roomId: localDbRoom,
+         gameState: updatedGameState,
+      });
    }
 
    function dropDownOptions(

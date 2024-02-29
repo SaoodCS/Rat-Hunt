@@ -13,7 +13,7 @@ import WordGuessFormClass from './class/WordGuessFormClass';
 import ArrayOfObjects from '../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 
 export default function WordGuessForm(): JSX.Element {
-   const { localDbRoom } = useContext(GameContext);
+   const { localDbRoom, localDbUser } = useContext(GameContext);
    const { isDarkTheme } = useThemeContext();
    const { apiError } = useApiErrorContext();
    const { form, errors, handleChange, initHandleSubmit } = useForm(
@@ -23,12 +23,27 @@ export default function WordGuessForm(): JSX.Element {
    );
    const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
    const { data: topicsData } = FirestoreDB.Topics.getTopicsQuery();
+   const updateGameStateMutation = FirestoreDB.Room.updateGameStateMutation({});
 
    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
       const { isFormValid } = initHandleSubmit(e);
       // eslint-disable-next-line no-useless-return
       if (!isFormValid) return;
-      // TODO: API to submit word guess here
+      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
+      const { gameState } = roomData;
+      const userStates = gameState.userStates;
+      const userStatesWithoutThisUser = ArrayOfObjects.filterOut(userStates, 'userId', localDbUser);
+      const userState = ArrayOfObjects.getObjWithKeyValuePair(userStates, 'userId', localDbUser);
+      const updatedUserState: typeof userState = { ...userState, guess: form.guess };
+      const updatedUserStates: (typeof userState)[] = [
+         ...userStatesWithoutThisUser,
+         updatedUserState,
+      ];
+      const updatedGameState: typeof gameState = { ...gameState, userStates: updatedUserStates };
+      await updateGameStateMutation.mutateAsync({
+         roomId: localDbRoom,
+         gameState: updatedGameState,
+      });
    }
 
    function dropDownOptions(
