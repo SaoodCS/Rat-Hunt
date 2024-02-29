@@ -13,6 +13,9 @@ export default function InputHeader(): JSX.Element {
    const [displayedForm, setDisplayedForm] = useState<JSX.Element | undefined>();
 
    useEffect(() => {
+      
+
+
       // if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       // const haveAllPlayersSubmittedClues = roomData.gameState.userStates.every((userState) =>
       //    MiscHelper.isNotFalsyOrEmpty(userState.clue),
