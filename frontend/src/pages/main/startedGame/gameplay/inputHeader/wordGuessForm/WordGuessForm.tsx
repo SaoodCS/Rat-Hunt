@@ -39,7 +39,13 @@ export default function WordGuessForm(): JSX.Element {
          ...userStatesWithoutThisUser,
          updatedUserState,
       ];
-      const updatedGameState: typeof gameState = { ...gameState, userStates: updatedUserStates };
+      const firstUser = gameState.userStates[0].userId;
+      const updatedCurrentTurn = firstUser;
+      const updatedGameState: typeof gameState = {
+         ...gameState,
+         currentTurn: updatedCurrentTurn,
+         userStates: updatedUserStates,
+      };
       await updateGameStateMutation.mutateAsync({
          roomId: localDbRoom,
          gameState: updatedGameState,

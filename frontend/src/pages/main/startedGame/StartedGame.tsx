@@ -20,6 +20,7 @@ export default function StartedGame(): JSX.Element {
    const updateGameStateMutation = FirestoreDB.Room.updateGameStateMutation({});
 
    useEffect(() => {
+      // This useEffect is responsible for updating the game state when the ROUND changes.
       if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
          const { users } = roomData;
          const connectedUsers = ArrayOfObjects.filterOut(users, 'userStatus', 'disconnected');

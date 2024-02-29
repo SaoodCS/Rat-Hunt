@@ -37,7 +37,22 @@ export default function RatVoteForm(): JSX.Element {
          ...userStatesWithoutThisUser,
          updatedUserState,
       ];
-      const updatedGameState: typeof gameState = { ...gameState, userStates: updatedUserStates };
+      const finalVoteSubmission = ArrayOfObjects.isKeyInAllObjsNotValuedAs(
+         userStatesWithoutThisUser,
+         'votedFor',
+         '',
+      );
+      const ratUser = gameState.currentRat;
+      const thisUserIndex = gameState.userStates.findIndex(
+         (userState) => userState.userId === localDbUser,
+      );
+      const nextUser = gameState.userStates[thisUserIndex + 1]?.userId || ratUser;
+      const updatedCurrentTurn = finalVoteSubmission ? ratUser : nextUser;
+      const updatedGameState: typeof gameState = {
+         ...gameState,
+         currentTurn: updatedCurrentTurn,
+         userStates: updatedUserStates,
+      };
       await updateGameStateMutation.mutateAsync({
          roomId: localDbRoom,
          gameState: updatedGameState,

@@ -65,6 +65,10 @@ export default class ArrayOfObjects {
       return arr.every((obj) => obj[key] === value);
    }
 
+   static isKeyInAllObjsNotValuedAs<T>(arr: T[], key: keyof T, value: T[keyof T]): boolean {
+      return arr.every((obj) => obj[key] !== value);
+   }
+
    static getArrOfValuesFromKey<T, K extends keyof T>(arr: T[], key: K): T[K][] {
       return arr.map((obj) => obj[key]);
    }

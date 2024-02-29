@@ -43,7 +43,22 @@ export default function ClueForm(): JSX.Element {
          ...userStatesWithoutThisUser,
          updatedUserState,
       ];
-      const updatedGameState: typeof gameState = { ...gameState, userStates: updatedUserStates };
+      const finalClueSubmission = ArrayOfObjects.isKeyInAllObjsNotValuedAs(
+         userStatesWithoutThisUser,
+         'clue',
+         '',
+      );
+      const firstUser = gameState.userStates[0].userId;
+      const thisUserIndex = gameState.userStates.findIndex(
+         (userState) => userState.userId === localDbUser,
+      );
+      const nextUser = gameState.userStates[thisUserIndex + 1]?.userId || firstUser;
+      const updatedCurrentTurn = finalClueSubmission ? firstUser : nextUser;
+      const updatedGameState: typeof gameState = {
+         ...gameState,
+         currentTurn: updatedCurrentTurn,
+         userStates: updatedUserStates,
+      };
       await updateGameStateMutation.mutateAsync({
          roomId: localDbRoom,
          gameState: updatedGameState,
