@@ -41,7 +41,6 @@ export default function InputHeader(): JSX.Element {
       const ratHasGuessedWord = MiscHelper.isNotFalsyOrEmpty(ratUserState.guess);
       const isLastRound = gameState.currentRound === gameState.numberOfRoundsSet;
       const isYourTurn = gameState.currentTurn === localDbUser;
-
       if (allCluesExist && allVotesExist && ratHasGuessedWord) {
          setShowClueForm(false);
          setShowRatVoteForm(false);
@@ -50,13 +49,11 @@ export default function InputHeader(): JSX.Element {
          setShowRoundSummary(!isLastRound);
          return;
       }
-
-      if (isYourTurn) {
-         setShowWordGuessForm(allCluesExist && allVotesExist && isPlayerRat);
-         setShowRatVoteForm(allCluesExist && !allVotesExist);
-         setShowClueForm(!allCluesExist);
-         // return;
-      }
+      setShowGameSummary(false);
+      setShowRoundSummary(false);
+      setShowWordGuessForm(isYourTurn && allCluesExist && allVotesExist && isPlayerRat);
+      setShowRatVoteForm(isYourTurn && allCluesExist && !allVotesExist);
+      setShowClueForm(isYourTurn && !allCluesExist);
    }, [roomData?.gameState.currentTurn, localDbUser]);
 
    return (
