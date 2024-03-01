@@ -28,14 +28,15 @@ export default function StartedGame(): JSX.Element {
          if (connectedUser?.userId !== localDbUser) return;
          if (!MiscHelper.isNotFalsyOrEmpty(allUsers)) return;
          const newRat = allUsers[Math.floor(Math.random() * allUsers.length)];
-         const { activeTopic, currentRound } = roomData.gameState;
+         const { activeTopic, currentRound, userStates } = roomData.gameState;
          const { randNewTopicKey, getActiveTopicWords } = FirestoreDB.Room;
          if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
          const isRoundOne = currentRound === 1;
          const newTopic = !isRoundOne ? randNewTopicKey(activeTopic, topicsData) : activeTopic;
          const newWords = getActiveTopicWords(topicsData, newTopic);
          const newWord = newWords[Math.floor(Math.random() * newWords.length)].word;
-         const updatedCurrentTurn = users[0].userId;
+         const sortedUserStates = ArrayOfObjects.sort(userStates, 'userId');
+         const updatedCurrentTurn = sortedUserStates[0].userId;
          const updatedGameState: FirestoreDB.Room.IGameState = {
             ...roomData.gameState,
             activeTopic: newTopic,
