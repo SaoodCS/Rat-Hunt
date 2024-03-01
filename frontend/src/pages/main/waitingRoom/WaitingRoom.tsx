@@ -35,7 +35,8 @@ export default function WaitingRoom(): JSX.Element {
       useContext(BannerContext);
 
    useEffect(() => {
-      setDisablePlay(allUsers.length < 3 ? true : false);
+      // TODO: change to < 3 when testing is done
+      setDisablePlay(allUsers.length < 1 ? true : false);
    }, [allUsers]);
 
    useEffect(() => {
