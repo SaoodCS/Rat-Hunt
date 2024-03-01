@@ -1,18 +1,18 @@
+import { Send } from '@styled-icons/ionicons-sharp/Send';
 import { useContext } from 'react';
+import { TextBtn } from '../../../../../../global/components/lib/button/textBtn/Style';
 import type { IDropDownOption } from '../../../../../../global/components/lib/form/dropDown/DropDownInput';
 import { StyledForm } from '../../../../../../global/components/lib/form/form/Style';
 import InputCombination from '../../../../../../global/components/lib/form/inputCombination/InputCombination';
 import useThemeContext from '../../../../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
+import ArrayOfObjects from '../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../../../../global/hooks/useForm';
 import FirestoreDB from '../../../../class/FirestoreDb';
-import RatVoteFormClass from './class/RatVoteFormClass';
 import { GameContext } from '../../../../context/GameContext';
-import MiscHelper from '../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import ArrayOfObjects from '../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import { gameFormStyles } from '../style/Style';
-import { TextBtn } from '../../../../../../global/components/lib/button/textBtn/Style';
-import { Send } from '@styled-icons/ionicons-sharp/Send';
+import RatVoteFormClass from './class/RatVoteFormClass';
 
 export default function RatVoteForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -31,7 +31,7 @@ export default function RatVoteForm(): JSX.Element {
       if (!isFormValid) return;
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
-      const userStates = gameState.userStates;
+      const { userStates, currentRat } = gameState;
       const userStatesWithoutThisUser = ArrayOfObjects.filterOut(userStates, 'userId', localDbUser);
       const userState = ArrayOfObjects.getObjWithKeyValuePair(userStates, 'userId', localDbUser);
       const updatedUserState: typeof userState = { ...userState, votedFor: form.vote };
@@ -44,12 +44,10 @@ export default function RatVoteForm(): JSX.Element {
          'votedFor',
          '',
       );
-      const ratUser = gameState.currentRat;
-      const thisUserIndex = gameState.userStates.findIndex(
-         (userState) => userState.userId === localDbUser,
-      );
-      const nextUser = gameState.userStates[thisUserIndex + 1]?.userId || ratUser;
-      const updatedCurrentTurn = finalVoteSubmission ? ratUser : nextUser;
+      const sortedUserStates = ArrayOfObjects.sort(userStates, 'userId');
+      const thisUserIndex = sortedUserStates.findIndex((u) => u.userId === localDbUser);
+      const nextUser = sortedUserStates[thisUserIndex + 1]?.userId || currentRat;
+      const updatedCurrentTurn = finalVoteSubmission ? `${currentRat}.wordGuess` : nextUser;
       const updatedGameState: typeof gameState = {
          ...gameState,
          currentTurn: updatedCurrentTurn,

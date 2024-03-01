@@ -30,14 +30,14 @@ export default function ClueForm(): JSX.Element {
       if (!isFormValid) return;
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const userClue = form.clue;
-      const userStates = roomData.gameState.userStates;
+      const { gameState } = roomData;
+      const { userStates } = gameState;
       const submittedClues = ArrayOfObjects.getArrOfValuesFromKey(userStates, 'clue');
       if (submittedClues.includes(userClue)) {
          setApiError('Another user has already submitted this clue.');
          return;
       }
       setApiError('');
-      const { gameState } = roomData;
       const userState = ArrayOfObjects.getObjWithKeyValuePair(userStates, 'userId', localDbUser);
       const userStatesWithoutThisUser = ArrayOfObjects.filterOut(userStates, 'userId', localDbUser);
       const updatedUserState: typeof userState = { ...userState, clue: userClue };
@@ -50,11 +50,10 @@ export default function ClueForm(): JSX.Element {
          'clue',
          '',
       );
-      const firstUser = gameState.userStates[0].userId;
-      const thisUserIndex = gameState.userStates.findIndex(
-         (userState) => userState.userId === localDbUser,
-      );
-      const nextUser = gameState.userStates[thisUserIndex + 1]?.userId || firstUser;
+      const sortedUserStates = ArrayOfObjects.sort(userStates, 'userId');
+      const firstUser = sortedUserStates[0].userId;
+      const thisUserIndex = sortedUserStates.findIndex((u) => u.userId === localDbUser);
+      const nextUser = sortedUserStates[thisUserIndex + 1]?.userId || firstUser;
       const updatedCurrentTurn = finalClueSubmission ? firstUser : nextUser;
       const updatedGameState: typeof gameState = {
          ...gameState,

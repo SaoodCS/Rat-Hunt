@@ -11,6 +11,7 @@ import FirestoreDB from '../class/FirestoreDb';
 import RTDB from '../class/firebaseRTDB';
 import { GameContext } from '../context/GameContext';
 import HelpGuide from './HelpGuide';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface IGuideAndLeaveRoom {
    currentPath: string;
@@ -25,6 +26,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    const deleteUserFromFs = FirestoreDB.Room.deleteUserMutation({});
    const deleteRoomMutation = FirestoreDB.Room.deleteRoomMutation({});
    const navigation = useNavigate();
+   const queryClient = useQueryClient();
 
    function handleHelpGuide(): void {
       setModalHeader('How To Play?');
@@ -53,6 +55,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
          await onDisconnect(userStatusRef).cancel();
          setLocalDbRoom('');
          setLocalDbUser('');
+         queryClient.removeQueries();
          navigation('/main/play');
       }
    }

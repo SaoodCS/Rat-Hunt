@@ -33,7 +33,7 @@ export default function WordGuessForm(): JSX.Element {
       if (!isFormValid) return;
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
-      const userStates = gameState.userStates;
+      const { userStates } = gameState;
       const userStatesWithoutThisUser = ArrayOfObjects.filterOut(userStates, 'userId', localDbUser);
       const userState = ArrayOfObjects.getObjWithKeyValuePair(userStates, 'userId', localDbUser);
       const updatedUserState: typeof userState = { ...userState, guess: form.guess };
@@ -41,8 +41,7 @@ export default function WordGuessForm(): JSX.Element {
          ...userStatesWithoutThisUser,
          updatedUserState,
       ];
-      const firstUser = gameState.userStates[0].userId;
-      const updatedCurrentTurn = firstUser;
+      const updatedCurrentTurn = '';
       const updatedGameState: typeof gameState = {
          ...gameState,
          currentTurn: updatedCurrentTurn,

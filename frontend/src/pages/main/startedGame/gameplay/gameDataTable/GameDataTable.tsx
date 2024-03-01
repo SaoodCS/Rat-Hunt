@@ -1,12 +1,22 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { LogoText } from '../../../../../global/components/app/logo/LogoText';
 import FirestoreDB from '../../../class/FirestoreDb';
 import { Cell, DataTableWrapper, HeaderRowContainer, RowContainer, UserRowsWrapper } from './Style';
 import { GameContext } from '../../../context/GameContext';
+import MiscHelper from '../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
+import ArrayOfObjects from '../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 
 export default function GameDataTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
    const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
+   const [sortedUserStates, setSortedUserStates] = useState<FirestoreDB.Room.IUserStates[]>();
+
+   useEffect(() => {
+      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
+      const { gameState } = roomData;
+      const { userStates } = gameState;
+      setSortedUserStates(ArrayOfObjects.sort(userStates, 'userId'));
+   }, [roomData?.gameState.userStates, localDbUser]);
 
    return (
       <DataTableWrapper>
@@ -22,7 +32,7 @@ export default function GameDataTable(): JSX.Element {
             </Cell>
          </HeaderRowContainer>
          <UserRowsWrapper>
-            {roomData?.gameState.userStates.map((user) => (
+            {sortedUserStates?.map((user) => (
                <RowContainer
                   key={user.userId}
                   isThisUser={user.userId === localDbUser}

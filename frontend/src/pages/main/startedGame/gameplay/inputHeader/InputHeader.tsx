@@ -1,15 +1,15 @@
 import { useContext, useEffect, useState } from 'react';
 import { FlexRowWrapper } from '../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
+import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import ArrayOfObjects from '../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import FirestoreDB from '../../../class/FirestoreDb';
 import { GameContext } from '../../../context/GameContext';
-import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
+import GameSummary from '../summary/GameSummary';
+import RoundSummary from '../summary/RoundSummary';
 import ClueForm from './clueForm/ClueForm';
 import RatVoteForm from './ratVoteForm/RatVoteForm';
 import WordGuessForm from './wordGuessForm/WordGuessForm';
-import RoundSummary from '../summary/RoundSummary';
-import GameSummary from '../summary/GameSummary';
 
 // changing turns:
 // - if the current user is the last user to submit a clue, then change the current user to the first user in the userStates array
@@ -32,15 +32,15 @@ export default function InputHeader(): JSX.Element {
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
-      const { userStates, currentRat } = gameState;
+      const { userStates, currentRat, currentRound, numberOfRoundsSet, currentTurn } = gameState;
       const ratUserState = ArrayOfObjects.getObjWithKeyValuePair(userStates, 'userId', currentRat);
       if (!MiscHelper.isNotFalsyOrEmpty(ratUserState)) return;
       const isPlayerRat = currentRat === localDbUser;
       const allCluesExist = ArrayOfObjects.isKeyInAllObjsNotValuedAs(userStates, 'clue', '');
       const allVotesExist = ArrayOfObjects.isKeyInAllObjsNotValuedAs(userStates, 'votedFor', '');
       const ratHasGuessedWord = MiscHelper.isNotFalsyOrEmpty(ratUserState.guess);
-      const isLastRound = gameState.currentRound === gameState.numberOfRoundsSet;
-      const isYourTurn = gameState.currentTurn === localDbUser;
+      const isLastRound = currentRound === numberOfRoundsSet;
+      const isYourTurn = currentTurn.replace('.wordGuess', '') === localDbUser;
       if (allCluesExist && allVotesExist && ratHasGuessedWord) {
          setShowClueForm(false);
          setShowRatVoteForm(false);

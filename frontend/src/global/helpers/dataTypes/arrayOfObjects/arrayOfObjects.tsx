@@ -2,8 +2,9 @@ import DateHelper from '../date/DateHelper';
 
 export default class ArrayOfObjects {
    static sort<T>(arr: T[], key: keyof T, descending?: boolean): T[] {
+      const deepCopy: T[] = JSON.parse(JSON.stringify(arr));
       if (descending) {
-         return arr.sort((a, b) => {
+         return deepCopy.sort((a, b) => {
             if (a[key] > b[key]) {
                return -1;
             }
@@ -14,7 +15,7 @@ export default class ArrayOfObjects {
          });
       }
 
-      return arr.sort((a, b) => {
+      return deepCopy.sort((a, b) => {
          if (a[key] < b[key]) {
             return -1;
          }
