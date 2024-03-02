@@ -15,7 +15,7 @@ import { Send } from '@styled-icons/ionicons-sharp/Send';
 import { gameFormStyles } from '../style/Style';
 
 export default function WordGuessForm(): JSX.Element {
-   const { localDbRoom, localDbUser } = useContext(GameContext);
+   const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
    const { isDarkTheme } = useThemeContext();
    const { apiError } = useApiErrorContext();
    const { form, errors, handleChange, initHandleSubmit } = useForm(
@@ -24,7 +24,6 @@ export default function WordGuessForm(): JSX.Element {
       WordGuessFormClass.form.validate,
    );
    const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
-   const { data: topicsData } = FirestoreDB.Topics.getTopicsQuery();
    const updateGameStateMutation = FirestoreDB.Room.updateGameStateMutation({});
 
    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
@@ -57,13 +56,9 @@ export default function WordGuessForm(): JSX.Element {
       input: (typeof WordGuessFormClass.form.inputs)[0],
    ): IDropDownOption[] | undefined {
       if (!input.isDropDown) return;
-      const inputIsGuess = input.name === 'guess';
-      const topicsDataExists = MiscHelper.isNotFalsyOrEmpty(topicsData);
-      const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
-      if (!(inputIsGuess && topicsDataExists && roomDataExists)) return;
-      const currentTopic = roomData.gameState.activeTopic;
-      const currentTopicItems = ArrayOfObjects.filterIn(topicsData, 'key', currentTopic)[0].values;
-      return currentTopicItems.map((item) => ({ value: item, label: item }));
+      if (input.name !== 'guess') return;
+      const topicWords = ArrayOfObjects.getArrOfValuesFromKey(activeTopicWords, 'word');
+      return topicWords.map((word) => ({ value: word, label: word }));
    }
 
    return (

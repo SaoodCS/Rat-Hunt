@@ -73,7 +73,7 @@ export default function Play(): JSX.Element {
       const userState: FirestoreDB.Room.IUserStates = {
          userId: form.name,
          totalScore: 0,
-         roundScore: 0,
+         roundScores: [],
          clue: '',
          guess: '',
          votedFor: '',
@@ -113,7 +113,7 @@ export default function Play(): JSX.Element {
                {
                   userId: form.name,
                   totalScore: 0,
-                  roundScore: 0,
+                  roundScores: [],
                   clue: '',
                   guess: '',
                   votedFor: '',

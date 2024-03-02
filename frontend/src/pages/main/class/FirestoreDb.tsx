@@ -59,7 +59,7 @@ export namespace FirestoreDB {
       export interface IUserStates {
          userId: string;
          totalScore: number; // totalScore = totalScore + roundScore at the end of each round (not reset)
-         roundScore: number; // set based on the score system + reset to 0 at start of each round
+         roundScores: number[]; // roundScores[0] = score for round 1, roundScores[1] = score for round 2, etc.
          clue: string; // set when user's turn + reset to empty string at start of each round
          guess: string; // only the rat guesses the word at the end of the round + then reset at the start of each round
          votedFor: string; // set when user votes for who they think the rat is at the end of the round + reset to empty string at start of each round

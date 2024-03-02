@@ -16,12 +16,7 @@ export default function ScoreboardSlide(): JSX.Element {
          roomData?.gameState?.userStates || [],
          'totalScore',
       );
-      const roundScores = ArrayOfObjects.getArrOfValuesFromKey(
-         roomData?.gameState?.userStates || [],
-         'roundScore',
-      );
-      const roundScoresPlusTotal = roundScores.map((score, index) => score + totalScores[index]);
-      const barOutOf = Math.max(...roundScoresPlusTotal);
+      const barOutOf = Math.max(...totalScores);
       const labels = ArrayOfObjects.getArrOfValuesFromKey(
          roomData?.gameState?.userStates || [],
          'userId',
@@ -30,7 +25,7 @@ export default function ScoreboardSlide(): JSX.Element {
          return {
             label,
             target: barOutOf,
-            completedAmnt: roundScoresPlusTotal[index],
+            completedAmnt: totalScores[index],
          };
       });
       setChartData(chartData);

@@ -89,6 +89,7 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
          if (roomDataExists && !localDbUserInRoom) alert('You have been removed from the room!');
          setLocalDbRoom('');
          setLocalDbUser('');
+         queryClient.invalidateQueries();
          navigation('/main/play');
       }
    }, [isLoading]);
