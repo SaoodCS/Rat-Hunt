@@ -22,13 +22,13 @@ export default function StartedGame(): JSX.Element {
    useEffect(() => {
       // This useEffect is responsible for updating the game state when the ROUND changes.
       if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
-         const { users } = roomData;
+         const { users, gameState } = roomData;
          const connectedUsers = ArrayOfObjects.filterOut(users, 'userStatus', 'disconnected');
          const connectedUser = connectedUsers[0];
          if (connectedUser?.userId !== localDbUser) return;
          if (!MiscHelper.isNotFalsyOrEmpty(allUsers)) return;
          const newRat = allUsers[Math.floor(Math.random() * allUsers.length)];
-         const { activeTopic, currentRound, userStates } = roomData.gameState;
+         const { activeTopic, currentRound, userStates } = gameState;
          const { randNewTopicKey, getActiveTopicWords } = FirestoreDB.Room;
          if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
          const isRoundOne = currentRound === 1;
