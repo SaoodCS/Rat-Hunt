@@ -48,7 +48,7 @@ export default function WordGuessForm(): JSX.Element {
       };
       await updateGameStateMutation.mutateAsync({
          roomId: localDbRoom,
-         gameState: updatedGameState,
+         gameState: FirestoreDB.Room.calculatePoints(updatedGameState),
       });
    }
 
