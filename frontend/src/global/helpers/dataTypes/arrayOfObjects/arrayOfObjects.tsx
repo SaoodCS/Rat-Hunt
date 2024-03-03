@@ -106,4 +106,25 @@ export default class ArrayOfObjects {
       }
       return sum;
    }
+
+   // function that sets the value of a key in all object to a new value
+   static setAllValuesOfKey<T>(arr: T[], key: keyof T, newValue: T[keyof T]): T[] {
+      const deepCopy: T[] = JSON.parse(JSON.stringify(arr));
+      for (let i = 0; i < deepCopy.length; i++) {
+         deepCopy[i][key] = newValue;
+      }
+      return deepCopy;
+   }
+
+   // function that can do setAllValuesOfKeys for multiple keys
+   static setAllValuesOfKeys<T>(arr: T[], keyValues: { key: keyof T; value: T[keyof T] }[]): T[] {
+      const deepCopy: T[] = JSON.parse(JSON.stringify(arr));
+      for (let i = 0; i < deepCopy.length; i++) {
+         for (let j = 0; j < keyValues.length; j++) {
+            deepCopy[i][keyValues[j].key] = keyValues[j].value;
+         }
+      }
+      return deepCopy;
+   }
+
 }

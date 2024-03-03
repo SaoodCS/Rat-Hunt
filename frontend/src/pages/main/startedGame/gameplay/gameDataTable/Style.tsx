@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 import Color from '../../../../../global/css/colors';
-import { LogoText } from '../../../../../global/components/app/logo/LogoText';
 import MyCSS from '../../../../../global/css/MyCSS';
 
-export const Cell = styled.div`
-   width: calc(100% / 3);
+export const Cell = styled.div<{ noOfTableRows?: number }>`
+   width: ${({ noOfTableRows }) => `calc(100% / ${noOfTableRows || 3})`};
    text-align: center;
 `;
 
@@ -14,31 +13,29 @@ export const RowContainer = styled.div<{ isThisUser?: boolean; currentTurn?: boo
    padding-top: 0.5em;
    padding-bottom: 0.5em;
    font-size: 0.85em;
-   ${LogoText} {
-      color: ${({ isThisUser, currentTurn }) => {
-         if (currentTurn) {
-            return Color.setRgbOpacity(Color.darkThm.txt, 0.8);
-         }
-         if (isThisUser) {
-            return Color.darkThm.accentAlt;
-         }
-         return Color.darkThm.accent;
-      }};
-   }
+   background-color: ${({ isThisUser, currentTurn }) => {
+      if (currentTurn) {
+         return Color.setRgbOpacity(Color.darkThm.accentAlt, 0.1);
+      }
+      if (isThisUser) {
+         return Color.setRgbOpacity(Color.darkThm.accent, 0.1);
+      }
+      return 'transparent';
+   }};
 `;
 
-export const UserRowsWrapper = styled.div`
+export const UserRowsWrapper = styled.div<{ headerRowHeight?: string }>`
    position: absolute;
-   top: 2.5em;
+   top: ${({ headerRowHeight }) => headerRowHeight || '2.5em'};
    bottom: 0px;
    width: 100%;
    overflow-y: scroll;
    ${MyCSS.Scrollbar.gradientStyle};
 `;
 
-export const HeaderRowContainer = styled.div`
+export const HeaderRowContainer = styled.div<{ height?: string }>`
    position: absolute;
-   height: 2.5em;
+   height: ${({ height }) => height || '2.5em'};
    width: 100%;
    display: flex;
    align-items: center;

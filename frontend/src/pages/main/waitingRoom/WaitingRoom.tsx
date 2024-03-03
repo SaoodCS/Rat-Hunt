@@ -29,10 +29,11 @@ export default function WaitingRoom(): JSX.Element {
       setToastZIndex,
    } = useContext(ToastContext);
    const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
-   const updateGameStarted = FirestoreDB.Room.updateGameStartedMutation({});
    const [disablePlay, setDisablePlay] = useState(false);
    const { toggleBanner, setBannerMessage, setBannerType, setBannerZIndex } =
       useContext(BannerContext);
+   const { data: topicsData } = FirestoreDB.Topics.getTopicsQuery();
+   const setRoomData = FirestoreDB.Room.setRoomMutation({});
 
    useEffect(() => {
       // TODO: change to < 3 when testing is done
@@ -53,10 +54,19 @@ export default function WaitingRoom(): JSX.Element {
          setBannerZIndex(100);
          return;
       }
-
-      await updateGameStarted.mutateAsync({
+      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
+      if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
+      const { gameState } = roomData;
+      const { activeTopic } = gameState;
+      const initialRoundGameState = FirestoreDB.Room.updateGameStateForNextRound(
+         gameState,
+         topicsData,
+         activeTopic,
+      );
+      await setRoomData.mutateAsync({
+         ...roomData,
+         gameState: initialRoundGameState,
          gameStarted: true,
-         roomId: localDbRoom,
       });
    }
 

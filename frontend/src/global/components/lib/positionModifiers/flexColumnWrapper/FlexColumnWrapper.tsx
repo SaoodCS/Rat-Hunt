@@ -8,6 +8,9 @@ export const FlexColumnWrapper = styled.div<{
    width?: string;
    position?: string;
    right?: string;
+   filter?: string;
+   boxSizing?: string;
+   margin?: string;
 }>`
    display: flex;
    flex-direction: column;
@@ -19,4 +22,7 @@ export const FlexColumnWrapper = styled.div<{
    position: ${({ position }) => (position ? position : 'static')};
    width: ${({ width }) => (width ? width : 'auto')};
    right: ${({ right }) => right};
+   filter: ${({ filter }) => filter};
+   box-sizing: ${({ boxSizing }) => boxSizing};
+   margin: ${({ margin }) => margin};
 `;

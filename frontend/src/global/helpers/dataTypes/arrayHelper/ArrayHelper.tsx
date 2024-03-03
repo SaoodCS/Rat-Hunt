@@ -14,4 +14,15 @@ export default class ArrayHelper {
             .join(' ');
       });
    }
+
+   static findMostRepeatedItem(array: string[]): string {
+      const clonedArr = JSON.parse(JSON.stringify(array));
+      return clonedArr
+         .sort(
+            (a: string, b: string) =>
+               clonedArr.filter((v: string) => v === a).length -
+               clonedArr.filter((v: string) => v === b).length,
+         )
+         .pop();
+   }
 }

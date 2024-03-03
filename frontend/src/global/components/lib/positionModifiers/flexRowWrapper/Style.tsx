@@ -13,6 +13,8 @@ export const FlexRowWrapper = styled.div<{
    borderRadius?: string;
    left?: string;
    right?: string;
+   top?: string;
+   bottom?: string;
 }>`
    display: flex;
    flex-direction: row;
@@ -29,4 +31,6 @@ export const FlexRowWrapper = styled.div<{
    border-radius: ${({ borderRadius }) => borderRadius};
    left: ${({ left }) => left};
    right: ${({ right }) => right};
+   top: ${({ top }) => top};
+   bottom: ${({ bottom }) => bottom};
 `;

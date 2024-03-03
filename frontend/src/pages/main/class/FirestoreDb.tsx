@@ -331,6 +331,49 @@ export namespace FirestoreDB {
          };
          return updatedGameState;
       }
+
+      export function updateGameStateForNextRound(
+         gameState: IGameState,
+         topicsData: FirestoreDB.Topics.ITopics[],
+         newTopic: string,
+         resetRoundNo?: boolean,
+         resetScores?: boolean,
+      ): IGameState {
+         const { userStates } = gameState;
+         const allUsers = ArrayOfObjects.getArrOfValuesFromKey(userStates, 'userId');
+         const newRat = allUsers[Math.floor(Math.random() * allUsers.length)];
+         const { currentRound } = gameState;
+         const newWords = getActiveTopicWords(topicsData, newTopic);
+         const newWord = newWords[Math.floor(Math.random() * newWords.length)].word;
+         const updatedUserStates = ArrayOfObjects.setAllValuesOfKeys(
+            userStates,
+            resetScores
+               ? [
+                    { key: 'clue', value: '' },
+                    { key: 'guess', value: '' },
+                    { key: 'votedFor', value: '' },
+                    { key: 'roundScores', value: [] },
+                    { key: 'totalScore', value: 0 },
+                 ]
+               : [
+                    { key: 'clue', value: '' },
+                    { key: 'guess', value: '' },
+                    { key: 'votedFor', value: '' },
+                 ],
+         );
+         const sortedUserStates = ArrayOfObjects.sort(updatedUserStates, 'userId');
+         const updatedCurrentTurn = sortedUserStates[0].userId;
+         const updatedGameState: IGameState = {
+            ...gameState,
+            activeTopic: newTopic,
+            activeWord: newWord,
+            currentRat: newRat,
+            currentRound: resetRoundNo ? 1 : currentRound + 1,
+            currentTurn: updatedCurrentTurn,
+            userStates: updatedUserStates,
+         };
+         return updatedGameState;
+      }
    }
 
    export namespace Game {

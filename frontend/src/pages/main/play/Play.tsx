@@ -106,8 +106,8 @@ export default function Play(): JSX.Element {
             activeTopic: form.topic,
             activeWord: '',
             currentRat: '',
-            currentRound: 1,
-            numberOfRoundsSet: 5,
+            currentRound: 0,
+            numberOfRoundsSet: 2,
             currentTurn: '',
             userStates: [
                {
