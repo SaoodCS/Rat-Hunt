@@ -15,14 +15,26 @@ export default class ArrayHelper {
       });
    }
 
-   static findMostRepeatedItem(array: string[]): string {
-      const clonedArr = JSON.parse(JSON.stringify(array));
-      return clonedArr
-         .sort(
-            (a: string, b: string) =>
-               clonedArr.filter((v: string) => v === a).length -
-               clonedArr.filter((v: string) => v === b).length,
-         )
-         .pop();
+   static findMostRepeatedItems(array: string[]): string[] {
+      const countMap: Map<string, number> = new Map();
+      for (const item of array) {
+         countMap.set(item, (countMap.get(item) || 0) + 1);
+      }
+      let maxCount = 0;
+      countMap.forEach((count) => {
+         if (count > maxCount) {
+            maxCount = count;
+         }
+      });
+
+      const mostRepeatedItems: string[] = [];
+      countMap.forEach((count, item) => {
+         if (count === maxCount) {
+            mostRepeatedItems.push(item);
+         }
+      });
+      return mostRepeatedItems;
    }
+
+   // check if there are multiple most repeated items in the array
 }

@@ -1,6 +1,7 @@
 import { Fragment, useContext, useEffect, useState } from 'react';
 import { LogoText } from '../../../../../../../../global/components/app/logo/LogoText';
 import { FlexColumnWrapper } from '../../../../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
+import { BannerContext } from '../../../../../../../../global/context/widget/banner/BannerContext';
 import Color from '../../../../../../../../global/css/colors';
 import ArrayHelper from '../../../../../../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
 import ArrayOfObjects from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
@@ -8,12 +9,11 @@ import HTMLEntities from '../../../../../../../../global/helpers/dataTypes/htmlE
 import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import FirestoreDB from '../../../../../../class/FirestoreDb';
 import { GameContext } from '../../../../../../context/GameContext';
-import { BannerContext } from '../../../../../../../../global/context/widget/banner/BannerContext';
 
 export default function SummaryData(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
    const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
-   const [mostVotedFor, setMostVotedFor] = useState('');
+   //const [mostVotedFor, setMostVotedFor] = useState('');
    const [ratGuess, setRatGuess] = useState('');
    const { toggleBanner, setBannerMessage, setBannerZIndex, setBannerType } =
       useContext(BannerContext);
@@ -24,22 +24,23 @@ export default function SummaryData(): JSX.Element {
       const { userStates, currentRat } = gameState;
       const userVotes: string[] = ArrayOfObjects.getArrOfValuesFromKey(userStates, 'votedFor');
       const ratUserState = ArrayOfObjects.getObjWithKeyValuePair(userStates, 'userId', currentRat);
-      const mostVotedUser = ArrayHelper.findMostRepeatedItem(userVotes);
-      setMostVotedFor(mostVotedUser);
+      const mostRepeatedItems = ArrayHelper.findMostRepeatedItems(userVotes);
+      const ratGotCaught = mostRepeatedItems.length === 1 && mostRepeatedItems.includes(currentRat);
       setRatGuess(ratUserState?.guess || '');
-      const ratGotMostVotes = mostVotedUser === currentRat;
-      const ratGuessedCorrectly = ratUserState?.guess === roomData?.gameState.activeWord;
+      // const ratGotCaught = mostVotedUser === currentRat;
       const thisUserIsRat = currentRat === localDbUser;
       if (thisUserIsRat) {
-         setBannerMessage(ratGuessedCorrectly ? 'You got away!' : 'You got caught!');
-         setBannerType(ratGuessedCorrectly ? 'success' : 'error');
+         setBannerMessage(!ratGotCaught ? 'You got away!' : 'You got caught!');
+         setBannerType(!ratGotCaught ? 'success' : 'error');
       }
       if (!thisUserIsRat) {
-         setBannerMessage(ratGotMostVotes ? 'You caught the rat!' : 'The rat got away!');
-         setBannerType(ratGotMostVotes ? 'success' : 'error');
+         setBannerMessage(ratGotCaught ? 'You caught the rat!' : 'The rat got away!');
+         setBannerType(ratGotCaught ? 'success' : 'error');
       }
       setBannerZIndex(100);
       toggleBanner(true);
+
+      return () => toggleBanner(false);
    }, [roomData?.gameState.userStates]);
 
    const roundSummaryMap = [
