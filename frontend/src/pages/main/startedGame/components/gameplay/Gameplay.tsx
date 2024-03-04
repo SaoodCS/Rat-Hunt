@@ -23,7 +23,8 @@ export default function Gameplay(): JSX.Element {
    const [showRatVoteForm, setShowRatVoteForm] = useState(false);
    const [showWordGuessForm, setShowWordGuessForm] = useState(false);
    const [showRoundSummary, setShowRoundSummary] = useState(false);
-   const [showGameSummary, setShowGameSummary] = useState(false);
+   const [showRatGuessingMsg, setShowRatGuessingMsg] = useState(false);
+   const [showCurrentTurnMsg, setShowCurrentTurnMsg] = useState(false);
 
    useEffect(() => {
       // This useEffect is responsble for updating the UI when the currentTurn changes
@@ -38,68 +39,83 @@ export default function Gameplay(): JSX.Element {
       const ratHasGuessedWord = MiscHelper.isNotFalsyOrEmpty(ratUserState.guess);
       const isLastRound = currentRound === numberOfRoundsSet;
       const isYourTurn = currentTurn.replace('.wordGuess', '') === localDbUser;
+      const ratIsGuessingWord = currentTurn.includes('.wordGuess');
+      setShowRatGuessingMsg(!isYourTurn && ratIsGuessingWord);
+      setShowCurrentTurnMsg(!isYourTurn && !ratIsGuessingWord);
       if (allCluesExist && allVotesExist && ratHasGuessedWord) {
          setShowClueForm(false);
          setShowRatVoteForm(false);
          setShowWordGuessForm(false);
-         setShowGameSummary(isLastRound);
          setShowRoundSummary(!isLastRound);
          return;
       }
-      setShowGameSummary(false);
       setShowRoundSummary(false);
       setShowWordGuessForm(isYourTurn && allCluesExist && allVotesExist && isPlayerRat);
       setShowRatVoteForm(isYourTurn && allCluesExist && !allVotesExist);
       setShowClueForm(isYourTurn && !allCluesExist);
    }, [roomData?.gameState.currentTurn, localDbUser]);
 
+   const gameplayHeadMap = [
+      {
+         component: <ClueForm />,
+         condition: showClueForm,
+      },
+      {
+         component: <RatVoteForm />,
+         condition: showRatVoteForm,
+      },
+      {
+         component: <WordGuessForm />,
+         condition: showWordGuessForm,
+      },
+      {
+         component: <RoundSummary />,
+         condition: showRoundSummary,
+      },
+      {
+         text: `Current Turn: ${roomData?.gameState.currentTurn}`,
+         condition: showCurrentTurnMsg,
+      },
+      {
+         text: 'The Rat is guessing the word',
+         condition: showRatGuessingMsg,
+      },
+   ];
+
    return (
       <>
-         <ConditionalRender condition={!showGameSummary && !showRoundSummary}>
+         <ConditionalRender condition={!showRoundSummary}>
             <GameplayWrapper>
                <FlexRowWrapper position="absolute" height="4em" width="100%">
-                  <ConditionalRender condition={showClueForm}>
-                     <ClueForm />
-                  </ConditionalRender>
-                  <ConditionalRender condition={showRatVoteForm}>
-                     <RatVoteForm />
-                  </ConditionalRender>
-                  <ConditionalRender condition={showWordGuessForm}>
-                     <WordGuessForm />
-                  </ConditionalRender>
-                  <ConditionalRender
-                     condition={
-                        roomData?.gameState.currentTurn.replace('.wordGuess', '') !== localDbUser &&
-                        !showRoundSummary
-                     }
-                  >
-                     <LogoText
-                        size="1.1em"
-                        color={Color.setRgbOpacity(Color.darkThm.success, 0.75)}
-                     >
-                        <ConditionalRender
-                           condition={!roomData?.gameState.currentTurn.includes('.wordGuess')}
+                  {gameplayHeadMap.map(({ text, condition, component }, index) => (
+                     <ConditionalRender key={index} condition={condition}>
+                        <Fader
+                           fadeInCondition={condition}
+                           transitionDuration={0.5}
+                           width="100%"
+                           height="100%"
                         >
-                           Current Turn: {roomData?.gameState.currentTurn}
-                        </ConditionalRender>
-                        <ConditionalRender
-                           condition={!!roomData?.gameState.currentTurn.includes('.wordGuess')}
-                        >
-                           The Rat is guessing the word
-                        </ConditionalRender>
-                        <AnimatedDots count={3} />
-                     </LogoText>
-                  </ConditionalRender>
+                           <ConditionalRender condition={!!component}>
+                              {component}
+                           </ConditionalRender>
+                           <ConditionalRender condition={!!text}>
+                              <LogoText
+                                 size="1.25em"
+                                 color={Color.setRgbOpacity(Color.darkThm.success, 0.75)}
+                                 style={{ paddingTop: '0.25em' }}
+                              >
+                                 {text} <AnimatedDots count={3} />
+                              </LogoText>
+                           </ConditionalRender>
+                        </Fader>
+                     </ConditionalRender>
+                  ))}
                </FlexRowWrapper>
                <GameDataTable />
             </GameplayWrapper>
          </ConditionalRender>
-         <ConditionalRender condition={showRoundSummary || showGameSummary}>
-            <Fader
-               fadeInCondition={showRoundSummary || showGameSummary}
-               transitionDuration={3}
-               height={'100%'}
-            >
+         <ConditionalRender condition={showRoundSummary}>
+            <Fader fadeInCondition={showRoundSummary} transitionDuration={2} height={'100%'}>
                <RoundSummary />
             </Fader>
          </ConditionalRender>

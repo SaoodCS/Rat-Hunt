@@ -6,16 +6,17 @@ interface IFader {
    fadeInCondition: boolean;
    transitionDuration?: number;
    height?: string;
+   width?: string;
 }
 
 export default function Fader(props: IFader): JSX.Element {
-   const { children, fadeInCondition, transitionDuration, height } = props;
+   const { children, fadeInCondition, transitionDuration, height, width } = props;
    return (
       <motion.main
          initial={{ opacity: 0 }}
          animate={{ opacity: fadeInCondition ? 1 : 0 }}
          transition={{ duration: transitionDuration || 0.5 }}
-         style={{ height: height || 'auto' }}
+         style={{ height: height || 'auto', width: width || 'auto' }}
       >
          {children}
       </motion.main>
