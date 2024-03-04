@@ -1,17 +1,20 @@
 import { useContext, useEffect, useState } from 'react';
+import { LogoText } from '../../../../../global/components/app/logo/LogoText';
+import Fader from '../../../../../global/components/lib/animation/fader/Fader';
+import AnimatedDots from '../../../../../global/components/lib/font/animatedDots/AnimatedDots';
+import { FlexRowWrapper } from '../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
+import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
+import Color from '../../../../../global/css/colors';
+import ArrayOfObjects from '../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
+import FirestoreDB from '../../../class/FirestoreDb';
+import { GameContext } from '../../../context/GameContext';
 import ClueForm from './forms/clueForm/ClueForm';
 import RatVoteForm from './forms/ratVoteForm/RatVoteForm';
 import WordGuessForm from './forms/wordGuessForm/WordGuessForm';
 import GameDataTable from './gameDataTable/GameDataTable';
 import { GameplayWrapper } from './style/Style';
 import RoundSummary from './summary/components/roundSummary/RoundSummary';
-import Fader from '../../../../../global/components/lib/animation/fader/Fader';
-import { FlexRowWrapper } from '../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
-import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
-import ArrayOfObjects from '../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import MiscHelper from '../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import FirestoreDB from '../../../class/FirestoreDb';
-import { GameContext } from '../../../context/GameContext';
 
 export default function Gameplay(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -63,6 +66,29 @@ export default function Gameplay(): JSX.Element {
                   </ConditionalRender>
                   <ConditionalRender condition={showWordGuessForm}>
                      <WordGuessForm />
+                  </ConditionalRender>
+                  <ConditionalRender
+                     condition={
+                        roomData?.gameState.currentTurn.replace('.wordGuess', '') !== localDbUser &&
+                        !showRoundSummary
+                     }
+                  >
+                     <LogoText
+                        size="1.1em"
+                        color={Color.setRgbOpacity(Color.darkThm.success, 0.75)}
+                     >
+                        <ConditionalRender
+                           condition={!roomData?.gameState.currentTurn.includes('.wordGuess')}
+                        >
+                           Current Turn: {roomData?.gameState.currentTurn}
+                        </ConditionalRender>
+                        <ConditionalRender
+                           condition={!!roomData?.gameState.currentTurn.includes('.wordGuess')}
+                        >
+                           The Rat is guessing the word
+                        </ConditionalRender>
+                        <AnimatedDots count={3} />
+                     </LogoText>
                   </ConditionalRender>
                </FlexRowWrapper>
                <GameDataTable />

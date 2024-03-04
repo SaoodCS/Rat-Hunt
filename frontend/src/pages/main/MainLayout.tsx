@@ -33,7 +33,6 @@ export default function MainLayout(): JSX.Element {
                </HeaderRightElWrapper>
             </Header>
             <Body isDarkTheme={isDarkTheme}>
-               {/* <GamePageLayout /> */}
                <Outlet />
             </Body>
          </GameContextProvider>

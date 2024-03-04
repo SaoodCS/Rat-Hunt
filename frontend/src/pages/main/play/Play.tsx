@@ -179,7 +179,9 @@ export default function Play(): JSX.Element {
                   />
                ))}
 
-            <StaticButton isDarkTheme={isDarkTheme}>Submit</StaticButton>
+            <StaticButton isDarkTheme={isDarkTheme} type="submit">
+               Submit
+            </StaticButton>
          </StyledForm>
       </FlexColumnWrapper>
    );

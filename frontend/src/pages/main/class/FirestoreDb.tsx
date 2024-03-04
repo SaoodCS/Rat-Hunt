@@ -338,11 +338,12 @@ export namespace FirestoreDB {
          newTopic: string,
          resetRoundNo?: boolean,
          resetScores?: boolean,
+         noOfRounds?: number,
       ): IGameState {
          const { userStates } = gameState;
          const allUsers = ArrayOfObjects.getArrOfValuesFromKey(userStates, 'userId');
          const newRat = allUsers[Math.floor(Math.random() * allUsers.length)];
-         const { currentRound } = gameState;
+         const { currentRound, numberOfRoundsSet } = gameState;
          const newWords = getActiveTopicWords(topicsData, newTopic);
          const newWord = newWords[Math.floor(Math.random() * newWords.length)].word;
          const updatedUserStates = ArrayOfObjects.setAllValuesOfKeys(
@@ -371,6 +372,7 @@ export namespace FirestoreDB {
             currentRound: resetRoundNo ? 1 : currentRound + 1,
             currentTurn: updatedCurrentTurn,
             userStates: updatedUserStates,
+            numberOfRoundsSet: noOfRounds ? noOfRounds : numberOfRoundsSet,
          };
          return updatedGameState;
       }

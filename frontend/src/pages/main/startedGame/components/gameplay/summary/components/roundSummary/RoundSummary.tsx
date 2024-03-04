@@ -11,38 +11,30 @@ import HTMLEntities from '../../../../../../../../global/helpers/dataTypes/htmlE
 import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import FirestoreDB from '../../../../../../class/FirestoreDb';
 import { GameContext } from '../../../../../../context/GameContext';
+import { ModalContext } from '../../../../../../../../global/context/widget/modal/ModalContext';
+import RoundEndForm from './components/form/RoundEndForm';
 
 export default function RoundSummary(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);
-   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
    const [isLastRound, setIsLastRound] = useState(false);
-   const { data: topicsData } = FirestoreDB.Topics.getTopicsQuery();
-   const setRoomData = FirestoreDB.Room.setRoomMutation({});
-
+   const { toggleModal, setModalContent, setModalHeader, setModalZIndex } =
+      useContext(ModalContext);
+   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
       const { currentRound, numberOfRoundsSet } = gameState;
       setIsLastRound(currentRound === numberOfRoundsSet);
+      return () => {
+         toggleModal(false);
+      };
    }, []);
 
-   async function handleUpdateGameState(): Promise<void> {
-      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
-      if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
-      const { gameState } = roomData;
-      const { activeTopic } = gameState;
-      const newTopic = FirestoreDB.Room.randNewTopicKey(activeTopic, topicsData);
-      const updatedGameState = FirestoreDB.Room.updateGameStateForNextRound(
-         gameState,
-         topicsData,
-         newTopic,
-         isLastRound ? true : undefined,
-         isLastRound ? true : undefined,
-      );
-      await setRoomData.mutateAsync({
-         ...roomData,
-         gameState: updatedGameState,
-      });
+   function handleUpdateGameState(): void {
+      setModalHeader(!isLastRound ? 'Next Round' : 'Play Again');
+      setModalContent(<RoundEndForm isLastRound={isLastRound} toggleModal={toggleModal} />);
+      setModalZIndex(100);
+      toggleModal(true);
    }
 
    return (

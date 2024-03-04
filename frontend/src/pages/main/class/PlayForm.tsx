@@ -86,7 +86,10 @@ export default class PlayFormClass {
    private static validate(formValues: IPlayFormClass): Record<keyof IPlayFormClass, string> {
       const formValidation = FormHelper.validation(formValues, PlayFormClass.inputs);
       if (formValues.joinOrHost === 'host') formValidation.roomId = '';
-      if (formValues.joinOrHost === 'join') formValidation.topic = '';
+      if (formValues.joinOrHost === 'join') {
+         formValidation.topic = '';
+         formValidation.noOfRounds = '';
+      }
       return formValidation;
    }
 
