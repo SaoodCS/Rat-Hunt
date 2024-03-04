@@ -24,7 +24,7 @@ export default function RatVoteForm(): JSX.Element {
       RatVoteFormClass.form.validate,
    );
    const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
-   const updateGameStateMutation = FirestoreDB.Room.updateGameStateMutation({});
+   const updateGameStateMutation = FirestoreDB.Room.updateGameStateMutation({}, false);
 
    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
       const { isFormValid } = initHandleSubmit(e);

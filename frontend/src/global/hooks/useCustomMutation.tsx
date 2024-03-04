@@ -13,6 +13,7 @@ import { APIHelper } from '../firebase/apis/helper/NApiHelper';
 export function useCustomMutation<TData, TVariables>(
    mutationFn: MutationFunction<TData, TVariables>,
    options?: UseMutationOptions<TData, unknown, TVariables>,
+   showLoader = true,
 ): UseMutationResult<TData, unknown, TVariables, void> {
    const { setShowLoader } = useContext(LoaderContext);
    const { setApiError } = useApiErrorContext();
@@ -20,7 +21,7 @@ export function useCustomMutation<TData, TVariables>(
    // Define the default callbacks
    const defaultOnMutate = (variables: TVariables): void => {
       console.log('Default onMutate');
-      setShowLoader(true);
+      setShowLoader(showLoader);
    };
 
    const defaultOnSettled = (

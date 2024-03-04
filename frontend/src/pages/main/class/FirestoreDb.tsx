@@ -111,6 +111,7 @@ export namespace FirestoreDB {
 
       export function setRoomMutation(
          options: UseMutationOptions<void, unknown, IRoom>,
+         showLoader = true,
       ): UseMutationResult<void, unknown, IRoom, void> {
          return useCustomMutation(
             async (roomData: IRoom) => {
@@ -122,6 +123,7 @@ export namespace FirestoreDB {
                }
             },
             { ...options },
+            showLoader,
          );
       }
 
@@ -184,6 +186,7 @@ export namespace FirestoreDB {
 
       export function updateGameStateMutation(
          options: UseMutationOptions<void, unknown, IUpdateGameStateMutation>,
+         showLoader = true,
       ): UseMutationResult<void, unknown, IUpdateGameStateMutation, void> {
          return useCustomMutation(
             async (params: IUpdateGameStateMutation) => {
@@ -196,6 +199,7 @@ export namespace FirestoreDB {
                }
             },
             { ...options },
+            showLoader,
          );
       }
 
