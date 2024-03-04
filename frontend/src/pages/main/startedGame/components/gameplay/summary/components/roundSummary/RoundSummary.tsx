@@ -48,7 +48,7 @@ export default function RoundSummary(): JSX.Element {
             <LogoText size="1.4em">Round Summary {HTMLEntities.space} </LogoText>
             <BtnContainer>
                <TextBtn isDarkTheme onClick={handleUpdateGameState}>
-                  <TextColourizer fontSize="0.8em">
+                  <TextColourizer fontSize="0.7em">
                      {!isLastRound ? 'Next Round' : 'Play Again'}
                   </TextColourizer>
                </TextBtn>
