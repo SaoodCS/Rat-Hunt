@@ -30,14 +30,13 @@ export default function Gameplay(): JSX.Element {
       // This useEffect is responsble for updating the UI when the currentTurn changes
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
-      const { userStates, currentRat, currentRound, numberOfRoundsSet, currentTurn } = gameState;
+      const { userStates, currentRat, currentTurn } = gameState;
       const ratUserState = ArrayOfObjects.getObjWithKeyValuePair(userStates, 'userId', currentRat);
       if (!MiscHelper.isNotFalsyOrEmpty(ratUserState)) return;
       const isPlayerRat = currentRat === localDbUser;
       const allCluesExist = ArrayOfObjects.isKeyInAllObjsNotValuedAs(userStates, 'clue', '');
       const allVotesExist = ArrayOfObjects.isKeyInAllObjsNotValuedAs(userStates, 'votedFor', '');
       const ratHasGuessedWord = MiscHelper.isNotFalsyOrEmpty(ratUserState.guess);
-      const isLastRound = currentRound === numberOfRoundsSet;
       const isYourTurn = currentTurn.replace('.wordGuess', '') === localDbUser;
       const ratIsGuessingWord = currentTurn.includes('.wordGuess');
       setShowRatGuessingMsg(!isYourTurn && ratIsGuessingWord);
@@ -46,7 +45,7 @@ export default function Gameplay(): JSX.Element {
          setShowClueForm(false);
          setShowRatVoteForm(false);
          setShowWordGuessForm(false);
-         setShowRoundSummary(!isLastRound);
+         setShowRoundSummary(true);
          return;
       }
       setShowRoundSummary(false);

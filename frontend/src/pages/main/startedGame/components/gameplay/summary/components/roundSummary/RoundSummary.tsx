@@ -20,6 +20,7 @@ export default function RoundSummary(): JSX.Element {
    const { toggleModal, setModalContent, setModalHeader, setModalZIndex } =
       useContext(ModalContext);
    const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
+
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
