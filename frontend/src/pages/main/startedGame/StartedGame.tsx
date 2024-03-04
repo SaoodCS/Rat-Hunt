@@ -1,12 +1,12 @@
-import Gameplay from './gameplay/Gameplay';
-import GameHeader from './header/GameHeader';
+import Gameplay from './components/gameplay/Gameplay';
+import GameHeader from './components/header/GameHeader';
+import TopicBoard from './components/topicBoard/TopicBoard';
 import {
-   GameHeaderWrapper,
    GamePageWrapper,
+   GameHeaderWrapper,
    GameplayWrapper,
    TopicBoardWrapper,
 } from './style/Style';
-import TopicBoard from './topicBoard/TopicBoard';
 
 export default function StartedGame(): JSX.Element {
    return (

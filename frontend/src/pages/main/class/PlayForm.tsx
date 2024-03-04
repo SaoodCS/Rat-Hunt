@@ -6,6 +6,7 @@ export interface IPlayFormClass {
    joinOrHost: 'join' | 'host';
    roomId: string;
    topic: string;
+   noOfRounds: number;
 }
 
 export default class PlayFormClass {
@@ -60,6 +61,17 @@ export default class PlayFormClass {
          dropDownOptions: [],
          validator: (value: string): string | true => {
             if (!value) return 'Please select a topic';
+            return true;
+         },
+      },
+      {
+         name: 'noOfRounds',
+         id: 'no-of-rounds',
+         placeholder: 'Number of Rounds',
+         type: 'number',
+         isRequired: true,
+         validator: (value: number): string | true => {
+            if (typeof value !== 'number') return 'Please enter the number of rounds';
             return true;
          },
       },

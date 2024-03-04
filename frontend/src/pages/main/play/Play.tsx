@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { doc, getDoc } from 'firebase/firestore';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LogoFader from '../../../global/components/app/logo/LogoFader';
 import { StaticButton } from '../../../global/components/lib/button/staticButton/Style';
@@ -33,9 +33,15 @@ export default function Play(): JSX.Element {
    const { isLoading, isPaused, data } = FirestoreDB.Topics.getTopicsQuery();
    const { data: allRoomIds } = FirestoreDB.Game.getAllRoomIdsQuery();
    const navigation = useNavigate();
-
    const setRoomData = FirestoreDB.Room.setRoomMutation({});
    const addUserToRoom = FirestoreDB.Room.addUserToRoomMutation({});
+   const [showHostFields, setShowHostFields] = useState(false);
+   const [showRoomIdField, setShowRoomIdField] = useState(false);
+
+   useEffect(() => {
+      setShowRoomIdField(form.joinOrHost === 'join');
+      setShowHostFields(MiscHelper.isNotFalsyOrEmpty(data) && form.joinOrHost === 'host');
+   }, [data, form.joinOrHost]);
 
    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
       const { isFormValid } = initHandleSubmit(e);
@@ -107,7 +113,7 @@ export default function Play(): JSX.Element {
             activeWord: '',
             currentRat: '',
             currentRound: 0,
-            numberOfRoundsSet: 2,
+            numberOfRoundsSet: form.noOfRounds,
             currentTurn: '',
             userStates: [
                {
@@ -149,16 +155,14 @@ export default function Play(): JSX.Element {
    if (isPaused) return <OfflineFetch />;
    // if (error) return <FetchError />;
 
-   const showRoomIdField = form.joinOrHost === 'join';
-   const showTopicField = MiscHelper.isNotFalsyOrEmpty(data) && form.joinOrHost === 'host';
-
    return (
       <FlexColumnWrapper justifyContent="center" alignItems="center" height="100%">
          <LogoFader />
          <StyledForm onSubmit={handleSubmit} apiError={apiError} padding={1}>
             {PlayFormClass.form.inputs
                .filter((input) => input.name !== 'roomId' || showRoomIdField)
-               .filter((input) => input.name !== 'topic' || showTopicField)
+               .filter((input) => input.name !== 'topic' || showHostFields)
+               .filter((input) => input.name !== 'noOfRounds' || showHostFields)
                .map((input) => (
                   <InputCombination
                      key={input.id}
