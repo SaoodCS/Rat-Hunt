@@ -308,7 +308,12 @@ export namespace FirestoreDB {
 
       export function calculatePoints(gameState: IGameState): IGameState {
          const { userStates, currentRat, activeWord } = gameState;
-         const { getObjWithKeyValuePair, getObjectsWithKeyValuePair, filterOut } = ArrayOfObjects;
+         const {
+            getObjWithKeyValuePair,
+            getObjectsWithKeyValuePair,
+            filterOut,
+            getArrOfValuesFromKey,
+         } = ArrayOfObjects;
          const rat = getObjWithKeyValuePair(userStates, 'userId', currentRat);
          const correctGuess = rat.guess === activeWord;
          const ratVoters = getObjectsWithKeyValuePair(userStates, 'votedFor', currentRat);
@@ -316,6 +321,10 @@ export namespace FirestoreDB {
          const ratGets2Points = correctGuess && !correctVotes;
          const ratGets1Point = (correctGuess && correctVotes) || (!correctGuess && !correctVotes);
          const othersGet1Point = correctVotes;
+
+         const ratVotersWithoutRat = filterOut(ratVoters, 'userId', currentRat);
+         const ratVotersIds = getArrOfValuesFromKey(ratVotersWithoutRat, 'userId');
+
          const updatedRatUserState: IUserStates = {
             ...rat,
             totalScore: rat.totalScore + (ratGets2Points ? 2 : ratGets1Point ? 1 : 0),
@@ -323,12 +332,20 @@ export namespace FirestoreDB {
          };
          const userStatesWithoutRat: IUserStates[] = filterOut(userStates, 'userId', currentRat);
          const updatedUserStates: IUserStates[] = userStatesWithoutRat.map((userState) => {
+            const othersGetAnotherPoint = ratVotersIds.includes(userState.userId);
             return {
                ...userState,
-               totalScore: userState.totalScore + (othersGet1Point ? 1 : 0),
-               roundScores: [...userState.roundScores, othersGet1Point ? 1 : 0],
+               totalScore:
+                  userState.totalScore +
+                  (othersGet1Point ? 1 : 0) +
+                  (othersGetAnotherPoint ? 1 : 0),
+               roundScores: [
+                  ...userState.roundScores,
+                  (othersGet1Point ? 1 : 0) + (othersGetAnotherPoint ? 1 : 0),
+               ],
             };
          });
+
          const updatedGameState: IGameState = {
             ...gameState,
             userStates: [...updatedUserStates, updatedRatUserState],
