@@ -19,7 +19,9 @@ export default class PlayFormClass {
          isRequired: true,
          validator: (value: string): string | true => {
             if (!value) return 'Please enter your name';
-            if (value.length < 3) return 'Name must be at least 3 characters';
+            if (value.trim() === '') return 'Name cannot be empty';
+            if (value.length < 2) return 'Name must be at least 2 characters';
+            if (value.length > 8) return 'Name must be at most 8 characters';
             return true;
          },
       },
@@ -72,6 +74,8 @@ export default class PlayFormClass {
          isRequired: true,
          validator: (value: number): string | true => {
             if (typeof value !== 'number') return 'Please enter the number of rounds';
+            if (value < 1) return 'Number of rounds must be at least 1';
+            if (value > 10) return 'Number of rounds must be at most 10';
             return true;
          },
       },

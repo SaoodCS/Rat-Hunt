@@ -15,7 +15,10 @@ export default class ClueFormClass {
          isRequired: true,
          validator: (value: string): string | true => {
             if (!value) return 'Please enter a clue';
-            if (value.length < 3) return 'clue must be at least 3 character';
+            if (value.length < 1) return 'Clue must be at least 1 character';
+            if (value.length > 10) return 'Clue must be at most 10 characters';
+            if (value.trim() === '') return 'Clue cannot be empty';
+            if (value.split(' ').length > 1) return 'Clue cannot be more than one word';
             return true;
          },
       },

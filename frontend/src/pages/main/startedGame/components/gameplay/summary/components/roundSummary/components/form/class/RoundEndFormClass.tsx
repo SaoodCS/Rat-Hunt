@@ -30,6 +30,8 @@ export default class RoundEndFormClass {
          isRequired: true,
          validator: (value: number): string | true => {
             if (typeof value !== 'number') return 'Please enter the number of rounds';
+            if (value < 1) return 'Number of rounds must be at least 1';
+            if (value > 10) return 'Number of rounds must be at most 10';
             return true;
          },
       },
