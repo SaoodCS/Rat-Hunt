@@ -46,6 +46,10 @@ export default class ArrayOfObjects {
       return arr.filter((obj) => obj[key] !== value);
    }
 
+   static filterOutValues<T>(array: T[], key: keyof T, values: T[keyof T][]): T[] {
+      return array.filter((item) => !values.includes(item[key]));
+   }
+
    static filterIn<T>(arr: T[], key: keyof T, value: T[keyof T]): T[] {
       return arr.filter((obj) => obj[key] === value);
    }

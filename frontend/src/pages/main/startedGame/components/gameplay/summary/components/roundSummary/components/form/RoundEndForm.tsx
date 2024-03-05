@@ -5,6 +5,7 @@ import { StyledForm } from '../../../../../../../../../../global/components/lib/
 import InputCombination from '../../../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
 import useApiErrorContext from '../../../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import ArrayHelper from '../../../../../../../../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
+import ArrayOfObjects from '../../../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../../../../../../../../global/hooks/useForm';
 import FirestoreDB from '../../../../../../../../class/FirestoreDb';
@@ -34,16 +35,22 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
       if (!isFormValid) return;
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
-      const { gameState } = roomData;
+      const { gameState, users } = roomData;
       const { newTopic, noOfRounds } = form;
-      const updatedGameState = FirestoreDB.Room.updateGameStateForNextRound(
+      const disconnectedUsers = ArrayOfObjects.filterOut(users, 'userStatus', 'connected');
+      const disconnectedUsersIds = ArrayOfObjects.getArrOfValuesFromKey(
+         disconnectedUsers,
+         'userId',
+      );
+      const updatedGameState = FirestoreDB.Room.updateGameStateForNextRound({
+         disconnectedUsersIds,
          gameState,
          topicsData,
          newTopic,
-         isLastRound ? true : undefined,
-         isLastRound ? true : undefined,
-         noOfRounds,
-      );
+         resetRoundToOne: isLastRound ? true : undefined,
+         resetScores: isLastRound ? true : undefined,
+         newNoOfRounds: noOfRounds,
+      });
       await setRoomData.mutateAsync({
          ...roomData,
          gameState: updatedGameState,

@@ -379,23 +379,55 @@ export namespace FirestoreDB {
          return updatedGameState;
       }
 
-      export function updateGameStateForNextRound(
-         gameState: IGameState,
-         topicsData: FirestoreDB.Topics.ITopics[],
-         newTopic: string,
-         resetRoundNo?: boolean,
-         resetScores?: boolean,
-         noOfRounds?: number,
-      ): IGameState {
+      export function updateGameStateForNextRound(options: {
+         disconnectedUsersIds: string[];
+         gameState: IGameState;
+         topicsData: FirestoreDB.Topics.ITopics[];
+         newTopic: string;
+         resetRoundToOne?: boolean;
+         resetScores?: boolean;
+         newNoOfRounds?: number;
+         resetCurrentRound?: boolean;
+         delUserFromUserStateId?: string;
+      }): IGameState {
+         const {
+            disconnectedUsersIds,
+            gameState,
+            topicsData,
+            newTopic,
+            resetRoundToOne,
+            resetScores,
+            newNoOfRounds,
+            resetCurrentRound,
+            delUserFromUserStateId,
+         } = options;
          const { userStates } = gameState;
-         const allUsers = ArrayOfObjects.getArrOfValuesFromKey(userStates, 'userId');
-         const newRat = allUsers[Math.floor(Math.random() * allUsers.length)];
+         const resetRoundToOneIsTrue = resetRoundToOne === true;
+         const resetScoresIsTrue = resetScores === true;
+         const newNoOfRoundsExists = newNoOfRounds !== undefined;
+         const resetCurrentRoundIsTrue = resetCurrentRound === true;
+
+         const userStatesWithoutDelUser = ArrayOfObjects.filterOut(
+            userStates,
+            'userId',
+            delUserFromUserStateId || '',
+         );
+         const connectedUsersStates = ArrayOfObjects.filterOutValues(
+            userStatesWithoutDelUser,
+            'userId',
+            disconnectedUsersIds,
+         );
+         const connectedUsersIds = ArrayOfObjects.getArrOfValuesFromKey(
+            connectedUsersStates,
+            'userId',
+         );
+         const newRat = connectedUsersIds[Math.floor(Math.random() * connectedUsersIds.length)];
          const { currentRound, numberOfRoundsSet } = gameState;
          const newWords = getActiveTopicWords(topicsData, newTopic);
          const newWord = newWords[Math.floor(Math.random() * newWords.length)].word;
          const updatedUserStates = ArrayOfObjects.setAllValuesOfKeys(
-            userStates,
-            resetScores
+            userStatesWithoutDelUser,
+            resetScoresIsTrue
                ? [
                     { key: 'clue', value: '' },
                     { key: 'guess', value: '' },
@@ -409,19 +441,87 @@ export namespace FirestoreDB {
                     { key: 'votedFor', value: '' },
                  ],
          );
-         const sortedUserStates = ArrayOfObjects.sort(updatedUserStates, 'userId');
+         const sortedUserStates = ArrayOfObjects.sort(connectedUsersStates, 'userId');
          const updatedCurrentTurn = sortedUserStates[0].userId;
          const updatedGameState: IGameState = {
             ...gameState,
             activeTopic: newTopic,
             activeWord: newWord,
             currentRat: newRat,
-            currentRound: resetRoundNo ? 1 : currentRound + 1,
+            currentRound: resetRoundToOneIsTrue
+               ? 1
+               : resetCurrentRoundIsTrue
+                 ? currentRound
+                 : currentRound + 1,
             currentTurn: updatedCurrentTurn,
             userStates: updatedUserStates,
-            numberOfRoundsSet: noOfRounds ? noOfRounds : numberOfRoundsSet,
+            numberOfRoundsSet: newNoOfRoundsExists ? newNoOfRounds : numberOfRoundsSet,
          };
          return updatedGameState;
+      }
+
+      export function getNextTurnUser(
+         userStates: IUserStates[],
+         localDbUser: string,
+         type: 'ratVote' | 'clue' | 'guess' | 'leaveRoom',
+         currentRat: string,
+         disconnectedUsersIds: string[],
+      ): string {
+         const connectedUsersStates = ArrayOfObjects.filterOutValues(
+            userStates,
+            'userId',
+            disconnectedUsersIds,
+         );
+         const sortedUserStates = ArrayOfObjects.sort(connectedUsersStates, 'userId');
+         const thisUserIndex = sortedUserStates.findIndex((u) => u.userId === localDbUser);
+         const userStatesWithoutThisUser = ArrayOfObjects.filterOut(
+            connectedUsersStates,
+            'userId',
+            localDbUser,
+         );
+         const finalVoteSubmission = ArrayOfObjects.isKeyInAllObjsNotValuedAs(
+            userStatesWithoutThisUser,
+            'votedFor',
+            '',
+         );
+         const finalClueSubmission = ArrayOfObjects.isKeyInAllObjsNotValuedAs(
+            userStatesWithoutThisUser,
+            'clue',
+            '',
+         );
+         if (type === 'ratVote') {
+            const nextUser = sortedUserStates[thisUserIndex + 1]?.userId || currentRat;
+            const updatedCurrentTurn = finalVoteSubmission ? `${currentRat}.wordGuess` : nextUser;
+            return updatedCurrentTurn;
+         }
+         if (type === 'clue') {
+            const firstUser = sortedUserStates[0].userId;
+            const nextUser = sortedUserStates[thisUserIndex + 1]?.userId || firstUser;
+            const updatedCurrentTurn = finalClueSubmission ? firstUser : nextUser;
+            return updatedCurrentTurn;
+         }
+         if (type === 'guess') {
+            return '';
+         }
+         // if type is 'leaveRoom':
+         const allVotesSubmitted = finalVoteSubmission;
+         const allCluesSubmitted = finalClueSubmission;
+         const thisUserIsRat = currentRat === localDbUser;
+         const ratUserState = ArrayOfObjects.getObjWithKeyValuePair(
+            userStates,
+            'userId',
+            currentRat,
+         );
+         const ratSubmittedGuess = ratUserState.guess !== '';
+         if (ratSubmittedGuess) return '';
+         if (thisUserIsRat) return sortedUserStates[0].userId; // if it is the rat user's go and they leave the room, the current turn will be reset to the first user
+         if (allVotesSubmitted) return `${currentRat}.wordGuess`;
+         if (allCluesSubmitted) return sortedUserStates[0].userId;
+         // If not all clues are submitted:
+         const firstUser = sortedUserStates[0].userId;
+         const nextUser = sortedUserStates[thisUserIndex + 1]?.userId || firstUser;
+         const updatedCurrentTurn = nextUser;
+         return updatedCurrentTurn;
       }
    }
 

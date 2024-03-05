@@ -1,6 +1,5 @@
-import { useContext } from 'react';
 import { Send } from '@styled-icons/ionicons-sharp/Send';
-import { gameFormStyles } from '../style/Style';
+import { useContext } from 'react';
 import { TextBtn } from '../../../../../../../global/components/lib/button/textBtn/Style';
 import { StyledForm } from '../../../../../../../global/components/lib/form/form/Style';
 import InputCombination from '../../../../../../../global/components/lib/form/inputCombination/InputCombination';
@@ -11,6 +10,7 @@ import MiscHelper from '../../../../../../../global/helpers/dataTypes/miscHelper
 import useForm from '../../../../../../../global/hooks/useForm';
 import FirestoreDB from '../../../../../class/FirestoreDb';
 import { GameContext } from '../../../../../context/GameContext';
+import { gameFormStyles } from '../style/Style';
 import ClueFormClass from './class/ClueFormClass';
 
 export default function ClueForm(): JSX.Element {
@@ -30,8 +30,8 @@ export default function ClueForm(): JSX.Element {
       if (!isFormValid) return;
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const userClue = form.clue;
-      const { gameState } = roomData;
-      const { userStates } = gameState;
+      const { gameState, users } = roomData;
+      const { userStates, currentRat } = gameState;
       const submittedClues = ArrayOfObjects.getArrOfValuesFromKey(userStates, 'clue');
       if (submittedClues.includes(userClue)) {
          setApiError('Another user has already submitted this clue.');
@@ -45,16 +45,19 @@ export default function ClueForm(): JSX.Element {
          ...userStatesWithoutThisUser,
          updatedUserState,
       ];
-      const finalClueSubmission = ArrayOfObjects.isKeyInAllObjsNotValuedAs(
-         userStatesWithoutThisUser,
-         'clue',
-         '',
+      const disconnectedUsers = ArrayOfObjects.filterOut(users, 'userStatus', 'connected');
+      const disconnectedUsersIds = ArrayOfObjects.getArrOfValuesFromKey(
+         disconnectedUsers,
+         'userId',
       );
-      const sortedUserStates = ArrayOfObjects.sort(userStates, 'userId');
-      const firstUser = sortedUserStates[0].userId;
-      const thisUserIndex = sortedUserStates.findIndex((u) => u.userId === localDbUser);
-      const nextUser = sortedUserStates[thisUserIndex + 1]?.userId || firstUser;
-      const updatedCurrentTurn = finalClueSubmission ? firstUser : nextUser;
+      const updatedCurrentTurn = FirestoreDB.Room.getNextTurnUser(
+         userStates,
+         localDbUser,
+         'clue',
+         currentRat,
+         disconnectedUsersIds,
+      );
+
       const updatedGameState: typeof gameState = {
          ...gameState,
          currentTurn: updatedCurrentTurn,

@@ -12,6 +12,7 @@ import { FlexRowWrapper } from '../../../global/components/lib/positionModifiers
 import { BannerContext } from '../../../global/context/widget/banner/BannerContext';
 import { ToastContext } from '../../../global/context/widget/toast/ToastContext';
 import Color from '../../../global/css/colors';
+import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import StringHelper from '../../../global/helpers/dataTypes/string/StringHelper';
 import FirestoreDB from '../class/FirestoreDb';
@@ -56,13 +57,20 @@ export default function WaitingRoom(): JSX.Element {
       }
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
-      const { gameState } = roomData;
+      const { gameState, users } = roomData;
       const { activeTopic } = gameState;
-      const initialRoundGameState = FirestoreDB.Room.updateGameStateForNextRound(
+      const disconnectedUsers = ArrayOfObjects.filterOut(users, 'userStatus', 'connected');
+      const disconnectedUsersIds = ArrayOfObjects.getArrOfValuesFromKey(
+         disconnectedUsers,
+         'userId',
+      );
+
+      const initialRoundGameState = FirestoreDB.Room.updateGameStateForNextRound({
+         disconnectedUsersIds,
          gameState,
          topicsData,
-         activeTopic,
-      );
+         newTopic: activeTopic,
+      });
       await setRoomData.mutateAsync({
          ...roomData,
          gameState: initialRoundGameState,

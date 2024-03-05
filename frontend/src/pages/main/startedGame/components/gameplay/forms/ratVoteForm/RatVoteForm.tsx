@@ -30,7 +30,7 @@ export default function RatVoteForm(): JSX.Element {
       const { isFormValid } = initHandleSubmit(e);
       if (!isFormValid) return;
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
-      const { gameState } = roomData;
+      const { gameState, users } = roomData;
       const { userStates, currentRat } = gameState;
       const userStatesWithoutThisUser = ArrayOfObjects.filterOut(userStates, 'userId', localDbUser);
       const userState = ArrayOfObjects.getObjWithKeyValuePair(userStates, 'userId', localDbUser);
@@ -39,15 +39,19 @@ export default function RatVoteForm(): JSX.Element {
          ...userStatesWithoutThisUser,
          updatedUserState,
       ];
-      const finalVoteSubmission = ArrayOfObjects.isKeyInAllObjsNotValuedAs(
-         userStatesWithoutThisUser,
-         'votedFor',
-         '',
+      const disconnectedUsers = ArrayOfObjects.filterOut(users, 'userStatus', 'connected');
+      const disconnectedUsersIds = ArrayOfObjects.getArrOfValuesFromKey(
+         disconnectedUsers,
+         'userId',
       );
-      const sortedUserStates = ArrayOfObjects.sort(userStates, 'userId');
-      const thisUserIndex = sortedUserStates.findIndex((u) => u.userId === localDbUser);
-      const nextUser = sortedUserStates[thisUserIndex + 1]?.userId || currentRat;
-      const updatedCurrentTurn = finalVoteSubmission ? `${currentRat}.wordGuess` : nextUser;
+      const updatedCurrentTurn = FirestoreDB.Room.getNextTurnUser(
+         userStates,
+         localDbUser,
+         'ratVote',
+         currentRat,
+         disconnectedUsersIds,
+      );
+
       const updatedGameState: typeof gameState = {
          ...gameState,
          currentTurn: updatedCurrentTurn,

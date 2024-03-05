@@ -24,6 +24,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
       useContext(ModalContext);
    const { localDbRoom, localDbUser, setLocalDbRoom, setLocalDbUser } = useContext(GameContext);
    const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
+   const { data: topicsData } = FirestoreDB.Topics.getTopicsQuery();
    const deleteUserFromFs = FirestoreDB.Room.deleteUserMutation({});
    const deleteRoomMutation = FirestoreDB.Room.deleteRoomMutation({});
    const updateRoomStateMutation = FirestoreDB.Room.updateRoomStateMutation({}, false);
@@ -38,58 +39,89 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    }
 
    async function handleLeaveRoom(): Promise<void> {
-      if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
-         const isLastUser = roomData.users.length === 1;
-         if (isLastUser) {
-            await deleteRoomMutation.mutateAsync({ roomId: localDbRoom });
-            await RTDB.deleteRoom(localDbRoom);
+      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
+      if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
+      const isLastUser = roomData.users.length === 1;
+      const userStatusRef: DatabaseReference = ref(
+         firebaseRTDB,
+         `/rooms/${localDbRoom}/${localDbUser}`,
+      );
+      if (isLastUser) {
+         await deleteRoomMutation.mutateAsync({ roomId: localDbRoom });
+         await RTDB.deleteRoom(localDbRoom);
+      } else {
+         const { gameState, users } = roomData;
+         const { currentTurn, userStates, currentRat, activeTopic } = gameState;
+         if (currentRat === localDbUser) {
+            if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
+            const disconnectedUsers = ArrayOfObjects.filterOut(users, 'userStatus', 'connected');
+            const disconnectedUsersIds = ArrayOfObjects.getArrOfValuesFromKey(
+               disconnectedUsers,
+               'userId',
+            );
+
+            const updatedGameState = FirestoreDB.Room.updateGameStateForNextRound({
+               disconnectedUsersIds,
+               gameState,
+               topicsData,
+               newTopic: activeTopic,
+               resetCurrentRound: true,
+               delUserFromUserStateId: localDbUser,
+            });
+            const updatedUsers = ArrayOfObjects.filterOut(users, 'userId', localDbUser);
+            const updatedRoomState: FirestoreDB.Room.IRoom = {
+               ...roomData,
+               users: updatedUsers,
+               gameState: updatedGameState,
+            };
+            await updateRoomStateMutation.mutateAsync({
+               roomState: updatedRoomState,
+               roomId: localDbRoom,
+            });
+         } else if (currentTurn === localDbUser) {
+            const disconnectedUsers = ArrayOfObjects.filterOut(users, 'userStatus', 'connected');
+            const disconnectedUsersIds = ArrayOfObjects.getArrOfValuesFromKey(
+               disconnectedUsers,
+               'userId',
+            );
+            const nextUser = FirestoreDB.Room.getNextTurnUser(
+               userStates,
+               localDbUser,
+               'leaveRoom',
+               currentRat,
+               disconnectedUsersIds,
+            );
+
+            const updatedUserStates = ArrayOfObjects.filterOut(userStates, 'userId', localDbUser);
+            const updatedGameState = {
+               ...gameState,
+               currentTurn: nextUser,
+               userStates: updatedUserStates,
+            };
+            const updatedUsers = ArrayOfObjects.filterOut(users, 'userId', localDbUser);
+            const updatedRoomState: FirestoreDB.Room.IRoom = {
+               ...roomData,
+               users: updatedUsers,
+               gameState: updatedGameState,
+            };
+            await updateRoomStateMutation.mutateAsync({
+               roomState: updatedRoomState,
+               roomId: localDbRoom,
+            });
+            await RTDB.deleteUser(localDbUser, localDbRoom);
          } else {
-            const { gameState, users } = roomData;
-            const { currentTurn, userStates } = gameState;
-            if (currentTurn === localDbUser) {
-               const sortedUserStates = ArrayOfObjects.sort(userStates, 'userId');
-               const firstUser = sortedUserStates[0].userId;
-               const thisUserIndex = sortedUserStates.findIndex((u) => u.userId === localDbUser);
-               const nextUser = sortedUserStates[thisUserIndex + 1]?.userId || firstUser;
-               const updatedUserStates = ArrayOfObjects.filterOut(
-                  userStates,
-                  'userId',
-                  localDbUser,
-               );
-               const updatedGameState = {
-                  ...gameState,
-                  currentTurn: nextUser,
-                  userStates: updatedUserStates,
-               };
-               const updatedUsers = ArrayOfObjects.filterOut(users, 'userId', localDbUser);
-               const updatedRoomState: FirestoreDB.Room.IRoom = {
-                  ...roomData,
-                  users: updatedUsers,
-                  gameState: updatedGameState,
-               };
-               await updateRoomStateMutation.mutateAsync({
-                  roomState: updatedRoomState,
-                  roomId: localDbRoom,
-               });
-               await RTDB.deleteUser(localDbUser, localDbRoom);
-            } else {
-               await deleteUserFromFs.mutateAsync({
-                  roomData: roomData,
-                  userId: localDbUser,
-               });
-               await RTDB.deleteUser(localDbUser, localDbRoom);
-            }
+            await deleteUserFromFs.mutateAsync({
+               roomData: roomData,
+               userId: localDbUser,
+            });
+            await RTDB.deleteUser(localDbUser, localDbRoom);
          }
-         const userStatusRef: DatabaseReference = ref(
-            firebaseRTDB,
-            `/rooms/${localDbRoom}/${localDbUser}`,
-         );
-         await onDisconnect(userStatusRef).cancel();
-         setLocalDbRoom('');
-         setLocalDbUser('');
-         queryClient.removeQueries();
-         navigation('/main/play');
       }
+      await onDisconnect(userStatusRef).cancel();
+      setLocalDbRoom('');
+      setLocalDbUser('');
+      queryClient.removeQueries();
+      navigation('/main/play');
    }
 
    function waitingOrStartedPage(): boolean {
