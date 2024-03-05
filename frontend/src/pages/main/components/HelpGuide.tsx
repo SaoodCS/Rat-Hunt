@@ -9,8 +9,8 @@ export default function HelpGuide(): JSX.Element {
          listItem: 'Aim of the Game',
          subItems: [
             'To catch the RAT without giving away the secret word.',
-            'If you are the RAT then your mission is to avoid detection and work out the secret word'
-         ]
+            'If you are the RAT then your mission is to avoid detection and work out the secret word',
+         ],
       },
       {
          listItem: 'Word Selection',
@@ -32,7 +32,7 @@ export default function HelpGuide(): JSX.Element {
          content: [
             'After all players give their clues, everyone (including the RAT) take turns voting for who they think the RAT is.',
             'The RAT also guesses what was the secret word all other players received.',
-            'If the RAT recieves the most votes, they get caught. If there is a tie, the RAT escapes.'
+            'If the RAT recieves the most votes, they get caught. If there is a tie, the RAT escapes.',
          ],
       },
       {
