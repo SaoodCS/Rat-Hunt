@@ -401,6 +401,7 @@ export namespace FirestoreDB {
             resetCurrentRound,
             delUserFromUserStateId,
          } = options;
+         // NOTE: this function now only sets the next turn and current rat to a user who is connected
          const { userStates } = gameState;
          const resetRoundToOneIsTrue = resetRoundToOne === true;
          const resetScoresIsTrue = resetScores === true;
@@ -467,6 +468,7 @@ export namespace FirestoreDB {
          currentRat: string,
          disconnectedUsersIds: string[],
       ): string {
+         // NOTE: this function now only sets the next turn to a user who is connected
          const connectedUsersStates = ArrayOfObjects.filterOutValues(
             userStates,
             'userId',
