@@ -13,9 +13,9 @@ import {
 } from 'firebase/firestore';
 import APIHelper from '../../../global/firebase/apis/helper/NApiHelper';
 import { firestore } from '../../../global/firebase/config/config';
+import ArrayHelper from '../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
 import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import { useCustomMutation } from '../../../global/hooks/useCustomMutation';
-import ArrayHelper from '../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
 
 export namespace FirestoreDB {
    export namespace Topics {
@@ -177,6 +177,30 @@ export namespace FirestoreDB {
                }
             },
             { ...options },
+         );
+      }
+
+      interface IUpdateRoomStateMutation {
+         roomState: IRoom;
+         roomId: string;
+      }
+
+      export function updateRoomStateMutation(
+         options: UseMutationOptions<void, unknown, IUpdateRoomStateMutation>,
+         showLoader = true,
+      ): UseMutationResult<void, unknown, IUpdateRoomStateMutation, void> {
+         return useCustomMutation(
+            async (params: IUpdateRoomStateMutation) => {
+               const { roomState, roomId } = params;
+               try {
+                  const docRef = doc(firestore, key.collection, `room-${roomId}`);
+                  await updateDoc(docRef, { ...roomState });
+               } catch (e) {
+                  throw new APIHelper.ErrorThrower(APIHelper.handleError(e));
+               }
+            },
+            { ...options },
+            showLoader,
          );
       }
 
