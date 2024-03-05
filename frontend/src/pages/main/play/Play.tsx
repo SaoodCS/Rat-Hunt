@@ -20,6 +20,7 @@ import FirestoreDB from '../class/FirestoreDb';
 import PlayFormClass from '../class/PlayForm';
 import RTDB from '../class/firebaseRTDB';
 import { GameContext } from '../context/GameContext';
+import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 
 export default function Play(): JSX.Element {
    const { isDarkTheme } = useThemeContext();
@@ -146,7 +147,7 @@ export default function Play(): JSX.Element {
          for (let i = 0; i < topics.length; i++) {
             dropDownOptions.push({ value: topics[i], label: topicLabels[i] });
          }
-         return dropDownOptions;
+         return ArrayOfObjects.sort(dropDownOptions, 'label');
       }
       return input.dropDownOptions;
    }

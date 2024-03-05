@@ -15,6 +15,7 @@ import APIHelper from '../../../global/firebase/apis/helper/NApiHelper';
 import { firestore } from '../../../global/firebase/config/config';
 import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import { useCustomMutation } from '../../../global/hooks/useCustomMutation';
+import ArrayHelper from '../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
 
 export namespace FirestoreDB {
    export namespace Topics {
@@ -292,7 +293,8 @@ export namespace FirestoreDB {
       ): IActiveTopicWords[] {
          const topicObj = ArrayOfObjects.getObjWithKeyValuePair(topics, 'key', activeTopic);
          const words = topicObj.values;
-         const words16 = words.slice(0, 16);
+         const sortedWords = ArrayHelper.sort(words);
+         const words16 = sortedWords.slice(0, 16);
          const wordsWithCellIds: IActiveTopicWords[] = [];
          const letters = ['A', 'B', 'C', 'D'];
          for (let i = 0; i < 4; i++) {

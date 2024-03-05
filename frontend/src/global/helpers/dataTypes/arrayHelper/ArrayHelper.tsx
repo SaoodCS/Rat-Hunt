@@ -36,5 +36,28 @@ export default class ArrayHelper {
       return mostRepeatedItems;
    }
 
-   // check if there are multiple most repeated items in the array
+   static sort<T extends string[] | number[]>(arr: T, descending?: boolean): T {
+      const deepCopy: T = JSON.parse(JSON.stringify(arr));
+      if (descending) {
+         return deepCopy.sort((a, b) => {
+            if (a > b) {
+               return -1;
+            }
+            if (a < b) {
+               return 1;
+            }
+            return 0;
+         }) as T;
+      }
+
+      return deepCopy.sort((a, b) => {
+         if (a < b) {
+            return -1;
+         }
+         if (a > b) {
+            return 1;
+         }
+         return 0;
+      }) as T;
+   }
 }

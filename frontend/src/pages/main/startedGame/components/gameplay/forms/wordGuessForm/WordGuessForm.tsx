@@ -1,6 +1,5 @@
-import { useContext } from 'react';
 import { Send } from '@styled-icons/ionicons-sharp/Send';
-import { gameFormStyles } from '../style/Style';
+import { useContext } from 'react';
 import { TextBtn } from '../../../../../../../global/components/lib/button/textBtn/Style';
 import type { IDropDownOption } from '../../../../../../../global/components/lib/form/dropDown/DropDownInput';
 import { StyledForm } from '../../../../../../../global/components/lib/form/form/Style';
@@ -12,6 +11,7 @@ import MiscHelper from '../../../../../../../global/helpers/dataTypes/miscHelper
 import useForm from '../../../../../../../global/hooks/useForm';
 import FirestoreDB from '../../../../../class/FirestoreDb';
 import { GameContext } from '../../../../../context/GameContext';
+import { gameFormStyles } from '../style/Style';
 import WordGuessFormClass from './class/WordGuessFormClass';
 
 export default function WordGuessForm(): JSX.Element {
@@ -58,7 +58,8 @@ export default function WordGuessForm(): JSX.Element {
       if (!input.isDropDown) return;
       if (input.name !== 'guess') return;
       const topicWords = ArrayOfObjects.getArrOfValuesFromKey(activeTopicWords, 'word');
-      return topicWords.map((word) => ({ value: word, label: word }));
+      const dropDownOptions = topicWords.map((word) => ({ value: word, label: word }));
+      return ArrayOfObjects.sort(dropDownOptions, 'label');
    }
 
    return (

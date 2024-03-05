@@ -1,18 +1,18 @@
 import { Send } from '@styled-icons/ionicons-sharp/Send';
 import { useContext } from 'react';
-import { gameFormStyles } from '../style/Style';
-import RatVoteFormClass from './class/RatVoteFormClass';
-import useThemeContext from '../../../../../../../global/context/theme/hooks/useThemeContext';
 import { TextBtn } from '../../../../../../../global/components/lib/button/textBtn/Style';
 import type { IDropDownOption } from '../../../../../../../global/components/lib/form/dropDown/DropDownInput';
 import { StyledForm } from '../../../../../../../global/components/lib/form/form/Style';
 import InputCombination from '../../../../../../../global/components/lib/form/inputCombination/InputCombination';
+import useThemeContext from '../../../../../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import ArrayOfObjects from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../../../../../global/hooks/useForm';
 import FirestoreDB from '../../../../../class/FirestoreDb';
 import { GameContext } from '../../../../../context/GameContext';
+import { gameFormStyles } from '../style/Style';
+import RatVoteFormClass from './class/RatVoteFormClass';
 
 export default function RatVoteForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -69,7 +69,7 @@ export default function RatVoteForm(): JSX.Element {
          value: user.userId,
          label: user.userId,
       }));
-      return dropDownOptions;
+      return ArrayOfObjects.sort(dropDownOptions, 'label');
    }
 
    return (
