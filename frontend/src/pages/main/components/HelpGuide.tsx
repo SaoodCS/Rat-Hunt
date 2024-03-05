@@ -6,33 +6,42 @@ import { ListItem, OrderedList } from '../../../global/components/lib/newList/St
 export default function HelpGuide(): JSX.Element {
    const helpContent = [
       {
+         listItem: 'Aim of the Game',
+         subItems: [
+            'To catch the RAT without giving away the secret word.',
+            'If you are the RAT then your mission is to avoid detection and work out the secret word'
+         ]
+      },
+      {
          listItem: 'Word Selection',
          subItems: [
-            'All players receive the same word from the grid (e.g., A2), except for the rat.',
-            'The rat does not receive the word.',
+            'All players receive the same secret word from the grid (e.g., A2), except for the RAT.',
+            'The RAT does not receive the word.',
          ],
       },
       {
          listItem: 'Clues',
          content: [
-            'Each player provides a clue related to the word.',
-            'Clues should convince others that the player knows the word without revealing it to the rat.',
-            'The rat also gives a clue based on their guess of the word.',
+            'All players take it in turn to provide a clue related to the secret word.',
+            'Clues should convince others that the player knows the secret word without revealing it to the RAT.',
+            'The RAT also gives a clue based on their guess of the secret word.',
          ],
       },
       {
          listItem: 'Voting',
          content: [
-            'After all players give their clues, everyone (including the rat) votes for who they think the rat is.',
-            'The rat also guesses which word all other players received.',
+            'After all players give their clues, everyone (including the RAT) take turns voting for who they think the RAT is.',
+            'The RAT also guesses what was the secret word all other players received.',
+            'If the RAT recieves the most votes, they get caught. If there is a tie, the RAT escapes.'
          ],
       },
       {
          listItem: 'Scoring',
          content: [
-            'If the player with the highest votes is the rat, all players (except the rat) earn 1 point.',
-            'If the player with the highest votes is not the rat, the rat earns 1 point.',
-            'If the rat correctly guesses the word, they earn 1 point.',
+            'If the RAT correctly guesses the secret word, they earn 1 point.',
+            'If the RAT escapes, the RAT recieves 1 point.',
+            'If the RAT is caught, all players (except the RAT) earn 1 point.',
+            "If a player that isn't the RAT correctly votes for the RAT, they earn 1 point.",
          ],
       },
    ];
