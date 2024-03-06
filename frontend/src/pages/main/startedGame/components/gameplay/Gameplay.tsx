@@ -7,7 +7,8 @@ import ConditionalRender from '../../../../../global/components/lib/renderModifi
 import Color from '../../../../../global/css/colors';
 import ArrayOfObjects from '../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import FirestoreDB from '../../../class/FirestoreDb';
+import DBConnect from '../../../../../utils/DBConnect/DBConnect';
+import GameHelper from '../../../../../utils/GameHelper/GameHelper';
 import { GameContext } from '../../../context/GameContext';
 import ClueForm from './forms/clueForm/ClueForm';
 import RatVoteForm from './forms/ratVoteForm/RatVoteForm';
@@ -18,33 +19,33 @@ import RoundSummary from './summary/components/roundSummary/RoundSummary';
 
 export default function Gameplay(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
-   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
+   const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [showClueForm, setShowClueForm] = useState(false);
    const [showRatVoteForm, setShowRatVoteForm] = useState(false);
    const [showWordGuessForm, setShowWordGuessForm] = useState(false);
    const [showRoundSummary, setShowRoundSummary] = useState(false);
    const [showRatGuessingMsg, setShowRatGuessingMsg] = useState(false);
    const [showCurrentTurnMsg, setShowCurrentTurnMsg] = useState(false);
-   const updateGameStateMutation = FirestoreDB.Room.updateGameStateMutation({}, false);
+   const updateGameStateMutation = DBConnect.FSDB.Set.gameState({}, false);
 
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState, users } = roomData;
-      const connectedUsers = FirestoreDB.Room.getConnectedUserIds(roomData.users);
+      const connectedUsers = GameHelper.Get.connectedUserIds(roomData.users);
       if (localDbUser !== connectedUsers[0]) return;
       const { currentTurn, userStates, currentRat } = gameState;
-      const disconnectedUsers = FirestoreDB.Room.getDisconnectedUserIds(users);
+      const disconnectedUsers = GameHelper.Get.disconnectedUserIds(users);
       const currentTurnUserIsDisconnected = disconnectedUsers.includes(currentTurn);
       if (!currentTurnUserIsDisconnected) return;
-      const gamePhase = FirestoreDB.Room.getGamePhase(gameState);
-      const updatedCurrentTurn = FirestoreDB.Room.getNextTurnUser(
+      const gamePhase = GameHelper.Get.gamePhase(gameState);
+      const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(
          userStates,
          currentTurn,
          gamePhase,
          currentRat,
          disconnectedUsers,
       );
-      const updatedUserStates = FirestoreDB.Room.updateUserInUserStates(
+      const updatedUserStates = GameHelper.SetUserState.userKeyVal(
          userStates,
          currentTurn,
          gamePhase,
@@ -59,7 +60,7 @@ export default function Gameplay(): JSX.Element {
          roomId: localDbRoom,
          gameState:
             gamePhase === 'guess'
-               ? FirestoreDB.Room.calculatePoints(updatedGameState)
+               ? GameHelper.SetGameState.userPoints(updatedGameState)
                : updatedGameState,
       });
    }, [roomData?.gameState.currentTurn, localDbUser, roomData?.users]);

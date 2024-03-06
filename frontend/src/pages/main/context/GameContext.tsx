@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { createContext } from 'react';
 import type { SetValue } from '../../../global/hooks/useLocalStorage';
-import type FirestoreDB from '../class/FirestoreDb';
+import type GameHelper from '../../../utils/GameHelper/GameHelper';
 
 export interface IGameContext {
    allUsers: string[];
@@ -10,8 +10,8 @@ export interface IGameContext {
    setLocalDbRoom: SetValue<string>;
    localDbUser: string;
    setLocalDbUser: SetValue<string>;
-   activeTopicWords: FirestoreDB.Room.IActiveTopicWords[];
-   setActiveTopicWords: Dispatch<SetStateAction<FirestoreDB.Room.IActiveTopicWords[]>>;
+   activeTopicWords: GameHelper.I.WordCell[];
+   setActiveTopicWords: Dispatch<SetStateAction<GameHelper.I.WordCell[]>>;
 }
 
 export const GameContext = createContext<IGameContext>({

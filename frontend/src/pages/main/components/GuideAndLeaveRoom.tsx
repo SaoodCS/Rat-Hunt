@@ -9,10 +9,10 @@ import { ModalContext } from '../../../global/context/widget/modal/ModalContext'
 import { firebaseRTDB } from '../../../global/firebase/config/config';
 import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import FirestoreDB from '../class/FirestoreDb';
-import RTDB from '../class/firebaseRTDB';
+import DBConnect from '../../../utils/DBConnect/DBConnect';
 import { GameContext } from '../context/GameContext';
 import HelpGuide from './HelpGuide';
+import GameHelper from '../../../utils/GameHelper/GameHelper';
 
 interface IGuideAndLeaveRoom {
    currentPath: string;
@@ -23,11 +23,11 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    const { setModalContent, setModalHeader, setModalZIndex, toggleModal } =
       useContext(ModalContext);
    const { localDbRoom, localDbUser, setLocalDbRoom, setLocalDbUser } = useContext(GameContext);
-   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
-   const { data: topicsData } = FirestoreDB.Topics.getTopicsQuery();
-   const deleteUserFromFs = FirestoreDB.Room.deleteUserMutation({});
-   const deleteRoomMutation = FirestoreDB.Room.deleteRoomMutation({});
-   const updateRoomStateMutation = FirestoreDB.Room.updateRoomStateMutation({}, false);
+   const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
+   const { data: topicsData } = DBConnect.FSDB.Get.topics();
+   const deleteUserFromFs = DBConnect.FSDB.Delete.user({});
+   const deleteRoomMutation = DBConnect.FSDB.Delete.room({});
+   const updateRoomStateMutation = DBConnect.FSDB.Set.room({}, false);
    const navigation = useNavigate();
    const queryClient = useQueryClient();
 
@@ -48,7 +48,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
       );
       if (isLastUser) {
          await deleteRoomMutation.mutateAsync({ roomId: localDbRoom });
-         await RTDB.deleteRoom(localDbRoom);
+         await DBConnect.RTDB.Delete.room(localDbRoom);
       } else {
          const { gameState, users } = roomData;
          const { currentTurn, userStates, currentRat, activeTopic } = gameState;
@@ -60,7 +60,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
                'userId',
             );
 
-            const updatedGameState = FirestoreDB.Room.updateGameStateForNewRound({
+            const updatedGameState = GameHelper.SetGameState.newRound({
                disconnectedUsersIds,
                gameState,
                topicsData,
@@ -69,22 +69,19 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
                delUserFromUserStateId: localDbUser,
             });
             const updatedUsers = ArrayOfObjects.filterOut(users, 'userId', localDbUser);
-            const updatedRoomState: FirestoreDB.Room.IRoom = {
+            const updatedRoomState: DBConnect.FSDB.I.Room = {
                ...roomData,
                users: updatedUsers,
                gameState: updatedGameState,
             };
-            await updateRoomStateMutation.mutateAsync({
-               roomState: updatedRoomState,
-               roomId: localDbRoom,
-            });
+            await updateRoomStateMutation.mutateAsync(updatedRoomState);
          } else if (currentTurn === localDbUser) {
             const disconnectedUsers = ArrayOfObjects.filterOut(users, 'userStatus', 'connected');
             const disconnectedUsersIds = ArrayOfObjects.getArrOfValuesFromKey(
                disconnectedUsers,
                'userId',
             );
-            const nextUser = FirestoreDB.Room.getNextTurnUser(
+            const nextUser = GameHelper.Get.nextTurnUserId(
                userStates,
                localDbUser,
                'leaveRoom',
@@ -99,22 +96,19 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
                userStates: updatedUserStates,
             };
             const updatedUsers = ArrayOfObjects.filterOut(users, 'userId', localDbUser);
-            const updatedRoomState: FirestoreDB.Room.IRoom = {
+            const updatedRoomState: DBConnect.FSDB.I.Room = {
                ...roomData,
                users: updatedUsers,
                gameState: updatedGameState,
             };
-            await updateRoomStateMutation.mutateAsync({
-               roomState: updatedRoomState,
-               roomId: localDbRoom,
-            });
-            await RTDB.deleteUser(localDbUser, localDbRoom);
+            await updateRoomStateMutation.mutateAsync(updatedRoomState);
+            await DBConnect.RTDB.Delete.user(localDbUser, localDbRoom);
          } else {
             await deleteUserFromFs.mutateAsync({
                roomData: roomData,
                userId: localDbUser,
             });
-            await RTDB.deleteUser(localDbUser, localDbRoom);
+            await DBConnect.RTDB.Delete.user(localDbUser, localDbRoom);
          }
       }
       await onDisconnect(userStatusRef).cancel();

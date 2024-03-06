@@ -14,13 +14,13 @@ import useThemeContext from '../../../global/context/theme/hooks/useThemeContext
 import useApiErrorContext from '../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import { firestore } from '../../../global/firebase/config/config';
 import ArrayHelper from '../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
+import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../global/hooks/useForm';
-import FirestoreDB from '../class/FirestoreDb';
+import DBConnect from '../../../utils/DBConnect/DBConnect';
 import PlayFormClass from '../class/PlayForm';
-import RTDB from '../class/firebaseRTDB';
 import { GameContext } from '../context/GameContext';
-import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import GameHelper from '../../../utils/GameHelper/GameHelper';
 
 export default function Play(): JSX.Element {
    const { isDarkTheme } = useThemeContext();
@@ -31,11 +31,11 @@ export default function Play(): JSX.Element {
       PlayFormClass.form.initialErrors,
       PlayFormClass.form.validate,
    );
-   const { isLoading, isPaused, data } = FirestoreDB.Topics.getTopicsQuery();
-   const { data: allRoomIds } = FirestoreDB.Game.getAllRoomIdsQuery();
+   const { isLoading, isPaused, data } = DBConnect.FSDB.Get.topics();
+   const { data: allRoomIds } = DBConnect.FSDB.Get.allRoomIds();
    const navigation = useNavigate();
-   const setRoomData = FirestoreDB.Room.setRoomMutation({});
-   const addUserToRoom = FirestoreDB.Room.addUserToRoomMutation({});
+   const setRoomData = DBConnect.FSDB.Set.room({});
+   const addUserToRoom = DBConnect.FSDB.Set.user({});
    const [showHostFields, setShowHostFields] = useState(false);
    const [showRoomIdField, setShowRoomIdField] = useState(false);
 
@@ -55,13 +55,17 @@ export default function Play(): JSX.Element {
    }
 
    async function handleJoinGame(): Promise<void> {
-      const docRef = doc(firestore, FirestoreDB.Room.key.collection, `room-${form.roomId}`);
+      const docRef = doc(
+         firestore,
+         DBConnect.FSDB.CONSTS.GAME_COLLECTION,
+         `${DBConnect.FSDB.CONSTS.ROOM_DOC_PREFIX}${form.roomId}`,
+      );
       const docSnap = await getDoc(docRef);
       if (!docSnap.exists()) {
          alert('Room does not exist!');
          return;
       }
-      const roomData = docSnap.data() as FirestoreDB.Room.IRoom;
+      const roomData = docSnap.data() as DBConnect.FSDB.I.Room;
       const clientUserExistsInRoom = roomData.users.some((user) => user.userId === form.name);
       if (clientUserExistsInRoom) {
          alert('Be original, Ben');
@@ -72,12 +76,12 @@ export default function Play(): JSX.Element {
          alert('Room is full');
          return;
       }
-      const user: FirestoreDB.Room.IUser = {
+      const user: DBConnect.FSDB.I.User = {
          userStatus: 'connected',
          statusUpdatedAt: new Date().toUTCString(),
          userId: form.name,
       };
-      const userState: FirestoreDB.Room.IUserStates = {
+      const userState: DBConnect.FSDB.I.UserState = {
          userId: form.name,
          totalScore: 0,
          roundScores: [],
@@ -93,13 +97,13 @@ export default function Play(): JSX.Element {
       });
       setLocalDbRoom(form.roomId);
       setLocalDbUser(form.name);
-      RTDB.setUserStatus(form.name, form.roomId);
+      DBConnect.RTDB.Set.userStatus(form.name, form.roomId);
       navigation(roomData.gameStarted ? '/main/startedgame' : '/main/waitingroom');
    }
 
    async function handleHostGame(): Promise<void> {
-      const generatedRoomId = FirestoreDB.Room.generateUniqueId(allRoomIds ?? ['']);
-      const room: FirestoreDB.Room.IRoom = {
+      const generatedRoomId = GameHelper.New.roomUID(allRoomIds ?? ['']);
+      const room: DBConnect.FSDB.I.Room = {
          gameStarted: false,
          roomId: generatedRoomId,
          users: [
@@ -131,7 +135,7 @@ export default function Play(): JSX.Element {
       await setRoomData.mutateAsync(room);
       setLocalDbRoom(generatedRoomId);
       setLocalDbUser(form.name);
-      RTDB.setUserStatus(form.name, generatedRoomId);
+      DBConnect.RTDB.Set.userStatus(form.name, generatedRoomId);
       navigation('/main/waitingroom');
    }
 

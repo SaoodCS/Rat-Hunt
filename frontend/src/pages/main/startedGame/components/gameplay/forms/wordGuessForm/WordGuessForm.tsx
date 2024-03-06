@@ -9,10 +9,11 @@ import useApiErrorContext from '../../../../../../../global/context/widget/apiEr
 import ArrayOfObjects from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../../../../../global/hooks/useForm';
-import FirestoreDB from '../../../../../class/FirestoreDb';
 import { GameContext } from '../../../../../context/GameContext';
 import { gameFormStyles } from '../style/Style';
 import WordGuessFormClass from './class/WordGuessFormClass';
+import DBConnect from '../../../../../../../utils/DBConnect/DBConnect';
+import GameHelper from '../../../../../../../utils/GameHelper/GameHelper';
 
 export default function WordGuessForm(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
@@ -23,8 +24,8 @@ export default function WordGuessForm(): JSX.Element {
       WordGuessFormClass.form.initialErrors,
       WordGuessFormClass.form.validate,
    );
-   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
-   const updateGameStateMutation = FirestoreDB.Room.updateGameStateMutation({}, false);
+   const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
+   const updateGameStateMutation = DBConnect.FSDB.Set.gameState({}, false);
 
    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
       const { isFormValid } = initHandleSubmit(e);
@@ -48,7 +49,7 @@ export default function WordGuessForm(): JSX.Element {
       };
       await updateGameStateMutation.mutateAsync({
          roomId: localDbRoom,
-         gameState: FirestoreDB.Room.calculatePoints(updatedGameState),
+         gameState: GameHelper.SetGameState.userPoints(updatedGameState),
       });
    }
 

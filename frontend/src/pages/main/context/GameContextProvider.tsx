@@ -9,9 +9,8 @@ import { firestore } from '../../../global/firebase/config/config';
 import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useLocalStorage from '../../../global/hooks/useLocalStorage';
-import FirestoreDB from '../class/FirestoreDb';
-import LocalDB from '../class/LocalDb';
-import RTDB from '../class/firebaseRTDB';
+import DBConnect from '../../../utils/DBConnect/DBConnect';
+import GameHelper from '../../../utils/GameHelper/GameHelper';
 import GuideAndLeaveRoom from '../components/GuideAndLeaveRoom';
 import { GameContext } from './GameContext';
 
@@ -22,13 +21,11 @@ interface IGameContextProvider {
 export default function GameContextProvider(props: IGameContextProvider): JSX.Element {
    const { children } = props;
    const [allUsers, setAllUsers] = useState<string[]>([]);
-   const [activeTopicWords, setActiveTopicWords] = useState<FirestoreDB.Room.IActiveTopicWords[]>(
-      [],
-   );
-   const [localDbUser, setLocalDbUser] = useLocalStorage(LocalDB.key.localDbName, '');
-   const [localDbRoom, setLocalDbRoom] = useLocalStorage(LocalDB.key.localDbRoom, '');
-   const { data: roomData, isLoading } = FirestoreDB.Room.getRoomQuery(localDbRoom);
-   const { data: topicsData } = FirestoreDB.Topics.getTopicsQuery();
+   const [activeTopicWords, setActiveTopicWords] = useState<GameHelper.I.WordCell[]>([]);
+   const [localDbUser, setLocalDbUser] = useLocalStorage(DBConnect.Local.STORAGE_KEYS.USER, '');
+   const [localDbRoom, setLocalDbRoom] = useLocalStorage(DBConnect.Local.STORAGE_KEYS.ROOM, '');
+   const { data: roomData, isLoading } = DBConnect.FSDB.Get.room(localDbRoom);
+   const { data: topicsData } = DBConnect.FSDB.Get.topics();
    const [initialRender, setInitialRender] = useState(true);
    const { setHeaderRightElement } = useHeaderContext();
    const navigation = useNavigate();
@@ -43,11 +40,15 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
    useEffect(() => {
       // This useEffect listens to changes in the firestore room document and updates the roomData cache when the document is updated (doesn't re-run the getRoomQuery, so onSuccess etc. query events are not triggered)
       if (MiscHelper.isNotFalsyOrEmpty(localDbRoom)) {
-         const docRef = doc(firestore, FirestoreDB.Room.key.collection, `room-${localDbRoom}`);
+         const docRef = doc(
+            firestore,
+            DBConnect.FSDB.CONSTS.GAME_COLLECTION,
+            `${DBConnect.FSDB.CONSTS.ROOM_DOC_PREFIX}${localDbRoom}`,
+         );
          const unsubscribe = onSnapshot(docRef, (doc) => {
             const roomData = doc.data();
             if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
-               queryClient.setQueryData([FirestoreDB.Room.key.getRoom], roomData);
+               queryClient.setQueryData([DBConnect.FSDB.CONSTS.QUERY_KEYS.GET_ROOM], roomData);
             }
          });
          return () => {
@@ -67,7 +68,7 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
       const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
       const topicsDataExists = MiscHelper.isNotFalsyOrEmpty(topicsData);
       if (roomDataExists && topicsDataExists) {
-         const activeTopicWords = FirestoreDB.Room.getActiveTopicWords(
+         const activeTopicWords = GameHelper.Get.topicWordsAndCells(
             topicsData,
             roomData.gameState.activeTopic,
          );
@@ -83,7 +84,7 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
          const localDbUserInRoom = roomData?.users?.some((user) => user.userId === localDbUser);
          if (roomDataExists && localDbUserInRoom) {
             navigation(roomData.gameStarted ? '/main/startedgame' : '/main/waitingroom');
-            RTDB.setUserStatus(localDbUser, roomData.roomId);
+            DBConnect.RTDB.Set.userStatus(localDbUser, roomData.roomId);
             return;
          }
          if (roomDataExists && !localDbUserInRoom) alert('You have been removed from the room!');

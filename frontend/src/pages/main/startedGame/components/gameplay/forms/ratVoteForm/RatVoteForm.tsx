@@ -9,7 +9,8 @@ import useApiErrorContext from '../../../../../../../global/context/widget/apiEr
 import ArrayOfObjects from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../../../../../global/hooks/useForm';
-import FirestoreDB from '../../../../../class/FirestoreDb';
+import DBConnect from '../../../../../../../utils/DBConnect/DBConnect';
+import GameHelper from '../../../../../../../utils/GameHelper/GameHelper';
 import { GameContext } from '../../../../../context/GameContext';
 import { gameFormStyles } from '../style/Style';
 import RatVoteFormClass from './class/RatVoteFormClass';
@@ -23,8 +24,8 @@ export default function RatVoteForm(): JSX.Element {
       RatVoteFormClass.form.initialErrors,
       RatVoteFormClass.form.validate,
    );
-   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
-   const updateGameStateMutation = FirestoreDB.Room.updateGameStateMutation({}, false);
+   const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
+   const updateGameStateMutation = DBConnect.FSDB.Set.gameState({}, false);
 
    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
       const { isFormValid } = initHandleSubmit(e);
@@ -44,7 +45,7 @@ export default function RatVoteForm(): JSX.Element {
          disconnectedUsers,
          'userId',
       );
-      const updatedCurrentTurn = FirestoreDB.Room.getNextTurnUser(
+      const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(
          userStates,
          localDbUser,
          'votedFor',

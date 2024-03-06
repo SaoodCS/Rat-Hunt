@@ -7,12 +7,12 @@ import ArrayHelper from '../../../../../../../../global/helpers/dataTypes/arrayH
 import ArrayOfObjects from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import HTMLEntities from '../../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import FirestoreDB from '../../../../../../class/FirestoreDb';
 import { GameContext } from '../../../../../../context/GameContext';
+import DBConnect from '../../../../../../../../utils/DBConnect/DBConnect';
 
 export default function SummaryData(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
-   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
+   const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    //const [mostVotedFor, setMostVotedFor] = useState('');
    const [ratGuess, setRatGuess] = useState('');
    const { toggleBanner, setBannerMessage, setBannerZIndex, setBannerType } =

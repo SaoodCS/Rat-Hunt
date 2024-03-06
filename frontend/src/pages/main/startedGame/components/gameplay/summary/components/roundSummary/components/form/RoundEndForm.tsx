@@ -8,7 +8,8 @@ import ArrayHelper from '../../../../../../../../../../global/helpers/dataTypes/
 import ArrayOfObjects from '../../../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../../../../../../../../global/hooks/useForm';
-import FirestoreDB from '../../../../../../../../class/FirestoreDb';
+import DBConnect from '../../../../../../../../../../utils/DBConnect/DBConnect';
+import GameHelper from '../../../../../../../../../../utils/GameHelper/GameHelper';
 import { GameContext } from '../../../../../../../../context/GameContext';
 import RoundEndFormClass from './class/RoundEndFormClass';
 
@@ -26,9 +27,9 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
       RoundEndFormClass.form.initialErrors,
       RoundEndFormClass.form.validate(isLastRound),
    );
-   const { data: topicsData } = FirestoreDB.Topics.getTopicsQuery();
-   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
-   const setRoomData = FirestoreDB.Room.setRoomMutation({});
+   const { data: topicsData } = DBConnect.FSDB.Get.topics();
+   const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
+   const setRoomData = DBConnect.FSDB.Set.room({});
 
    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
       const { isFormValid } = initHandleSubmit(e);
@@ -42,7 +43,7 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
          disconnectedUsers,
          'userId',
       );
-      const updatedGameState = FirestoreDB.Room.updateGameStateForNewRound({
+      const updatedGameState = GameHelper.SetGameState.newRound({
          disconnectedUsersIds,
          gameState,
          topicsData,

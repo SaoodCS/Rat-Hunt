@@ -1,19 +1,19 @@
 import { useContext, useEffect, useState } from 'react';
-import { HeaderRowContainer, RowContainer, UserRowsWrapper } from '../../../gameDataTable/Style';
-import { ScoreTableCell, ScoreTableWrapper } from '../../style/Style';
 import { LogoText } from '../../../../../../../../global/components/app/logo/LogoText';
 import { FlexColumnWrapper } from '../../../../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
+import Color from '../../../../../../../../global/css/colors';
 import ArrayOfObjects from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import HTMLEntities from '../../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import FirestoreDB from '../../../../../../class/FirestoreDb';
+import DBConnect from '../../../../../../../../utils/DBConnect/DBConnect';
 import { GameContext } from '../../../../../../context/GameContext';
-import Color from '../../../../../../../../global/css/colors';
+import { HeaderRowContainer, RowContainer, UserRowsWrapper } from '../../../gameDataTable/Style';
+import { ScoreTableCell, ScoreTableWrapper } from '../../style/Style';
 
 export default function ScoresTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
-   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
-   const [sortedUserStates, setSortedUserStates] = useState<FirestoreDB.Room.IUserStates[]>();
+   const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
+   const [sortedUserStates, setSortedUserStates] = useState<DBConnect.FSDB.I.UserState[]>();
 
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;

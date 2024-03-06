@@ -5,10 +5,10 @@ import { FlexRowWrapper } from '../../../../../../global/components/lib/position
 import ConditionalRender from '../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import ArrayOfObjects from '../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import HTMLEntities from '../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
-import FirestoreDB from '../../../../class/FirestoreDb';
 import { GameContext } from '../../../../context/GameContext';
 import Color from '../../../../../../global/css/colors';
 import Unicode from '../../../../../../global/helpers/dataTypes/unicode/Unicode';
+import DBConnect from '../../../../../../utils/DBConnect/DBConnect';
 
 interface IGameHeaderDetails {
    label: string;
@@ -17,7 +17,7 @@ interface IGameHeaderDetails {
 
 export default function GameDetailsSlide(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
-   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
+   const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [gameHeaderDetails, setGameHeaderDetails] = useState<IGameHeaderDetails[]>([]);
 
    useEffect(() => {

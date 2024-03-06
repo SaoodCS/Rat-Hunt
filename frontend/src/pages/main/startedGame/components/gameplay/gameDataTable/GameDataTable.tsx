@@ -2,14 +2,14 @@ import { useContext, useEffect, useState } from 'react';
 import { LogoText } from '../../../../../../global/components/app/logo/LogoText';
 import ArrayOfObjects from '../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import FirestoreDB from '../../../../class/FirestoreDb';
 import { GameContext } from '../../../../context/GameContext';
 import { DataTableWrapper, HeaderRowContainer, Cell, UserRowsWrapper, RowContainer } from './Style';
+import DBConnect from '../../../../../../utils/DBConnect/DBConnect';
 
 export default function GameDataTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
-   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
-   const [sortedUserStates, setSortedUserStates] = useState<FirestoreDB.Room.IUserStates[]>();
+   const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
+   const [sortedUserStates, setSortedUserStates] = useState<DBConnect.FSDB.I.UserState[]>();
 
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;

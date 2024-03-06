@@ -3,12 +3,12 @@ import { ScoreboardContainer } from '../Style';
 import type { IProgressBarChartData } from '../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
 import ProgressBarChart from '../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
 import ArrayOfObjects from '../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import FirestoreDB from '../../../../class/FirestoreDb';
 import { GameContext } from '../../../../context/GameContext';
+import DBConnect from '../../../../../../utils/DBConnect/DBConnect';
 
 export default function ScoreboardSlide(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);
-   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
+   const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [chartData, setChartData] = useState<IProgressBarChartData[]>([]);
 
    useEffect(() => {

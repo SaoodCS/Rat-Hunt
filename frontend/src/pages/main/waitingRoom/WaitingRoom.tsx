@@ -15,7 +15,8 @@ import Color from '../../../global/css/colors';
 import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import StringHelper from '../../../global/helpers/dataTypes/string/StringHelper';
-import FirestoreDB from '../class/FirestoreDb';
+import DBConnect from '../../../utils/DBConnect/DBConnect';
+import GameHelper from '../../../utils/GameHelper/GameHelper';
 import { GameContext } from '../context/GameContext';
 
 export default function WaitingRoom(): JSX.Element {
@@ -29,12 +30,12 @@ export default function WaitingRoom(): JSX.Element {
       setHorizontalPos,
       setToastZIndex,
    } = useContext(ToastContext);
-   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
+   const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [disablePlay, setDisablePlay] = useState(false);
    const { toggleBanner, setBannerMessage, setBannerType, setBannerZIndex } =
       useContext(BannerContext);
-   const { data: topicsData } = FirestoreDB.Topics.getTopicsQuery();
-   const setRoomData = FirestoreDB.Room.setRoomMutation({});
+   const { data: topicsData } = DBConnect.FSDB.Get.topics();
+   const setRoomData = DBConnect.FSDB.Set.room({});
 
    useEffect(() => {
       // TODO: change to < 3 when testing is done
@@ -65,7 +66,7 @@ export default function WaitingRoom(): JSX.Element {
          'userId',
       );
 
-      const initialRoundGameState = FirestoreDB.Room.updateGameStateForNewRound({
+      const initialRoundGameState = GameHelper.SetGameState.newRound({
          disconnectedUsersIds,
          gameState,
          topicsData,

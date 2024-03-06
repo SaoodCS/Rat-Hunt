@@ -9,17 +9,17 @@ import { FlexColumnWrapper } from '../../../../../../../../global/components/lib
 import { FlexRowWrapper } from '../../../../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
 import HTMLEntities from '../../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import FirestoreDB from '../../../../../../class/FirestoreDb';
 import { GameContext } from '../../../../../../context/GameContext';
 import { ModalContext } from '../../../../../../../../global/context/widget/modal/ModalContext';
 import RoundEndForm from './components/form/RoundEndForm';
+import DBConnect from '../../../../../../../../utils/DBConnect/DBConnect';
 
 export default function RoundSummary(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);
    const [isLastRound, setIsLastRound] = useState(false);
    const { toggleModal, setModalContent, setModalHeader, setModalZIndex } =
       useContext(ModalContext);
-   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
+   const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
 
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;

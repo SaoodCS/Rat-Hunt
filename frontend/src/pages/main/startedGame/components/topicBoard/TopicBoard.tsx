@@ -2,14 +2,15 @@ import { useContext, useEffect, useState } from 'react';
 import { BoardCell, BoardContainer, BoardRow, CellUID, CellValue } from './Style';
 import { LogoText } from '../../../../../global/components/app/logo/LogoText';
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
-import FirestoreDB from '../../../class/FirestoreDb';
 import { GameContext } from '../../../context/GameContext';
 import Color from '../../../../../global/css/colors';
+import DBConnect from '../../../../../utils/DBConnect/DBConnect';
+import type GameHelper from '../../../../../utils/GameHelper/GameHelper';
 
 export default function TopicBoard(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
-   const { data: roomData } = FirestoreDB.Room.getRoomQuery(localDbRoom);
-   const [rows, setRows] = useState<FirestoreDB.Room.IActiveTopicWords[][]>([[]]);
+   const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
+   const [rows, setRows] = useState<GameHelper.I.WordCell[][]>([[]]);
 
    useEffect(() => {
       const rowA = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'A');
