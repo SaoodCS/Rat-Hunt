@@ -65,7 +65,7 @@ export default function WaitingRoom(): JSX.Element {
          'userId',
       );
 
-      const initialRoundGameState = FirestoreDB.Room.updateGameStateForNextRound({
+      const initialRoundGameState = FirestoreDB.Room.updateGameStateForNewRound({
          disconnectedUsersIds,
          gameState,
          topicsData,

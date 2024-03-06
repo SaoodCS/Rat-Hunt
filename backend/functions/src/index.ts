@@ -32,12 +32,12 @@ export const onDataChange = functions.database
     user["statusUpdatedAt"] = functionExecutedAt;
     users[userIndex] = user;
     await roomRefFS.update({ users });
-    // if userStatus in disconnected then set a timeout which will remove the user if it remains disconnected for 5 minutes
+    // if userStatus is disconnected then set a timeout which will remove the user if it remains disconnected for 5 minutes
     if (userStatus !== "disconnected") return;
     setTimeout(async () => {
       const roomDataFS = await FBHelp.getRoomFromFS(roomRefFS);
       if (!MiscHelp.isNotFalsyOrEmpty(roomDataFS)) return;
-      const usersFS = roomDataFS.users;
+      const { gameState, users: usersFS } = roomDataFS;
       const thisUserInUsersFS = FBHelp.getUserInUsers(usersFS, userId);
       if (!MiscHelp.isNotFalsyOrEmpty(thisUserInUsersFS)) return;
       const { user: userInUsersFS } = thisUserInUsersFS;
@@ -49,13 +49,26 @@ export const onDataChange = functions.database
         return;
       }
       const userStatesFS = roomDataFS.gameState.userStates;
-      const updatedUserStates = userStatesFS.filter((u) => u.userId !== userId);
+      const userStatesWithoutLeavingUser = userStatesFS.filter(
+        (u) => u.userId !== userId
+      );
+      const { currentRat, activeTopic } = gameState;
+      const topics = await FBHelp.getTopics();
+      const isRat = currentRat === userId;
+      const updatedGameState: typeof gameState = {
+        ...gameState,
+        userStates: userStatesWithoutLeavingUser,
+      };
       await roomRefFS.update({
         users: FieldValue.arrayRemove(userInUsersFS),
-        gameState: {
-          ...roomDataFS.gameState,
-          userStates: updatedUserStates,
-        },
+        gameState: isRat
+          ? FBHelp.resetRoundGameState(
+              gameState,
+              userStatesWithoutLeavingUser,
+              activeTopic,
+              topics
+            )
+          : updatedGameState,
       });
       await userRefRT.remove();
     }, TIMER);

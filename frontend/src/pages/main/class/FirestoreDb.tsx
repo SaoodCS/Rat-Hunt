@@ -379,7 +379,7 @@ export namespace FirestoreDB {
          return updatedGameState;
       }
 
-      export function updateGameStateForNextRound(options: {
+      export function updateGameStateForNewRound(options: {
          disconnectedUsersIds: string[];
          gameState: IGameState;
          topicsData: FirestoreDB.Topics.ITopics[];
@@ -413,16 +413,7 @@ export namespace FirestoreDB {
             'userId',
             delUserFromUserStateId || '',
          );
-         const connectedUsersStates = ArrayOfObjects.filterOutValues(
-            userStatesWithoutDelUser,
-            'userId',
-            disconnectedUsersIds,
-         );
-         const connectedUsersIds = ArrayOfObjects.getArrOfValuesFromKey(
-            connectedUsersStates,
-            'userId',
-         );
-         const newRat = connectedUsersIds[Math.floor(Math.random() * connectedUsersIds.length)];
+         const newRat = ArrayOfObjects.getRandItem(userStatesWithoutDelUser).userId;
          const { currentRound, numberOfRoundsSet } = gameState;
          const newWords = getActiveTopicWords(topicsData, newTopic);
          const newWord = newWords[Math.floor(Math.random() * newWords.length)].word;
@@ -442,7 +433,10 @@ export namespace FirestoreDB {
                     { key: 'votedFor', value: '' },
                  ],
          );
-         const sortedUserStates = ArrayOfObjects.sort(connectedUsersStates, 'userId');
+         const sortedUserStates = ArrayOfObjects.sort(
+            userStatesWithoutDelUser, // connectedUsersStates,
+            'userId',
+         );
          const updatedCurrentTurn = sortedUserStates[0].userId;
          const updatedGameState: IGameState = {
             ...gameState,
@@ -463,23 +457,25 @@ export namespace FirestoreDB {
 
       export function getNextTurnUser(
          userStates: IUserStates[],
-         localDbUser: string,
-         type: 'ratVote' | 'clue' | 'guess' | 'leaveRoom',
+         currentTurnUser: string,
+         type: 'votedFor' | 'clue' | 'guess' | 'leaveRoom',
          currentRat: string,
          disconnectedUsersIds: string[],
       ): string {
-         // NOTE: this function now only sets the next turn to a user who is connected
-         const connectedUsersStates = ArrayOfObjects.filterOutValues(
-            userStates,
+         // const connectedUsersStates = ArrayOfObjects.filterOutValues(
+         //    userStates,
+         //    'userId',
+         //    disconnectedUsersIds,
+         // );
+         const sortedUserStates = ArrayOfObjects.sort(
+            userStates, // connectedUsersStates,
             'userId',
-            disconnectedUsersIds,
          );
-         const sortedUserStates = ArrayOfObjects.sort(connectedUsersStates, 'userId');
-         const thisUserIndex = sortedUserStates.findIndex((u) => u.userId === localDbUser);
+         const thisUserIndex = sortedUserStates.findIndex((u) => u.userId === currentTurnUser);
          const userStatesWithoutThisUser = ArrayOfObjects.filterOut(
-            connectedUsersStates,
+            userStates, // connectedUsersStates,
             'userId',
-            localDbUser,
+            currentTurnUser,
          );
          const finalVoteSubmission = ArrayOfObjects.isKeyInAllObjsNotValuedAs(
             userStatesWithoutThisUser,
@@ -491,7 +487,7 @@ export namespace FirestoreDB {
             'clue',
             '',
          );
-         if (type === 'ratVote') {
+         if (type === 'votedFor') {
             const nextUser = sortedUserStates[thisUserIndex + 1]?.userId || currentRat;
             const updatedCurrentTurn = finalVoteSubmission ? `${currentRat}.wordGuess` : nextUser;
             return updatedCurrentTurn;
@@ -508,7 +504,7 @@ export namespace FirestoreDB {
          // if type is 'leaveRoom':
          const allVotesSubmitted = finalVoteSubmission;
          const allCluesSubmitted = finalClueSubmission;
-         const thisUserIsRat = currentRat === localDbUser;
+         const thisUserIsRat = currentRat === currentTurnUser;
          const ratUserState = ArrayOfObjects.getObjWithKeyValuePair(
             userStates,
             'userId',
@@ -524,6 +520,40 @@ export namespace FirestoreDB {
          const nextUser = sortedUserStates[thisUserIndex + 1]?.userId || firstUser;
          const updatedCurrentTurn = nextUser;
          return updatedCurrentTurn;
+      }
+
+      export function getDisconnectedUserIds(users: IUser[]): string[] {
+         const disconnectedUsers = ArrayOfObjects.filterOut(users, 'userStatus', 'connected');
+         return ArrayOfObjects.getArrOfValuesFromKey(disconnectedUsers, 'userId');
+      }
+
+      export function getConnectedUserIds(users: IUser[]): string[] {
+         const connectedUsers = ArrayOfObjects.filterOut(users, 'userStatus', 'disconnected');
+         return ArrayOfObjects.getArrOfValuesFromKey(connectedUsers, 'userId');
+      }
+
+      export function getGamePhase(gameState: IGameState): 'votedFor' | 'clue' | 'guess' {
+         const { currentTurn, userStates } = gameState;
+         const currentTurnUserState = ArrayOfObjects.getObjWithKeyValuePair(
+            userStates,
+            'userId',
+            currentTurn,
+         );
+         if (currentTurnUserState.clue === '') return 'clue';
+         if (currentTurnUserState.votedFor === '') return 'votedFor';
+         return 'guess';
+      }
+
+      export function updateUserInUserStates(
+         userStates: IUserStates[],
+         userId: string,
+         key: keyof IUserStates,
+         newValue: string,
+      ): IUserStates[] {
+         const userState = ArrayOfObjects.getObjWithKeyValuePair(userStates, 'userId', userId);
+         const userStatesWithoutUser = ArrayOfObjects.filterOut(userStates, 'userId', userId);
+         const updatedUserState: typeof userState = { ...userState, [key]: newValue };
+         return [...userStatesWithoutUser, updatedUserState];
       }
    }
 

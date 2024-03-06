@@ -47,7 +47,7 @@ export default function RatVoteForm(): JSX.Element {
       const updatedCurrentTurn = FirestoreDB.Room.getNextTurnUser(
          userStates,
          localDbUser,
-         'ratVote',
+         'votedFor',
          currentRat,
          disconnectedUsersIds,
       );

@@ -25,6 +25,44 @@ export default function Gameplay(): JSX.Element {
    const [showRoundSummary, setShowRoundSummary] = useState(false);
    const [showRatGuessingMsg, setShowRatGuessingMsg] = useState(false);
    const [showCurrentTurnMsg, setShowCurrentTurnMsg] = useState(false);
+   const updateGameStateMutation = FirestoreDB.Room.updateGameStateMutation({}, false);
+
+   useEffect(() => {
+      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
+      const { gameState, users } = roomData;
+      const connectedUsers = FirestoreDB.Room.getConnectedUserIds(roomData.users);
+      if (localDbUser !== connectedUsers[0]) return;
+      const { currentTurn, userStates, currentRat } = gameState;
+      const disconnectedUsers = FirestoreDB.Room.getDisconnectedUserIds(users);
+      const currentTurnUserIsDisconnected = disconnectedUsers.includes(currentTurn);
+      if (!currentTurnUserIsDisconnected) return;
+      const gamePhase = FirestoreDB.Room.getGamePhase(gameState);
+      const updatedCurrentTurn = FirestoreDB.Room.getNextTurnUser(
+         userStates,
+         currentTurn,
+         gamePhase,
+         currentRat,
+         disconnectedUsers,
+      );
+      const updatedUserStates = FirestoreDB.Room.updateUserInUserStates(
+         userStates,
+         currentTurn,
+         gamePhase,
+         'SKIP',
+      );
+      const updatedGameState: typeof gameState = {
+         ...gameState,
+         currentTurn: updatedCurrentTurn,
+         userStates: updatedUserStates,
+      };
+      updateGameStateMutation.mutate({
+         roomId: localDbRoom,
+         gameState:
+            gamePhase === 'guess'
+               ? FirestoreDB.Room.calculatePoints(updatedGameState)
+               : updatedGameState,
+      });
+   }, [roomData?.gameState.currentTurn, localDbUser, roomData?.users]);
 
    useEffect(() => {
       // This useEffect is responsble for updating the UI when the currentTurn changes

@@ -60,7 +60,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
                'userId',
             );
 
-            const updatedGameState = FirestoreDB.Room.updateGameStateForNextRound({
+            const updatedGameState = FirestoreDB.Room.updateGameStateForNewRound({
                disconnectedUsersIds,
                gameState,
                topicsData,

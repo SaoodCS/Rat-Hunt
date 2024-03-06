@@ -42,7 +42,7 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
          disconnectedUsers,
          'userId',
       );
-      const updatedGameState = FirestoreDB.Room.updateGameStateForNextRound({
+      const updatedGameState = FirestoreDB.Room.updateGameStateForNewRound({
          disconnectedUsersIds,
          gameState,
          topicsData,

@@ -1,5 +1,6 @@
 import * as admin from "firebase-admin";
 import { DocumentReference } from "firebase-admin/firestore";
+import { ArrayHelp } from "./ArrayHelp";
 
 export interface IUser {
   userStatus: "connected" | "disconnected";
@@ -28,6 +29,16 @@ export interface IRoom {
   roomId: string;
   users: IUser[];
   gameState: IGameState;
+}
+
+export interface ITopics {
+  key: string;
+  values: string[];
+}
+
+export interface IActiveTopicWords {
+  cellId: string;
+  word: string;
 }
 
 interface IChangeDetails {
@@ -78,6 +89,40 @@ export class FBHelp {
     return roomSnapshot.data() as IRoom | undefined;
   }
 
+  public static async getTopics() {
+    const topicsSnapshot = await admin
+      .firestore()
+      .collection("topics")
+      .doc("topics")
+      .get();
+    return topicsSnapshot.data() as ITopics[];
+  }
+
+  public static getActiveTopicWords(
+    topics: ITopics[],
+    activeTopic: string
+  ): IActiveTopicWords[] {
+    const topicObj = ArrayHelp.getObjWithKeyValuePair(
+      topics,
+      "key",
+      activeTopic
+    );
+    const words = topicObj.values;
+    const sortedWords = ArrayHelp.sort(words);
+    const words16 = sortedWords.slice(0, 16);
+    const wordsWithCellIds: IActiveTopicWords[] = [];
+    const letters = ["A", "B", "C", "D"];
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 4; j++) {
+        wordsWithCellIds.push({
+          cellId: letters[i] + (j + 1),
+          word: words16[i * 4 + j],
+        });
+      }
+    }
+    return wordsWithCellIds;
+  }
+
   public static getRefs(roomId: string, userId: string) {
     const roomRefFS = admin
       .firestore()
@@ -104,5 +149,39 @@ export class FBHelp {
       userIndex,
       user: userStatesArr[userIndex],
     };
+  }
+
+  static resetRoundGameState(
+    gameState: IGameState,
+    userStatesWithoutLeavingUser: IUserStates[],
+    activeTopic: string,
+    topics: ITopics[]
+  ): IGameState {
+    const newRat = ArrayHelp.getRandItem(userStatesWithoutLeavingUser).userId;
+
+    const newWords = FBHelp.getActiveTopicWords(topics, activeTopic);
+    const newWord = newWords[Math.floor(Math.random() * newWords.length)].word;
+    const updatedUserStates = ArrayHelp.setAllValuesOfKeys(
+      userStatesWithoutLeavingUser,
+      [
+        { key: "clue", value: "" },
+        { key: "guess", value: "" },
+        { key: "votedFor", value: "" },
+      ]
+    );
+    const sortedUserStates = ArrayHelp.sortObjects(
+      userStatesWithoutLeavingUser,
+      "userId"
+    );
+    const updatedCurrentTurn = sortedUserStates[0].userId;
+    const updatedGameState: IGameState = {
+      ...gameState,
+      activeTopic,
+      activeWord: newWord,
+      currentRat: newRat,
+      currentTurn: updatedCurrentTurn,
+      userStates: updatedUserStates,
+    };
+    return updatedGameState;
   }
 }
