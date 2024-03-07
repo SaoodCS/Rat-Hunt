@@ -8,14 +8,14 @@ import { GameContext } from '../../../../../global/context/game/GameContext';
 import Color from '../../../../../global/css/colors';
 import ArrayOfObjects from '../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import ClueForm from './forms/clueForm/ClueForm';
-import RatVoteForm from './forms/ratVoteForm/RatVoteForm';
-import WordGuessForm from './forms/wordGuessForm/WordGuessForm';
-import GameDataTable from './gameDataTable/GameDataTable';
-import { GameplayWrapper } from './style/Style';
-import RoundSummary from './summary/components/roundSummary/RoundSummary';
 import DBConnect from '../../../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../../../global/utils/GameHelper/GameHelper';
+import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
+import ClueForm from './components/forms/clueForm/ClueForm';
+import RatVoteForm from './components/forms/ratVoteForm/RatVoteForm';
+import WordGuessForm from './components/forms/wordGuessForm/WordGuessForm';
+import RoundSummary from './components/summary/components/roundSummary/RoundSummary';
+import GameStateTable from './components/gameStateTable/GameStateTable';
 
 export default function Gameplay(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -123,7 +123,13 @@ export default function Gameplay(): JSX.Element {
    return (
       <>
          <ConditionalRender condition={!showRoundSummary}>
-            <GameplayWrapper>
+            <FlexColumnWrapper
+               position="relative"
+               height="100%"
+               padding="1em 1em 1em 1em"
+               boxSizing="border-box"
+               filter="brightness(1.5)"
+            >
                <FlexRowWrapper position="absolute" height="4em" width="100%">
                   {gameplayHeadMap.map(({ text, condition, component }, index) => (
                      <ConditionalRender key={index} condition={condition}>
@@ -149,8 +155,8 @@ export default function Gameplay(): JSX.Element {
                      </ConditionalRender>
                   ))}
                </FlexRowWrapper>
-               <GameDataTable />
-            </GameplayWrapper>
+               <GameStateTable />
+            </FlexColumnWrapper>
          </ConditionalRender>
          <ConditionalRender condition={showRoundSummary}>
             <Fader fadeInCondition={showRoundSummary} transitionDuration={2} height={'100%'}>
