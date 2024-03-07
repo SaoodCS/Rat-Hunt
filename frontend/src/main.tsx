@@ -4,14 +4,14 @@ import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import App from './App';
 import InstallAppModal from './global/components/app/modals/installAppModal/InstallAppModal';
-import GlobalUtils from './global/config/GlobalConfig';
+import GlobalConfig from './global/config/class/GlobalConfig';
 import DeviceContextProvider from './global/context/device/DeviceContextProvider';
 import ThemeContextProvider from './global/context/theme/ThemeContextProvider';
 
 function Root(): JSX.Element {
    return (
       <StrictMode>
-         <QueryClientProvider client={GlobalUtils.config.queryClient}>
+         <QueryClientProvider client={GlobalConfig.queryClient}>
             <ThemeContextProvider>
                <DeviceContextProvider>
                   <InstallAppModal />

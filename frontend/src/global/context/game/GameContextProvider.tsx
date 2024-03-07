@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import GuideAndLeaveRoom from '../../../pages/main/components/GuideAndLeaveRoom';
 import DBConnect from '../../../utils/DBConnect/DBConnect';
 import GameHelper from '../../../utils/GameHelper/GameHelper';
-import { firestore } from '../../firebase/config/config';
+import { firestore } from '../../config/firebase/config';
 import ArrayOfObjects from '../../helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../helpers/dataTypes/miscHelper/MiscHelper';
 import useLocalStorage from '../../hooks/useLocalStorage';

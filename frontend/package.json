@@ -15,7 +15,7 @@
       "test": "vitest",
       "test-watch": "vitest --watch",
       "view-unused-exports": "npx unimported",
-      "del-dev-dist-old": "node src/global/config/script/delDevDistOld.js",
+      "del-dev-dist-old": "node src/global/scripts/delDevDistOld.js",
       "deploy": "npm run build && firebase deploy --only hosting --project rat-hunt",
       "start": "npm run del-dev-dist-old && vite --host --mode development",
       "generate-pwa-assets": "pwa-assets-generator public/icons/logo-512x512.png"

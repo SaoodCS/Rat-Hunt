@@ -6,9 +6,9 @@ import type {
 } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
 import { useContext } from 'react';
+import { APIHelper } from '../../utils/apiHelper/NApiHelper';
 import useApiErrorContext from '../context/widget/apiError/hooks/useApiErrorContext';
 import { LoaderContext } from '../context/widget/loader/LoaderContext';
-import { APIHelper } from '../firebase/apis/helper/NApiHelper';
 
 export function useCustomMutation<TData, TVariables>(
    mutationFn: MutationFunction<TData, TVariables>,
