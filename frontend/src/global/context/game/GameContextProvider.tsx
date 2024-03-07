@@ -6,13 +6,13 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import GuideAndLeaveRoom from '../../../pages/main/components/GuideAndLeaveRoom';
 import { firestore } from '../../config/firebase/config';
-import ArrayOfObjects from '../../helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import ArrOfObj from '../../helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../helpers/dataTypes/miscHelper/MiscHelper';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import useHeaderContext from '../widget/header/hooks/useHeaderContext';
-import { GameContext } from './GameContext';
 import DBConnect from '../../utils/DBConnect/DBConnect';
 import GameHelper from '../../utils/GameHelper/GameHelper';
+import useHeaderContext from '../widget/header/hooks/useHeaderContext';
+import { GameContext } from './GameContext';
 
 interface IGameContextProvider {
    children: ReactNode;
@@ -59,7 +59,7 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
 
    useEffect(() => {
       if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
-         const allUsers = ArrayOfObjects.getArrOfValuesFromKey(roomData.users, 'userId');
+         const allUsers = ArrOfObj.getArrOfValuesFromKey(roomData.users, 'userId');
          setAllUsers(allUsers);
       }
    }, [roomData?.users]);

@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { firebaseRTDB } from '../../../global/config/firebase/config';
 import { GameContext } from '../../../global/context/game/GameContext';
 import { ModalContext } from '../../../global/context/widget/modal/ModalContext';
-import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import ArrOfObj from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import DBConnect from '../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../global/utils/GameHelper/GameHelper';
@@ -61,7 +61,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
                resetCurrentRound: true,
                delUserFromUserStateId: localDbUser,
             });
-            const updatedUsers = ArrayOfObjects.filterOut(users, 'userId', localDbUser);
+            const updatedUsers = ArrOfObj.filterOut(users, 'userId', localDbUser);
             const updatedRoomState = GameHelper.SetRoomState.keysVals(roomData, [
                { key: 'users', value: updatedUsers },
                { key: 'gameState', value: updatedGameState },
@@ -74,12 +74,12 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
                'leaveRoom',
                currentRat,
             );
-            const updatedUserStates = ArrayOfObjects.filterOut(userStates, 'userId', localDbUser);
+            const updatedUserStates = ArrOfObj.filterOut(userStates, 'userId', localDbUser);
             const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
                { key: 'currentTurn', value: nextUser },
                { key: 'userStates', value: updatedUserStates },
             ]);
-            const updatedUsers = ArrayOfObjects.filterOut(users, 'userId', localDbUser);
+            const updatedUsers = ArrOfObj.filterOut(users, 'userId', localDbUser);
 
             const updatedRoomState = GameHelper.SetRoomState.keysVals(roomData, [
                { key: 'users', value: updatedUsers },

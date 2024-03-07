@@ -18,10 +18,10 @@ import {
    setDoc,
    updateDoc,
 } from 'firebase/firestore';
-import APIHelper from '../ApiHelper/NApiHelper';
 import { firebaseRTDB, firestore } from '../../config/firebase/config';
+import ArrOfObj from '../../helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import { useCustomMutation } from '../../hooks/useCustomMutation';
-import ArrayOfObjects from '../../helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import APIHelper from '../ApiHelper/NApiHelper';
 
 export namespace DBConnect {
    /* -- FIRESTORE DB -- */
@@ -252,12 +252,8 @@ export namespace DBConnect {
                         `${CONSTS.ROOM_DOC_PREFIX}${roomData.roomId}`,
                      );
                      if (!userId) return;
-                     const userInUsers = ArrayOfObjects.getObjWithKeyValuePair(
-                        roomData.users,
-                        'userId',
-                        userId,
-                     );
-                     const updatedUserStates = ArrayOfObjects.filterOut(
+                     const userInUsers = ArrOfObj.findObj(roomData.users, 'userId', userId);
+                     const updatedUserStates = ArrOfObj.filterOut(
                         roomData.gameState.userStates,
                         'userId',
                         userId,

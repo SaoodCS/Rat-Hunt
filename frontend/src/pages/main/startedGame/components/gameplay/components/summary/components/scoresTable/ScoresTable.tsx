@@ -3,7 +3,6 @@ import { LogoText } from '../../../../../../../../../global/components/app/logo/
 import { FlexColumnWrapper } from '../../../../../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { GameContext } from '../../../../../../../../../global/context/game/GameContext';
 import Color from '../../../../../../../../../global/css/colors';
-import ArrayOfObjects from '../../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import HTMLEntities from '../../../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import MiscHelper from '../../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import DBConnect from '../../../../../../../../../global/utils/DBConnect/DBConnect';
@@ -13,6 +12,7 @@ import {
    UserRowsWrapper,
 } from '../../../gameStateTable/style/Style';
 import { ScoreTableCell, ScoreTableWrapper } from './style/Style';
+import ArrOfObj from '../../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 
 export default function ScoresTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -23,7 +23,7 @@ export default function ScoresTable(): JSX.Element {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
       const { userStates } = gameState;
-      const sortedUserStates = ArrayOfObjects.sort(userStates, 'totalScore', true);
+      const sortedUserStates = ArrOfObj.sort(userStates, 'totalScore', true);
       setSortedUserStates(sortedUserStates);
    }, [roomData?.gameState.userStates]);
 

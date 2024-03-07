@@ -1,19 +1,18 @@
 import { Fragment, useContext, useEffect, useState } from 'react';
-import { GameContext } from '../../../../../../../../../global/context/game/GameContext';
-import DBConnect from '../../../../../../../../../global/utils/DBConnect/DBConnect';
-import { BannerContext } from '../../../../../../../../../global/context/widget/banner/BannerContext';
-import MiscHelper from '../../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import ArrayOfObjects from '../../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import ArrayHelper from '../../../../../../../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
-import { FlexColumnWrapper } from '../../../../../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { LogoText } from '../../../../../../../../../global/components/app/logo/LogoText';
+import { FlexColumnWrapper } from '../../../../../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
+import { GameContext } from '../../../../../../../../../global/context/game/GameContext';
+import { BannerContext } from '../../../../../../../../../global/context/widget/banner/BannerContext';
 import Color from '../../../../../../../../../global/css/colors';
+import ArrayHelper from '../../../../../../../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
 import HTMLEntities from '../../../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
+import MiscHelper from '../../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
+import DBConnect from '../../../../../../../../../global/utils/DBConnect/DBConnect';
+import ArrOfObj from '../../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 
 export default function SummaryData(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
-   //const [mostVotedFor, setMostVotedFor] = useState('');
    const [ratGuess, setRatGuess] = useState('');
    const { toggleBanner, setBannerMessage, setBannerZIndex, setBannerType } =
       useContext(BannerContext);
@@ -22,12 +21,11 @@ export default function SummaryData(): JSX.Element {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
       const { userStates, currentRat } = gameState;
-      const userVotes: string[] = ArrayOfObjects.getArrOfValuesFromKey(userStates, 'votedFor');
-      const ratUserState = ArrayOfObjects.getObjWithKeyValuePair(userStates, 'userId', currentRat);
+      const userVotes: string[] = ArrOfObj.getArrOfValuesFromKey(userStates, 'votedFor');
+      const ratUserState = ArrOfObj.findObj(userStates, 'userId', currentRat);
       const mostRepeatedItems = ArrayHelper.findMostRepeatedItems(userVotes);
       const ratGotCaught = mostRepeatedItems.length === 1 && mostRepeatedItems.includes(currentRat);
       setRatGuess(ratUserState?.guess || '');
-      // const ratGotCaught = mostVotedUser === currentRat;
       const thisUserIsRat = currentRat === localDbUser;
       if (thisUserIsRat) {
          setBannerMessage(!ratGotCaught ? 'You got away!' : 'You got caught!');
@@ -48,10 +46,6 @@ export default function SummaryData(): JSX.Element {
          key: 'rat',
          value: roomData?.gameState.currentRat,
       },
-      // {
-      //    key: 'mostVotes',
-      //    value: mostVotedFor,
-      // },
       {
          key: 'word',
          value: roomData?.gameState.activeWord,

@@ -15,12 +15,12 @@ import { GameContext } from '../../../global/context/game/GameContext';
 import useThemeContext from '../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import ArrayHelper from '../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
-import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../global/hooks/useForm';
 import DBConnect from '../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../global/utils/GameHelper/GameHelper';
 import PlayFormClass from './class/PlayForm';
+import ArrOfObj from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 
 export default function Play(): JSX.Element {
    const { isDarkTheme } = useThemeContext();
@@ -151,7 +151,7 @@ export default function Play(): JSX.Element {
          for (let i = 0; i < topics.length; i++) {
             dropDownOptions.push({ value: topics[i], label: topicLabels[i] });
          }
-         return ArrayOfObjects.sort(dropDownOptions, 'label');
+         return ArrOfObj.sort(dropDownOptions, 'label');
       }
       return input.dropDownOptions;
    }

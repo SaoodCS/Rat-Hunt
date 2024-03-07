@@ -1,6 +1,6 @@
 import DateHelper from '../date/DateHelper';
 
-export default class ArrayOfObjects {
+export default class ArrOfObj {
    static sort<T>(arr: T[], key: keyof T, descending?: boolean): T[] {
       const deepCopy: T[] = JSON.parse(JSON.stringify(arr));
       if (descending) {
@@ -26,12 +26,8 @@ export default class ArrayOfObjects {
       });
    }
 
-   static getObjWithKeyValuePair<T>(arr: T[], key: keyof T, value: T[keyof T]): T {
+   static findObj<T>(arr: T[], key: keyof T, value: T[keyof T]): T {
       return arr.find((obj) => obj[key] === value) as T;
-   }
-
-   static getObjectsWithKeyValuePair<T>(arr: T[], key: keyof T, value: T[keyof T]): T[] {
-      return arr.filter((obj) => obj[key] === value) as T[];
    }
 
    static sumKeyValues<T>(arr: T[], key: keyof T): number {

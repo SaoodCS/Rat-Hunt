@@ -7,7 +7,6 @@ import { FlexRowWrapper } from '../../../../../global/components/lib/positionMod
 import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../global/context/game/GameContext';
 import Color from '../../../../../global/css/colors';
-import ArrayOfObjects from '../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import DBConnect from '../../../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../../../global/utils/GameHelper/GameHelper';
@@ -16,6 +15,7 @@ import RatVoteForm from './components/forms/ratVoteForm/RatVoteForm';
 import WordGuessForm from './components/forms/wordGuessForm/WordGuessForm';
 import GameStateTable from './components/gameStateTable/GameStateTable';
 import RoundSummary from './components/summary/RoundSummary';
+import ArrOfObj from '../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 
 export default function Gameplay(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -65,11 +65,11 @@ export default function Gameplay(): JSX.Element {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
       const { userStates, currentRat, currentTurn } = gameState;
-      const ratUserState = ArrayOfObjects.getObjWithKeyValuePair(userStates, 'userId', currentRat);
+      const ratUserState = ArrOfObj.findObj(userStates, 'userId', currentRat);
       if (!MiscHelper.isNotFalsyOrEmpty(ratUserState)) return;
       const isPlayerRat = currentRat === localDbUser;
-      const allCluesExist = ArrayOfObjects.isKeyInAllObjsNotValuedAs(userStates, 'clue', '');
-      const allVotesExist = ArrayOfObjects.isKeyInAllObjsNotValuedAs(userStates, 'votedFor', '');
+      const allCluesExist = ArrOfObj.isKeyInAllObjsNotValuedAs(userStates, 'clue', '');
+      const allVotesExist = ArrOfObj.isKeyInAllObjsNotValuedAs(userStates, 'votedFor', '');
       const ratHasGuessedWord = MiscHelper.isNotFalsyOrEmpty(ratUserState.guess);
       const isYourTurn = currentTurn.replace('.wordGuess', '') === localDbUser;
       const ratIsGuessingWord = currentTurn.includes('.wordGuess');

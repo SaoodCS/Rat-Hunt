@@ -6,13 +6,13 @@ import InputCombination from '../../../../../../../../global/components/lib/form
 import { GameContext } from '../../../../../../../../global/context/game/GameContext';
 import useThemeContext from '../../../../../../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
-import ArrayOfObjects from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../../../../../../global/hooks/useForm';
 import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
 import { gameFormStyles } from '../style/Style';
 import ClueFormClass from './class/ClueFormClass';
+import ArrOfObj from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 
 export default function ClueForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -33,7 +33,7 @@ export default function ClueForm(): JSX.Element {
       const userClue = form.clue;
       const { gameState } = roomData;
       const { userStates, currentRat } = gameState;
-      const submittedClues = ArrayOfObjects.getArrOfValuesFromKey(userStates, 'clue');
+      const submittedClues = ArrOfObj.getArrOfValuesFromKey(userStates, 'clue');
       if (submittedClues.includes(userClue)) {
          setApiError('Another user has already submitted this clue.');
          return;

@@ -4,11 +4,11 @@ import { FlexRowWrapper } from '../../../../../../../global/components/lib/posit
 import ConditionalRender from '../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import Color from '../../../../../../../global/css/colors';
-import ArrayOfObjects from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import HTMLEntities from '../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import Unicode from '../../../../../../../global/helpers/dataTypes/unicode/Unicode';
 import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
 import { GameDetailsContainer } from '../../style/Style';
+import ArrOfObj from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 
 interface IGameHeaderDetails {
    label: string;
@@ -35,7 +35,7 @@ export default function GameDetailsSlide(): JSX.Element {
             value:
                roomData?.gameState?.currentRat === localDbUser
                   ? 'YOU ARE THE RAT'
-                  : ArrayOfObjects.getObjWithKeyValuePair(
+                  : ArrOfObj.findObj(
                        activeTopicWords,
                        'word',
                        roomData?.gameState?.activeWord || '',

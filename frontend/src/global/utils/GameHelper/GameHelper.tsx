@@ -1,5 +1,5 @@
 import ArrayHelper from '../../helpers/dataTypes/arrayHelper/ArrayHelper';
-import ArrayOfObjects from '../../helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import ArrOfObj from '../../helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import type DBConnect from '../DBConnect/DBConnect';
 
 export namespace GameHelper {
@@ -12,7 +12,7 @@ export namespace GameHelper {
 
    export namespace New {
       export function topic(activeTopic: string, topicData: DBConnect.FSDB.I.Topics[]): string {
-         const newTopic = ArrayOfObjects.getRandItem(topicData).key;
+         const newTopic = ArrOfObj.getRandItem(topicData).key;
          return newTopic === activeTopic ? topic(activeTopic, topicData) : newTopic;
       }
 
@@ -32,7 +32,7 @@ export namespace GameHelper {
          topics: DBConnect.FSDB.I.Topics[],
          activeTopic: string,
       ): GameHelper.I.WordCell[] {
-         const topicObj = ArrayOfObjects.getObjWithKeyValuePair(topics, 'key', activeTopic);
+         const topicObj = ArrOfObj.findObj(topics, 'key', activeTopic);
          const words = topicObj.values;
          const sortedWords = ArrayHelper.sort(words);
          const words16 = sortedWords.slice(0, 16);
@@ -50,7 +50,7 @@ export namespace GameHelper {
       }
 
       export function firstUser(userStates: DBConnect.FSDB.I.UserState[]): string {
-         const sortedUserStates = ArrayOfObjects.sort(userStates, 'userId');
+         const sortedUserStates = ArrOfObj.sort(userStates, 'userId');
          return sortedUserStates[0].userId;
       }
 
@@ -60,19 +60,19 @@ export namespace GameHelper {
          type: 'votedFor' | 'clue' | 'guess' | 'leaveRoom',
          currentRat: string,
       ): string {
-         const sortedUserStates = ArrayOfObjects.sort(userStates, 'userId');
+         const sortedUserStates = ArrOfObj.sort(userStates, 'userId');
          const thisUserIndex = sortedUserStates.findIndex((u) => u.userId === currentTurnUser);
-         const userStatesWithoutThisUser = ArrayOfObjects.filterOut(
+         const userStatesWithoutThisUser = ArrOfObj.filterOut(
             userStates,
             'userId',
             currentTurnUser,
          );
-         const finalVoteSubmission = ArrayOfObjects.isKeyInAllObjsNotValuedAs(
+         const finalVoteSubmission = ArrOfObj.isKeyInAllObjsNotValuedAs(
             userStatesWithoutThisUser,
             'votedFor',
             '',
          );
-         const finalClueSubmission = ArrayOfObjects.isKeyInAllObjsNotValuedAs(
+         const finalClueSubmission = ArrOfObj.isKeyInAllObjsNotValuedAs(
             userStatesWithoutThisUser,
             'clue',
             '',
@@ -95,11 +95,7 @@ export namespace GameHelper {
          const allVotesSubmitted = finalVoteSubmission;
          const allCluesSubmitted = finalClueSubmission;
          const thisUserIsRat = currentRat === currentTurnUser;
-         const ratUserState = ArrayOfObjects.getObjWithKeyValuePair(
-            userStates,
-            'userId',
-            currentRat,
-         );
+         const ratUserState = ArrOfObj.findObj(userStates, 'userId', currentRat);
          const ratSubmittedGuess = ratUserState.guess !== '';
          if (ratSubmittedGuess) return '';
          if (thisUserIsRat) return sortedUserStates[0].userId;
@@ -113,24 +109,20 @@ export namespace GameHelper {
       }
 
       export function disconnectedUserIds(users: DBConnect.FSDB.I.User[]): string[] {
-         const disconnectedUsers = ArrayOfObjects.filterOut(users, 'userStatus', 'connected');
-         return ArrayOfObjects.getArrOfValuesFromKey(disconnectedUsers, 'userId');
+         const disconnectedUsers = ArrOfObj.filterOut(users, 'userStatus', 'connected');
+         return ArrOfObj.getArrOfValuesFromKey(disconnectedUsers, 'userId');
       }
 
       export function connectedUserIds(users: DBConnect.FSDB.I.User[]): string[] {
-         const connectedUsers = ArrayOfObjects.filterOut(users, 'userStatus', 'disconnected');
-         return ArrayOfObjects.getArrOfValuesFromKey(connectedUsers, 'userId');
+         const connectedUsers = ArrOfObj.filterOut(users, 'userStatus', 'disconnected');
+         return ArrOfObj.getArrOfValuesFromKey(connectedUsers, 'userId');
       }
 
       export function gamePhase(
          gameState: DBConnect.FSDB.I.GameState,
       ): 'votedFor' | 'clue' | 'guess' {
          const { currentTurn, userStates } = gameState;
-         const currentTurnUserState = ArrayOfObjects.getObjWithKeyValuePair(
-            userStates,
-            'userId',
-            currentTurn,
-         );
+         const currentTurnUserState = ArrOfObj.findObj(userStates, 'userId', currentTurn);
          if (currentTurnUserState.clue === '') return 'clue';
          if (currentTurnUserState.votedFor === '') return 'votedFor';
          return 'guess';
@@ -155,15 +147,10 @@ export namespace GameHelper {
          gameState: DBConnect.FSDB.I.GameState,
       ): DBConnect.FSDB.I.GameState {
          const { userStates, currentRat, activeWord } = gameState;
-         const {
-            getObjWithKeyValuePair,
-            getObjectsWithKeyValuePair,
-            filterOut,
-            getArrOfValuesFromKey,
-         } = ArrayOfObjects;
-         const rat = getObjWithKeyValuePair(userStates, 'userId', currentRat);
+         const { findObj, filterIn, filterOut, getArrOfValuesFromKey } = ArrOfObj;
+         const rat = findObj(userStates, 'userId', currentRat);
          const correctGuess = rat.guess === activeWord;
-         const ratVoters = getObjectsWithKeyValuePair(userStates, 'votedFor', currentRat);
+         const ratVoters = filterIn(userStates, 'votedFor', currentRat);
          const correctVotes = ratVoters.length > userStates.length / 2;
          const ratGets2Points = correctGuess && !correctVotes;
          const ratGets1Point = (correctGuess && correctVotes) || (!correctGuess && !correctVotes);
@@ -230,16 +217,16 @@ export namespace GameHelper {
          const newNoOfRoundsExists = newNoOfRounds !== undefined;
          const resetCurrentRoundIsTrue = resetCurrentRound === true;
 
-         const userStatesWithoutDelUser = ArrayOfObjects.filterOut(
+         const userStatesWithoutDelUser = ArrOfObj.filterOut(
             userStates,
             'userId',
             delUserFromUserStateId || '',
          );
-         const newRat = ArrayOfObjects.getRandItem(userStatesWithoutDelUser).userId;
+         const newRat = ArrOfObj.getRandItem(userStatesWithoutDelUser).userId;
          const { currentRound, numberOfRoundsSet } = gameState;
          const newWords = Get.topicWordsAndCells(topicsData, newTopic);
          const newWord = newWords[Math.floor(Math.random() * newWords.length)].word;
-         const updatedUserStates = ArrayOfObjects.setAllValuesOfKeys(
+         const updatedUserStates = ArrOfObj.setAllValuesOfKeys(
             userStatesWithoutDelUser,
             resetScoresIsTrue
                ? [
@@ -291,8 +278,8 @@ export namespace GameHelper {
          userId: string,
          keyVals: { key: T; value: DBConnect.FSDB.I.UserState[T] }[],
       ): DBConnect.FSDB.I.UserState[] {
-         const userState = ArrayOfObjects.getObjWithKeyValuePair(userStates, 'userId', userId);
-         const userStatesWithoutUser = ArrayOfObjects.filterOut(userStates, 'userId', userId);
+         const userState = ArrOfObj.findObj(userStates, 'userId', userId);
+         const userStatesWithoutUser = ArrOfObj.filterOut(userStates, 'userId', userId);
          const updatedUserState: typeof userState = JSON.parse(JSON.stringify(userState));
          keyVals.forEach((keyVal) => {
             updatedUserState[keyVal.key] = keyVal.value;

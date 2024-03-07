@@ -8,12 +8,12 @@ import useApiErrorContext from '../../../../../../../../global/context/widget/ap
 import useForm from '../../../../../../../../global/hooks/useForm';
 import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect';
 import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import ArrayOfObjects from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
 import type { IDropDownOption } from '../../../../../../../../global/components/lib/form/dropDown/DropDownInput';
 import { StyledForm } from '../../../../../../../../global/components/lib/form/form/Style';
 import InputCombination from '../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
 import { TextBtn } from '../../../../../../../../global/components/lib/button/textBtn/Style';
+import ArrOfObj from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 
 export default function WordGuessForm(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
@@ -51,9 +51,9 @@ export default function WordGuessForm(): JSX.Element {
    ): IDropDownOption[] | undefined {
       if (!input.isDropDown) return;
       if (input.name !== 'guess') return;
-      const topicWords = ArrayOfObjects.getArrOfValuesFromKey(activeTopicWords, 'word');
+      const topicWords = ArrOfObj.getArrOfValuesFromKey(activeTopicWords, 'word');
       const dropDownOptions = topicWords.map((word) => ({ value: word, label: word }));
-      return ArrayOfObjects.sort(dropDownOptions, 'label');
+      return ArrOfObj.sort(dropDownOptions, 'label');
    }
 
    return (

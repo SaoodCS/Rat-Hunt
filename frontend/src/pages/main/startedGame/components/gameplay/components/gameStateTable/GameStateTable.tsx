@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { LogoText } from '../../../../../../../global/components/app/logo/LogoText';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
-import ArrayOfObjects from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
 import {
@@ -11,6 +10,7 @@ import {
    RowContainer,
    UserRowsWrapper,
 } from './style/Style';
+import ArrOfObj from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 
 export default function GameStateTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -21,7 +21,7 @@ export default function GameStateTable(): JSX.Element {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
       const { userStates } = gameState;
-      setSortedUserStates(ArrayOfObjects.sort(userStates, 'userId'));
+      setSortedUserStates(ArrOfObj.sort(userStates, 'userId'));
    }, [roomData?.gameState.userStates, localDbUser]);
 
    return (
