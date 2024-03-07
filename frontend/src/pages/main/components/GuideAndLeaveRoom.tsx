@@ -62,11 +62,10 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
                delUserFromUserStateId: localDbUser,
             });
             const updatedUsers = ArrayOfObjects.filterOut(users, 'userId', localDbUser);
-            const updatedRoomState: DBConnect.FSDB.I.Room = {
-               ...roomData,
-               users: updatedUsers,
-               gameState: updatedGameState,
-            };
+            const updatedRoomState = GameHelper.SetRoomState.keysVals(roomData, [
+               { key: 'users', value: updatedUsers },
+               { key: 'gameState', value: updatedGameState },
+            ]);
             await updateRoomStateMutation.mutateAsync(updatedRoomState);
          } else if (currentTurn === localDbUser) {
             const nextUser = GameHelper.Get.nextTurnUserId(
@@ -75,19 +74,17 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
                'leaveRoom',
                currentRat,
             );
-
             const updatedUserStates = ArrayOfObjects.filterOut(userStates, 'userId', localDbUser);
-            const updatedGameState = {
-               ...gameState,
-               currentTurn: nextUser,
-               userStates: updatedUserStates,
-            };
+            const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
+               { key: 'currentTurn', value: nextUser },
+               { key: 'userStates', value: updatedUserStates },
+            ]);
             const updatedUsers = ArrayOfObjects.filterOut(users, 'userId', localDbUser);
-            const updatedRoomState: DBConnect.FSDB.I.Room = {
-               ...roomData,
-               users: updatedUsers,
-               gameState: updatedGameState,
-            };
+
+            const updatedRoomState = GameHelper.SetRoomState.keysVals(roomData, [
+               { key: 'users', value: updatedUsers },
+               { key: 'gameState', value: updatedGameState },
+            ]);
             await updateRoomStateMutation.mutateAsync(updatedRoomState);
             await DBConnect.RTDB.Delete.user(localDbUser, localDbRoom);
          } else {

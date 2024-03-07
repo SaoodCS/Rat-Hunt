@@ -33,23 +33,19 @@ export default function RatVoteForm(): JSX.Element {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
       const { userStates, currentRat } = gameState;
-      const updatedUserStates = GameHelper.SetUserState.userKeyVal(
-         userStates,
-         localDbUser,
-         'votedFor',
-         form.vote,
-      );
+      const updatedUserStates = GameHelper.SetUserStates.updateUser(userStates, localDbUser, [
+         { key: 'votedFor', value: form.vote },
+      ]);
       const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(
          userStates,
          localDbUser,
          'votedFor',
          currentRat,
       );
-      const updatedGameState: typeof gameState = {
-         ...gameState,
-         currentTurn: updatedCurrentTurn,
-         userStates: updatedUserStates,
-      };
+      const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
+         { key: 'currentTurn', value: updatedCurrentTurn },
+         { key: 'userStates', value: updatedUserStates },
+      ]);
       await updateGameStateMutation.mutateAsync({
          roomId: localDbRoom,
          gameState: updatedGameState,

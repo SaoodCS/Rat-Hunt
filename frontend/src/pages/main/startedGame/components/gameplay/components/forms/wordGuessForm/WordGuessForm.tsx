@@ -29,23 +29,17 @@ export default function WordGuessForm(): JSX.Element {
 
    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
       const { isFormValid } = initHandleSubmit(e);
-      // eslint-disable-next-line no-useless-return
       if (!isFormValid) return;
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
       const { userStates } = gameState;
-      const updatedUserStates = GameHelper.SetUserState.userKeyVal(
-         userStates,
-         localDbUser,
-         'guess',
-         form.guess,
-      );
-      const updatedCurrentTurn = '';
-      const updatedGameState: typeof gameState = {
-         ...gameState,
-         currentTurn: updatedCurrentTurn,
-         userStates: updatedUserStates,
-      };
+      const updatedUserStates = GameHelper.SetUserStates.updateUser(userStates, localDbUser, [
+         { key: 'guess', value: form.guess },
+      ]);
+      const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
+         { key: 'userStates', value: updatedUserStates },
+         { key: 'currentTurn', value: '' },
+      ]);
       await updateGameStateMutation.mutateAsync({
          roomId: localDbRoom,
          gameState: GameHelper.SetGameState.userPoints(updatedGameState),

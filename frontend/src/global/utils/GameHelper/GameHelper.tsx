@@ -49,6 +49,11 @@ export namespace GameHelper {
          return wordsWithCellIds;
       }
 
+      export function firstUser(userStates: DBConnect.FSDB.I.UserState[]): string {
+         const sortedUserStates = ArrayOfObjects.sort(userStates, 'userId');
+         return sortedUserStates[0].userId;
+      }
+
       export function nextTurnUserId(
          userStates: DBConnect.FSDB.I.UserState[],
          currentTurnUser: string,
@@ -132,6 +137,19 @@ export namespace GameHelper {
       }
    }
 
+   export namespace SetRoomState {
+      export function keysVals<T extends keyof DBConnect.FSDB.I.Room>(
+         roomData: DBConnect.FSDB.I.Room,
+         keyVals: { key: T; value: DBConnect.FSDB.I.Room[T] }[],
+      ): DBConnect.FSDB.I.Room {
+         const updatedRoomData: typeof roomData = JSON.parse(JSON.stringify(roomData));
+         keyVals.forEach((keyVal) => {
+            updatedRoomData[keyVal.key] = keyVal.value;
+         });
+         return updatedRoomData;
+      }
+   }
+
    export namespace SetGameState {
       export function userPoints(
          gameState: DBConnect.FSDB.I.GameState,
@@ -150,10 +168,8 @@ export namespace GameHelper {
          const ratGets2Points = correctGuess && !correctVotes;
          const ratGets1Point = (correctGuess && correctVotes) || (!correctGuess && !correctVotes);
          const othersGet1Point = correctVotes;
-
          const ratVotersWithoutRat = filterOut(ratVoters, 'userId', currentRat);
          const ratVotersIds = getArrOfValuesFromKey(ratVotersWithoutRat, 'userId');
-
          const updatedRatUserState: DBConnect.FSDB.I.UserState = {
             ...rat,
             totalScore: rat.totalScore + (ratGets2Points ? 2 : ratGets1Point ? 1 : 0),
@@ -239,8 +255,7 @@ export namespace GameHelper {
                     { key: 'votedFor', value: '' },
                  ],
          );
-         const sortedUserStates = ArrayOfObjects.sort(userStatesWithoutDelUser, 'userId');
-         const updatedCurrentTurn = sortedUserStates[0].userId;
+         const updatedCurrentTurn = GameHelper.Get.firstUser(userStatesWithoutDelUser);
          const updatedGameState: DBConnect.FSDB.I.GameState = {
             ...gameState,
             activeTopic: newTopic,
@@ -257,22 +272,33 @@ export namespace GameHelper {
          };
          return updatedGameState;
       }
+
+      export function keysVals<T extends keyof DBConnect.FSDB.I.GameState>(
+         gameState: DBConnect.FSDB.I.GameState,
+         keyVals: { key: T; value: DBConnect.FSDB.I.GameState[T] }[],
+      ): DBConnect.FSDB.I.GameState {
+         const updatedGameState: typeof gameState = JSON.parse(JSON.stringify(gameState));
+         keyVals.forEach((keyVal) => {
+            updatedGameState[keyVal.key] = keyVal.value;
+         });
+         return updatedGameState;
+      }
    }
 
-   export namespace SetUserState {
-      export function userKeyVal(
+   export namespace SetUserStates {
+      export function updateUser<T extends keyof DBConnect.FSDB.I.UserState>(
          userStates: DBConnect.FSDB.I.UserState[],
          userId: string,
-         key: keyof DBConnect.FSDB.I.UserState,
-         newValue: string,
+         keyVals: { key: T; value: DBConnect.FSDB.I.UserState[T] }[],
       ): DBConnect.FSDB.I.UserState[] {
          const userState = ArrayOfObjects.getObjWithKeyValuePair(userStates, 'userId', userId);
          const userStatesWithoutUser = ArrayOfObjects.filterOut(userStates, 'userId', userId);
-         const updatedUserState: typeof userState = { ...userState, [key]: newValue };
+         const updatedUserState: typeof userState = JSON.parse(JSON.stringify(userState));
+         keyVals.forEach((keyVal) => {
+            updatedUserState[keyVal.key] = keyVal.value;
+         });
          return [...userStatesWithoutUser, updatedUserState];
       }
-
-      
    }
 }
 

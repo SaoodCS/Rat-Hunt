@@ -44,17 +44,13 @@ export default function Gameplay(): JSX.Element {
          gamePhase,
          currentRat,
       );
-      const updatedUserStates = GameHelper.SetUserState.userKeyVal(
-         userStates,
-         currentTurn,
-         gamePhase,
-         'SKIP',
-      );
-      const updatedGameState: typeof gameState = {
-         ...gameState,
-         currentTurn: updatedCurrentTurn,
-         userStates: updatedUserStates,
-      };
+      const updatedUserStates = GameHelper.SetUserStates.updateUser(userStates, currentTurn, [
+         { key: gamePhase, value: 'SKIP' },
+      ]);
+      const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
+         { key: 'currentTurn', value: updatedCurrentTurn },
+         { key: 'userStates', value: updatedUserStates },
+      ]);
       updateGameStateMutation.mutate({
          roomId: localDbRoom,
          gameState:

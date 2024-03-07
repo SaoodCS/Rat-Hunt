@@ -39,24 +39,19 @@ export default function ClueForm(): JSX.Element {
          return;
       }
       setApiError('');
-      const updatedUserStates = GameHelper.SetUserState.userKeyVal(
-         userStates,
-         localDbUser,
-         'clue',
-         userClue,
-      );
+      const updatedUserStates = GameHelper.SetUserStates.updateUser(userStates, localDbUser, [
+         { key: 'clue', value: userClue },
+      ]);
       const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(
          userStates,
          localDbUser,
          'clue',
          currentRat,
       );
-
-      const updatedGameState: typeof gameState = {
-         ...gameState,
-         currentTurn: updatedCurrentTurn,
-         userStates: updatedUserStates,
-      };
+      const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
+         { key: 'currentTurn', value: updatedCurrentTurn },
+         { key: 'userStates', value: updatedUserStates },
+      ]);
       await updateGameStateMutation.mutateAsync({
          roomId: localDbRoom,
          gameState: updatedGameState,
