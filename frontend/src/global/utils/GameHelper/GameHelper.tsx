@@ -139,6 +139,7 @@ export namespace GameHelper {
             if (allCluesExist) return 'votedFor';
             return 'clue';
          }
+         // TODO: potential update: instead of this, check if this user is the last user to submit a clue / vote
          if (currentTurnUserState.clue === '') return 'clue';
          if (currentTurnUserState.votedFor === '') return 'votedFor';
          return 'guess';
