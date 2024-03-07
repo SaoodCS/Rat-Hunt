@@ -6,7 +6,6 @@ import InputCombination from '../../../../../../../../../global/components/lib/f
 import { GameContext } from '../../../../../../../../../global/context/game/GameContext';
 import useApiErrorContext from '../../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import ArrayHelper from '../../../../../../../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
-import ArrayOfObjects from '../../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../../../../../../../global/hooks/useForm';
 import DBConnect from '../../../../../../../../../global/utils/DBConnect/DBConnect';
@@ -36,15 +35,9 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
       if (!isFormValid) return;
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
-      const { gameState, users } = roomData;
+      const { gameState } = roomData;
       const { newTopic, noOfRounds } = form;
-      const disconnectedUsers = ArrayOfObjects.filterOut(users, 'userStatus', 'connected');
-      const disconnectedUsersIds = ArrayOfObjects.getArrOfValuesFromKey(
-         disconnectedUsers,
-         'userId',
-      );
       const updatedGameState = GameHelper.SetGameState.newRound({
-         disconnectedUsersIds,
          gameState,
          topicsData,
          newTopic,

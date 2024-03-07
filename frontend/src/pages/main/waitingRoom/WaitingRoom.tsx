@@ -13,7 +13,6 @@ import { GameContext } from '../../../global/context/game/GameContext';
 import { BannerContext } from '../../../global/context/widget/banner/BannerContext';
 import { ToastContext } from '../../../global/context/widget/toast/ToastContext';
 import Color from '../../../global/css/colors';
-import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import StringHelper from '../../../global/helpers/dataTypes/string/StringHelper';
 import DBConnect from '../../../global/utils/DBConnect/DBConnect';
@@ -58,16 +57,9 @@ export default function WaitingRoom(): JSX.Element {
       }
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
-      const { gameState, users } = roomData;
+      const { gameState } = roomData;
       const { activeTopic } = gameState;
-      const disconnectedUsers = ArrayOfObjects.filterOut(users, 'userStatus', 'connected');
-      const disconnectedUsersIds = ArrayOfObjects.getArrOfValuesFromKey(
-         disconnectedUsers,
-         'userId',
-      );
-
       const initialRoundGameState = GameHelper.SetGameState.newRound({
-         disconnectedUsersIds,
          gameState,
          topicsData,
          newTopic: activeTopic,

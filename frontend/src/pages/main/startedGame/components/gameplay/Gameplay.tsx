@@ -43,7 +43,6 @@ export default function Gameplay(): JSX.Element {
          currentTurn,
          gamePhase,
          currentRat,
-         disconnectedUsers,
       );
       const updatedUserStates = GameHelper.SetUserState.userKeyVal(
          userStates,

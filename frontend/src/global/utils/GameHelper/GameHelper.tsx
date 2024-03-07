@@ -12,7 +12,7 @@ export namespace GameHelper {
 
    export namespace New {
       export function topic(activeTopic: string, topicData: DBConnect.FSDB.I.Topics[]): string {
-         const newTopic = topicData[Math.floor(Math.random() * topicData.length)].key;
+         const newTopic = ArrayOfObjects.getRandItem(topicData).key;
          return newTopic === activeTopic ? topic(activeTopic, topicData) : newTopic;
       }
 
@@ -54,20 +54,11 @@ export namespace GameHelper {
          currentTurnUser: string,
          type: 'votedFor' | 'clue' | 'guess' | 'leaveRoom',
          currentRat: string,
-         disconnectedUsersIds: string[],
       ): string {
-         // const connectedUsersStates = ArrayOfObjects.filterOutValues(
-         //    userStates,
-         //    'userId',
-         //    disconnectedUsersIds,
-         // );
-         const sortedUserStates = ArrayOfObjects.sort(
-            userStates, // connectedUsersStates,
-            'userId',
-         );
+         const sortedUserStates = ArrayOfObjects.sort(userStates, 'userId');
          const thisUserIndex = sortedUserStates.findIndex((u) => u.userId === currentTurnUser);
          const userStatesWithoutThisUser = ArrayOfObjects.filterOut(
-            userStates, // connectedUsersStates,
+            userStates,
             'userId',
             currentTurnUser,
          );
@@ -198,7 +189,6 @@ export namespace GameHelper {
       }
 
       export function newRound(options: {
-         disconnectedUsersIds: string[];
          gameState: DBConnect.FSDB.I.GameState;
          topicsData: DBConnect.FSDB.I.Topics[];
          newTopic: string;
@@ -209,7 +199,6 @@ export namespace GameHelper {
          delUserFromUserStateId?: string;
       }): DBConnect.FSDB.I.GameState {
          const {
-            disconnectedUsersIds,
             gameState,
             topicsData,
             newTopic,
@@ -282,6 +271,8 @@ export namespace GameHelper {
          const updatedUserState: typeof userState = { ...userState, [key]: newValue };
          return [...userStatesWithoutUser, updatedUserState];
       }
+
+      
    }
 }
 

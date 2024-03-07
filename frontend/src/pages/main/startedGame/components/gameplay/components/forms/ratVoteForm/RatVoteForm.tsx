@@ -1,19 +1,19 @@
 import { Send } from '@styled-icons/ionicons-sharp/Send';
 import { useContext } from 'react';
-import { gameFormStyles } from '../style/Style';
-import RatVoteFormClass from './class/RatVoteFormClass';
-import { GameContext } from '../../../../../../../../global/context/game/GameContext';
-import useForm from '../../../../../../../../global/hooks/useForm';
-import useThemeContext from '../../../../../../../../global/context/theme/hooks/useThemeContext';
-import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
-import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect';
-import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import ArrayOfObjects from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
+import { TextBtn } from '../../../../../../../../global/components/lib/button/textBtn/Style';
 import type { IDropDownOption } from '../../../../../../../../global/components/lib/form/dropDown/DropDownInput';
 import { StyledForm } from '../../../../../../../../global/components/lib/form/form/Style';
 import InputCombination from '../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
-import { TextBtn } from '../../../../../../../../global/components/lib/button/textBtn/Style';
+import { GameContext } from '../../../../../../../../global/context/game/GameContext';
+import useThemeContext from '../../../../../../../../global/context/theme/hooks/useThemeContext';
+import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
+import ArrayOfObjects from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
+import useForm from '../../../../../../../../global/hooks/useForm';
+import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect';
+import GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
+import { gameFormStyles } from '../style/Style';
+import RatVoteFormClass from './class/RatVoteFormClass';
 
 export default function RatVoteForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -31,28 +31,20 @@ export default function RatVoteForm(): JSX.Element {
       const { isFormValid } = initHandleSubmit(e);
       if (!isFormValid) return;
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
-      const { gameState, users } = roomData;
+      const { gameState } = roomData;
       const { userStates, currentRat } = gameState;
-      const userStatesWithoutThisUser = ArrayOfObjects.filterOut(userStates, 'userId', localDbUser);
-      const userState = ArrayOfObjects.getObjWithKeyValuePair(userStates, 'userId', localDbUser);
-      const updatedUserState: typeof userState = { ...userState, votedFor: form.vote };
-      const updatedUserStates: (typeof userState)[] = [
-         ...userStatesWithoutThisUser,
-         updatedUserState,
-      ];
-      const disconnectedUsers = ArrayOfObjects.filterOut(users, 'userStatus', 'connected');
-      const disconnectedUsersIds = ArrayOfObjects.getArrOfValuesFromKey(
-         disconnectedUsers,
-         'userId',
+      const updatedUserStates = GameHelper.SetUserState.userKeyVal(
+         userStates,
+         localDbUser,
+         'votedFor',
+         form.vote,
       );
       const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(
          userStates,
          localDbUser,
          'votedFor',
          currentRat,
-         disconnectedUsersIds,
       );
-
       const updatedGameState: typeof gameState = {
          ...gameState,
          currentTurn: updatedCurrentTurn,

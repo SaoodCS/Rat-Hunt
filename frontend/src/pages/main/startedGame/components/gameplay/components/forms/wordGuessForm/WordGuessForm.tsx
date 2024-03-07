@@ -34,13 +34,12 @@ export default function WordGuessForm(): JSX.Element {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
       const { userStates } = gameState;
-      const userStatesWithoutThisUser = ArrayOfObjects.filterOut(userStates, 'userId', localDbUser);
-      const userState = ArrayOfObjects.getObjWithKeyValuePair(userStates, 'userId', localDbUser);
-      const updatedUserState: typeof userState = { ...userState, guess: form.guess };
-      const updatedUserStates: (typeof userState)[] = [
-         ...userStatesWithoutThisUser,
-         updatedUserState,
-      ];
+      const updatedUserStates = GameHelper.SetUserState.userKeyVal(
+         userStates,
+         localDbUser,
+         'guess',
+         form.guess,
+      );
       const updatedCurrentTurn = '';
       const updatedGameState: typeof gameState = {
          ...gameState,

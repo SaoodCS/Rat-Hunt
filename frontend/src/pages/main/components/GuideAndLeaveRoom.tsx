@@ -10,9 +10,9 @@ import { GameContext } from '../../../global/context/game/GameContext';
 import { ModalContext } from '../../../global/context/widget/modal/ModalContext';
 import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import HelpGuide from './HelpGuide';
 import DBConnect from '../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../global/utils/GameHelper/GameHelper';
+import HelpGuide from './HelpGuide';
 
 interface IGuideAndLeaveRoom {
    currentPath: string;
@@ -54,14 +54,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
          const { currentTurn, userStates, currentRat, activeTopic } = gameState;
          if (currentRat === localDbUser) {
             if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
-            const disconnectedUsers = ArrayOfObjects.filterOut(users, 'userStatus', 'connected');
-            const disconnectedUsersIds = ArrayOfObjects.getArrOfValuesFromKey(
-               disconnectedUsers,
-               'userId',
-            );
-
             const updatedGameState = GameHelper.SetGameState.newRound({
-               disconnectedUsersIds,
                gameState,
                topicsData,
                newTopic: activeTopic,
@@ -76,17 +69,11 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
             };
             await updateRoomStateMutation.mutateAsync(updatedRoomState);
          } else if (currentTurn === localDbUser) {
-            const disconnectedUsers = ArrayOfObjects.filterOut(users, 'userStatus', 'connected');
-            const disconnectedUsersIds = ArrayOfObjects.getArrOfValuesFromKey(
-               disconnectedUsers,
-               'userId',
-            );
             const nextUser = GameHelper.Get.nextTurnUserId(
                userStates,
                localDbUser,
                'leaveRoom',
                currentRat,
-               disconnectedUsersIds,
             );
 
             const updatedUserStates = ArrayOfObjects.filterOut(userStates, 'userId', localDbUser);

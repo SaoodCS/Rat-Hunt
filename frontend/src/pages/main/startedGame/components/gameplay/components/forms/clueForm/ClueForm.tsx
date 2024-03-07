@@ -1,18 +1,18 @@
 import { Send } from '@styled-icons/ionicons-sharp/Send';
 import { useContext } from 'react';
-import { gameFormStyles } from '../style/Style';
-import ClueFormClass from './class/ClueFormClass';
-import useThemeContext from '../../../../../../../../global/context/theme/hooks/useThemeContext';
-import { GameContext } from '../../../../../../../../global/context/game/GameContext';
-import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
-import useForm from '../../../../../../../../global/hooks/useForm';
-import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect';
-import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import ArrayOfObjects from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
+import { TextBtn } from '../../../../../../../../global/components/lib/button/textBtn/Style';
 import { StyledForm } from '../../../../../../../../global/components/lib/form/form/Style';
 import InputCombination from '../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
-import { TextBtn } from '../../../../../../../../global/components/lib/button/textBtn/Style';
+import { GameContext } from '../../../../../../../../global/context/game/GameContext';
+import useThemeContext from '../../../../../../../../global/context/theme/hooks/useThemeContext';
+import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
+import ArrayOfObjects from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
+import useForm from '../../../../../../../../global/hooks/useForm';
+import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect';
+import GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
+import { gameFormStyles } from '../style/Style';
+import ClueFormClass from './class/ClueFormClass';
 
 export default function ClueForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -31,7 +31,7 @@ export default function ClueForm(): JSX.Element {
       if (!isFormValid) return;
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const userClue = form.clue;
-      const { gameState, users } = roomData;
+      const { gameState } = roomData;
       const { userStates, currentRat } = gameState;
       const submittedClues = ArrayOfObjects.getArrOfValuesFromKey(userStates, 'clue');
       if (submittedClues.includes(userClue)) {
@@ -39,24 +39,17 @@ export default function ClueForm(): JSX.Element {
          return;
       }
       setApiError('');
-      const userState = ArrayOfObjects.getObjWithKeyValuePair(userStates, 'userId', localDbUser);
-      const userStatesWithoutThisUser = ArrayOfObjects.filterOut(userStates, 'userId', localDbUser);
-      const updatedUserState: typeof userState = { ...userState, clue: userClue };
-      const updatedUserStates: (typeof userState)[] = [
-         ...userStatesWithoutThisUser,
-         updatedUserState,
-      ];
-      const disconnectedUsers = ArrayOfObjects.filterOut(users, 'userStatus', 'connected');
-      const disconnectedUsersIds = ArrayOfObjects.getArrOfValuesFromKey(
-         disconnectedUsers,
-         'userId',
+      const updatedUserStates = GameHelper.SetUserState.userKeyVal(
+         userStates,
+         localDbUser,
+         'clue',
+         userClue,
       );
       const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(
          userStates,
          localDbUser,
          'clue',
          currentRat,
-         disconnectedUsersIds,
       );
 
       const updatedGameState: typeof gameState = {
