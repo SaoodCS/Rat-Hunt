@@ -11,6 +11,13 @@ export const FlexColumnWrapper = styled.div<{
    filter?: string;
    boxSizing?: string;
    margin?: string;
+   top?: string;
+   bottom?: string;
+   left?: string;
+   background?: string;
+   zIndex?: number;
+   borderRadius?: string;
+   backdropFilter?: string;
 }>`
    display: flex;
    flex-direction: column;
@@ -25,4 +32,11 @@ export const FlexColumnWrapper = styled.div<{
    filter: ${({ filter }) => filter};
    box-sizing: ${({ boxSizing }) => boxSizing};
    margin: ${({ margin }) => margin};
+   top: ${({ top }) => top};
+   bottom: ${({ bottom }) => bottom};
+   left: ${({ left }) => left};
+   background: ${({ background }) => background};
+   z-index: ${({ zIndex }) => zIndex};
+   border-radius: ${({ borderRadius }) => borderRadius};
+   backdrop-filter: ${({ backdropFilter }) => backdropFilter};
 `;

@@ -13,6 +13,8 @@ import { BtnContainer } from '../../../header/style/Style';
 import RoundEndForm from './components/form/RoundEndForm';
 import ScoresTable from './components/scoresTable/ScoresTable';
 import SummaryData from './components/summaryData/SummaryData';
+import ConditionalRender from '../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
+import WinnerLoserSplash from './components/winnerLoserSplash/WinnerLoserSplash';
 
 export default function RoundSummary(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);
@@ -20,13 +22,18 @@ export default function RoundSummary(): JSX.Element {
    const { toggleModal, setModalContent, setModalHeader, setModalZIndex } =
       useContext(ModalContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
+   const [displayWinnerLoserSplash, setDisplayWinnerLoserSplash] = useState(true);
 
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
       const { currentRound, numberOfRoundsSet } = gameState;
       setIsLastRound(currentRound === numberOfRoundsSet);
+      const timer = setTimeout(() => {
+         setDisplayWinnerLoserSplash(false);
+      }, 2000);
       return () => {
+         clearTimeout(timer);
          toggleModal(false);
       };
    }, []);
@@ -45,6 +52,9 @@ export default function RoundSummary(): JSX.Element {
          filter="brightness(1.5)"
          boxSizing="border-box"
       >
+         <ConditionalRender condition={displayWinnerLoserSplash}>
+            <WinnerLoserSplash />
+         </ConditionalRender>
          <FlexRowWrapper position="absolute" height="1.5em" margin="1em">
             <LogoText size="1.4em">Round Summary {HTMLEntities.space} </LogoText>
             <BtnContainer>
