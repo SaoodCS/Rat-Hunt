@@ -86,9 +86,9 @@ export default function Play(): JSX.Element {
          userId: form.name,
          totalScore: 0,
          roundScores: [],
-         clue: '',
+         clue: gameStarted ? 'SKIP' : '',
          guess: '',
-         votedFor: '',
+         votedFor: gameStarted ? 'SKIP' : '',
          spectate: gameStarted,
       };
       await addUserToRoom.mutateAsync({

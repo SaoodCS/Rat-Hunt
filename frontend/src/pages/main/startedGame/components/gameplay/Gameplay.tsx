@@ -60,7 +60,7 @@ export default function Gameplay(): JSX.Element {
                ? GameHelper.SetGameState.userPoints(updatedGameState)
                : updatedGameState,
       });
-   }, [roomData?.gameState.currentTurn, localDbUser, roomData?.users]);
+   }, [roomData?.gameState?.currentTurn, localDbUser, roomData?.users]);
 
    useEffect(() => {
       // This useEffect is responsble for updating the UI when the currentTurn changes
@@ -88,7 +88,7 @@ export default function Gameplay(): JSX.Element {
       setShowWordGuessForm(isYourTurn && allCluesExist && allVotesExist && isPlayerRat);
       setShowRatVoteForm(isYourTurn && allCluesExist && !allVotesExist);
       setShowClueForm(isYourTurn && !allCluesExist);
-   }, [roomData?.gameState.currentTurn, localDbUser]);
+   }, [roomData?.gameState?.currentTurn, localDbUser]);
 
    const gameplayHeadMap = [
       {
@@ -108,7 +108,7 @@ export default function Gameplay(): JSX.Element {
          condition: showRoundSummary,
       },
       {
-         text: `Current Turn: ${roomData?.gameState.currentTurn}`,
+         text: `Current Turn: ${roomData?.gameState?.currentTurn}`,
          condition: showCurrentTurnMsg,
       },
       {

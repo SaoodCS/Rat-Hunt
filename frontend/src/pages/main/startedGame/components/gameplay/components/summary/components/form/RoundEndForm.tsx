@@ -43,7 +43,7 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
          newTopic,
          resetRoundToOne: isLastRound ? true : undefined,
          resetScores: isLastRound ? true : undefined,
-         newNoOfRounds: noOfRounds,
+         newNoOfRounds: isLastRound ? noOfRounds : undefined,
       });
       await setRoomData.mutateAsync({
          ...roomData,

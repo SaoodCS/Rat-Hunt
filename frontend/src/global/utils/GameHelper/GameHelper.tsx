@@ -128,6 +128,17 @@ export namespace GameHelper {
       ): 'votedFor' | 'clue' | 'guess' {
          const { currentTurn, userStates } = gameState;
          const currentTurnUserState = ArrOfObj.findObj(userStates, 'userId', currentTurn);
+         if (currentTurnUserState.spectate) {
+            const allCluesExist = ArrOfObj.isKeyInAllObjsNotValuedAs(userStates, 'clue', '');
+            const allVotedForValuesExist = ArrOfObj.isKeyInAllObjsNotValuedAs(
+               userStates,
+               'votedFor',
+               '',
+            );
+            if (allCluesExist && allVotedForValuesExist) return 'guess';
+            if (allCluesExist) return 'votedFor';
+            return 'clue';
+         }
          if (currentTurnUserState.clue === '') return 'clue';
          if (currentTurnUserState.votedFor === '') return 'votedFor';
          return 'guess';

@@ -23,21 +23,15 @@ export default function GameStateTable(): JSX.Element {
       const { gameState } = roomData;
       const { userStates } = gameState;
       setSortedUserStates(ArrOfObj.sort(userStates, 'userId'));
-   }, [roomData?.gameState.userStates, localDbUser]);
-
-   function getConnectionStatus(userId: string): DBConnect.FSDB.I.User['userStatus'] {
-      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return 'disconnected';
-      const { users } = roomData;
-      const thisUser = ArrOfObj.findObj(users, 'userId', userId);
-      return thisUser.userStatus;
-   }
+   }, [roomData?.gameState?.userStates, localDbUser]);
 
    function valueCol(userState: DBConnect.FSDB.I.UserState): string {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return 'disconnected';
+      if (!MiscHelper.isNotFalsyOrEmpty(userState)) return 'disconnected';
       const { users } = roomData;
       const thisUser = ArrOfObj.findObj(users, 'userId', userState.userId);
       const isSpectating = userState.spectate;
-      const isDisconnected = thisUser.userStatus === 'disconnected';
+      const isDisconnected = thisUser?.userStatus === 'disconnected'; 
       if (isDisconnected || isSpectating) return Color.setRgbOpacity(Color.darkThm.txt, 0.35);
       return '';
    }
@@ -61,8 +55,6 @@ export default function GameStateTable(): JSX.Element {
                   key={user.userId}
                   isThisUser={user.userId === localDbUser}
                   currentTurn={user.userId === roomData?.gameState.currentTurn}
-                  isSpectating={user.spectate}
-                  isDisconnected={getConnectionStatus(user.userId) === 'disconnected'}
                >
                   <Cell>
                      <LogoText size="1em" color={valueCol(user)}>

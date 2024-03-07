@@ -10,8 +10,6 @@ export const Cell = styled.div<{ noOfTableRows?: number }>`
 export const RowContainer = styled.div<{
    isThisUser?: boolean;
    currentTurn?: boolean;
-   isDisconnected?: boolean;
-   isSpectating?: boolean;
 }>`
    display: flex;
    border-bottom: 1px solid ${Color.darkThm.accent};
