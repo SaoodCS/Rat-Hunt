@@ -3,7 +3,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import App from './App';
-import InstallAppModal from './global/components/app/modals/installAppModal/InstallAppModal';
+import InstallAppModal from './global/components/app/installAppModal/InstallAppModal';
 import GlobalConfig from './global/config/class/GlobalConfig';
 import DeviceContextProvider from './global/context/device/DeviceContextProvider';
 import ThemeContextProvider from './global/context/theme/ThemeContextProvider';

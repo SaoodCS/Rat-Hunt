@@ -1,7 +1,7 @@
-import Device from '../../../../helpers/pwa/deviceHelper';
-import useLocalStorage from '../../../../hooks/useLocalStorage';
-import Modal from '../../../lib/modal/Modal';
-import { VerticalSeperator } from '../../../lib/positionModifiers/verticalSeperator/VerticalSeperator';
+import Device from '../../../helpers/pwa/deviceHelper';
+import useLocalStorage from '../../../hooks/useLocalStorage';
+import Modal from '../../lib/modal/Modal';
+import { VerticalSeperator } from '../../lib/positionModifiers/verticalSeperator/VerticalSeperator';
 import InstallAppSteps from './InstallAppSteps';
 
 export default function InstallAppModal(): JSX.Element {
