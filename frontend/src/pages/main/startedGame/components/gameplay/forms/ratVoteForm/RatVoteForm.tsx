@@ -10,10 +10,10 @@ import useApiErrorContext from '../../../../../../../global/context/widget/apiEr
 import ArrayOfObjects from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../../../../../global/hooks/useForm';
-import DBConnect from '../../../../../../../utils/DBConnect/DBConnect';
-import GameHelper from '../../../../../../../utils/GameHelper/GameHelper';
 import { gameFormStyles } from '../style/Style';
 import RatVoteFormClass from './class/RatVoteFormClass';
+import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
+import GameHelper from '../../../../../../../global/utils/GameHelper/GameHelper';
 
 export default function RatVoteForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);

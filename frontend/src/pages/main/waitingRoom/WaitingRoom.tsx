@@ -16,8 +16,8 @@ import Color from '../../../global/css/colors';
 import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import StringHelper from '../../../global/helpers/dataTypes/string/StringHelper';
-import DBConnect from '../../../utils/DBConnect/DBConnect';
-import GameHelper from '../../../utils/GameHelper/GameHelper';
+import DBConnect from '../../../global/utils/DBConnect/DBConnect';
+import GameHelper from '../../../global/utils/GameHelper/GameHelper';
 
 export default function WaitingRoom(): JSX.Element {
    const { allUsers, localDbRoom, localDbUser } = useContext(GameContext);

@@ -8,14 +8,14 @@ import { GameContext } from '../../../../../global/context/game/GameContext';
 import Color from '../../../../../global/css/colors';
 import ArrayOfObjects from '../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import DBConnect from '../../../../../utils/DBConnect/DBConnect';
-import GameHelper from '../../../../../utils/GameHelper/GameHelper';
 import ClueForm from './forms/clueForm/ClueForm';
 import RatVoteForm from './forms/ratVoteForm/RatVoteForm';
 import WordGuessForm from './forms/wordGuessForm/WordGuessForm';
 import GameDataTable from './gameDataTable/GameDataTable';
 import { GameplayWrapper } from './style/Style';
 import RoundSummary from './summary/components/roundSummary/RoundSummary';
+import DBConnect from '../../../../../global/utils/DBConnect/DBConnect';
+import GameHelper from '../../../../../global/utils/GameHelper/GameHelper';
 
 export default function Gameplay(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);

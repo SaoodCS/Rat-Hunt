@@ -8,11 +8,11 @@ import { GameContext } from '../../../../../../../../global/context/game/GameCon
 import { ModalContext } from '../../../../../../../../global/context/widget/modal/ModalContext';
 import HTMLEntities from '../../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import DBConnect from '../../../../../../../../utils/DBConnect/DBConnect';
 import { BtnContainer } from '../../../../header/Style';
 import ScoresTable from '../scoresTable/ScoresTable';
 import SummaryData from '../summaryData/SummaryData';
 import RoundEndForm from './components/form/RoundEndForm';
+import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect';
 
 export default function RoundSummary(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);

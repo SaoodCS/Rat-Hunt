@@ -7,8 +7,8 @@ import Color from '../../../../../../global/css/colors';
 import ArrayOfObjects from '../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import HTMLEntities from '../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import Unicode from '../../../../../../global/helpers/dataTypes/unicode/Unicode';
-import DBConnect from '../../../../../../utils/DBConnect/DBConnect';
 import { GameDetailsContainer } from '../Style';
+import DBConnect from '../../../../../../global/utils/DBConnect/DBConnect';
 
 interface IGameHeaderDetails {
    label: string;

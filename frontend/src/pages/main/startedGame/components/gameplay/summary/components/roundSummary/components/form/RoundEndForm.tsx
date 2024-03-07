@@ -9,9 +9,9 @@ import ArrayHelper from '../../../../../../../../../../global/helpers/dataTypes/
 import ArrayOfObjects from '../../../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../../../../../../../../global/hooks/useForm';
-import DBConnect from '../../../../../../../../../../utils/DBConnect/DBConnect';
-import GameHelper from '../../../../../../../../../../utils/GameHelper/GameHelper';
 import RoundEndFormClass from './class/RoundEndFormClass';
+import DBConnect from '../../../../../../../../../../global/utils/DBConnect/DBConnect';
+import GameHelper from '../../../../../../../../../../global/utils/GameHelper/GameHelper';
 
 interface IRoundEndForm {
    isLastRound: boolean;

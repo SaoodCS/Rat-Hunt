@@ -18,10 +18,10 @@ import {
    setDoc,
    updateDoc,
 } from 'firebase/firestore';
-import { firebaseRTDB, firestore } from '../../global/config/firebase/config';
-import ArrayOfObjects from '../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import { useCustomMutation } from '../../global/hooks/useCustomMutation';
-import APIHelper from '../apiHelper/NApiHelper';
+import APIHelper from '../ApiHelper/NApiHelper';
+import { firebaseRTDB, firestore } from '../../config/firebase/config';
+import { useCustomMutation } from '../../hooks/useCustomMutation';
+import ArrayOfObjects from '../../helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 
 export namespace DBConnect {
    /* -- FIRESTORE DB -- */

@@ -1,5 +1,5 @@
-import ArrayHelper from '../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
-import ArrayOfObjects from '../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import ArrayHelper from '../../helpers/dataTypes/arrayHelper/ArrayHelper';
+import ArrayOfObjects from '../../helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import type DBConnect from '../DBConnect/DBConnect';
 
 export namespace GameHelper {

@@ -3,8 +3,8 @@ import { LogoText } from '../../../../../../global/components/app/logo/LogoText'
 import { GameContext } from '../../../../../../global/context/game/GameContext';
 import ArrayOfObjects from '../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import DBConnect from '../../../../../../utils/DBConnect/DBConnect';
 import { Cell, DataTableWrapper, HeaderRowContainer, RowContainer, UserRowsWrapper } from './Style';
+import DBConnect from '../../../../../../global/utils/DBConnect/DBConnect';
 
 export default function GameDataTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);

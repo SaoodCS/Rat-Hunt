@@ -6,9 +6,9 @@ import Color from '../../../../../../../../global/css/colors';
 import ArrayOfObjects from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import HTMLEntities from '../../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import DBConnect from '../../../../../../../../utils/DBConnect/DBConnect';
 import { HeaderRowContainer, RowContainer, UserRowsWrapper } from '../../../gameDataTable/Style';
 import { ScoreTableCell, ScoreTableWrapper } from '../../style/Style';
+import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect';
 
 export default function ScoresTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);

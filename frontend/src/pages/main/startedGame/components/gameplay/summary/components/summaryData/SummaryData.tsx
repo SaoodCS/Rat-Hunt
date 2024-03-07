@@ -8,7 +8,7 @@ import ArrayHelper from '../../../../../../../../global/helpers/dataTypes/arrayH
 import ArrayOfObjects from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import HTMLEntities from '../../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import DBConnect from '../../../../../../../../utils/DBConnect/DBConnect';
+import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect';
 
 export default function SummaryData(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);

@@ -10,9 +10,9 @@ import { GameContext } from '../../../global/context/game/GameContext';
 import { ModalContext } from '../../../global/context/widget/modal/ModalContext';
 import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import DBConnect from '../../../utils/DBConnect/DBConnect';
-import GameHelper from '../../../utils/GameHelper/GameHelper';
 import HelpGuide from './HelpGuide';
+import DBConnect from '../../../global/utils/DBConnect/DBConnect';
+import GameHelper from '../../../global/utils/GameHelper/GameHelper';
 
 interface IGuideAndLeaveRoom {
    currentPath: string;
