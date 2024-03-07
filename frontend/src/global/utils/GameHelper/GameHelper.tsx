@@ -235,11 +235,13 @@ export namespace GameHelper {
                     { key: 'votedFor', value: '' },
                     { key: 'roundScores', value: [] },
                     { key: 'totalScore', value: 0 },
+                    { key: 'spectate', value: false },
                  ]
                : [
                     { key: 'clue', value: '' },
                     { key: 'guess', value: '' },
                     { key: 'votedFor', value: '' },
+                    { key: 'spectate', value: false },
                  ],
          );
          const updatedCurrentTurn = GameHelper.Get.firstUser(userStatesWithoutDelUser);

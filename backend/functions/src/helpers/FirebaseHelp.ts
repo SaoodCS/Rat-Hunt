@@ -14,6 +14,7 @@ export interface IUserStates {
   clue: string;
   guess: string;
   votedFor: string;
+  spectate: boolean;
 }
 export interface IGameState {
   activeTopic: string;

@@ -54,6 +54,7 @@ export namespace DBConnect {
                   clue: string;
                   guess: string;
                   votedFor: string;
+                  spectate: boolean;
                }[];
             };
          }

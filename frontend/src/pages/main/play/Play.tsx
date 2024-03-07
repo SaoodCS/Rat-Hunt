@@ -15,12 +15,12 @@ import { GameContext } from '../../../global/context/game/GameContext';
 import useThemeContext from '../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import ArrayHelper from '../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
+import ArrOfObj from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../global/hooks/useForm';
 import DBConnect from '../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../global/utils/GameHelper/GameHelper';
 import PlayFormClass from './class/PlayForm';
-import ArrOfObj from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 
 export default function Play(): JSX.Element {
    const { isDarkTheme } = useThemeContext();
@@ -66,12 +66,13 @@ export default function Play(): JSX.Element {
          return;
       }
       const roomData = docSnap.data() as DBConnect.FSDB.I.Room;
-      const clientUserExistsInRoom = roomData.users.some((user) => user.userId === form.name);
+      const { gameStarted, users, gameState } = roomData;
+      const clientUserExistsInRoom = users.some((user) => user.userId === form.name);
       if (clientUserExistsInRoom) {
          alert('Be original, Ben');
          return;
       }
-      const roomIsFull = roomData.users.length >= 10;
+      const roomIsFull = users.length >= 10;
       if (roomIsFull) {
          alert('Room is full');
          return;
@@ -85,20 +86,21 @@ export default function Play(): JSX.Element {
          userId: form.name,
          totalScore: 0,
          roundScores: [],
-         clue: '',
+         clue: gameStarted ? 'SKIP' : '',
          guess: '',
-         votedFor: '',
+         votedFor: gameStarted ? 'SKIP' : '',
+         spectate: gameStarted,
       };
       await addUserToRoom.mutateAsync({
          roomId: form.roomId,
          userObjForUsers: user,
          userObjForUserState: userState,
-         gameStateObj: roomData.gameState,
+         gameStateObj: gameState,
       });
       setLocalDbRoom(form.roomId);
       setLocalDbUser(form.name);
       DBConnect.RTDB.Set.userStatus(form.name, form.roomId);
-      navigation(roomData.gameStarted ? '/main/startedgame' : '/main/waitingroom');
+      navigation(gameStarted ? '/main/startedgame' : '/main/waitingroom');
    }
 
    async function handleHostGame(): Promise<void> {
@@ -128,6 +130,7 @@ export default function Play(): JSX.Element {
                   clue: '',
                   guess: '',
                   votedFor: '',
+                  spectate: false,
                },
             ],
          },
