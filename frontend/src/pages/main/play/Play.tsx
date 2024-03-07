@@ -10,6 +10,7 @@ import { StyledForm } from '../../../global/components/lib/form/form/Style';
 import InputCombination from '../../../global/components/lib/form/inputCombination/InputCombination';
 import Loader from '../../../global/components/lib/loader/fullScreen/Loader';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
+import { GameContext } from '../../../global/context/game/GameContext';
 import useThemeContext from '../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import { firestore } from '../../../global/firebase/config/config';
@@ -18,9 +19,8 @@ import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arr
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../global/hooks/useForm';
 import DBConnect from '../../../utils/DBConnect/DBConnect';
-import PlayFormClass from '../class/PlayForm';
-import { GameContext } from '../context/GameContext';
 import GameHelper from '../../../utils/GameHelper/GameHelper';
+import PlayFormClass from '../class/PlayForm';
 
 export default function Play(): JSX.Element {
    const { isDarkTheme } = useThemeContext();

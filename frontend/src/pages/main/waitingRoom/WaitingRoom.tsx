@@ -9,6 +9,7 @@ import AnimatedDots from '../../../global/components/lib/font/animatedDots/Anima
 import { TextColourizer } from '../../../global/components/lib/font/textColorizer/TextColourizer';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { FlexRowWrapper } from '../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
+import { GameContext } from '../../../global/context/game/GameContext';
 import { BannerContext } from '../../../global/context/widget/banner/BannerContext';
 import { ToastContext } from '../../../global/context/widget/toast/ToastContext';
 import Color from '../../../global/css/colors';
@@ -17,7 +18,6 @@ import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper'
 import StringHelper from '../../../global/helpers/dataTypes/string/StringHelper';
 import DBConnect from '../../../utils/DBConnect/DBConnect';
 import GameHelper from '../../../utils/GameHelper/GameHelper';
-import { GameContext } from '../context/GameContext';
 
 export default function WaitingRoom(): JSX.Element {
    const { allUsers, localDbRoom, localDbUser } = useContext(GameContext);

@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
 import { LogoText } from '../../../../../../global/components/app/logo/LogoText';
+import { GameContext } from '../../../../../../global/context/game/GameContext';
 import ArrayOfObjects from '../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import { GameContext } from '../../../../context/GameContext';
-import { DataTableWrapper, HeaderRowContainer, Cell, UserRowsWrapper, RowContainer } from './Style';
 import DBConnect from '../../../../../../utils/DBConnect/DBConnect';
+import { Cell, DataTableWrapper, HeaderRowContainer, RowContainer, UserRowsWrapper } from './Style';
 
 export default function GameDataTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);

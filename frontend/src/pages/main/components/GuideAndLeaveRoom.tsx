@@ -5,14 +5,14 @@ import type { DatabaseReference } from 'firebase/database';
 import { onDisconnect, ref } from 'firebase/database';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { GameContext } from '../../../global/context/game/GameContext';
 import { ModalContext } from '../../../global/context/widget/modal/ModalContext';
 import { firebaseRTDB } from '../../../global/firebase/config/config';
 import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import DBConnect from '../../../utils/DBConnect/DBConnect';
-import { GameContext } from '../context/GameContext';
-import HelpGuide from './HelpGuide';
 import GameHelper from '../../../utils/GameHelper/GameHelper';
+import HelpGuide from './HelpGuide';
 
 interface IGuideAndLeaveRoom {
    currentPath: string;

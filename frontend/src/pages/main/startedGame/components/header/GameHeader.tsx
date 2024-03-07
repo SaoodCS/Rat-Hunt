@@ -10,14 +10,14 @@ import { ArrowCircleLeftIcon } from '../../../../../global/components/lib/icons/
 import { FlexCenterer } from '../../../../../global/components/lib/positionModifiers/centerers/FlexCenterer';
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
+import { GameContext } from '../../../../../global/context/game/GameContext';
 import useThemeContext from '../../../../../global/context/theme/hooks/useThemeContext';
 import { ToastContext } from '../../../../../global/context/widget/toast/ToastContext';
-import { GameContext } from '../../../context/GameContext';
+import Color from '../../../../../global/css/colors';
+import Unicode from '../../../../../global/helpers/dataTypes/unicode/Unicode';
 import { BtnContainer } from './Style';
 import GameDetailsSlide from './components/GameDetailsSlide';
 import ScoreboardSlide from './components/ScoreboardSlide';
-import Color from '../../../../../global/css/colors';
-import Unicode from '../../../../../global/helpers/dataTypes/unicode/Unicode';
 
 export default function GameHeader(): JSX.Element {
    const { containerRef, scrollToSlide } = useCarousel(1, 'headerCarousel.currentSlide');

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { GameContext } from '../../../../pages/main/context/GameContext';
+import { GameContext } from '../../../context/game/GameContext';
 import useThemeContext from '../../../context/theme/hooks/useThemeContext';
 import Color from '../../../css/colors';
 import NumberHelper from '../../../helpers/dataTypes/number/NumberHelper';

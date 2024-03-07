@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
-import { BoardCell, BoardContainer, BoardRow, CellUID, CellValue } from './Style';
 import { LogoText } from '../../../../../global/components/app/logo/LogoText';
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
-import { GameContext } from '../../../context/GameContext';
+import { GameContext } from '../../../../../global/context/game/GameContext';
 import Color from '../../../../../global/css/colors';
 import DBConnect from '../../../../../utils/DBConnect/DBConnect';
 import type GameHelper from '../../../../../utils/GameHelper/GameHelper';
+import { BoardCell, BoardContainer, BoardRow, CellUID, CellValue } from './Style';
 
 export default function TopicBoard(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);

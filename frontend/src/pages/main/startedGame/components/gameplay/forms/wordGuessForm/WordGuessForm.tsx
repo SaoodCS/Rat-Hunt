@@ -4,16 +4,16 @@ import { TextBtn } from '../../../../../../../global/components/lib/button/textB
 import type { IDropDownOption } from '../../../../../../../global/components/lib/form/dropDown/DropDownInput';
 import { StyledForm } from '../../../../../../../global/components/lib/form/form/Style';
 import InputCombination from '../../../../../../../global/components/lib/form/inputCombination/InputCombination';
+import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import useThemeContext from '../../../../../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import ArrayOfObjects from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../../../../../global/hooks/useForm';
-import { GameContext } from '../../../../../context/GameContext';
-import { gameFormStyles } from '../style/Style';
-import WordGuessFormClass from './class/WordGuessFormClass';
 import DBConnect from '../../../../../../../utils/DBConnect/DBConnect';
 import GameHelper from '../../../../../../../utils/GameHelper/GameHelper';
+import { gameFormStyles } from '../style/Style';
+import WordGuessFormClass from './class/WordGuessFormClass';
 
 export default function WordGuessForm(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);

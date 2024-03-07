@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
-import { ScoreboardContainer } from '../Style';
 import type { IProgressBarChartData } from '../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
 import ProgressBarChart from '../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
+import { GameContext } from '../../../../../../global/context/game/GameContext';
 import ArrayOfObjects from '../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import { GameContext } from '../../../../context/GameContext';
 import DBConnect from '../../../../../../utils/DBConnect/DBConnect';
+import { ScoreboardContainer } from '../Style';
 
 export default function ScoreboardSlide(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);

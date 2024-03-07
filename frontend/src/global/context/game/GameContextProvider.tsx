@@ -4,14 +4,14 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import useHeaderContext from '../../../global/context/widget/header/hooks/useHeaderContext';
-import { firestore } from '../../../global/firebase/config/config';
-import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import useLocalStorage from '../../../global/hooks/useLocalStorage';
+import GuideAndLeaveRoom from '../../../pages/main/components/GuideAndLeaveRoom';
 import DBConnect from '../../../utils/DBConnect/DBConnect';
 import GameHelper from '../../../utils/GameHelper/GameHelper';
-import GuideAndLeaveRoom from '../components/GuideAndLeaveRoom';
+import { firestore } from '../../firebase/config/config';
+import ArrayOfObjects from '../../helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../helpers/dataTypes/miscHelper/MiscHelper';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import useHeaderContext from '../widget/header/hooks/useHeaderContext';
 import { GameContext } from './GameContext';
 
 interface IGameContextProvider {

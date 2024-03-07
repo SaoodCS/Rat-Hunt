@@ -1,13 +1,13 @@
 import { Fragment, useContext, useEffect, useState } from 'react';
 import { LogoText } from '../../../../../../../../global/components/app/logo/LogoText';
 import { FlexColumnWrapper } from '../../../../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
+import { GameContext } from '../../../../../../../../global/context/game/GameContext';
 import { BannerContext } from '../../../../../../../../global/context/widget/banner/BannerContext';
 import Color from '../../../../../../../../global/css/colors';
 import ArrayHelper from '../../../../../../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
 import ArrayOfObjects from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import HTMLEntities from '../../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import { GameContext } from '../../../../../../context/GameContext';
 import DBConnect from '../../../../../../../../utils/DBConnect/DBConnect';
 
 export default function SummaryData(): JSX.Element {
