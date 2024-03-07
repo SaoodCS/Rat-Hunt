@@ -118,6 +118,11 @@ export namespace GameHelper {
          return ArrOfObj.getArrOfValuesFromKey(connectedUsers, 'userId');
       }
 
+      export function spectatingUserIds(userStates: DBConnect.FSDB.I.UserState[]): string[] {
+         const spectatingUsers = ArrOfObj.filterOut(userStates, 'spectate', false);
+         return ArrOfObj.getArrOfValuesFromKey(spectatingUsers, 'userId');
+      }
+
       export function gamePhase(
          gameState: DBConnect.FSDB.I.GameState,
       ): 'votedFor' | 'clue' | 'guess' {

@@ -7,6 +7,7 @@ import { FlexRowWrapper } from '../../../../../global/components/lib/positionMod
 import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../global/context/game/GameContext';
 import Color from '../../../../../global/css/colors';
+import ArrOfObj from '../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import DBConnect from '../../../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../../../global/utils/GameHelper/GameHelper';
@@ -15,7 +16,6 @@ import RatVoteForm from './components/forms/ratVoteForm/RatVoteForm';
 import WordGuessForm from './components/forms/wordGuessForm/WordGuessForm';
 import GameStateTable from './components/gameStateTable/GameStateTable';
 import RoundSummary from './components/summary/RoundSummary';
-import ArrOfObj from '../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 
 export default function Gameplay(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -35,8 +35,10 @@ export default function Gameplay(): JSX.Element {
       if (localDbUser !== connectedUsers[0]) return;
       const { currentTurn, userStates, currentRat } = gameState;
       const disconnectedUsers = GameHelper.Get.disconnectedUserIds(users);
+      const spectatingUsers = GameHelper.Get.spectatingUserIds(userStates);
       const currentTurnUserIsDisconnected = disconnectedUsers.includes(currentTurn);
-      if (!currentTurnUserIsDisconnected) return;
+      const currentTurnUserIsSpectating = spectatingUsers.includes(currentTurn);
+      if (!(currentTurnUserIsDisconnected || currentTurnUserIsSpectating)) return;
       const gamePhase = GameHelper.Get.gamePhase(gameState);
       const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(
          userStates,
