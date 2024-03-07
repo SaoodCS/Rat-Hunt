@@ -27,11 +27,6 @@ export const RowContainer = styled.div<{
       }
       return 'transparent';
    }};
-   ${({ isDisconnected, isSpectating }) => {
-      if (isDisconnected || isSpectating) {
-         return `color: ${Color.setRgbOpacity(Color.darkThm.bg, 0.75)};`;
-      }
-   }}
 `;
 
 export const UserRowsWrapper = styled.div<{ headerRowHeight?: string }>`

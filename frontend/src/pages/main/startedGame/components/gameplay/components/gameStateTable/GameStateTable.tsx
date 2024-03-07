@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { LogoText } from '../../../../../../../global/components/app/logo/LogoText';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
+import ArrOfObj from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
 import {
@@ -10,7 +11,7 @@ import {
    RowContainer,
    UserRowsWrapper,
 } from './style/Style';
-import ArrOfObj from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import Color from '../../../../../../../global/css/colors';
 
 export default function GameStateTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -29,6 +30,16 @@ export default function GameStateTable(): JSX.Element {
       const { users } = roomData;
       const thisUser = ArrOfObj.findObj(users, 'userId', userId);
       return thisUser.userStatus;
+   }
+
+   function valueCol(userState: DBConnect.FSDB.I.UserState): string {
+      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return 'disconnected';
+      const { users } = roomData;
+      const thisUser = ArrOfObj.findObj(users, 'userId', userState.userId);
+      const isSpectating = userState.spectate;
+      const isDisconnected = thisUser.userStatus === 'disconnected';
+      if (isDisconnected || isSpectating) return Color.setRgbOpacity(Color.darkThm.txt, 0.35);
+      return '';
    }
 
    return (
@@ -54,13 +65,19 @@ export default function GameStateTable(): JSX.Element {
                   isDisconnected={getConnectionStatus(user.userId) === 'disconnected'}
                >
                   <Cell>
-                     <LogoText size="1em">{user.userId}</LogoText>
+                     <LogoText size="1em" color={valueCol(user)}>
+                        {user.userId}
+                     </LogoText>
                   </Cell>
                   <Cell>
-                     <LogoText size="1em">{user.clue}</LogoText>
+                     <LogoText size="1em" color={valueCol(user)}>
+                        {user.clue}
+                     </LogoText>
                   </Cell>
                   <Cell>
-                     <LogoText size="1em">{user.votedFor}</LogoText>
+                     <LogoText size="1em" color={valueCol(user)}>
+                        {user.votedFor}
+                     </LogoText>
                   </Cell>
                </RowContainer>
             ))}
