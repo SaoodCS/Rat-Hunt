@@ -7,7 +7,12 @@ export const Cell = styled.div<{ noOfTableRows?: number }>`
    text-align: center;
 `;
 
-export const RowContainer = styled.div<{ isThisUser?: boolean; currentTurn?: boolean }>`
+export const RowContainer = styled.div<{
+   isThisUser?: boolean;
+   currentTurn?: boolean;
+   isDisconnected?: boolean;
+   isSpectating?: boolean;
+}>`
    display: flex;
    border-bottom: 1px solid ${Color.darkThm.accent};
    padding-top: 0.5em;
@@ -22,6 +27,11 @@ export const RowContainer = styled.div<{ isThisUser?: boolean; currentTurn?: boo
       }
       return 'transparent';
    }};
+   ${({ isDisconnected, isSpectating }) => {
+      if (isDisconnected || isSpectating) {
+         return `color: ${Color.setRgbOpacity(Color.darkThm.bg, 0.75)};`;
+      }
+   }}
 `;
 
 export const UserRowsWrapper = styled.div<{ headerRowHeight?: string }>`

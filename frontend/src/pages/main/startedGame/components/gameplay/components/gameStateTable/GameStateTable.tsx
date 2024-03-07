@@ -24,6 +24,13 @@ export default function GameStateTable(): JSX.Element {
       setSortedUserStates(ArrOfObj.sort(userStates, 'userId'));
    }, [roomData?.gameState.userStates, localDbUser]);
 
+   function getConnectionStatus(userId: string): DBConnect.FSDB.I.User['userStatus'] {
+      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return 'disconnected';
+      const { users } = roomData;
+      const thisUser = ArrOfObj.findObj(users, 'userId', userId);
+      return thisUser.userStatus;
+   }
+
    return (
       <DataTableWrapper>
          <HeaderRowContainer style={{ borderRadius: '0.5em' }}>
@@ -43,6 +50,8 @@ export default function GameStateTable(): JSX.Element {
                   key={user.userId}
                   isThisUser={user.userId === localDbUser}
                   currentTurn={user.userId === roomData?.gameState.currentTurn}
+                  isSpectating={user.spectate}
+                  isDisconnected={getConnectionStatus(user.userId) === 'disconnected'}
                >
                   <Cell>
                      <LogoText size="1em">{user.userId}</LogoText>
