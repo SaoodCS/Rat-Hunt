@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Color from '../../../../../global/css/colors';
-import MyCSS from '../../../../../global/css/MyCSS';
+import MyCSS from '../../../../../../global/css/MyCSS';
+import Color from '../../../../../../global/css/colors';
 
 export const BtnContainer = styled.div`
    border: 1px solid ${Color.darkThm.accent};

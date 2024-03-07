@@ -1,10 +1,16 @@
 import { useContext, useEffect, useState } from 'react';
-import { Cell, DataTableWrapper, HeaderRowContainer, RowContainer, UserRowsWrapper } from './Style';
-import { GameContext } from '../../../../../../../global/context/game/GameContext';
-import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
-import MiscHelper from '../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import ArrayOfObjects from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import { LogoText } from '../../../../../../../global/components/app/logo/LogoText';
+import { GameContext } from '../../../../../../../global/context/game/GameContext';
+import ArrayOfObjects from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
+import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
+import {
+   Cell,
+   DataTableWrapper,
+   HeaderRowContainer,
+   RowContainer,
+   UserRowsWrapper,
+} from './style/Style';
 
 export default function GameStateTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);

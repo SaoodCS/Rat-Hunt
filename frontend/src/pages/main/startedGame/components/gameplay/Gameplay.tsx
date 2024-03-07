@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { LogoText } from '../../../../../global/components/app/logo/LogoText';
 import Fader from '../../../../../global/components/lib/animation/fader/Fader';
 import AnimatedDots from '../../../../../global/components/lib/font/animatedDots/AnimatedDots';
+import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { FlexRowWrapper } from '../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
 import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../global/context/game/GameContext';
@@ -10,12 +11,11 @@ import ArrayOfObjects from '../../../../../global/helpers/dataTypes/arrayOfObjec
 import MiscHelper from '../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import DBConnect from '../../../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../../../global/utils/GameHelper/GameHelper';
-import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import ClueForm from './components/forms/clueForm/ClueForm';
 import RatVoteForm from './components/forms/ratVoteForm/RatVoteForm';
 import WordGuessForm from './components/forms/wordGuessForm/WordGuessForm';
-import RoundSummary from './components/summary/components/roundSummary/RoundSummary';
 import GameStateTable from './components/gameStateTable/GameStateTable';
+import RoundSummary from './components/summary/RoundSummary';
 
 export default function Gameplay(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);

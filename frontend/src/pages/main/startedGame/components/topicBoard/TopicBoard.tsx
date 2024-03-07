@@ -3,9 +3,9 @@ import { LogoText } from '../../../../../global/components/app/logo/LogoText';
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { GameContext } from '../../../../../global/context/game/GameContext';
 import Color from '../../../../../global/css/colors';
-import { BoardCell, BoardContainer, BoardRow, CellUID, CellValue } from './Style';
 import DBConnect from '../../../../../global/utils/DBConnect/DBConnect';
 import type GameHelper from '../../../../../global/utils/GameHelper/GameHelper';
+import { BoardCell, BoardContainer, BoardRow, CellUID, CellValue } from './style/Style';
 
 export default function TopicBoard(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);

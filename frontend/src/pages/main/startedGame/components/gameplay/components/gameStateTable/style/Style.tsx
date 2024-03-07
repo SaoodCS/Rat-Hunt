@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Color from '../../../../../../../global/css/colors';
-import MyCSS from '../../../../../../../global/css/MyCSS';
+import MyCSS from '../../../../../../../../global/css/MyCSS';
+import Color from '../../../../../../../../global/css/colors';
 
 export const Cell = styled.div<{ noOfTableRows?: number }>`
    width: ${({ noOfTableRows }) => `calc(100% / ${noOfTableRows || 3})`};

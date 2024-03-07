@@ -15,9 +15,9 @@ import useThemeContext from '../../../../../global/context/theme/hooks/useThemeC
 import { ToastContext } from '../../../../../global/context/widget/toast/ToastContext';
 import Color from '../../../../../global/css/colors';
 import Unicode from '../../../../../global/helpers/dataTypes/unicode/Unicode';
-import { BtnContainer } from './Style';
-import GameDetailsSlide from './components/GameDetailsSlide';
-import ScoreboardSlide from './components/ScoreboardSlide';
+import GameDetailsSlide from './components/gameDetailsSlide/GameDetailsSlide';
+import ScoreboardSlide from './components/scoreboardSlide/ScoreboardSlide';
+import { BtnContainer } from './style/Style';
 
 export default function GameHeader(): JSX.Element {
    const { containerRef, scrollToSlide } = useCarousel(1, 'headerCarousel.currentSlide');

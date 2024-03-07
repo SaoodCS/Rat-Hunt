@@ -2,8 +2,8 @@ import Gameplay from './components/gameplay/Gameplay';
 import GameHeader from './components/header/GameHeader';
 import TopicBoard from './components/topicBoard/TopicBoard';
 import {
-   GamePageWrapper,
    GameHeaderWrapper,
+   GamePageWrapper,
    GameplayWrapper,
    TopicBoardWrapper,
 } from './style/Style';

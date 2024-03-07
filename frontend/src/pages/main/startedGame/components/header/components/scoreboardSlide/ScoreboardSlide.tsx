@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
-import type { IProgressBarChartData } from '../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
-import ProgressBarChart from '../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
-import { GameContext } from '../../../../../../global/context/game/GameContext';
-import ArrayOfObjects from '../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import { ScoreboardContainer } from '../Style';
-import DBConnect from '../../../../../../global/utils/DBConnect/DBConnect';
+import type { IProgressBarChartData } from '../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
+import ProgressBarChart from '../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
+import { GameContext } from '../../../../../../../global/context/game/GameContext';
+import ArrayOfObjects from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
+import { ScoreboardContainer } from '../../style/Style';
 
 export default function ScoreboardSlide(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);

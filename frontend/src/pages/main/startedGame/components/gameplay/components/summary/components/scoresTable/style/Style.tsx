@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Cell } from '../../../../gameStateTable/Style';
+import { Cell } from '../../../../gameStateTable/style/Style';
 
 export const ScoreTableWrapper = styled.div`
    position: absolute;

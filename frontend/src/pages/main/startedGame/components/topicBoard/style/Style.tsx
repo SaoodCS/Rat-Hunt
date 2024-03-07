@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Color from '../../../../../global/css/colors';
+import Color from '../../../../../../global/css/colors';
 
 export const CellValue = styled.div`
    width: 80%;

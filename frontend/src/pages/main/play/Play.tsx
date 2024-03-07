@@ -18,9 +18,9 @@ import ArrayHelper from '../../../global/helpers/dataTypes/arrayHelper/ArrayHelp
 import ArrayOfObjects from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../global/hooks/useForm';
-import PlayFormClass from './PlayForm';
 import DBConnect from '../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../global/utils/GameHelper/GameHelper';
+import PlayFormClass from './class/PlayForm';
 
 export default function Play(): JSX.Element {
    const { isDarkTheme } = useThemeContext();

@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
-import { LogoText } from '../../../../../../global/components/app/logo/LogoText';
-import { FlexRowWrapper } from '../../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
-import ConditionalRender from '../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
-import { GameContext } from '../../../../../../global/context/game/GameContext';
-import Color from '../../../../../../global/css/colors';
-import ArrayOfObjects from '../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import HTMLEntities from '../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
-import Unicode from '../../../../../../global/helpers/dataTypes/unicode/Unicode';
-import { GameDetailsContainer } from '../Style';
-import DBConnect from '../../../../../../global/utils/DBConnect/DBConnect';
+import { LogoText } from '../../../../../../../global/components/app/logo/LogoText';
+import { FlexRowWrapper } from '../../../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
+import ConditionalRender from '../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
+import { GameContext } from '../../../../../../../global/context/game/GameContext';
+import Color from '../../../../../../../global/css/colors';
+import ArrayOfObjects from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import HTMLEntities from '../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
+import Unicode from '../../../../../../../global/helpers/dataTypes/unicode/Unicode';
+import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
+import { GameDetailsContainer } from '../../style/Style';
 
 interface IGameHeaderDetails {
    label: string;
