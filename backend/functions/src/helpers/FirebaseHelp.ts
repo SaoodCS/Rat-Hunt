@@ -185,4 +185,10 @@ export class FBHelp {
     };
     return updatedGameState;
   }
+
+  public static isRoundSummaryPhase(gameState: IGameState) {
+    const { currentRat, userStates } = gameState;
+    const ratUserState = ArrayHelp.getObj(userStates, "userId", currentRat);
+    return ratUserState.guess !== "";
+  }
 }

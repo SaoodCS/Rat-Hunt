@@ -52,6 +52,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
       } else {
          const { gameState, users } = roomData;
          const { currentTurn, userStates, currentRat, activeTopic } = gameState;
+         const gamePhase = GameHelper.Get.gamePhase(gameState);
          if (currentRat === localDbUser) {
             if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
             const updatedGameState = GameHelper.SetGameState.newRound({
@@ -59,7 +60,8 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
                topicsData,
                newTopic: activeTopic,
                resetCurrentRound: true,
-               delUserFromUserStateId: localDbUser,
+               idOfUserToDelFromUserStates: localDbUser,
+               cancelGameStateUpdate: gamePhase === 'roundSummary',
             });
             const updatedUsers = ArrOfObj.filterOut(users, 'userId', localDbUser);
             const updatedRoomState = GameHelper.SetRoomState.keysVals(roomData, [

@@ -1,6 +1,7 @@
 import * as admin from "firebase-admin";
 import { FieldValue } from "firebase-admin/firestore";
 import * as functions from "firebase-functions";
+import { ArrayHelp } from "./helpers/ArrayHelp";
 import { FBHelp } from "./helpers/FirebaseHelp";
 import { MiscHelp } from "./helpers/MiscHelp";
 
@@ -49,19 +50,23 @@ export const onDataChange = functions.database
         return;
       }
       const userStatesFS = roomDataFS.gameState.userStates;
-      const userStatesWithoutLeavingUser = userStatesFS.filter(
-        (u) => u.userId !== userId
+      const userStatesWithoutLeavingUser = ArrayHelp.filterOut(
+        userStatesFS,
+        "userId",
+        userId
       );
       const { currentRat, activeTopic } = gameState;
       const topics = await FBHelp.getTopics();
       const isRat = currentRat === userId;
+      const isRoundSummaryPhase = FBHelp.isRoundSummaryPhase(gameState);
       const updatedGameState: typeof gameState = {
         ...gameState,
         userStates: userStatesWithoutLeavingUser,
       };
+      const runResetRound = isRat && !isRoundSummaryPhase;
       await roomRefFS.update({
         users: FieldValue.arrayRemove(userInUsersFS),
-        gameState: isRat
+        gameState: runResetRound
           ? FBHelp.resetRoundGameState(
               gameState,
               userStatesWithoutLeavingUser,

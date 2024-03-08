@@ -27,6 +27,14 @@ export namespace GameHelper {
       }
    }
 
+   export namespace Check {
+      export function hasRatGuessed(gameState: DBConnect.FSDB.I.GameState): boolean {
+         const { currentRat, userStates } = gameState;
+         const ratUserState = ArrOfObj.findObj(userStates, 'userId', currentRat);
+         return ratUserState.guess !== '';
+      }
+   }
+
    export namespace Get {
       export function topicWordsAndCells(
          topics: DBConnect.FSDB.I.Topics[],
@@ -125,23 +133,26 @@ export namespace GameHelper {
 
       export function gamePhase(
          gameState: DBConnect.FSDB.I.GameState,
-      ): 'votedFor' | 'clue' | 'guess' {
+      ): 'votedFor' | 'clue' | 'guess' | 'roundSummary' {
          const { currentTurn, userStates } = gameState;
          const currentTurnUserState = ArrOfObj.findObj(userStates, 'userId', currentTurn);
+         const hasRatGuessed = GameHelper.Check.hasRatGuessed(gameState);
          if (currentTurnUserState.spectate) {
+            // Spectating user's clue and votedFor values are already set to 'SKIP' for the round
             const allCluesExist = ArrOfObj.isKeyInAllObjsNotValuedAs(userStates, 'clue', '');
             const allVotedForValuesExist = ArrOfObj.isKeyInAllObjsNotValuedAs(
                userStates,
                'votedFor',
                '',
             );
+            if (hasRatGuessed) return 'roundSummary';
             if (allCluesExist && allVotedForValuesExist) return 'guess';
             if (allCluesExist) return 'votedFor';
             return 'clue';
          }
-         // TODO: potential update: instead of this, check if this user is the last user to submit a clue / vote
          if (currentTurnUserState.clue === '') return 'clue';
          if (currentTurnUserState.votedFor === '') return 'votedFor';
+         if (hasRatGuessed) return 'roundSummary';
          return 'guess';
       }
    }
@@ -216,7 +227,8 @@ export namespace GameHelper {
          resetScores?: boolean;
          newNoOfRounds?: number;
          resetCurrentRound?: boolean;
-         delUserFromUserStateId?: string;
+         idOfUserToDelFromUserStates?: string;
+         cancelGameStateUpdate?: boolean;
       }): DBConnect.FSDB.I.GameState {
          const {
             gameState,
@@ -226,9 +238,11 @@ export namespace GameHelper {
             resetScores,
             newNoOfRounds,
             resetCurrentRound,
-            delUserFromUserStateId,
+            idOfUserToDelFromUserStates,
+            cancelGameStateUpdate,
          } = options;
          const { userStates } = gameState;
+         if (cancelGameStateUpdate === true) return gameState;
          const resetRoundToOneIsTrue = resetRoundToOne === true;
          const resetScoresIsTrue = resetScores === true;
          const newNoOfRoundsExists = newNoOfRounds !== undefined;
@@ -237,7 +251,7 @@ export namespace GameHelper {
          const userStatesWithoutDelUser = ArrOfObj.filterOut(
             userStates,
             'userId',
-            delUserFromUserStateId || '',
+            idOfUserToDelFromUserStates || '',
          );
          const newRat = ArrOfObj.getRandItem(userStatesWithoutDelUser).userId;
          const { currentRound, numberOfRoundsSet } = gameState;

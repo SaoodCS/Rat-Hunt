@@ -40,6 +40,7 @@ export default function Gameplay(): JSX.Element {
       const currentTurnUserIsSpectating = spectatingUsers.includes(currentTurn);
       if (!(currentTurnUserIsDisconnected || currentTurnUserIsSpectating)) return;
       const gamePhase = GameHelper.Get.gamePhase(gameState);
+      if (gamePhase === 'roundSummary') return;
       const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(
          userStates,
          currentTurn,
