@@ -10,7 +10,7 @@ export const Body = styled.div<{ isDarkTheme: boolean }>`
    background: linear-gradient(
       to bottom,
       ${Color.setRgbOpacity(Color.darkThm.accent, 0)},
-      ${Color.setRgbOpacity(Color.darkThm.accent, 0.2)}
+      ${Color.setRgbOpacity(Color.darkThm.accent, 0.1)}
    );
    @media (min-width: ${MyCSS.PortableBp.asPx}) {
       margin-top: 20px;

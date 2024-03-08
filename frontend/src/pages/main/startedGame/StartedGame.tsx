@@ -23,10 +23,12 @@ export default function StartedGame(): JSX.Element {
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
+      if (!MiscHelper.isNotFalsyOrEmpty(gameState)) return;
       const { userStates } = gameState;
+      if (!MiscHelper.isNotFalsyOrEmpty(userStates)) return;
       const thisUserState = ArrOfObj.findObj(userStates, 'userId', localDbUser);
-      const { spectate } = thisUserState;
-      if (!spectate) return;
+      if (!MiscHelper.isNotFalsyOrEmpty(thisUserState)) return;
+      if (!thisUserState?.spectate !== true) return;
       setModalHeader('Spectator Mode');
       setModalContent(<>You are spectating the current round as it has already started.</>);
       setModalZIndex(100);

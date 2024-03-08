@@ -13,8 +13,8 @@ export const RowContainer = styled.div<{
 }>`
    display: flex;
    border-bottom: 1px solid ${Color.darkThm.accent};
-   border-left: 1px solid ${Color.darkThm.accent};
-   border-right: 1px solid ${Color.darkThm.accent};
+   border-left: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.75)};
+   border-right: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.75)};
    padding-top: 0.5em;
    padding-bottom: 0.5em;
    font-size: 0.85em;
