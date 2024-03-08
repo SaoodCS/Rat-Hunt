@@ -1,3 +1,4 @@
+import type { FlattenSimpleInterpolation } from 'styled-components';
 import styled from 'styled-components';
 
 export const FlexColumnWrapper = styled.div<{
@@ -18,6 +19,7 @@ export const FlexColumnWrapper = styled.div<{
    zIndex?: number;
    borderRadius?: string;
    backdropFilter?: string;
+   localStyles?: FlattenSimpleInterpolation;
 }>`
    display: flex;
    flex-direction: column;
@@ -39,4 +41,5 @@ export const FlexColumnWrapper = styled.div<{
    z-index: ${({ zIndex }) => zIndex};
    border-radius: ${({ borderRadius }) => borderRadius};
    backdrop-filter: ${({ backdropFilter }) => backdropFilter};
+   ${({ localStyles }) => localStyles};
 `;

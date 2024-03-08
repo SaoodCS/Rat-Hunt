@@ -1,7 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
+import type { FlattenSimpleInterpolation } from 'styled-components';
+import { css } from 'styled-components';
 import { LogoText } from '../../../../../global/components/app/logo/LogoText';
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { GameContext } from '../../../../../global/context/game/GameContext';
+import MyCSS from '../../../../../global/css/MyCSS';
 import Color from '../../../../../global/css/colors';
 import DBConnect from '../../../../../global/utils/DBConnect/DBConnect';
 import type GameHelper from '../../../../../global/utils/GameHelper/GameHelper';
@@ -30,7 +33,7 @@ export default function TopicBoard(): JSX.Element {
    }
 
    return (
-      <FlexColumnWrapper style={{ height: '90%', margin: '1em' }}>
+      <FlexColumnWrapper localStyles={screenStyles()}>
          <BoardContainer>
             {rows.map((row, index) => (
                <BoardRow key={index}>
@@ -54,3 +57,18 @@ export default function TopicBoard(): JSX.Element {
       </FlexColumnWrapper>
    );
 }
+
+const screenStyles = (): FlattenSimpleInterpolation => {
+   const allStyles = css`
+      height: 90%;
+      margin: 1em;
+   `;
+
+   const forDesktop = MyCSS.Media.desktop(css`
+      font-size: 1.25em;
+      width: 30em;
+      margin: 1em auto;
+   `);
+   const forTablet = MyCSS.Media.tablet(css``);
+   return MyCSS.Helper.concatStyles(forDesktop, forTablet, allStyles);
+};

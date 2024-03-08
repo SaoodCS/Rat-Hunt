@@ -18,6 +18,9 @@ import Unicode from '../../../../../global/helpers/dataTypes/unicode/Unicode';
 import GameDetailsSlide from './components/gameDetailsSlide/GameDetailsSlide';
 import ScoreboardSlide from './components/scoreboardSlide/ScoreboardSlide';
 import { BtnContainer } from './style/Style';
+import type { FlattenSimpleInterpolation } from 'styled-components';
+import { css } from 'styled-components';
+import MyCSS from '../../../../../global/css/MyCSS';
 
 export default function GameHeader(): JSX.Element {
    const { containerRef, scrollToSlide } = useCarousel(1, 'headerCarousel.currentSlide');
@@ -54,6 +57,7 @@ export default function GameHeader(): JSX.Element {
                alignItems="center"
                padding="0em 1em 0em 0em"
                right="0"
+               localStyles={screenStyles()}
             >
                <BtnContainer>
                   <TextBtn isDarkTheme onClick={copyToClipboard}>
@@ -87,3 +91,11 @@ export default function GameHeader(): JSX.Element {
       </CarouselContainer>
    );
 }
+
+const screenStyles = (): FlattenSimpleInterpolation => {
+   const forDesktop = MyCSS.Media.desktop(css`
+      font-size: 1.2em;
+   `);
+   const forTablet = MyCSS.Media.tablet(css``);
+   return MyCSS.Helper.concatStyles(forDesktop, forTablet);
+};

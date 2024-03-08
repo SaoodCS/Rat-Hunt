@@ -18,12 +18,11 @@ export const Header = styled.div<{ isDarkTheme: boolean }>`
    align-items: center;
    font-size: 1.1em;
    @media (min-width: ${MyCSS.PortableBp.asPx}) {
-      left: 5dvw;
-      width: 90dvw;
-      border-bottom: none;
-      justify-content: center;
-      padding-top: 20px;
+      height: calc(10% + 20px);
       font-size: 3em;
+      align-items: center;
+      justify-content: center;
+      border-bottom: none;
    }
    z-index: 1;
 `;
@@ -62,23 +61,30 @@ export const HeaderRightElWrapper = styled.div<{ isDarkTheme: boolean }>`
       margin-right: 1em;
    }
    & > *:not(:last-child) {
-      margin-right: 0.5em;
+      margin-right: 0.25em;
    }
 
    @media (min-width: ${MyCSS.PortableBp.asPx}) {
-      display: flex;
-      align-items: center;
-      position: relative;
       padding-left: 0.25em;
       & > * {
-         height: 0.7em;
+         height: 1.4em;
+         padding: 0.2em;
+         border-radius: 50%;
+         background-color: ${Color.darkThm.accentDarkerShade};
+         -webkit-tap-highlight-color: transparent;
+         cursor: pointer;
+         :hover {
+            filter: brightness(0.8);
+         }
+         transition: filter 0.2s;
+         box-sizing: border-box;
       }
 
       & > *:last-child {
          margin-right: 0.5em;
       }
       & > *:not(:last-child) {
-         margin-right: 0.1em;
+         margin-right: 0.25em;
       }
    }
 `;

@@ -17,6 +17,9 @@ import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper'
 import StringHelper from '../../../global/helpers/dataTypes/string/StringHelper';
 import DBConnect from '../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../global/utils/GameHelper/GameHelper';
+import type { FlattenSimpleInterpolation } from 'styled-components';
+import { css } from 'styled-components';
+import MyCSS from '../../../global/css/MyCSS';
 
 export default function WaitingRoom(): JSX.Element {
    const { allUsers, localDbRoom, localDbUser } = useContext(GameContext);
@@ -83,7 +86,7 @@ export default function WaitingRoom(): JSX.Element {
 
    return (
       <>
-         <FlexColumnWrapper padding="2em">
+         <FlexColumnWrapper padding="2em" localStyles={screenStyles()}>
             <FlexRowWrapper justifyContent="left" position="relative" alignItems="center">
                <LogoText size={'1.75em'} color={Color.darkThm.accentAlt}>
                   Waiting Room <AnimatedDots count={3} />
@@ -146,3 +149,13 @@ export default function WaitingRoom(): JSX.Element {
       </>
    );
 }
+
+const screenStyles = (): FlattenSimpleInterpolation => {
+   const forDesktop = MyCSS.Media.desktop(css`
+      width: 30em;
+      margin: 0 auto;
+      font-size: 1.2em;
+   `);
+   const forTablet = MyCSS.Media.tablet(css``);
+   return MyCSS.Helper.concatStyles(forDesktop, forTablet);
+};

@@ -1,4 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
+import type { FlattenSimpleInterpolation } from 'styled-components';
+import { css } from 'styled-components';
 import { LogoText } from '../../../../../global/components/app/logo/LogoText';
 import Fader from '../../../../../global/components/lib/animation/fader/Fader';
 import AnimatedDots from '../../../../../global/components/lib/font/animatedDots/AnimatedDots';
@@ -6,6 +8,7 @@ import { FlexColumnWrapper } from '../../../../../global/components/lib/position
 import { FlexRowWrapper } from '../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
 import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../global/context/game/GameContext';
+import MyCSS from '../../../../../global/css/MyCSS';
 import Color from '../../../../../global/css/colors';
 import ArrOfObj from '../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
@@ -126,7 +129,7 @@ export default function Gameplay(): JSX.Element {
                height="100%"
                padding="1em 1em 1em 1em"
                boxSizing="border-box"
-               filter="brightness(1.5)"
+               localStyles={screenStyles()}
             >
                <FlexRowWrapper position="absolute" height="4em" width="100%">
                   {gameplayHeadMap.map(({ text, condition, component }, index) => (
@@ -164,3 +167,20 @@ export default function Gameplay(): JSX.Element {
       </>
    );
 }
+
+const screenStyles = (): FlattenSimpleInterpolation => {
+   const forDesktop = MyCSS.Media.desktop(css`
+      font-size: 1.1em;
+      & > :first-child {
+         width: 25em;
+         text-align: center;
+         align-self: center;
+      }
+      & > :nth-child(2) {
+         margin-left: 8em;
+         margin-right: 8em;
+      }
+   `);
+   const forTablet = MyCSS.Media.tablet(css``);
+   return MyCSS.Helper.concatStyles(forDesktop, forTablet);
+};

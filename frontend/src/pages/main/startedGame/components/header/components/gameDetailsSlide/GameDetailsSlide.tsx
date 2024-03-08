@@ -4,11 +4,14 @@ import { FlexRowWrapper } from '../../../../../../../global/components/lib/posit
 import ConditionalRender from '../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import Color from '../../../../../../../global/css/colors';
+import ArrOfObj from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import HTMLEntities from '../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import Unicode from '../../../../../../../global/helpers/dataTypes/unicode/Unicode';
 import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
 import { GameDetailsContainer } from '../../style/Style';
-import ArrOfObj from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import type { FlattenSimpleInterpolation } from 'styled-components';
+import { css } from 'styled-components';
+import MyCSS from '../../../../../../../global/css/MyCSS';
 
 interface IGameHeaderDetails {
    label: string;
@@ -54,7 +57,7 @@ export default function GameDetailsSlide(): JSX.Element {
    ]);
 
    return (
-      <GameDetailsContainer>
+      <GameDetailsContainer localStyles={screenStyles()}>
          {gameHeaderDetails.map((detail, index) => (
             <FlexRowWrapper alignItems="center" key={index} padding="0em 0em 0em 0em">
                <ConditionalRender condition={!detail.value?.includes('THE RAT')}>
@@ -78,3 +81,11 @@ export default function GameDetailsSlide(): JSX.Element {
       </GameDetailsContainer>
    );
 }
+
+const screenStyles = (): FlattenSimpleInterpolation => {
+   const forDesktop = MyCSS.Media.desktop(css`
+      margin: 0 auto;
+      font-size: 1.25em;
+   `);
+   return MyCSS.Helper.concatStyles(forDesktop);
+};

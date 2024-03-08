@@ -1,3 +1,4 @@
+import type { FlattenSimpleInterpolation } from 'styled-components';
 import styled from 'styled-components';
 
 export const FlexRowWrapper = styled.div<{
@@ -15,6 +16,7 @@ export const FlexRowWrapper = styled.div<{
    right?: string;
    top?: string;
    bottom?: string;
+   localStyles?: FlattenSimpleInterpolation;
 }>`
    display: flex;
    flex-direction: row;
@@ -33,4 +35,5 @@ export const FlexRowWrapper = styled.div<{
    right: ${({ right }) => right};
    top: ${({ top }) => top};
    bottom: ${({ bottom }) => bottom};
+   ${({ localStyles }) => localStyles};
 `;

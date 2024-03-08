@@ -56,7 +56,7 @@ export default function SummaryData(): JSX.Element {
                   >
                      {item.key}
                      {HTMLEntities.space}
-                  </LogoText>{' '}
+                  </LogoText>
                   <LogoText
                      key={item.key}
                      size={'1em'}

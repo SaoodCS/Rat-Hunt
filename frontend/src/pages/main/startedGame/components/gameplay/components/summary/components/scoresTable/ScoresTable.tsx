@@ -3,6 +3,7 @@ import { LogoText } from '../../../../../../../../../global/components/app/logo/
 import { FlexColumnWrapper } from '../../../../../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { GameContext } from '../../../../../../../../../global/context/game/GameContext';
 import Color from '../../../../../../../../../global/css/colors';
+import ArrOfObj from '../../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import HTMLEntities from '../../../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import MiscHelper from '../../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import DBConnect from '../../../../../../../../../global/utils/DBConnect/DBConnect';
@@ -12,7 +13,6 @@ import {
    UserRowsWrapper,
 } from '../../../gameStateTable/style/Style';
 import { ScoreTableCell, ScoreTableWrapper } from './style/Style';
-import ArrOfObj from '../../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 
 export default function ScoresTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -30,7 +30,7 @@ export default function ScoresTable(): JSX.Element {
    return (
       <FlexColumnWrapper width="50%" height="100%" boxSizing="border-box" position="relative">
          <ScoreTableWrapper>
-            <HeaderRowContainer height="1.5em">
+            <HeaderRowContainer height="1.75em">
                <ScoreTableCell leftcell noOfTableRows={2}>
                   <LogoText size="0.9em">User</LogoText>
                </ScoreTableCell>
@@ -38,7 +38,7 @@ export default function ScoresTable(): JSX.Element {
                   <LogoText size="0.9em">Score</LogoText>
                </ScoreTableCell>
             </HeaderRowContainer>
-            <UserRowsWrapper headerRowHeight="1.5em">
+            <UserRowsWrapper headerRowHeight="2.25em">
                {sortedUserStates?.map((user) => (
                   <RowContainer key={user.userId} isThisUser={user.userId === localDbUser}>
                      <ScoreTableCell leftcell noOfTableRows={2}>

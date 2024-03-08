@@ -1,13 +1,15 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Color from '../../../../global/css/colors';
+import MyCSS from '../../../../global/css/MyCSS';
 
 export const GamePageWrapper = styled.div`
+   height: 100%;
    background: linear-gradient(
       to bottom,
-      ${Color.setRgbOpacity(Color.darkThm.accent, 0.05)},
-      ${Color.setRgbOpacity(Color.darkThm.accent, 0.4)}
+      ${Color.setRgbOpacity(Color.darkThm.accent, 0)},
+      ${Color.setRgbOpacity(Color.darkThm.accent, 0.1)},
+      ${Color.setRgbOpacity(Color.darkThm.accent, 0.1)}
    );
-   height: 100%;
 `;
 
 export const GameHeaderWrapper = styled.div`
@@ -19,6 +21,7 @@ export const GameHeaderWrapper = styled.div`
    width: 100%;
    top: 0;
    bottom: 80%;
+   filter: brightness(1.25);
 `;
 
 export const GameplayWrapper = styled.div`
@@ -29,6 +32,7 @@ export const GameplayWrapper = styled.div`
    border-top: 2px solid ${Color.darkThm.accent};
    border-top-right-radius: 1em;
    border-top-left-radius: 1em;
+   filter: brightness(1.25);
 `;
 
 export const TopicBoardWrapper = styled.div`
@@ -40,4 +44,5 @@ export const TopicBoardWrapper = styled.div`
    width: 100%;
    bottom: 0;
    top: 50%;
+   filter: brightness(1.25);
 `;

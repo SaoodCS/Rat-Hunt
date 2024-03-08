@@ -13,6 +13,8 @@ export const RowContainer = styled.div<{
 }>`
    display: flex;
    border-bottom: 1px solid ${Color.darkThm.accent};
+   border-left: 1px solid ${Color.darkThm.accent};
+   border-right: 1px solid ${Color.darkThm.accent};
    padding-top: 0.5em;
    padding-bottom: 0.5em;
    font-size: 0.85em;
@@ -31,7 +33,7 @@ export const UserRowsWrapper = styled.div<{ headerRowHeight?: string }>`
    position: absolute;
    top: ${({ headerRowHeight }) => headerRowHeight || '2.5em'};
    bottom: 0px;
-   width: 100%;
+   width: calc(100% + 0.25em);
    overflow-y: scroll;
    ${MyCSS.Scrollbar.gradientStyle};
 `;
@@ -42,7 +44,12 @@ export const HeaderRowContainer = styled.div<{ height?: string }>`
    width: 100%;
    display: flex;
    align-items: center;
-   border-bottom: 1px solid ${Color.darkThm.accent};
+   border: 1px solid ${Color.darkThm.accent};
+   background-color: ${Color.darkThm.dialog};
+   border-top-right-radius: 1em;
+   border-top-left-radius: 1em;
+   box-sizing: border-box;
+   margin-top: 0.5em;
 `;
 
 export const DataTableWrapper = styled.div`

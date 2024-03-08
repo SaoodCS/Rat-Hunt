@@ -3,7 +3,6 @@ import { doc, getDoc } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LogoFader from '../../../global/components/app/logo/LogoFader';
-import { StaticButton } from '../../../global/components/lib/button/staticButton/Style';
 import OfflineFetch from '../../../global/components/lib/fetch/offlineFetch/offlineFetch';
 import type { IDropDownOption } from '../../../global/components/lib/form/dropDown/DropDownInput';
 import { StyledForm } from '../../../global/components/lib/form/form/Style';
@@ -12,7 +11,6 @@ import Loader from '../../../global/components/lib/loader/fullScreen/Loader';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { firestore } from '../../../global/config/firebase/config';
 import { GameContext } from '../../../global/context/game/GameContext';
-import useThemeContext from '../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import ArrayHelper from '../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
 import ArrOfObj from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
@@ -21,9 +19,16 @@ import useForm from '../../../global/hooks/useForm';
 import DBConnect from '../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../global/utils/GameHelper/GameHelper';
 import PlayFormClass from './class/PlayForm';
+import { css, type FlattenSimpleInterpolation } from 'styled-components';
+import MyCSS from '../../../global/css/MyCSS';
+import { Enter } from '@styled-icons/icomoon/Enter';
+import { LogoText } from '../../../global/components/app/logo/LogoText';
+import { FlexRowWrapper } from '../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
+import { StaticButton } from '../../../global/components/lib/button/staticButton/Style';
+import Color from '../../../global/css/colors';
+import HTMLEntities from '../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 
 export default function Play(): JSX.Element {
-   const { isDarkTheme } = useThemeContext();
    const { apiError } = useApiErrorContext();
    const { setLocalDbRoom, setLocalDbUser } = useContext(GameContext);
    const { form, errors, handleChange, initHandleSubmit } = useForm(
@@ -164,7 +169,12 @@ export default function Play(): JSX.Element {
    // if (error) return <FetchError />;
 
    return (
-      <FlexColumnWrapper justifyContent="center" alignItems="center" height="100%">
+      <FlexColumnWrapper
+         justifyContent="center"
+         alignItems="center"
+         height="100%"
+         localStyles={screenStyles()}
+      >
          <LogoFader />
          <StyledForm onSubmit={handleSubmit} apiError={apiError} padding={1}>
             {PlayFormClass.form.inputs
@@ -187,10 +197,27 @@ export default function Play(): JSX.Element {
                   />
                ))}
 
-            <StaticButton isDarkTheme={isDarkTheme} type="submit">
-               Submit
-            </StaticButton>
+            <FlexRowWrapper justifyContent="center" alignItems="center">
+               <StaticButton type="submit" isDarkTheme style={{ display: 'flex' }}>
+                  <LogoText size={'1.5em'} color={Color.darkThm.accentDarkerShade}>
+                     ENTER {HTMLEntities.space}
+                  </LogoText>
+                  <Enter width={'1.5em'} color={Color.darkThm.accentDarkerShade} />
+               </StaticButton>
+            </FlexRowWrapper>
          </StyledForm>
       </FlexColumnWrapper>
    );
 }
+
+const screenStyles = (): FlattenSimpleInterpolation => {
+   const forDesktop = MyCSS.Media.desktop(css`
+      justify-content: space-evenly;
+      & > *:nth-child(2) {
+         width: 35em;
+         margin: -2em;
+      }
+   `);
+   const forTablet = MyCSS.Media.tablet(css``);
+   return MyCSS.Helper.concatStyles(forDesktop, forTablet);
+};

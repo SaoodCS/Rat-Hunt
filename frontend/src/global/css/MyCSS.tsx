@@ -8,6 +8,20 @@ export namespace MyCSS {
       static asPx = `${PortableBp.asNum}px`;
    }
 
+   export class Media {
+      static desktop = (styles: FlattenSimpleInterpolation): FlattenSimpleInterpolation => css`
+         @media (min-width: ${PortableBp.asPx}) {
+            ${styles}
+         }
+      `;
+
+      static tablet = (styles: FlattenSimpleInterpolation): FlattenSimpleInterpolation => css`
+         @media (max-width: ${PortableBp.asPx}) {
+            ${styles}
+         }
+      `;
+   }
+
    export namespace Clickables {
       export const removeDefaultEffects = css`
          background: none;

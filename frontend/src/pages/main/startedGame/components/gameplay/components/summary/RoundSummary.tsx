@@ -1,11 +1,16 @@
 import { useContext, useEffect, useState } from 'react';
+import type { FlattenSimpleInterpolation } from 'styled-components';
+import { css } from 'styled-components';
 import { LogoText } from '../../../../../../../global/components/app/logo/LogoText';
 import { TextBtn } from '../../../../../../../global/components/lib/button/textBtn/Style';
 import { TextColourizer } from '../../../../../../../global/components/lib/font/textColorizer/TextColourizer';
 import { FlexColumnWrapper } from '../../../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { FlexRowWrapper } from '../../../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
+import ConditionalRender from '../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import { ModalContext } from '../../../../../../../global/context/widget/modal/ModalContext';
+import MyCSS from '../../../../../../../global/css/MyCSS';
+import Color from '../../../../../../../global/css/colors';
 import HTMLEntities from '../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import MiscHelper from '../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
@@ -13,7 +18,6 @@ import { BtnContainer } from '../../../header/style/Style';
 import RoundEndForm from './components/form/RoundEndForm';
 import ScoresTable from './components/scoresTable/ScoresTable';
 import SummaryData from './components/summaryData/SummaryData';
-import ConditionalRender from '../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import WinnerLoserSplash from './components/winnerLoserSplash/WinnerLoserSplash';
 
 export default function RoundSummary(): JSX.Element {
@@ -49,8 +53,8 @@ export default function RoundSummary(): JSX.Element {
       <FlexColumnWrapper
          height="100%"
          position="relative"
-         filter="brightness(1.5)"
          boxSizing="border-box"
+         localStyles={screenStyles()}
       >
          <ConditionalRender condition={displayWinnerLoserSplash}>
             <WinnerLoserSplash />
@@ -81,3 +85,31 @@ export default function RoundSummary(): JSX.Element {
       </FlexColumnWrapper>
    );
 }
+
+const screenStyles = (): FlattenSimpleInterpolation => {
+   const forAll = css`
+      & > :nth-child(2) {
+         text-align: center;
+         align-items: center;
+         border: 2px solid ${Color.setRgbOpacity(Color.darkThm.accent, 1)};
+         border-radius: 1em;
+         & > :first-child {
+            border-right: 2px solid ${Color.setRgbOpacity(Color.darkThm.accent, 1)};
+            overflow-y: scroll;
+            ${MyCSS.Scrollbar.gradientStyle};
+            border-bottom-right-radius: 0.25em;
+            border-top-right-radius: 0.25em;
+         }
+      }
+   `;
+   const forDesktop = MyCSS.Media.desktop(css`
+      font-size: 1.2em;
+      align-items: center;
+      & > :nth-child(2) {
+         width: 31em;
+         justify-self: center;
+      }
+   `);
+   const forTablet = MyCSS.Media.tablet(css``);
+   return MyCSS.Helper.concatStyles(forAll, forDesktop, forTablet);
+};

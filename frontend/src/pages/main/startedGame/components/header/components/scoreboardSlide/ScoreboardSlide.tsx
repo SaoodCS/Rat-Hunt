@@ -5,6 +5,9 @@ import { GameContext } from '../../../../../../../global/context/game/GameContex
 import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
 import { ScoreboardContainer } from '../../style/Style';
 import ArrOfObj from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import type { FlattenSimpleInterpolation } from 'styled-components';
+import { css } from 'styled-components';
+import MyCSS from '../../../../../../../global/css/MyCSS';
 
 export default function ScoreboardSlide(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);
@@ -32,7 +35,7 @@ export default function ScoreboardSlide(): JSX.Element {
    }, [roomData?.gameState?.userStates, roomData?.gameState?.numberOfRoundsSet]);
 
    return (
-      <ScoreboardContainer>
+      <ScoreboardContainer localStyles={screenStyles()}>
          <ProgressBarChart
             data={ArrOfObj.sort(chartData, 'completedAmnt', true)}
             barHeight="1.5em"
@@ -41,3 +44,10 @@ export default function ScoreboardSlide(): JSX.Element {
       </ScoreboardContainer>
    );
 }
+
+const screenStyles = (): FlattenSimpleInterpolation => {
+   const forDesktop = MyCSS.Media.desktop(css`
+      font-size: 1.2em;
+   `);
+   return MyCSS.Helper.concatStyles(forDesktop);
+};
