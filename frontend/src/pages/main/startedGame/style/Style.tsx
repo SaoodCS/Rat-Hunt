@@ -1,6 +1,5 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Color from '../../../../global/css/colors';
-import MyCSS from '../../../../global/css/MyCSS';
 
 export const GamePageWrapper = styled.div`
    height: 100%;

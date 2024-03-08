@@ -40,8 +40,8 @@ export default function WaitingRoom(): JSX.Element {
    const setRoomData = DBConnect.FSDB.Set.room({});
 
    useEffect(() => {
-      // TODO: change to < 3 when testing is done
-      setDisablePlay(allUsers.length < 1 ? true : false);
+      // change to < 3 when testing is done
+      setDisablePlay(allUsers.length < 3 ? true : false);
    }, [allUsers]);
 
    useEffect(() => {
