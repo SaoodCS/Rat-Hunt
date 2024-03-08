@@ -28,7 +28,7 @@ export default function StartedGame(): JSX.Element {
       if (!MiscHelper.isNotFalsyOrEmpty(userStates)) return;
       const thisUserState = ArrOfObj.findObj(userStates, 'userId', localDbUser);
       if (!MiscHelper.isNotFalsyOrEmpty(thisUserState)) return;
-      if (!thisUserState?.spectate !== true) return;
+      if (thisUserState?.spectate !== true) return;
       setModalHeader('Spectator Mode');
       setModalContent(<>You are spectating the current round as it has already started.</>);
       setModalZIndex(100);

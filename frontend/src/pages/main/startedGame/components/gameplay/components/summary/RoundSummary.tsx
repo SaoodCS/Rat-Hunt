@@ -35,7 +35,7 @@ export default function RoundSummary(): JSX.Element {
       setIsLastRound(currentRound === numberOfRoundsSet);
       const timer = setTimeout(() => {
          setDisplayWinnerLoserSplash(false);
-      }, 2000);
+      }, 4000);
       return () => {
          clearTimeout(timer);
          toggleModal(false);
@@ -50,39 +50,43 @@ export default function RoundSummary(): JSX.Element {
    }
 
    return (
-      <FlexColumnWrapper
-         height="100%"
-         position="relative"
-         boxSizing="border-box"
-         localStyles={screenStyles()}
-      >
-         <ConditionalRender condition={displayWinnerLoserSplash}>
-            <WinnerLoserSplash />
-         </ConditionalRender>
-         <FlexRowWrapper position="absolute" height="1.5em" margin="1em">
-            <LogoText size="1.4em">Round Summary {HTMLEntities.space} </LogoText>
-            <BtnContainer>
-               <TextBtn isDarkTheme onClick={handleUpdateGameState}>
-                  <TextColourizer fontSize="0.7em">
-                     {!isLastRound ? 'Next Round' : 'Play Again'}
-                  </TextColourizer>
-               </TextBtn>
-            </BtnContainer>
-         </FlexRowWrapper>
-         <FlexRowWrapper
-            position="absolute"
-            top="2em"
-            margin="1em"
-            left="0"
-            right="0"
-            bottom="0"
-            justifyContent="start"
-            alignItems="start"
+      <>
+         <FlexColumnWrapper
+            height="100%"
+            position="relative"
+            boxSizing="border-box"
+            localStyles={screenStyles()}
          >
-            <SummaryData />
-            <ScoresTable />
-         </FlexRowWrapper>
-      </FlexColumnWrapper>
+            <ConditionalRender condition={displayWinnerLoserSplash}>
+               <WinnerLoserSplash />
+            </ConditionalRender>
+            <ConditionalRender condition={!displayWinnerLoserSplash}>
+               <FlexRowWrapper position="absolute" height="1.5em" margin="1em">
+                  <LogoText size="1.4em">Round Summary {HTMLEntities.space} </LogoText>
+                  <BtnContainer>
+                     <TextBtn isDarkTheme onClick={handleUpdateGameState}>
+                        <TextColourizer fontSize="0.7em">
+                           {!isLastRound ? 'Next Round' : 'Play Again'}
+                        </TextColourizer>
+                     </TextBtn>
+                  </BtnContainer>
+               </FlexRowWrapper>
+               <FlexRowWrapper
+                  position="absolute"
+                  top="2em"
+                  margin="1em"
+                  left="0"
+                  right="0"
+                  bottom="0"
+                  justifyContent="start"
+                  alignItems="start"
+               >
+                  <SummaryData />
+                  <ScoresTable />
+               </FlexRowWrapper>
+            </ConditionalRender>
+         </FlexColumnWrapper>
+      </>
    );
 }
 

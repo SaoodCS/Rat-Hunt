@@ -77,7 +77,8 @@ export default function Gameplay(): JSX.Element {
       const allCluesExist = ArrOfObj.isKeyInAllObjsNotValuedAs(userStates, 'clue', '');
       const allVotesExist = ArrOfObj.isKeyInAllObjsNotValuedAs(userStates, 'votedFor', '');
       const ratHasGuessedWord = MiscHelper.isNotFalsyOrEmpty(ratUserState.guess);
-      const isYourTurn = currentTurn.replace('.wordGuess', '') === localDbUser;
+      const currentTurnUserId = GameHelper.Get.currentTurnUserId(currentTurn);
+      const isYourTurn = currentTurnUserId === localDbUser;
       const ratIsGuessingWord = currentTurn.includes('.wordGuess');
       setShowRatGuessingMsg(!isYourTurn && ratIsGuessingWord);
       setShowCurrentTurnMsg(!isYourTurn && !ratIsGuessingWord);

@@ -20,6 +20,7 @@ export const FlexColumnWrapper = styled.div<{
    borderRadius?: string;
    backdropFilter?: string;
    localStyles?: FlattenSimpleInterpolation;
+   textAlign?: string;
 }>`
    display: flex;
    flex-direction: column;
@@ -41,5 +42,6 @@ export const FlexColumnWrapper = styled.div<{
    z-index: ${({ zIndex }) => zIndex};
    border-radius: ${({ borderRadius }) => borderRadius};
    backdrop-filter: ${({ backdropFilter }) => backdropFilter};
+   text-align: ${({ textAlign }) => textAlign};
    ${({ localStyles }) => localStyles};
 `;

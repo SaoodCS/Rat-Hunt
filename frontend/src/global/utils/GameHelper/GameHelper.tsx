@@ -33,6 +33,19 @@ export namespace GameHelper {
          const ratUserState = ArrOfObj.findObj(userStates, 'userId', currentRat);
          return ratUserState.guess !== '';
       }
+
+      export function isRatGuessCorrect(gameState: DBConnect.FSDB.I.GameState): boolean {
+         const { activeWord, currentRat, userStates } = gameState;
+         const ratUserState = ArrOfObj.findObj(userStates, 'userId', currentRat);
+         return ratUserState.guess === activeWord;
+      }
+
+      export function ratGotCaught(gameState: DBConnect.FSDB.I.GameState): boolean {
+         const { userStates, currentRat } = gameState;
+         const userVotes: string[] = ArrOfObj.getArrOfValuesFromKey(userStates, 'votedFor');
+         const mostRepeatedItems = ArrayHelper.findMostRepeatedItems(userVotes);
+         return mostRepeatedItems.length === 1 && mostRepeatedItems.includes(currentRat);
+      }
    }
 
    export namespace Get {
@@ -60,6 +73,10 @@ export namespace GameHelper {
       export function firstUser(userStates: DBConnect.FSDB.I.UserState[]): string {
          const sortedUserStates = ArrOfObj.sort(userStates, 'userId');
          return sortedUserStates[0].userId;
+      }
+
+      export function currentTurnUserId(currentTurn: string): string {
+         return currentTurn.replace('.wordGuess', '');
       }
 
       export function nextTurnUserId(
@@ -135,7 +152,9 @@ export namespace GameHelper {
          gameState: DBConnect.FSDB.I.GameState,
       ): 'votedFor' | 'clue' | 'guess' | 'roundSummary' {
          const { currentTurn, userStates } = gameState;
-         const currentTurnUserState = ArrOfObj.findObj(userStates, 'userId', currentTurn);
+         if (currentTurn === '') return 'roundSummary';
+         const currentTurnUserId = GameHelper.Get.currentTurnUserId(currentTurn);
+         const currentTurnUserState = ArrOfObj.findObj(userStates, 'userId', currentTurnUserId);
          const hasRatGuessed = GameHelper.Check.hasRatGuessed(gameState);
          if (currentTurnUserState.spectate) {
             // Spectating user's clue and votedFor values are already set to 'SKIP' for the round
