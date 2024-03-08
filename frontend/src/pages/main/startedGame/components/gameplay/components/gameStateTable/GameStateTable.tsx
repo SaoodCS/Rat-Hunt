@@ -21,15 +21,6 @@ export default function GameStateTable(): JSX.Element {
    const userRowsWrapperDiv = useRef<HTMLDivElement>(null);
 
    useEffect(() => {
-      if (!contentWrapperDiv.current || !userRowsWrapperDiv.current) return;
-      const contentWrapperHeight = contentWrapperDiv.current.clientHeight;
-      const userRowsWrapperHeight = userRowsWrapperDiv.current.clientHeight;
-      const borderStyle = `1px solid ${Color.darkThm.accent}`;
-      userRowsWrapperDiv.current.style.borderBottom =
-         contentWrapperHeight >= userRowsWrapperHeight ? borderStyle : 'none';
-   }, [contentWrapperDiv.current, userRowsWrapperDiv.current]);
-
-   useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
       const { userStates } = gameState;

@@ -100,9 +100,13 @@ const screenStyles = (): FlattenSimpleInterpolation => {
          & > :first-child {
             border-right: 2px solid ${Color.setRgbOpacity(Color.darkThm.accent, 1)};
             overflow-y: scroll;
-            ${MyCSS.Scrollbar.gradientStyle};
+            ${MyCSS.Scrollbar.hide};
             border-bottom-right-radius: 0.25em;
             border-top-right-radius: 0.25em;
+            mask-image: linear-gradient(to bottom, black calc(100% - 48px), transparent 100%);
+         }
+         & > :nth-child(2) {
+            mask-image: linear-gradient(to bottom, black calc(100% - 48px), transparent 100%);
          }
       }
    `;
