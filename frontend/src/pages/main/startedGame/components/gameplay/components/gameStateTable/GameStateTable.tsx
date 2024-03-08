@@ -31,7 +31,7 @@ export default function GameStateTable(): JSX.Element {
       const { users } = roomData;
       const thisUser = ArrOfObj.findObj(users, 'userId', userState.userId);
       const isSpectating = userState.spectate;
-      const isDisconnected = thisUser?.userStatus === 'disconnected'; 
+      const isDisconnected = thisUser?.userStatus === 'disconnected';
       if (isDisconnected || isSpectating) return Color.setRgbOpacity(Color.darkThm.txt, 0.35);
       return '';
    }
