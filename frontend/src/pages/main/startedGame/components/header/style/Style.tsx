@@ -14,8 +14,6 @@ export const GameDetailsContainer = styled.div<{ localStyles: FlattenSimpleInter
    height: 100%;
    display: flex;
    flex-direction: column;
-   justify-content: space-evenly;
-   padding-left: 1em;
    ${({ localStyles }) => localStyles};
 `;
 

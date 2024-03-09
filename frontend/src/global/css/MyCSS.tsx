@@ -15,6 +15,12 @@ export namespace MyCSS {
          }
       `;
 
+      static mobile = (styles: FlattenSimpleInterpolation): FlattenSimpleInterpolation => css`
+         @media (max-width: ${PortableBp.asPx}) {
+            ${styles}
+         }
+      `;
+
       static tablet = (styles: FlattenSimpleInterpolation): FlattenSimpleInterpolation => css`
          @media (max-width: ${PortableBp.asPx}) {
             ${styles}
