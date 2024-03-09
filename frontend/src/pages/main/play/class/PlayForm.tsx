@@ -20,8 +20,8 @@ export default class PlayFormClass {
          validator: (value: string): string | true => {
             if (!value) return 'Please enter your name';
             if (value.trim() === '') return 'Name cannot be empty';
-            if (value.length < 2) return 'Name must be at least 2 characters';
-            if (value.length > 8) return 'Name must be at most 8 characters';
+            if (value.length < 2) return 'Name must be at least 1 characters';
+            // if (value.length > 8) return 'Name must be at most 8 characters';
             return true;
          },
       },

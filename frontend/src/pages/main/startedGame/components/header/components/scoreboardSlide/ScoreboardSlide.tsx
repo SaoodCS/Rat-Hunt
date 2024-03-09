@@ -1,13 +1,13 @@
 import { useContext, useEffect, useRef, useState } from 'react';
+import type { FlattenSimpleInterpolation } from 'styled-components';
+import { css } from 'styled-components';
 import type { IProgressBarChartData } from '../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
 import ProgressBarChart from '../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
+import MyCSS from '../../../../../../../global/css/MyCSS';
+import ArrOfObj from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
 import { ScoreboardContainer } from '../../style/Style';
-import ArrOfObj from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import type { FlattenSimpleInterpolation } from 'styled-components';
-import { css } from 'styled-components';
-import MyCSS from '../../../../../../../global/css/MyCSS';
 
 export default function ScoreboardSlide(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);
@@ -19,7 +19,7 @@ export default function ScoreboardSlide(): JSX.Element {
       const resizeObserver = new ResizeObserver((entries) => {
          const scoreboardContainerDiv = entries[0].target as HTMLDivElement;
          const maskImage =
-            scoreboardContainerDiv.scrollHeight <= scoreboardContainerDiv.clientHeight
+            scoreboardContainerDiv.scrollHeight <= scoreboardContainerDiv.clientHeight + 1
                ? 'none'
                : 'linear-gradient(to bottom, black calc(100% - 48px), transparent 100%)';
          scoreboardContainerDiv.style.maskImage = maskImage;
@@ -57,7 +57,7 @@ export default function ScoreboardSlide(): JSX.Element {
       const scrollTop = scoreboardContainerDiv.scrollTop;
       if (
          scrollTop + scoreboardContainerDiv.clientHeight >=
-         scoreboardContainerDiv.scrollHeight - 0.5
+         scoreboardContainerDiv.scrollHeight - 1
       ) {
          scoreboardContainerDiv.style.maskImage = 'none';
       } else {

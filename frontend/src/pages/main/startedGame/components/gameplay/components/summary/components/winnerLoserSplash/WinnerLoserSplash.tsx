@@ -39,8 +39,8 @@ export default function WinnerLoserSplash(): JSX.Element {
 
          caughtMsg: {
             msg: ratGotCaught
-               ? 'You got voted for the most by others'
-               : 'You did not get voted for the most by the others!',
+               ? 'Most players did not suspect you as the rat'
+               : 'Most players suspected you as the rat',
             success: ratGotCaught ? false : true,
          },
       },

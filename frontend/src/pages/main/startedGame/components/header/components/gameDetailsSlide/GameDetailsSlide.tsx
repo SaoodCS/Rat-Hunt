@@ -94,7 +94,15 @@ export default function GameDetailsSlide(): JSX.Element {
          onScroll={handleScroll}
       >
          {gameHeaderDetails.map((detail, index) => (
-            <FlexColumnWrapper key={index} padding="0em 0em 0em 0em">
+            <FlexColumnWrapper
+               key={index}
+               padding="0em 0em 0em 0em"
+               style={{
+                  wordWrap: 'break-word',
+                  hyphens: 'auto',
+                  textOverflow: 'ellipsis',
+               }}
+            >
                <ConditionalRender condition={!detail.value?.includes('THE RAT')}>
                   <LogoText size={'1.25em'} color={Color.darkThm.accent}>
                      {detail.label}

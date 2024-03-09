@@ -23,7 +23,7 @@ export default function GameStateTable(): JSX.Element {
       const resizeObserver = new ResizeObserver((entries) => {
          const userRowsWrapperDiv = entries[0].target as HTMLDivElement;
          const maskImage =
-            userRowsWrapperDiv.scrollHeight <= userRowsWrapperDiv.clientHeight
+            userRowsWrapperDiv.scrollHeight <= userRowsWrapperDiv.clientHeight + 1
                ? 'none'
                : 'linear-gradient(to bottom, black calc(100% - 48px), transparent 100%)';
          userRowsWrapperDiv.style.maskImage = maskImage;
@@ -57,7 +57,7 @@ export default function GameStateTable(): JSX.Element {
    function handleScroll(e: React.UIEvent<HTMLDivElement, UIEvent>): void {
       const userRowsWrapperDiv = e.target as HTMLDivElement;
       const scrollTop = userRowsWrapperDiv.scrollTop;
-      if (scrollTop + userRowsWrapperDiv.clientHeight >= userRowsWrapperDiv.scrollHeight - 0.5) {
+      if (scrollTop + userRowsWrapperDiv.clientHeight >= userRowsWrapperDiv.scrollHeight - 1) {
          userRowsWrapperDiv.style.maskImage = 'none';
       } else {
          userRowsWrapperDiv.style.maskImage =

@@ -18,7 +18,7 @@ export default function SummaryData(): JSX.Element {
       const resizeObserver = new ResizeObserver((entries) => {
          const summaryDataDiv = entries[0].target as HTMLDivElement;
          const maskImage =
-            summaryDataDiv.scrollHeight <= summaryDataDiv.clientHeight
+            summaryDataDiv.scrollHeight <= summaryDataDiv.clientHeight + 1.5
                ? 'none'
                : 'linear-gradient(to bottom, black calc(100% - 48px), transparent 100%)';
          summaryDataDiv.style.maskImage = maskImage;
@@ -91,7 +91,12 @@ export default function SummaryData(): JSX.Element {
                   <LogoText
                      key={item.key}
                      size={'1em'}
-                     style={{ paddingBottom: '0.5em' }}
+                     style={{
+                        paddingBottom: '0.5em',
+                        wordWrap: 'break-word',
+                        textOverflow: 'ellipsis',
+                        hyphens: 'auto',
+                     }}
                      color={Color.darkThm.accentAlt}
                   >
                      {item.value}

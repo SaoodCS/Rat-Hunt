@@ -24,7 +24,7 @@ export default function ScoresTable(): JSX.Element {
       const resizeObserver = new ResizeObserver((entries) => {
          const userRowsWrapperDiv = entries[0].target as HTMLDivElement;
          const maskImage =
-            userRowsWrapperDiv.scrollHeight <= userRowsWrapperDiv.clientHeight
+            userRowsWrapperDiv.scrollHeight <= userRowsWrapperDiv.clientHeight + 1
                ? 'none'
                : 'linear-gradient(to bottom, black calc(100% - 48px), transparent 100%)';
          userRowsWrapperDiv.style.maskImage = maskImage;
@@ -48,7 +48,7 @@ export default function ScoresTable(): JSX.Element {
    function handleScroll(e: React.UIEvent<HTMLDivElement, UIEvent>): void {
       const userRowsWrapperDiv = e.target as HTMLDivElement;
       const scrollTop = userRowsWrapperDiv.scrollTop;
-      if (scrollTop + userRowsWrapperDiv.clientHeight >= userRowsWrapperDiv.scrollHeight - 0.5) {
+      if (scrollTop + userRowsWrapperDiv.clientHeight >= userRowsWrapperDiv.scrollHeight - 1) {
          userRowsWrapperDiv.style.maskImage = 'none';
       } else {
          userRowsWrapperDiv.style.maskImage =
@@ -75,7 +75,16 @@ export default function ScoresTable(): JSX.Element {
                {sortedUserStates?.map((user) => (
                   <RowContainer key={user.userId} isThisUser={user.userId === localDbUser}>
                      <ScoreTableCell leftcell noOfTableRows={2}>
-                        <LogoText size="0.9em">{user.userId}</LogoText>
+                        <LogoText
+                           size="0.9em"
+                           style={{
+                              wordWrap: 'break-word',
+                              textOverflow: 'ellipsis',
+                              hyphens: 'auto',
+                           }}
+                        >
+                           {user.userId}
+                        </LogoText>
                      </ScoreTableCell>
                      <ScoreTableCell rightcell noOfTableRows={2}>
                         <LogoText size="0.9em">

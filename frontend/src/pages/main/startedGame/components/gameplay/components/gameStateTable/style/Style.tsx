@@ -5,6 +5,12 @@ import Color from '../../../../../../../../global/css/colors';
 export const Cell = styled.div<{ noOfTableRows?: number }>`
    width: ${({ noOfTableRows }) => `calc(100% / ${noOfTableRows || 3})`};
    text-align: center;
+   padding-left: 0.5em;
+   padding-right: 0.5em;
+   box-sizing: border-box;
+   word-wrap: break-word;
+   text-overflow: ellipsis;
+   hyphens: auto;
 `;
 
 export const RowContainer = styled.div<{
