@@ -103,10 +103,8 @@ const screenStyles = (): FlattenSimpleInterpolation => {
             ${MyCSS.Scrollbar.hide};
             border-bottom-right-radius: 0.25em;
             border-top-right-radius: 0.25em;
-            mask-image: linear-gradient(to bottom, black calc(100% - 48px), transparent 100%);
-         }
-         & > :nth-child(2) {
-            mask-image: linear-gradient(to bottom, black calc(100% - 48px), transparent 100%);
+            padding-left: 0.5em;
+            padding-right: 0.5em;
          }
       }
    `;

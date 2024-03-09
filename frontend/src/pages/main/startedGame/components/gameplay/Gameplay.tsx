@@ -132,7 +132,7 @@ export default function Gameplay(): JSX.Element {
                boxSizing="border-box"
                localStyles={screenStyles()}
             >
-               <FlexRowWrapper position="absolute" height="4em" width="100%">
+               <FlexRowWrapper position="absolute" height="3em" width="100%">
                   {gameplayHeadMap.map(({ text, condition, component }, index) => (
                      <ConditionalRender key={index} condition={condition}>
                         <Fader
@@ -148,7 +148,7 @@ export default function Gameplay(): JSX.Element {
                               <LogoText
                                  size="1.25em"
                                  color={Color.setRgbOpacity(Color.darkThm.success, 0.75)}
-                                 style={{ paddingTop: '0.25em' }}
+                                 style={{ height: '100%', display: 'flex', alignItems: 'center' }}
                               >
                                  {text} <AnimatedDots count={3} />
                               </LogoText>

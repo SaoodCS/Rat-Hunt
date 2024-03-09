@@ -36,6 +36,7 @@ export const UserRowsWrapper = styled.div<{ headerRowHeight?: string }>`
    width: 100%;
    overflow-y: scroll;
    ${MyCSS.Scrollbar.hide};
+   //mask-image: linear-gradient(to bottom, black calc(100% - 48px), transparent 100%);
 `;
 
 export const HeaderRowContainer = styled.div<{ height?: string }>`
@@ -58,5 +59,4 @@ export const DataTableWrapper = styled.div`
    bottom: 0;
    right: 1em;
    left: 1em;
-   mask-image: linear-gradient(to bottom, black calc(100% - 48px), transparent 100%);
 `;

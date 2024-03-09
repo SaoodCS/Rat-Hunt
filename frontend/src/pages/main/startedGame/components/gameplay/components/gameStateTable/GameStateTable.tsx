@@ -12,13 +12,29 @@ import {
    RowContainer,
    UserRowsWrapper,
 } from './style/Style';
-
+//mask-image: linear-gradient(to bottom, black calc(100% - 48px), transparent 100%);
 export default function GameStateTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [sortedUserStates, setSortedUserStates] = useState<DBConnect.FSDB.I.UserState[]>();
-   const contentWrapperDiv = useRef<HTMLDivElement>(null);
-   const userRowsWrapperDiv = useRef<HTMLDivElement>(null);
+   const userRowsWrapperRef = useRef<HTMLDivElement>(null);
+
+   useEffect(() => {
+      const resizeObserver = new ResizeObserver((entries) => {
+         const userRowsWrapperDiv = entries[0].target as HTMLDivElement;
+         const maskImage =
+            userRowsWrapperDiv.scrollHeight <= userRowsWrapperDiv.clientHeight
+               ? 'none'
+               : 'linear-gradient(to bottom, black calc(100% - 48px), transparent 100%)';
+         userRowsWrapperDiv.style.maskImage = maskImage;
+      });
+      if (userRowsWrapperRef.current) {
+         resizeObserver.observe(userRowsWrapperRef.current);
+      }
+      return () => {
+         resizeObserver.disconnect();
+      };
+   }, [roomData]);
 
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
@@ -38,6 +54,17 @@ export default function GameStateTable(): JSX.Element {
       return '';
    }
 
+   function handleScroll(e: React.UIEvent<HTMLDivElement, UIEvent>): void {
+      const userRowsWrapperDiv = e.target as HTMLDivElement;
+      const scrollTop = userRowsWrapperDiv.scrollTop;
+      if (scrollTop + userRowsWrapperDiv.clientHeight >= userRowsWrapperDiv.scrollHeight - 0.5) {
+         userRowsWrapperDiv.style.maskImage = 'none';
+      } else {
+         userRowsWrapperDiv.style.maskImage =
+            'linear-gradient(to bottom, black calc(100% - 48px), transparent 100%)';
+      }
+   }
+
    return (
       <DataTableWrapper style={{ marginBottom: '1em' }}>
          <HeaderRowContainer height="2.5em">
@@ -51,8 +78,12 @@ export default function GameStateTable(): JSX.Element {
                <LogoText size="1em"> Voted For</LogoText>
             </Cell>
          </HeaderRowContainer>
-         <UserRowsWrapper headerRowHeight="3em" ref={userRowsWrapperDiv}>
-            <div ref={contentWrapperDiv}>
+         <UserRowsWrapper
+            headerRowHeight="3em"
+            ref={userRowsWrapperRef}
+            onScroll={(e) => handleScroll(e)}
+         >
+            <div>
                {sortedUserStates?.map((user) => (
                   <RowContainer
                      key={user.userId}

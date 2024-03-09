@@ -41,7 +41,7 @@ export default function WaitingRoom(): JSX.Element {
 
    useEffect(() => {
       // change to < 3 when testing is done
-      setDisablePlay(allUsers.length < 3 ? true : false);
+      setDisablePlay(allUsers.length < 1 ? true : false);
    }, [allUsers]);
 
    useEffect(() => {
