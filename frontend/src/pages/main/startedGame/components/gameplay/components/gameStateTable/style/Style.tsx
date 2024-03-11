@@ -61,6 +61,7 @@ export const HeaderRowContainer = styled.div<{ height?: string }>`
 
 export const DataTableWrapper = styled.div`
    position: absolute;
+   margin-bottom: 1em;
    top: 4em;
    bottom: 0;
    right: 1em;

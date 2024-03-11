@@ -58,7 +58,6 @@ export default function GameHeader(): JSX.Element {
                padding="0em 1em 0em 0em"
                right="0"
                localStyles={screenStyles()}
-               //style={{ maxWidth: '45%' }}
             >
                <BtnContainer>
                   <TextBtn isDarkTheme onClick={copyToClipboard}>

@@ -1,8 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
+import type { FlattenSimpleInterpolation } from 'styled-components';
+import { css } from 'styled-components';
 import { LogoText } from '../../../../../../../../../global/components/app/logo/LogoText';
 import { FlexColumnWrapper } from '../../../../../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import ConditionalRender from '../../../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../../../../../global/context/game/GameContext';
+import MyCSS from '../../../../../../../../../global/css/MyCSS';
 import Color from '../../../../../../../../../global/css/colors';
 import MiscHelper from '../../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import DBConnect from '../../../../../../../../../global/utils/DBConnect/DBConnect';
@@ -71,18 +74,16 @@ export default function WinnerLoserSplash(): JSX.Element {
       >
          {errorSuccessMsg.map((item) => (
             <ConditionalRender key={item.caughtMsg.msg} condition={item.condition}>
-               <FlexColumnWrapper padding="1em">
+               <FlexColumnWrapper padding="1em" localStyles={screenStyles()}>
                   <LogoText
                      size="1.25em"
                      color={item.caughtMsg.success ? Color.darkThm.success : Color.darkThm.error}
-                     style={{ marginBottom: '0.5em' }}
                   >
                      {item.caughtMsg.msg}
                   </LogoText>
                   <LogoText
                      size="1.25em"
                      color={item.guessMsg.success ? Color.darkThm.success : Color.darkThm.error}
-                     style={{ marginTop: '0.5em' }}
                   >
                      {item.guessMsg.msg}
                   </LogoText>
@@ -92,3 +93,13 @@ export default function WinnerLoserSplash(): JSX.Element {
       </FlexColumnWrapper>
    );
 }
+
+const screenStyles = (): FlattenSimpleInterpolation => {
+   const forAll = css`
+      & > * {
+         margin-bottom: 0.5em;
+      }
+   `;
+
+   return MyCSS.Helper.concatStyles(forAll);
+};

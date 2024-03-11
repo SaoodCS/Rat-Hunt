@@ -66,11 +66,9 @@ export default function SummaryData(): JSX.Element {
                      size={'1em'}
                      style={{
                         paddingBottom: '0.5em',
-                        wordWrap: 'break-word',
-                        textOverflow: 'ellipsis',
-                        hyphens: 'auto',
                      }}
                      color={Color.darkThm.accentAlt}
+                     wrapAndHyphenate
                   >
                      {item.value}
                   </LogoText>

@@ -145,13 +145,14 @@ export default function Gameplay(): JSX.Element {
                               {component}
                            </ConditionalRender>
                            <ConditionalRender condition={!!text}>
-                              <LogoText
-                                 size="1.25em"
-                                 color={Color.setRgbOpacity(Color.darkThm.success, 0.75)}
-                                 style={{ height: '100%', display: 'flex', alignItems: 'center' }}
-                              >
-                                 {text} <AnimatedDots count={3} />
-                              </LogoText>
+                              <FlexColumnWrapper height="100%" justifyContent="center">
+                                 <LogoText
+                                    size="1.25em"
+                                    color={Color.setRgbOpacity(Color.darkThm.success, 0.75)}
+                                 >
+                                    {text} <AnimatedDots count={3} />
+                                 </LogoText>
+                              </FlexColumnWrapper>
                            </ConditionalRender>
                         </Fader>
                      </ConditionalRender>

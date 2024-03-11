@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { LogoText } from '../../../../../../../global/components/app/logo/LogoText';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import Color from '../../../../../../../global/css/colors';
@@ -38,7 +38,7 @@ export default function GameStateTable(): JSX.Element {
    }
 
    return (
-      <DataTableWrapper style={{ marginBottom: '1em' }}>
+      <DataTableWrapper>
          <HeaderRowContainer height="2.5em">
             <Cell>
                <LogoText size="1em"> User</LogoText>

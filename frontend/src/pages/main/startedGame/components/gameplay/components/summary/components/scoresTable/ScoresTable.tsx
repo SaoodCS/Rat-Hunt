@@ -44,14 +44,7 @@ export default function ScoresTable(): JSX.Element {
                {sortedUserStates?.map((user) => (
                   <RowContainer key={user.userId} isThisUser={user.userId === localDbUser}>
                      <ScoreTableCell leftcell noOfTableRows={2}>
-                        <LogoText
-                           size="0.9em"
-                           style={{
-                              wordWrap: 'break-word',
-                              textOverflow: 'ellipsis',
-                              hyphens: 'auto',
-                           }}
-                        >
+                        <LogoText size="0.9em" wrapAndHyphenate>
                            {user.userId}
                         </LogoText>
                      </ScoreTableCell>

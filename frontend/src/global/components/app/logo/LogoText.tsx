@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Color from '../../../css/colors';
 
-export const LogoText = styled.div<{ color?: string; size?: string }>`
+export const LogoText = styled.div<{ color?: string; size?: string; wrapAndHyphenate?: boolean }>`
    font-size: ${({ size }) => size || '8em'};
    color: ${({ color }) => color || Color.darkThm.accent};
    font-family: 'Backfired';
@@ -9,4 +9,12 @@ export const LogoText = styled.div<{ color?: string; size?: string }>`
       font-family: 'Backfired';
       src: url('/fonts/Backfired.ttf') format('truetype');
    }
+   ${({ wrapAndHyphenate }) => {
+      if (!wrapAndHyphenate) return css``;
+      return css`
+         word-wrap: break-word;
+         hyphens: auto;
+         text-overflow: ellipsis;
+      `;
+   }}
 `;

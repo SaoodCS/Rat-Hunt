@@ -60,22 +60,15 @@ export default function GameDetailsSlide(): JSX.Element {
    return (
       <GameDetailsContainer localStyles={screenStyles()} ref={faderElRef} onScroll={handleScroll}>
          {gameHeaderDetails.map((detail, index) => (
-            <FlexColumnWrapper
-               key={index}
-               padding="0em 0em 0em 0em"
-               style={{
-                  wordWrap: 'break-word',
-                  hyphens: 'auto',
-                  textOverflow: 'ellipsis',
-               }}
-            >
+            <FlexColumnWrapper key={index} padding="0em 0em 0em 0em">
                <ConditionalRender condition={!detail.value?.includes('THE RAT')}>
-                  <LogoText size={'1.25em'} color={Color.darkThm.accent}>
+                  <LogoText size={'1.25em'} color={Color.darkThm.accent} wrapAndHyphenate>
                      {detail.label}
                   </LogoText>
                </ConditionalRender>
                <LogoText
                   size={'1.25em'}
+                  wrapAndHyphenate
                   color={
                      detail.value?.includes('THE RAT')
                         ? Color.darkThm.error
