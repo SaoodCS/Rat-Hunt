@@ -1,16 +1,17 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import { LogoText } from '../../../../../../../global/components/app/logo/LogoText';
-import ConditionalRender from '../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
-import { GameContext } from '../../../../../../../global/context/game/GameContext';
-import Color from '../../../../../../../global/css/colors';
-import ArrOfObj from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
-import { GameDetailsContainer } from '../../style/Style';
+import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
-import MyCSS from '../../../../../../../global/css/MyCSS';
+import { LogoText } from '../../../../../../../global/components/app/logo/LogoText';
 import { FlexColumnWrapper } from '../../../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { VerticalSeperator } from '../../../../../../../global/components/lib/positionModifiers/verticalSeperator/VerticalSeperator';
+import ConditionalRender from '../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
+import { GameContext } from '../../../../../../../global/context/game/GameContext';
+import MyCSS from '../../../../../../../global/css/MyCSS';
+import Color from '../../../../../../../global/css/colors';
+import ArrOfObj from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import useScrollFader from '../../../../../../../global/hooks/useScrollFader';
+import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
+import { GameDetailsContainer } from '../../style/Style';
 
 interface IGameHeaderDetails {
    label: string;
@@ -21,24 +22,7 @@ export default function GameDetailsSlide(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [gameHeaderDetails, setGameHeaderDetails] = useState<IGameHeaderDetails[]>([]);
-   const gameDetailsContainerRef = useRef<HTMLDivElement>(null);
-
-   useEffect(() => {
-      const resizeObserver = new ResizeObserver((entries) => {
-         const scoreboardContainerDiv = entries[0].target as HTMLDivElement;
-         const maskImage =
-            scoreboardContainerDiv.scrollHeight <= scoreboardContainerDiv.clientHeight + 3
-               ? 'none'
-               : 'linear-gradient(to bottom, black calc(100% - 48px), transparent 100%)';
-         scoreboardContainerDiv.style.maskImage = maskImage;
-      });
-      if (gameDetailsContainerRef.current) {
-         resizeObserver.observe(gameDetailsContainerRef.current);
-      }
-      return () => {
-         resizeObserver.disconnect();
-      };
-   }, [roomData]);
+   const { handleScroll, faderElRef } = useScrollFader([roomData], 3);
 
    useEffect(() => {
       const newGameHeaderDetails: IGameHeaderDetails[] = [
@@ -73,26 +57,8 @@ export default function GameDetailsSlide(): JSX.Element {
       localDbUser,
    ]);
 
-   function handleScroll(e: React.UIEvent<HTMLDivElement, UIEvent>): void {
-      const gameDetailsContainerRef = e.target as HTMLDivElement;
-      const scrollTop = gameDetailsContainerRef.scrollTop;
-      if (
-         scrollTop + gameDetailsContainerRef.clientHeight >=
-         gameDetailsContainerRef.scrollHeight - 3
-      ) {
-         gameDetailsContainerRef.style.maskImage = 'none';
-      } else {
-         gameDetailsContainerRef.style.maskImage =
-            'linear-gradient(to bottom, black calc(100% - 48px), transparent 100%)';
-      }
-   }
-
    return (
-      <GameDetailsContainer
-         localStyles={screenStyles()}
-         ref={gameDetailsContainerRef}
-         onScroll={handleScroll}
-      >
+      <GameDetailsContainer localStyles={screenStyles()} ref={faderElRef} onScroll={handleScroll}>
          {gameHeaderDetails.map((detail, index) => (
             <FlexColumnWrapper
                key={index}

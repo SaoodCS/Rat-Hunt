@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { LogoText } from '../../../../../../../../../global/components/app/logo/LogoText';
 import { FlexColumnWrapper } from '../../../../../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { GameContext } from '../../../../../../../../../global/context/game/GameContext';
@@ -13,29 +13,13 @@ import {
    UserRowsWrapper,
 } from '../../../gameStateTable/style/Style';
 import { ScoreTableCell, ScoreTableWrapper } from './style/Style';
+import useScrollFader from '../../../../../../../../../global/hooks/useScrollFader';
 
 export default function ScoresTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [sortedUserStates, setSortedUserStates] = useState<DBConnect.FSDB.I.UserState[]>();
-   const userRowsWrapperRef = useRef<HTMLDivElement>(null);
-
-   useEffect(() => {
-      const resizeObserver = new ResizeObserver((entries) => {
-         const userRowsWrapperDiv = entries[0].target as HTMLDivElement;
-         const maskImage =
-            userRowsWrapperDiv.scrollHeight <= userRowsWrapperDiv.clientHeight + 1
-               ? 'none'
-               : 'linear-gradient(to bottom, black calc(100% - 48px), transparent 100%)';
-         userRowsWrapperDiv.style.maskImage = maskImage;
-      });
-      if (userRowsWrapperRef.current) {
-         resizeObserver.observe(userRowsWrapperRef.current);
-      }
-      return () => {
-         resizeObserver.disconnect();
-      };
-   }, [roomData]);
+   const { faderElRef, handleScroll } = useScrollFader([roomData], 1);
 
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
@@ -44,17 +28,6 @@ export default function ScoresTable(): JSX.Element {
       const sortedUserStates = ArrOfObj.sort(userStates, 'totalScore', true);
       setSortedUserStates(sortedUserStates);
    }, [roomData?.gameState.userStates]);
-
-   function handleScroll(e: React.UIEvent<HTMLDivElement, UIEvent>): void {
-      const userRowsWrapperDiv = e.target as HTMLDivElement;
-      const scrollTop = userRowsWrapperDiv.scrollTop;
-      if (scrollTop + userRowsWrapperDiv.clientHeight >= userRowsWrapperDiv.scrollHeight - 1) {
-         userRowsWrapperDiv.style.maskImage = 'none';
-      } else {
-         userRowsWrapperDiv.style.maskImage =
-            'linear-gradient(to bottom, black calc(100% - 48px), transparent 100%)';
-      }
-   }
 
    return (
       <FlexColumnWrapper width="50%" height="100%" boxSizing="border-box" position="relative">
@@ -67,11 +40,7 @@ export default function ScoresTable(): JSX.Element {
                   <LogoText size="0.9em">Score</LogoText>
                </ScoreTableCell>
             </HeaderRowContainer>
-            <UserRowsWrapper
-               headerRowHeight="2.25em"
-               ref={userRowsWrapperRef}
-               onScroll={handleScroll}
-            >
+            <UserRowsWrapper headerRowHeight="2.25em" ref={faderElRef} onScroll={handleScroll}>
                {sortedUserStates?.map((user) => (
                   <RowContainer key={user.userId} isThisUser={user.userId === localDbUser}>
                      <ScoreTableCell leftcell noOfTableRows={2}>

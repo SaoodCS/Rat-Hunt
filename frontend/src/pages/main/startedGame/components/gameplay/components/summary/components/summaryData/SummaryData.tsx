@@ -1,4 +1,4 @@
-import { Fragment, useContext, useEffect, useRef, useState } from 'react';
+import { Fragment, useContext, useEffect, useState } from 'react';
 import { LogoText } from '../../../../../../../../../global/components/app/logo/LogoText';
 import { FlexColumnWrapper } from '../../../../../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { GameContext } from '../../../../../../../../../global/context/game/GameContext';
@@ -7,29 +7,13 @@ import ArrOfObj from '../../../../../../../../../global/helpers/dataTypes/arrayO
 import HTMLEntities from '../../../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import MiscHelper from '../../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import DBConnect from '../../../../../../../../../global/utils/DBConnect/DBConnect';
+import useScrollFader from '../../../../../../../../../global/hooks/useScrollFader';
 
 export default function SummaryData(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [ratGuess, setRatGuess] = useState('');
-   const summaryDataRef = useRef<HTMLDivElement>(null);
-
-   useEffect(() => {
-      const resizeObserver = new ResizeObserver((entries) => {
-         const summaryDataDiv = entries[0].target as HTMLDivElement;
-         const maskImage =
-            summaryDataDiv.scrollHeight <= summaryDataDiv.clientHeight + 1.5
-               ? 'none'
-               : 'linear-gradient(to bottom, black calc(100% - 48px), transparent 100%)';
-         summaryDataDiv.style.maskImage = maskImage;
-      });
-      if (summaryDataRef.current) {
-         resizeObserver.observe(summaryDataRef.current);
-      }
-      return () => {
-         resizeObserver.disconnect();
-      };
-   }, [roomData]);
+   const { handleScroll, faderElRef } = useScrollFader([roomData], 1.5);
 
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
@@ -54,17 +38,6 @@ export default function SummaryData(): JSX.Element {
       },
    ];
 
-   function handleScroll(e: React.UIEvent<HTMLDivElement, UIEvent>): void {
-      const summaryDataDiv = e.target as HTMLDivElement;
-      const scrollTop = summaryDataDiv.scrollTop;
-      if (scrollTop + summaryDataDiv.clientHeight >= summaryDataDiv.scrollHeight - 1.5) {
-         summaryDataDiv.style.maskImage = 'none';
-      } else {
-         summaryDataDiv.style.maskImage =
-            'linear-gradient(to bottom, black calc(100% - 48px), transparent 100%)';
-      }
-   }
-
    return (
       <>
          <FlexColumnWrapper
@@ -73,7 +46,7 @@ export default function SummaryData(): JSX.Element {
             padding="0.5em 0.5em 0em 0em"
             boxSizing="border-box"
             onScroll={handleScroll}
-            ref={summaryDataRef}
+            ref={faderElRef}
          >
             {roundSummaryMap.map((item) => (
                <Fragment key={item.key}>
