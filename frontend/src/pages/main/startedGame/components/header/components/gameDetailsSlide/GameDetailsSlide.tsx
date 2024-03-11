@@ -62,12 +62,12 @@ export default function GameDetailsSlide(): JSX.Element {
          {gameHeaderDetails.map((detail, index) => (
             <FlexColumnWrapper key={index} padding="0em 0em 0em 0em">
                <ConditionalRender condition={!detail.value?.includes('THE RAT')}>
-                  <LogoText size={'1.25em'} color={Color.darkThm.accent} wrapAndHyphenate>
+                  <LogoText size={'1em'} color={Color.darkThm.accent} wrapAndHyphenate>
                      {detail.label}
                   </LogoText>
                </ConditionalRender>
                <LogoText
-                  size={'1.25em'}
+                  size={'1em'}
                   wrapAndHyphenate
                   color={
                      detail.value?.includes('THE RAT')
