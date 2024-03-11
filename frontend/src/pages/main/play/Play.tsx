@@ -201,12 +201,16 @@ export default function Play(): JSX.Element {
                <TextBtn
                   type="submit"
                   isDarkTheme
-                  style={{ backgroundColor: Color.darkThm.accentDarkerShade }}
+                  style={{
+                     alignItems: 'center',
+                     borderTop: `1px solid ${Color.darkThm.accent}`,
+                     borderBottom: `1px solid ${Color.darkThm.accent}`,
+                  }}
                >
                   <LogoText size={'1.25em'}>
                      {HTMLEntities.space}ENTER {HTMLEntities.space}
                   </LogoText>
-                  <Enter width={'1.25em'} />
+                  <Enter width={'1.75em'} />
                   {HTMLEntities.space}
                </TextBtn>
             </FlexRowWrapper>
