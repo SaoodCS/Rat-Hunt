@@ -10,4 +10,8 @@ export default class StringHelper {
    static removeSequence(str: string, sequence: string): string {
       return str.replace(sequence, '');
    }
+
+   static containsOneOf(str: string, chars: string[]): boolean {
+      return chars.some((char) => str.includes(char));
+   }
 }

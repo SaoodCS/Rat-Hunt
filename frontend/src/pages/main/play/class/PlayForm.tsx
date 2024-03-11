@@ -1,3 +1,4 @@
+import StringHelper from '../../../../global/helpers/dataTypes/string/StringHelper';
 import type { InputArray } from '../../../../global/helpers/react/form/FormHelper';
 import FormHelper from '../../../../global/helpers/react/form/FormHelper';
 
@@ -21,6 +22,11 @@ export default class PlayFormClass {
             if (!value) return 'Please enter your name';
             if (value.trim() === '') return 'Name cannot be empty';
             if (value.length < 2) return 'Name must be at least 1 characters';
+            // names cannot contain: ".", "#", "$", "[", or "]":
+            const invalidChars = ['.', '#', '$', '[', ']'];
+            if (StringHelper.containsOneOf(value, invalidChars)) {
+               return 'Name cannot contain: ".", "#", "$", "[", or "]"';
+            }
             return true;
          },
       },
