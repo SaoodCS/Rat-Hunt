@@ -60,4 +60,9 @@ export default class ArrayHelper {
          return 0;
       }) as T;
    }
+
+   static toUpperCase<T extends string[]>(arr: T): T {
+      const deepCopy: T = JSON.parse(JSON.stringify(arr));
+      return deepCopy.map((item) => item.toUpperCase()) as T;
+   }
 }

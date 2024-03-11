@@ -18,9 +18,17 @@ export const GlobalTheme = createGlobalStyle<{ darkTheme: boolean }>`
   margin: 0;
   padding: 0;
   overflow: hidden;
-  font-family: 'Arial';
   font-weight: 500;
   box-sizing: border-box;
+  word-wrap: break-word;
+  hyphens: auto;
+  text-overflow: ellipsis;
+  font-family: 'Backfired';
+   @font-face {
+      font-family: 'Backfired';
+      src: url('/fonts/Backfired.ttf') format('truetype');
+   }
+   
   ::-webkit-scrollbar {
     width: 0.4em;
     background-color: rgb(255, 255, 255);

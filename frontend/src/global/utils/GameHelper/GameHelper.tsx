@@ -20,8 +20,8 @@ export namespace GameHelper {
          let newId = '';
          let idExists = true;
          while (idExists) {
-            newId = Math.random().toString(36).substring(2, 7);
-            idExists = existingRoomUIDs.includes(newId);
+            newId = Math.random().toString(36).substring(2, 7).toUpperCase();
+            idExists = ArrayHelper.toUpperCase(existingRoomUIDs).includes(newId);
          }
          return newId;
       }

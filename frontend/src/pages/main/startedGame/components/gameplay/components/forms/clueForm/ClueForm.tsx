@@ -13,12 +13,13 @@ import GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelp
 import { gameFormStyles } from '../style/Style';
 import ClueFormClass from './class/ClueFormClass';
 import ArrOfObj from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import ArrayHelper from '../../../../../../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
 
 export default function ClueForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
    const { isDarkTheme } = useThemeContext();
-   const { apiError, setApiError } = useApiErrorContext();
-   const { form, errors, handleChange, initHandleSubmit } = useForm(
+   const { apiError } = useApiErrorContext();
+   const { form, errors, handleChange, initHandleSubmit, setErrors } = useForm(
       ClueFormClass.form.initialState,
       ClueFormClass.form.initialErrors,
       ClueFormClass.form.validate,
@@ -34,11 +35,11 @@ export default function ClueForm(): JSX.Element {
       const { gameState } = roomData;
       const { userStates, currentRat } = gameState;
       const submittedClues = ArrOfObj.getArrOfValuesFromKey(userStates, 'clue');
-      if (submittedClues.includes(userClue)) {
-         setApiError('Another user has already submitted this clue.');
+      if (ArrayHelper.toUpperCase(submittedClues).includes(userClue.toUpperCase())) {
+         setErrors((prev) => ({ ...prev, clue: 'Another user has already submitted this clue.' }));
          return;
       }
-      setApiError('');
+      setErrors((prev) => ({ ...prev, clue: '' }));
       const updatedUserStates = GameHelper.SetUserStates.updateUser(userStates, localDbUser, [
          { key: 'clue', value: userClue },
       ]);

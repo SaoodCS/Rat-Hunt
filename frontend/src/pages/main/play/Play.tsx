@@ -60,10 +60,11 @@ export default function Play(): JSX.Element {
    }
 
    async function handleJoinGame(): Promise<void> {
+      const roomId = form.roomId.toUpperCase();
       const docRef = doc(
          firestore,
          DBConnect.FSDB.CONSTS.GAME_COLLECTION,
-         `${DBConnect.FSDB.CONSTS.ROOM_DOC_PREFIX}${form.roomId}`,
+         `${DBConnect.FSDB.CONSTS.ROOM_DOC_PREFIX}${roomId}`,
       );
       const docSnap = await getDoc(docRef);
       if (!docSnap.exists()) {
@@ -72,7 +73,9 @@ export default function Play(): JSX.Element {
       }
       const roomData = docSnap.data() as DBConnect.FSDB.I.Room;
       const { gameStarted, users, gameState } = roomData;
-      const clientUserExistsInRoom = users.some((user) => user.userId === form.name);
+      const clientUserExistsInRoom = users.some(
+         (user) => user.userId.toUpperCase() === form.name.toUpperCase(),
+      );
       if (clientUserExistsInRoom) {
          alert('Be original, Ben');
          return;
@@ -97,14 +100,14 @@ export default function Play(): JSX.Element {
          spectate: gameStarted,
       };
       await addUserToRoom.mutateAsync({
-         roomId: form.roomId,
+         roomId: roomId,
          userObjForUsers: user,
          userObjForUserState: userState,
          gameStateObj: gameState,
       });
-      setLocalDbRoom(form.roomId);
+      setLocalDbRoom(roomId);
       setLocalDbUser(form.name);
-      await DBConnect.RTDB.Set.userStatus(form.name, form.roomId);
+      await DBConnect.RTDB.Set.userStatus(form.name, roomId);
       navigation(gameStarted ? '/main/startedgame' : '/main/waitingroom', { replace: true });
    }
 
@@ -203,8 +206,7 @@ export default function Play(): JSX.Element {
                   isDarkTheme
                   style={{
                      alignItems: 'center',
-                     borderTop: `1px solid ${Color.darkThm.accent}`,
-                     borderBottom: `1px solid ${Color.darkThm.accent}`,
+                     border: `1px solid ${Color.darkThm.accent}`,
                   }}
                >
                   <LogoText size={'1.25em'}>
