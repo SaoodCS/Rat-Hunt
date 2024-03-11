@@ -24,9 +24,9 @@ import MyCSS from '../../../global/css/MyCSS';
 import { Enter } from '@styled-icons/icomoon/Enter';
 import { LogoText } from '../../../global/components/app/logo/LogoText';
 import { FlexRowWrapper } from '../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
-import { StaticButton } from '../../../global/components/lib/button/staticButton/Style';
-import Color from '../../../global/css/colors';
 import HTMLEntities from '../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
+import { TextBtn } from '../../../global/components/lib/button/textBtn/Style';
+import Color from '../../../global/css/colors';
 
 export default function Play(): JSX.Element {
    const { apiError } = useApiErrorContext();
@@ -198,12 +198,21 @@ export default function Play(): JSX.Element {
                ))}
 
             <FlexRowWrapper justifyContent="center" alignItems="center">
-               <StaticButton type="submit" isDarkTheme style={{ display: 'flex' }}>
-                  <LogoText size={'1.5em'} color={Color.darkThm.accentDarkerShade}>
-                     ENTER {HTMLEntities.space}
-                  </LogoText>
-                  <Enter width={'1.5em'} color={Color.darkThm.accentDarkerShade} />
-               </StaticButton>
+               <FlexRowWrapper
+                  padding="0.5em 1em 0.5em 1em"
+                  justifyContent="center"
+                  alignItems="center"
+                  width="fit-content"
+               >
+                  <TextBtn
+                     type="submit"
+                     isDarkTheme
+                     style={{ backgroundColor: Color.darkThm.accentDarkerShade }}
+                  >
+                     <LogoText size={'1.25em'}>ENTER {HTMLEntities.space}</LogoText>
+                     <Enter width={'1.25em'} />
+                  </TextBtn>
+               </FlexRowWrapper>
             </FlexRowWrapper>
          </StyledForm>
       </FlexColumnWrapper>
@@ -218,6 +227,11 @@ const screenStyles = (): FlattenSimpleInterpolation => {
          margin: -2em;
       }
    `);
-   const forTablet = MyCSS.Media.tablet(css``);
-   return MyCSS.Helper.concatStyles(forDesktop, forTablet);
+
+   const forShort = MyCSS.Media.short(css`
+      & > *:nth-child(1) {
+         font-size: 0.7em;
+      }
+   `);
+   return MyCSS.Helper.concatStyles(forDesktop, forShort);
 };

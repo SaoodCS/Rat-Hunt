@@ -26,6 +26,12 @@ export namespace MyCSS {
             ${styles}
          }
       `;
+
+      static short = (styles: FlattenSimpleInterpolation): FlattenSimpleInterpolation => css`
+         @media (max-height: 700px) {
+            ${styles}
+         }
+      `;
    }
 
    export namespace Clickables {

@@ -13,12 +13,12 @@ export default function LogoFader(): JSX.Element {
       <>
          <ConditionalRender condition={isRatExtermination}>
             <Fader fadeInCondition={isRatExtermination} transitionDuration={3}>
-               <RatExterminationLogo size={'18em'} />
+               <RatExterminationLogo size={'16em'} />
             </Fader>
          </ConditionalRender>
          <ConditionalRender condition={!isRatExtermination}>
             <Fader fadeInCondition={!isRatExtermination} transitionDuration={3}>
-               <RatLogo size={'18em'} />
+               <RatLogo size={'16em'} />
             </Fader>
          </ConditionalRender>
       </>
