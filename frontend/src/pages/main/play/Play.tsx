@@ -104,7 +104,7 @@ export default function Play(): JSX.Element {
       });
       setLocalDbRoom(form.roomId);
       setLocalDbUser(form.name);
-      DBConnect.RTDB.Set.userStatus(form.name, form.roomId);
+      await DBConnect.RTDB.Set.userStatus(form.name, form.roomId);
       navigation(gameStarted ? '/main/startedgame' : '/main/waitingroom');
    }
 
