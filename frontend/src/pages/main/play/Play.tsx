@@ -105,7 +105,7 @@ export default function Play(): JSX.Element {
       setLocalDbRoom(form.roomId);
       setLocalDbUser(form.name);
       await DBConnect.RTDB.Set.userStatus(form.name, form.roomId);
-      navigation(gameStarted ? '/main/startedgame' : '/main/waitingroom');
+      navigation(gameStarted ? '/main/startedgame' : '/main/waitingroom', { replace: true });
    }
 
    async function handleHostGame(): Promise<void> {
@@ -144,7 +144,7 @@ export default function Play(): JSX.Element {
       setLocalDbRoom(generatedRoomId);
       setLocalDbUser(form.name);
       DBConnect.RTDB.Set.userStatus(form.name, generatedRoomId);
-      navigation('/main/waitingroom');
+      navigation('/main/waitingroom', { replace: true });
    }
 
    function dropDownOptions(

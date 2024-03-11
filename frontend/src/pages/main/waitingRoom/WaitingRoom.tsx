@@ -46,7 +46,7 @@ export default function WaitingRoom(): JSX.Element {
 
    useEffect(() => {
       if (MiscHelper.isNotFalsyOrEmpty(roomData) && roomData.gameStarted) {
-         navigation('/main/startedgame');
+         navigation('/main/startedgame', { replace: true });
       }
    }, [roomData?.gameStarted]);
 

@@ -101,7 +101,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
       setLocalDbRoom('');
       setLocalDbUser('');
       queryClient.removeQueries();
-      navigation('/main/play');
+      navigation('/main/play', { replace: true });
    }
 
    function waitingOrStartedPage(): boolean {

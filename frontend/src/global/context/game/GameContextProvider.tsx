@@ -83,7 +83,9 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
          const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
          const localDbUserInRoom = roomData?.users?.some((user) => user.userId === localDbUser);
          if (roomDataExists && localDbUserInRoom) {
-            navigation(roomData.gameStarted ? '/main/startedgame' : '/main/waitingroom');
+            navigation(roomData.gameStarted ? '/main/startedgame' : '/main/waitingroom', {
+               replace: true,
+            });
             DBConnect.RTDB.Set.userStatus(localDbUser, roomData.roomId);
             return;
          }
@@ -93,7 +95,7 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
          // queryClient below added without testing so if there are bugs, delete it
          queryClient.clear();
          queryClient.invalidateQueries();
-         navigation('/main/play');
+         navigation('/main/play', { replace: true });
       }
    }, [isLoading]);
 
