@@ -21,7 +21,8 @@ export default defineConfig({
             clientsClaim: true,
             runtimeCaching: [
                {
-                  urlPattern: /^https?.*/,
+                  //cache all requests coming from googleapis
+                  urlPattern: /https?:\/\/.*googleapis\.com/,
                   handler: 'NetworkFirst',
                   method: 'GET',
                   options: {
