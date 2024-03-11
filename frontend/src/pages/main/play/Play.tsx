@@ -198,21 +198,17 @@ export default function Play(): JSX.Element {
                ))}
 
             <FlexRowWrapper justifyContent="center" alignItems="center">
-               <FlexRowWrapper
-                  padding="0.5em 1em 0.5em 1em"
-                  justifyContent="center"
-                  alignItems="center"
-                  width="fit-content"
+               <TextBtn
+                  type="submit"
+                  isDarkTheme
+                  style={{ backgroundColor: Color.darkThm.accentDarkerShade }}
                >
-                  <TextBtn
-                     type="submit"
-                     isDarkTheme
-                     style={{ backgroundColor: Color.darkThm.accentDarkerShade }}
-                  >
-                     <LogoText size={'1.25em'}>ENTER {HTMLEntities.space}</LogoText>
-                     <Enter width={'1.25em'} />
-                  </TextBtn>
-               </FlexRowWrapper>
+                  <LogoText size={'1.25em'}>
+                     {HTMLEntities.space}ENTER {HTMLEntities.space}
+                  </LogoText>
+                  <Enter width={'1.25em'} />
+                  {HTMLEntities.space}
+               </TextBtn>
             </FlexRowWrapper>
          </StyledForm>
       </FlexColumnWrapper>
