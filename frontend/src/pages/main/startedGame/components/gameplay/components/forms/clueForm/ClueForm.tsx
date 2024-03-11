@@ -31,7 +31,7 @@ export default function ClueForm(): JSX.Element {
       const { isFormValid } = initHandleSubmit(e);
       if (!isFormValid) return;
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
-      const userClue = form.clue;
+      const userClue = form.clue.trim();
       const { gameState } = roomData;
       const { userStates, currentRat } = gameState;
       const submittedClues = ArrOfObj.getArrOfValuesFromKey(userStates, 'clue');

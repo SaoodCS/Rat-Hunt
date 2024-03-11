@@ -21,7 +21,6 @@ export default class PlayFormClass {
             if (!value) return 'Please enter your name';
             if (value.trim() === '') return 'Name cannot be empty';
             if (value.length < 2) return 'Name must be at least 1 characters';
-            // if (value.length > 8) return 'Name must be at most 8 characters';
             return true;
          },
       },

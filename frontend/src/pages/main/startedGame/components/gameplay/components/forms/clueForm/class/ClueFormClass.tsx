@@ -18,7 +18,7 @@ export default class ClueFormClass {
             if (value.length < 1) return 'Clue must be at least 1 character';
             // if (value.length > 10) return 'Clue must be at most 10 characters';
             if (value.trim() === '') return 'Clue cannot be empty';
-            if (value.split(' ').length > 1) return 'Clue cannot be more than one word';
+            if (value.trim().split(' ').length > 1) return 'Clue cannot be more than one word';
             return true;
          },
       },
