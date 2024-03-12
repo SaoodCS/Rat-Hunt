@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as serviceAccount from '../../../env/service-account-key.json';
-import type { IFullUser, IRoom } from '../../helpers/FirebaseHelp';
+import { FBHelp, type IFullUser, type IRoom } from '../../helpers/FirebaseHelp';
 import { addDummyUsersToRoom, baseDummyUser, generateDummyUsers } from './helpers/helpers';
 
 if (!admin.apps.length) {
@@ -10,25 +10,29 @@ if (!admin.apps.length) {
 }
 
 async function createDummyRoom(): Promise<void> {
-   const dummyRoom: IRoom = {
-      gameStarted: false,
-      roomId: 'DUMMY',
-      users: [],
-      gameState: {
-         activeTopic: '',
-         activeWord: '',
-         currentRat: '',
-         currentRound: 0,
-         currentTurn: '',
-         numberOfRoundsSet: 0,
-         userStates: [],
-      },
-   };
+   const topics = await FBHelp.getTopics();
+   if (!topics) throw new Error('No topics found');
+   const selectedTopic = topics[0].key;
+   const selectedWord = topics[0].values[0];
    const dummyUsers: IFullUser[] = generateDummyUsers(baseDummyUser, [
       { userId: 'dummyUser2' },
       { userId: 'dummyUser3' },
       { userId: 'dummyUser4', spectate: true },
    ]);
+   const dummyRoom: IRoom = {
+      gameStarted: false,
+      roomId: 'DUMMY',
+      users: [],
+      gameState: {
+         activeTopic: selectedTopic,
+         activeWord: selectedWord,
+         currentRat: dummyUsers[0].userId,
+         currentRound: 0,
+         currentTurn: dummyUsers[0].userId,
+         numberOfRoundsSet: 4,
+         userStates: [],
+      },
+   };
    const roomWithDummyUsers = addDummyUsersToRoom(dummyRoom, dummyUsers);
    const roomRef = admin.firestore().collection('games').doc('room-DUMMY');
    await roomRef.set(roomWithDummyUsers);

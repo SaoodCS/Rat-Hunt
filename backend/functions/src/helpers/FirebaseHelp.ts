@@ -108,7 +108,7 @@ export class FBHelp {
 
    public static async getTopics(): Promise<ITopic[]> {
       const topicsSnapshot = await admin.firestore().collection('topics').doc('topics').get();
-      return topicsSnapshot.data() as ITopic[];
+      return topicsSnapshot.data()?.topics as ITopic[];
    }
 
    public static getActiveTopicWords(topics: ITopic[], activeTopic: string): IActiveTopicWords[] {
