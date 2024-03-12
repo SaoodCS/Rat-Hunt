@@ -17,6 +17,7 @@ export interface IUserStates {
    votedFor: string;
    spectate: boolean;
 }
+export type IFullUser = IUser & IUserStates;
 export interface IGameState {
    activeTopic: string;
    activeWord: string;
