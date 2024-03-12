@@ -30,7 +30,7 @@ async function createDummyRoom(): Promise<void> {
       { userId: 'dummyUser4', spectate: true },
    ]);
    const roomWithDummyUsers = addDummyUsersToRoom(dummyRoom, dummyUsers);
-   const roomRef = admin.firestore().collection('rooms').doc('room-DUMMY');
+   const roomRef = admin.firestore().collection('games').doc('room-DUMMY');
    await roomRef.set(roomWithDummyUsers);
 }
 
