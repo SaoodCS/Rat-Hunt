@@ -46,10 +46,22 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
             `${DBConnect.FSDB.CONSTS.ROOM_DOC_PREFIX}${localDbRoom}`,
          );
          const unsubscribe = onSnapshot(docRef, (doc) => {
-            const roomData = doc.data();
-            if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
+            const docExists = doc.exists();
+            const roomData = doc?.data() as DBConnect.FSDB.I.Room | undefined;
+            const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
+            const users = roomData?.users;
+            const usersExists = MiscHelper.isNotFalsyOrEmpty(users);
+            const isUserInRoom = GameHelper.Check.isUserInRoom(localDbUser, users ?? []);
+            if (docExists && roomDataExists && usersExists && isUserInRoom) {
                queryClient.setQueryData([DBConnect.FSDB.CONSTS.QUERY_KEYS.GET_ROOM], roomData);
+               return;
             }
+            setLocalDbRoom('');
+            setLocalDbUser('');
+            queryClient.clear();
+            queryClient.invalidateQueries();
+            navigation('/main/play', { replace: true });
+            unsubscribe();
          });
          return () => {
             unsubscribe();

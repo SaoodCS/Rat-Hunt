@@ -130,4 +130,8 @@ export default class ArrOfObj {
    static getRandItem<T>(arr: T[]): T {
       return arr[Math.floor(Math.random() * arr.length)];
    }
+
+   static hasKeyVal<T>(arr: T[], key: keyof T, value: T[keyof T]): boolean {
+      return arr.some((obj) => obj[key] === value);
+   }
 }

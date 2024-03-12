@@ -46,6 +46,10 @@ export namespace GameHelper {
          const mostRepeatedItems = ArrayHelper.findMostRepeatedItems(userVotes);
          return mostRepeatedItems.length === 1 && mostRepeatedItems.includes(currentRat);
       }
+
+      export function isUserInRoom(userId: string, users: DBConnect.FSDB.I.Room['users']): boolean {
+         return ArrOfObj.hasKeyVal(users, 'userId', userId);
+      }
    }
 
    export namespace Get {
