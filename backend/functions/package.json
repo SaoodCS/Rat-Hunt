@@ -1,25 +1,39 @@
 {
-  "name": "functions",
-  "scripts": {
-    "build": "tsc",
-    "build:watch": "tsc --watch",
-    "serve": "npm run build && firebase emulators:start --only functions",
-    "shell": "npm run build && firebase functions:shell",
-    "start": "npm run shell",
-    "deploy": "firebase deploy --only functions --project rat-hunt",
-    "logs": "firebase functions:log"
-  },
-  "engines": {
-    "node": "16"
-  },
-  "main": "lib/index.js",
-  "dependencies": {
-    "firebase-admin": "^11.5.0",
-    "firebase-functions": "^4.2.0"
-  },
-  "devDependencies": {
-    "typescript": "^4.9.0",
-    "firebase-functions-test": "^3.0.0"
-  },
-  "private": true
+   "name": "functions",
+   "scripts": {
+      "build": "tsc",
+      "build:watch": "tsc --watch",
+      "serve": "npm run build && firebase emulators:start --only functions",
+      "shell": "npm run build && firebase functions:shell",
+      "start": "npm run shell",
+      "deploy": "firebase deploy --only functions --project rat-hunt",
+      "logs": "firebase functions:log",
+      "ts-errors": "tsc --noEmit --pretty",
+      "lint": "eslint . --ignore-pattern functions/lib",
+      "lint-and-ts-errors": "concurrently \"npm run ts-errors\" \"npm run lint\" --success all --prefix-colors \"bgBlue.bold,bgMagenta.bold\" --group --names \"TS-ERROR-CHECK,LINT-ERROR-CHECK\"",
+      "lint-fix": "cd .. && eslint . --fix --ignore-pattern functions/lib",
+      "prettify": "prettier --config .prettierrc.json --write \"src/**/*.ts\""
+   },
+   "engines": {
+      "node": "16"
+   },
+   "main": "lib/index.js",
+   "dependencies": {
+      "firebase-admin": "^11.5.0",
+      "firebase-functions": "^4.2.0"
+   },
+   "devDependencies": {
+      "typescript": "^4.9.0",
+      "@typescript-eslint/eslint-plugin": "^6.2.1",
+      "@typescript-eslint/parser": "^6.2.1",
+      "eslint": "^8.47.0",
+      "eslint-config-prettier": "^9.0.0",
+      "eslint-import-resolver-typescript": "^3.6.0",
+      "eslint-plugin-import": "^2.28.0",
+      "eslint-plugin-prettier": "^5.0.0",
+      "eslint-plugin-security": "^1.7.1",
+      "eslint-plugin-unused-imports": "^3.0.0",
+      "firebase-functions-test": "^3.0.0"
+   },
+   "private": true
 }

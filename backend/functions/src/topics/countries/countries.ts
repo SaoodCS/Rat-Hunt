@@ -1,23 +1,23 @@
-import ITopic from "../interface";
+import type ITopic from '../../helpers/FirebaseHelp';
 
 export const countries: ITopic = {
-    key: "countries",
-    values: [
-      "Australia",
-      "USA",
-      "Canada",
-      "Mexico",
-      "Brazil",
-      "Argentina",
-      "Chile",
-      "Peru",
-      "England",
-      "France",
-      "Germany",
-      "Italy",
-      "Spain",
-      "Portugal",
-      "Russia",
-      "China",
-    ],
-  };
+   key: 'countries',
+   values: [
+      'Australia',
+      'USA',
+      'Canada',
+      'Mexico',
+      'Brazil',
+      'Argentina',
+      'Chile',
+      'Peru',
+      'England',
+      'France',
+      'Germany',
+      'Italy',
+      'Spain',
+      'Portugal',
+      'Russia',
+      'China',
+   ],
+};

@@ -11,7 +11,7 @@ export namespace GameHelper {
    }
 
    export namespace New {
-      export function topic(activeTopic: string, topicData: DBConnect.FSDB.I.Topics[]): string {
+      export function topic(activeTopic: string, topicData: DBConnect.FSDB.I.Topic[]): string {
          const newTopic = ArrOfObj.getRandItem(topicData).key;
          return newTopic === activeTopic ? topic(activeTopic, topicData) : newTopic;
       }
@@ -50,7 +50,7 @@ export namespace GameHelper {
 
    export namespace Get {
       export function topicWordsAndCells(
-         topics: DBConnect.FSDB.I.Topics[],
+         topics: DBConnect.FSDB.I.Topic[],
          activeTopic: string,
       ): GameHelper.I.WordCell[] {
          const topicObj = ArrOfObj.findObj(topics, 'key', activeTopic);
@@ -240,7 +240,7 @@ export namespace GameHelper {
 
       export function newRound(options: {
          gameState: DBConnect.FSDB.I.GameState;
-         topicsData: DBConnect.FSDB.I.Topics[];
+         topicsData: DBConnect.FSDB.I.Topic[];
          newTopic: string;
          resetRoundToOne?: boolean;
          resetScores?: boolean;

@@ -28,9 +28,26 @@ export namespace DBConnect {
    export namespace FSDB {
       // -- INTERFACES -- //
       export namespace I {
-         export interface Topics {
+         export interface Topic {
             key: string;
-            values: string[];
+            values: [
+               string,
+               string,
+               string,
+               string,
+               string,
+               string,
+               string,
+               string,
+               string,
+               string,
+               string,
+               string,
+               string,
+               string,
+               string,
+               string,
+            ];
          }
          export interface Room {
             gameStarted: boolean;
@@ -105,11 +122,11 @@ export namespace DBConnect {
          }
 
          export function topics(
-            options: UseQueryOptions<I.Topics[]> = {},
-         ): UseQueryResult<I.Topics[], unknown> {
+            options: UseQueryOptions<I.Topic[]> = {},
+         ): UseQueryResult<I.Topic[], unknown> {
             return useQuery({
                queryKey: [CONSTS.QUERY_KEYS.GET_TOPICS],
-               queryFn: async (): Promise<I.Topics[]> => {
+               queryFn: async (): Promise<I.Topic[]> => {
                   try {
                      const docRef = doc(firestore, CONSTS.TOPICS_COLLECTION, CONSTS.TOPICS_DOC);
                      const docSnap = await getDoc(docRef);
