@@ -50,33 +50,35 @@ export default function ProgressBarChart(props: IProgressBarChart): JSX.Element 
                   >
                      <LogoText
                         color={Color.setRgbOpacity(
-                           isLocalDbUser(item.label) ? Color.darkThm.success : Color.darkThm.txt,
-                           0.75,
+                           isLocalDbUser(item.label) ? Color.darkThm.error : Color.darkThm.success,
+                           1,
                         )}
                         size="0.8em"
                         style={{
-                           padding: '0em 0em 0em 0.5em',
+                           padding: '0.1em 0em 0em 0.5em',
                            height: '100%',
                            display: 'flex',
                            alignItems: 'center',
+                           filter: 'brightness(0.9)',
                         }}
                      >
                         {item.label}
                      </LogoText>
                      <LogoText
                         color={Color.setRgbOpacity(
-                           isLocalDbUser(item.label) ? Color.darkThm.success : Color.darkThm.txt,
-                           0.75,
+                           isLocalDbUser(item.label) ? Color.darkThm.error : Color.darkThm.success,
+                           1,
                         )}
                         size="0.8em"
                         style={{
-                           padding: '0em 0.75em 0em 0em',
+                           padding: '0.1em 0.75em 0em 0em',
                            position: 'absolute',
                            right: '0em',
                            zIndex: 999,
                            height: '100%',
                            display: 'flex',
                            alignItems: 'center',
+                           filter: 'brightness(0.9)',
                         }}
                      >
                         {item.completedAmnt}
@@ -90,7 +92,7 @@ export default function ProgressBarChart(props: IProgressBarChart): JSX.Element 
                         isDarkTheme={isDarkTheme}
                         style={{
                            background: isLocalDbUser(item.label)
-                              ? Color.setRgbOpacity(Color.darkThm.success, 0.2)
+                              ? Color.setRgbOpacity(Color.darkThm.error, 0.25)
                               : '',
                            position: 'absolute',
                            left: '0em',

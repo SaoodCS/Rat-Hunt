@@ -37,9 +37,10 @@ export const CompletedBar = styled.div<{
    position: absolute;
    height: 100%;
    background-image: ${({ completedPercentage }) =>
-      `linear-gradient(90deg, ${'rgba(0,0,0,0)'} -50%, ${Color.darkThm.accent} ${
-         100 - completedPercentage + 100
+      `linear-gradient(90deg, ${'rgba(0,0,0,0)'} -50%, ${Color.darkThm.success} ${
+         200 - completedPercentage + 200
       }%)`};
+   filter: brightness(0.5);
 
    border-top-right-radius: 10px;
    border-bottom-right-radius: 10px;
