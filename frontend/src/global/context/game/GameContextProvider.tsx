@@ -56,7 +56,7 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
                queryClient.setQueryData([DBConnect.FSDB.CONSTS.QUERY_KEYS.GET_ROOM], roomData);
                return;
             }
-            alert('Room does not exist or you have been removed from the room!');
+            // alert('Room does not exist or you have been removed from the room!'); <-- commented out because alert also shows when user intentionally leaves the room -->
             setLocalDbRoom('');
             setLocalDbUser('');
             queryClient.clear();
