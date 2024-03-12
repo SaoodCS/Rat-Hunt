@@ -54,7 +54,7 @@ export const BarBackground = styled.div<{
 }>`
    position: relative;
    display: flex;
-   background-color: ${Color.setRgbOpacity(Color.darkThm.inactive, 0.7)};
+   background-color: ${Color.setRgbOpacity(Color.darkThm.inactive, 0.4)};
    border-top-right-radius: 10px;
    border-bottom-right-radius: 10px;
    width: ${({ barWidth }) => barWidth || '20em'};

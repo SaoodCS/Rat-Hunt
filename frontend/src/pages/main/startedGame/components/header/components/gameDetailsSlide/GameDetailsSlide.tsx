@@ -1,28 +1,48 @@
+import { Copy } from '@styled-icons/fluentui-system-regular/Copy';
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
-import { LogoText } from '../../../../../../../global/components/app/logo/LogoText';
-import { FlexColumnWrapper } from '../../../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
-import { VerticalSeperator } from '../../../../../../../global/components/lib/positionModifiers/verticalSeperator/VerticalSeperator';
 import ConditionalRender from '../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
+import { ToastContext } from '../../../../../../../global/context/widget/toast/ToastContext';
 import MyCSS from '../../../../../../../global/css/MyCSS';
 import Color from '../../../../../../../global/css/colors';
 import ArrOfObj from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import HTMLEntities from '../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import useScrollFader from '../../../../../../../global/hooks/useScrollFader';
 import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
-import { GameDetailsContainer } from '../../style/Style';
+import {
+   GameDetailsContainer,
+   GameDetailsItemWrapper,
+   ItemLabel,
+   ItemValue,
+   RoomIDScoreboardItem,
+   RoomIDScoreboardWrapper,
+} from '../../style/Style';
 
 interface IGameHeaderDetails {
    label: string;
    value: string;
 }
 
-export default function GameDetailsSlide(): JSX.Element {
+interface IGameDetailsSlide {
+   scrollToSlide: (slideNumber: number) => void;
+}
+
+export default function GameDetailsSlide(props: IGameDetailsSlide): JSX.Element {
+   const { scrollToSlide } = props;
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [gameHeaderDetails, setGameHeaderDetails] = useState<IGameHeaderDetails[]>([]);
    const { handleScroll, faderElRef } = useScrollFader([roomData], 3);
+   const {
+      toggleToast,
+      setToastMessage,
+      setWidth,
+      setVerticalPos,
+      setHorizontalPos,
+      setToastZIndex,
+   } = useContext(ToastContext);
 
    useEffect(() => {
       const newGameHeaderDetails: IGameHeaderDetails[] = [
@@ -57,47 +77,68 @@ export default function GameDetailsSlide(): JSX.Element {
       localDbUser,
    ]);
 
+   async function copyToClipboard(): Promise<void> {
+      await navigator.clipboard.writeText(localDbRoom);
+      setToastMessage('Room ID Copied!');
+      setWidth('200px');
+      setVerticalPos('bottom');
+      setHorizontalPos('center');
+      setToastZIndex(100);
+      toggleToast(true);
+   }
+
    return (
-      <GameDetailsContainer localStyles={screenStyles()} ref={faderElRef} onScroll={handleScroll}>
-         {gameHeaderDetails.map((detail, index) => (
-            <FlexColumnWrapper key={index} padding="0em 0em 0em 0em">
-               <ConditionalRender condition={!detail.value?.includes('THE RAT')}>
-                  <LogoText size={'1em'} color={Color.darkThm.accent} wrapAndHyphenate>
-                     {detail.label}
-                  </LogoText>
-               </ConditionalRender>
-               <LogoText
-                  size={'1em'}
-                  wrapAndHyphenate
-                  color={
-                     detail.value?.includes('THE RAT')
-                        ? Color.darkThm.error
-                        : Color.darkThm.accentAlt
-                  }
-               >
-                  {detail.value}
-               </LogoText>
-               <VerticalSeperator margBottomEm={0.1} />
-            </FlexColumnWrapper>
-         ))}
-      </GameDetailsContainer>
+      <>
+         <GameDetailsContainer
+            ref={faderElRef}
+            onScroll={handleScroll}
+            localStyles={screenStyles()}
+         >
+            <RoomIDScoreboardWrapper>
+               <RoomIDScoreboardItem onClick={copyToClipboard}>
+                  Room ID:{HTMLEntities.space}
+                  {HTMLEntities.space}
+                  {localDbRoom}
+                  {HTMLEntities.space}
+                  <Copy size="0.85em" />
+               </RoomIDScoreboardItem>
+               <RoomIDScoreboardItem onClick={() => scrollToSlide(2)}>
+                  Scoreboard
+               </RoomIDScoreboardItem>
+            </RoomIDScoreboardWrapper>
+            {gameHeaderDetails.map(({ label, value }, index) => (
+               <GameDetailsItemWrapper key={index}>
+                  <ConditionalRender condition={!!value && !value.includes('THE RAT')}>
+                     <ItemLabel color={Color.darkThm.error}>{label}</ItemLabel>
+                  </ConditionalRender>
+                  <ItemValue
+                     color={Color.darkThm.success}
+                     ratUser={!!value && value.includes('THE RAT')}
+                  >
+                     {value}
+                     {label === 'Topic' && 'dfg rteghtrg htrgyh'}
+                  </ItemValue>
+               </GameDetailsItemWrapper>
+            ))}
+         </GameDetailsContainer>
+      </>
    );
 }
 
 const screenStyles = (): FlattenSimpleInterpolation => {
-   const forMobile = MyCSS.Media.mobile(css`
-      width: 50%;
-      height: calc(100% - 1em);
-      overflow-y: scroll;
-      padding-left: 1em;
-      padding-top: 1em;
-      font-size: 0.9em;
-   `);
+   const forMobile = MyCSS.Media.mobile(css``);
    const forDesktop = MyCSS.Media.desktop(css`
+      font-size: 1em;
+      width: 60%;
       margin: 0 auto;
-      font-size: 1.25em;
-      text-align: center;
-      justify-content: space-evenly;
+      & > *:not(:first-child) {
+         & > * {
+            width: 50%;
+            &:first-child {
+               text-align: end;
+            }
+         }
+      }
    `);
    return MyCSS.Helper.concatStyles(forDesktop, forMobile);
 };

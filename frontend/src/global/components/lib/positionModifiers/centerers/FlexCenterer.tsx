@@ -1,3 +1,4 @@
+import type { FlattenSimpleInterpolation } from 'styled-components';
 import styled from 'styled-components';
 
 export const FlexCenterer = styled.div<{
@@ -7,6 +8,7 @@ export const FlexCenterer = styled.div<{
    left?: string;
    right?: string;
    padding?: string;
+   localStyles?: FlattenSimpleInterpolation;
 }>`
    display: flex;
    justify-content: center;
@@ -17,4 +19,5 @@ export const FlexCenterer = styled.div<{
    left: ${({ left }) => left || 'auto'};
    right: ${({ right }) => right || 'auto'};
    padding: ${({ padding }) => padding};
+   ${({ localStyles }) => localStyles}
 `;

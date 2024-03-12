@@ -52,7 +52,7 @@ export const StyledBackArr = styled(ArrowIosBack)<{ darktheme: 'true' | 'false' 
 export const HeaderRightElWrapper = styled.div<{ isDarkTheme: boolean }>`
    right: 0px;
    position: fixed;
-   color: ${({ isDarkTheme }) => (isDarkTheme ? Color.darkThm.accent : Color.lightThm.accent)};
+   color: ${({ isDarkTheme }) => (isDarkTheme ? Color.darkThm.warning : Color.lightThm.warning)};
    & > * {
       height: 1.5em;
    }

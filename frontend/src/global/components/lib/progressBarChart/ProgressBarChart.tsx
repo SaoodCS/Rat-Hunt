@@ -50,10 +50,10 @@ export default function ProgressBarChart(props: IProgressBarChart): JSX.Element 
                   >
                      <LogoText
                         color={Color.setRgbOpacity(
-                           isLocalDbUser(item.label) ? Color.darkThm.accentAlt : Color.darkThm.txt,
+                           isLocalDbUser(item.label) ? Color.darkThm.success : Color.darkThm.txt,
                            0.75,
                         )}
-                        size="0.85em"
+                        size="0.8em"
                         style={{
                            padding: '0em 0em 0em 0.5em',
                            height: '100%',
@@ -65,10 +65,10 @@ export default function ProgressBarChart(props: IProgressBarChart): JSX.Element 
                      </LogoText>
                      <LogoText
                         color={Color.setRgbOpacity(
-                           isLocalDbUser(item.label) ? Color.darkThm.accentAlt : Color.darkThm.txt,
+                           isLocalDbUser(item.label) ? Color.darkThm.success : Color.darkThm.txt,
                            0.75,
                         )}
-                        size="0.85em"
+                        size="0.8em"
                         style={{
                            padding: '0em 0.75em 0em 0em',
                            position: 'absolute',
@@ -90,7 +90,7 @@ export default function ProgressBarChart(props: IProgressBarChart): JSX.Element 
                         isDarkTheme={isDarkTheme}
                         style={{
                            background: isLocalDbUser(item.label)
-                              ? Color.setRgbOpacity(Color.darkThm.accentAlt, 0.2)
+                              ? Color.setRgbOpacity(Color.darkThm.success, 0.2)
                               : '',
                            position: 'absolute',
                            left: '0em',

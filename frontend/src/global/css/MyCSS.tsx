@@ -62,6 +62,18 @@ export namespace MyCSS {
                }
             `;
          },
+         changeBrightnessOnClick: (amount: number, postClick: 'revert' | 'persist') => {
+            const selector = postClick === 'persist' ? '&:hover' : '&:active';
+            return css`
+               @media (max-width: ${MyCSS.PortableBp.asPx}) {
+                  cursor: pointer;
+                  transition: filter 0.2s;
+                  ${selector} {
+                     filter: brightness(${amount});
+                  }
+               }
+            `;
+         },
       };
 
       export const desktop = {
@@ -94,6 +106,18 @@ export namespace MyCSS {
                   transition: ${property} 0.2s;
                   ${selector} {
                      ${`${property}: ${propVal};`}
+                  }
+               }
+            `;
+         },
+         changeBrightnessOnHover: (amount: number) => {
+            const selector = '&:hover';
+            return css`
+               @media (min-width: ${MyCSS.PortableBp.asPx}) {
+                  cursor: pointer;
+                  transition: filter 0.2s;
+                  ${selector} {
+                     filter: brightness(${amount});
                   }
                }
             `;

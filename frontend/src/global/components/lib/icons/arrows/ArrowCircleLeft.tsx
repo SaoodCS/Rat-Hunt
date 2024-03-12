@@ -8,17 +8,11 @@ export const ArrowCircleLeftIcon = styled(ArrowCircleLeftOutline)<{ darktheme: '
    ${MyCSS.Clickables.removeDefaultEffects};
    color: ${({ darktheme }): string =>
       Color.setRgbOpacity(
-         BoolHelper.strToBool(darktheme) ? Color.darkThm.accent : Color.lightThm.accent,
-         0.5,
+         BoolHelper.strToBool(darktheme) ? Color.darkThm.warning : Color.lightThm.warning,
+         1,
       )};
    cursor: pointer;
-   ${({ darktheme }) => {
-      const color = Color.setRgbOpacity(
-         BoolHelper.strToBool(darktheme) ? Color.darkThm.accent : Color.lightThm.accent,
-         1,
-      );
-      const mobileCol = MyCSS.Clickables.portable.changeColorOnClick(color, 'color', 'revert');
-      const desktopCol = MyCSS.Clickables.desktop.changeColorOnHover(color, 'color');
-      return MyCSS.Helper.concatStyles(mobileCol, desktopCol);
-   }};
+   ${MyCSS.Clickables.portable.changeBrightnessOnClick(0.5, 'persist')};
+   ${MyCSS.Clickables.desktop.changeBrightnessOnHover(0.5)};
+   filter: brightness(0.8);
 `;
