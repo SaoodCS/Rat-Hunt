@@ -63,6 +63,7 @@ export const RoomIDScoreboardItem = styled.div`
    padding-bottom: 0.25em;
    color: ${Color.darkThm.warning};
    filter: brightness(0.8);
+   max-width: 20em;
 `;
 
 export const RoomIDScoreboardWrapper = styled.div`
@@ -72,6 +73,7 @@ export const RoomIDScoreboardWrapper = styled.div`
    justify-content: center;
    height: 100%;
    box-sizing: border-box;
+   
    //margin-bottom: 0.25em;
 `;
 

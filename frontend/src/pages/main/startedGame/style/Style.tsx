@@ -27,7 +27,7 @@ export const GameplayWrapper = styled.div`
    position: absolute;
    width: 100%;
    top: 20%;
-   bottom: 60%;
+   bottom: 45%;
    border-top: 2px solid ${Color.darkThm.accent};
    border-top-right-radius: 1em;
    border-top-left-radius: 1em;
@@ -35,13 +35,12 @@ export const GameplayWrapper = styled.div`
 `;
 
 export const TopicBoardWrapper = styled.div`
-   border-top-right-radius: 1em;
-   border-top-left-radius: 1em;
-   border-bottom: 1px solid ${Color.darkThm.accent};
+   //border-top-right-radius: 1em;
+   //border-top-left-radius: 1em;
    border-top: 2px solid ${Color.darkThm.accent};
    position: absolute;
    width: 100%;
    bottom: 0;
-   top: 60%;
+   top: 55%;
    filter: brightness(1.25);
 `;

@@ -70,12 +70,11 @@ export default function TopicBoard(): JSX.Element {
 
 const screenStyles = (): FlattenSimpleInterpolation => {
    const allStyles = css`
-      height: 92.5%;
-      width: 43.5dvh;
-      margin: 1em auto;
-      //border: 1px solid red;
+      height: 100%;
+      margin: 0 auto;
    `;
-   const forDesktop = MyCSS.Media.desktop(css``);
+   const forDesktop = MyCSS.Media.desktop(css`
+   `);
    const forTablet = MyCSS.Media.tablet(css``);
    return MyCSS.Helper.concatStyles(forDesktop, forTablet, allStyles);
 };

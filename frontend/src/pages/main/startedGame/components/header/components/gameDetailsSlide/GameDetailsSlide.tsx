@@ -129,16 +129,19 @@ const screenStyles = (): FlattenSimpleInterpolation => {
    const forMobile = MyCSS.Media.mobile(css``);
    const forDesktop = MyCSS.Media.desktop(css`
       font-size: 1em;
-      width: 60%;
-      margin: 0 auto;
-      & > *:not(:first-child) {
-         & > * {
-            width: 50%;
-            &:first-child {
-               text-align: end;
+   `);
+   const medium = css`
+      @media (min-width: 544px) {
+         margin: 0 auto;
+         & > *:not(:first-child) {
+            & > * {
+               width: 50%;
+               &:first-child {
+                  text-align: end;
+               }
             }
          }
       }
-   `);
-   return MyCSS.Helper.concatStyles(forDesktop, forMobile);
+   `;
+   return MyCSS.Helper.concatStyles(forDesktop, forMobile, medium);
 };
