@@ -209,13 +209,22 @@ export default function Play(): JSX.Element {
                   style={{
                      alignItems: 'center',
                      borderRadius: '0.25em',
-                     borderBottom: `2px solid ${Color.setRgbOpacity(Color.darkThm.warning, 0.5)}`,
+                     border: `2px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.4)}`,
+                     background: Color.setRgbOpacity(Color.darkThm.accent, 0.1),
                   }}
                >
-                  <LogoText size={'1.25em'} color={Color.setRgbOpacity(Color.darkThm.warning, 0.8)}>
+                  <LogoText
+                     size={'1.25em'}
+                     color={Color.setRgbOpacity(Color.darkThm.accent, 1)}
+                     style={{ filter: 'brightness(1.2)' }}
+                  >
                      {HTMLEntities.space}ENTER {HTMLEntities.space}
                   </LogoText>
-                  <Enter width={'1.25em'} color={Color.setRgbOpacity(Color.darkThm.warning, 0.8)} />
+                  <Enter
+                     width={'1.25em'}
+                     color={Color.setRgbOpacity(Color.darkThm.accent, 1)}
+                     style={{ filter: 'brightness(1.2)' }}
+                  />
                   {HTMLEntities.space}
                </TextBtn>
             </FlexRowWrapper>
