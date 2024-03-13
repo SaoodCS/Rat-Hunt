@@ -16,17 +16,30 @@ export const CellUID = styled.div`
    padding: 0.5em;
 `;
 
-export const BoardCell = styled.div`
-   border: 1px solid ${Color.darkThm.accent};
-   width: 25%;
-   height: 100%;
+export const BoardCell = styled.div<{ isActiveWord?: boolean; isUserRat?: boolean }>`
+   //border: 1px solid ${Color.setRgbOpacity(Color.darkThm.accentDarkerShade, 1)};
+   width: calc(25% - 4px);
+   margin-left: 2px;
+   margin-right: 2px;
+   height: calc(100% - 4px);
    box-sizing: border-box;
    border-radius: 1em;
    display: flex;
    justify-content: center;
    align-items: center;
    position: relative;
-   background-color: ${Color.setRgbOpacity(Color.darkThm.accent, 0.1)};
+   background-color: ${Color.setRgbOpacity(Color.darkThm.bg, 1)};
+   filter: brightness(1.2);
+   // create an inner bevelling effect
+
+   box-shadow: ${({ isActiveWord, isUserRat }) => {
+      if (isActiveWord && !isUserRat) {
+         return `inset 0.05em 0.05em 0em 0 ${Color.setRgbOpacity(Color.darkThm.success, 1)},
+         inset -0.1em -0.1em 0.1em 0 ${Color.setRgbOpacity(Color.darkThm.bg, 1)}`;
+      }
+      return `inset 0.05em 0.05em 0em 0 ${Color.setRgbOpacity(Color.darkThm.accent, 0.5)},
+         inset -0.1em -0.1em 0.1em 0 ${Color.setRgbOpacity(Color.darkThm.bg, 1)}`;
+   }};
 `;
 
 export const BoardRow = styled.div`
@@ -35,9 +48,7 @@ export const BoardRow = styled.div`
 `;
 
 export const BoardContainer = styled.div`
-   border: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 1)};
    height: 100%;
    width: 100%;
    border-radius: 1em;
-   background-color: ${Color.darkThm.bg};
 `;

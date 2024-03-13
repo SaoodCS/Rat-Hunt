@@ -14,6 +14,11 @@ export default function TopicBoard(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [rows, setRows] = useState<GameHelper.I.WordCell[][]>([[]]);
+   const [isThisUserRat, setIsThisUserRat] = useState<boolean>(false);
+
+   useEffect(() => {
+      setIsThisUserRat(localDbUser === roomData?.gameState?.currentRat);
+   }, [roomData?.gameState?.currentRat, localDbUser]);
 
    useEffect(() => {
       const rowA = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'A');
@@ -23,13 +28,15 @@ export default function TopicBoard(): JSX.Element {
       setRows([rowA, rowB, rowC, rowD]);
    }, [activeTopicWords]);
 
+   function isItemActiveWord(word: string): boolean {
+      return roomData?.gameState?.activeWord === word;
+   }
+
    function setColor(word: string): string {
-      const currentWord = roomData?.gameState?.activeWord;
-      const isUserRat = localDbUser === roomData?.gameState?.currentRat;
-      if (word === currentWord && !isUserRat) {
-         return Color.darkThm.error;
+      if (isItemActiveWord(word) && !isThisUserRat) {
+         return Color.darkThm.success;
       }
-      return Color.setRgbOpacity(Color.darkThm.txt, 0.7);
+      return Color.setRgbOpacity(Color.darkThm.txt, 0.35);
    }
 
    return (
@@ -38,7 +45,11 @@ export default function TopicBoard(): JSX.Element {
             {rows.map((row, index) => (
                <BoardRow key={index}>
                   {row.map((item, index) => (
-                     <BoardCell key={index}>
+                     <BoardCell
+                        key={index}
+                        isActiveWord={isItemActiveWord(item.word)}
+                        isUserRat={isThisUserRat}
+                     >
                         <CellUID>
                            <LogoText size="0.6em" color={setColor(item.word)}>
                               {item.cellId}
