@@ -208,13 +208,15 @@ export default function Play(): JSX.Element {
                   isDarkTheme
                   style={{
                      alignItems: 'center',
-                     border: `1px solid ${Color.darkThm.accent}`,
+                     borderLeft: `1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.8)}`,
+                     borderTop: `1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.8)}`,
+                     backgroundColor: Color.darkThm.accentDarkerShade,
                   }}
                >
-                  <LogoText size={'1.25em'}>
+                  <LogoText size={'1em'} color={Color.setRgbOpacity(Color.darkThm.warning, 0.8)}>
                      {HTMLEntities.space}ENTER {HTMLEntities.space}
                   </LogoText>
-                  <Enter width={'1.75em'} />
+                  <Enter width={'1.25em'} color={Color.setRgbOpacity(Color.darkThm.warning, 0.8)} />
                   {HTMLEntities.space}
                </TextBtn>
             </FlexRowWrapper>

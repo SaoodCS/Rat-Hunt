@@ -28,12 +28,8 @@ export const LabelWrapper = styled.label`
 
 export const InputLabel = styled.div<IInputLabel>`
    font-size: 0.75em;
-   color: ${({ focusedInput, isDarkTheme }) =>
-      focusedInput
-         ? isDarkTheme
-            ? Color.darkThm.accent
-            : Color.lightThm.accent
-         : Color.setRgbOpacity(isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt, 0.6)};
+   color: ${({ focusedInput }) =>
+      focusedInput ? Color.darkThm.txt : Color.setRgbOpacity(Color.darkThm.txt, 0.6)};
    transform: ${({ focusedInput, inputHasValue }) =>
       focusedInput || inputHasValue ? 'translateY(-0.5em)' : 'translateY(0.5em)'};
    font-size: ${({ focusedInput, inputHasValue }) =>
@@ -42,7 +38,7 @@ export const InputLabel = styled.div<IInputLabel>`
    transition: all 0.2s ease-in-out;
    &:after {
       content: ${({ isRequired }) => (isRequired ? "'*'" : "''")};
-      color: ${({ isDarkTheme }) => (isDarkTheme ? Color.darkThm.error : Color.lightThm.error)};
+      color: ${Color.darkThm.error};
       padding: 2px;
    }
 `;
@@ -55,18 +51,14 @@ export const TextInput = styled.input.attrs<IInputAttr>(({ isRequired, isDisable
    font-size: 1em;
    width: 100%;
    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-   color: ${({ isDisabled, isDarkTheme }) =>
-      isDisabled && Color.setRgbOpacity(isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt, 0.6)};
-   border-bottom: ${({ hasError, isDarkTheme }) =>
-      hasError
-         ? `2px solid red`
-         : `1px solid ${isDarkTheme ? Color.darkThm.border : Color.lightThm.border}`};
+   color: ${({ isDisabled }) =>
+      isDisabled ? Color.setRgbOpacity(Color.darkThm.accent, 0.6) : Color.darkThm.txt};
+   border-bottom: ${({ hasError }) =>
+      hasError ? `2px solid red` : `2px solid ${Color.darkThm.accentDarkerShade}`};
    &:focus,
    &:active {
-      border-bottom: ${({ hasError, isDarkTheme }) =>
-         hasError
-            ? `2px solid ${isDarkTheme ? Color.darkThm.error : Color.lightThm.error}`
-            : `1px solid ${Color.lightThm.accent}`};
+      border-bottom: ${({ hasError }) =>
+         hasError ? `2px solid ${Color.darkThm.error}` : `1px solid ${Color.darkThm.accent}`};
    }
    font-weight: 100;
    z-index: 1;
@@ -75,5 +67,5 @@ export const TextInput = styled.input.attrs<IInputAttr>(({ isRequired, isDisable
 export const ErrorLabel = styled.div<{ isDarkTheme: boolean }>`
    font-size: 0.75em;
    margin-top: 0.2em;
-   color: ${({ isDarkTheme }) => (isDarkTheme ? Color.darkThm.error : Color.lightThm.error)};
+   color: ${Color.darkThm.error};
 `;
