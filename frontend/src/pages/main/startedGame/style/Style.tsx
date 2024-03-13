@@ -35,8 +35,8 @@ export const GameplayWrapper = styled.div`
 `;
 
 export const TopicBoardWrapper = styled.div`
-   //border-top-right-radius: 1em;
-   //border-top-left-radius: 1em;
+   border-top-right-radius: 1em;
+   border-top-left-radius: 1em;
    border-top: 2px solid ${Color.darkThm.accent};
    position: absolute;
    width: 100%;

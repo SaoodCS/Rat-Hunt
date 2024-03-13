@@ -73,8 +73,6 @@ export const RoomIDScoreboardWrapper = styled.div`
    justify-content: center;
    height: 100%;
    box-sizing: border-box;
-   
-   //margin-bottom: 0.25em;
 `;
 
 export const GameDetailsContainer = styled.div<{ localStyles?: FlattenSimpleInterpolation }>`
@@ -83,7 +81,6 @@ export const GameDetailsContainer = styled.div<{ localStyles?: FlattenSimpleInte
    display: flex;
    box-sizing: border-box;
    margin-top: 0.25em;
-   //margin-bottom: 0.25em;
    flex-direction: column;
    justify-content: space-evenly;
    font-size: 0.8em;
