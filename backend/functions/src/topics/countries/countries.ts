@@ -15,9 +15,5 @@ export const countries: ITopic = {
       'France',
       'Germany',
       'Italy',
-      'Spain',
-      'Portugal',
-      'Russia',
-      'China',
    ],
 };

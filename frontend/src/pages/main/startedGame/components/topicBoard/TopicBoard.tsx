@@ -24,8 +24,7 @@ export default function TopicBoard(): JSX.Element {
       const rowA = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'A');
       const rowB = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'B');
       const rowC = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'C');
-      const rowD = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'D');
-      setRows([rowA, rowB, rowC, rowD]);
+      setRows([rowA, rowB, rowC]);
    }, [activeTopicWords]);
 
    function isItemActiveWord(word: string): boolean {
@@ -71,15 +70,12 @@ export default function TopicBoard(): JSX.Element {
 
 const screenStyles = (): FlattenSimpleInterpolation => {
    const allStyles = css`
-      height: 90%;
-      margin: 1em;
-   `;
-
-   const forDesktop = MyCSS.Media.desktop(css`
-      font-size: 1.25em;
-      width: 30em;
+      height: 92.5%;
+      width: 43.5dvh;
       margin: 1em auto;
-   `);
+      //border: 1px solid red;
+   `;
+   const forDesktop = MyCSS.Media.desktop(css``);
    const forTablet = MyCSS.Media.tablet(css``);
    return MyCSS.Helper.concatStyles(forDesktop, forTablet, allStyles);
 };

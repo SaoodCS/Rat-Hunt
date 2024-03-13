@@ -62,8 +62,8 @@ export namespace GameHelper {
          const sortedWords = ArrayHelper.sort(words);
          const words16 = sortedWords.slice(0, 16);
          const wordsWithCellIds: GameHelper.I.WordCell[] = [];
-         const letters = ['A', 'B', 'C', 'D'];
-         for (let i = 0; i < 4; i++) {
+         const letters = ['A', 'B', 'C'];
+         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 4; j++) {
                wordsWithCellIds.push({
                   cellId: letters[i] + (j + 1),

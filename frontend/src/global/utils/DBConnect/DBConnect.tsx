@@ -43,10 +43,6 @@ export namespace DBConnect {
                string,
                string,
                string,
-               string,
-               string,
-               string,
-               string,
             ];
          }
          export interface Room {

@@ -15,9 +15,5 @@ export const animals: ITopic = {
       'panda',
       'koala',
       'kangaroo',
-      'shark',
-      'whale',
-      'dolphin',
-      'octopus',
    ],
 };

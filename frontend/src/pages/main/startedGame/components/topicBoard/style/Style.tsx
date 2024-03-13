@@ -44,7 +44,7 @@ export const BoardCell = styled.div<{ isActiveWord?: boolean; isUserRat?: boolea
 
 export const BoardRow = styled.div`
    display: flex;
-   height: 25%;
+   height: calc((1 / 3) * 100%);
 `;
 
 export const BoardContainer = styled.div`

@@ -15,9 +15,5 @@ export const food: ITopic = {
       'Udon',
       'Pho',
       'Pad Thai',
-      'Tom Yum',
-      'Samosa',
-      'Naan',
-      'Curry',
    ],
 };

@@ -15,9 +15,5 @@ export const sports: ITopic = {
       'Volleyball',
       'Table Tennis',
       'Badminton',
-      'Swimming',
-      'Cycling',
-      'Running',
-      'Boxing',
    ],
 };

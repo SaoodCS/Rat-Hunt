@@ -27,7 +27,7 @@ export const GameplayWrapper = styled.div`
    position: absolute;
    width: 100%;
    top: 20%;
-   bottom: 50%;
+   bottom: 60%;
    border-top: 2px solid ${Color.darkThm.accent};
    border-top-right-radius: 1em;
    border-top-left-radius: 1em;
@@ -42,6 +42,6 @@ export const TopicBoardWrapper = styled.div`
    position: absolute;
    width: 100%;
    bottom: 0;
-   top: 50%;
+   top: 60%;
    filter: brightness(1.25);
 `;

@@ -49,10 +49,6 @@ export default interface ITopic {
       string,
       string,
       string,
-      string,
-      string,
-      string,
-      string,
    ];
 }
 
@@ -117,8 +113,8 @@ export class FBHelp {
       const sortedWords = ArrayHelp.sort(words);
       const words16 = sortedWords.slice(0, 16);
       const wordsWithCellIds: IActiveTopicWords[] = [];
-      const letters = ['A', 'B', 'C', 'D'];
-      for (let i = 0; i < 4; i++) {
+      const letters = ['A', 'B', 'C'];
+      for (let i = 0; i < 3; i++) {
          for (let j = 0; j < 4; j++) {
             wordsWithCellIds.push({
                cellId: letters[i] + (j + 1),

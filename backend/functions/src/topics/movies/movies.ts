@@ -15,9 +15,5 @@ export const movies: ITopic = {
       'Titanic',
       'The Terminator',
       'The Incredibles',
-      'The Sixth Sense',
-      'The Silence of the Lambs',
-      'The Shining',
-      'The Exorcist',
    ],
 };
