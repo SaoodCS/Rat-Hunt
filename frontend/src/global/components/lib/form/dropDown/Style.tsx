@@ -26,15 +26,22 @@ export const StyledSelect = styled.select.attrs<IStyledSelectAttr>(
    width: 100%;
    cursor: pointer;
    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-   color: ${({ isDisabled }) => isDisabled && Color.setRgbOpacity(Color.lightThm.txt, 0.6)};
+   color: ${({ isDisabled }) =>
+      isDisabled
+         ? Color.setRgbOpacity(Color.darkThm.accent, 0.6)
+         : Color.setRgbOpacity(Color.darkThm.txt, 0.8)};
 
    border-bottom: ${({ hasError }) =>
-      hasError ? `2px solid red` : `2px solid ${Color.darkThm.accentDarkerShade}`};
+      hasError ? `2px solid red` : `2px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.4)}`};
    &:focus,
    &:active {
       outline: none;
       border-bottom: ${({ hasError }) =>
-         hasError ? `2px solid ${Color.darkThm.error}` : `1px solid ${Color.darkThm.accent}`};
+         hasError ? `2px solid ${Color.darkThm.error}` : `2px solid ${Color.darkThm.accent}`};
+      color: ${({ isDisabled }) =>
+         isDisabled
+            ? Color.setRgbOpacity(Color.darkThm.accent, 0.6)
+            : Color.setRgbOpacity(Color.darkThm.txt, 1)};
    }
    font-weight: 100;
    z-index: 1;

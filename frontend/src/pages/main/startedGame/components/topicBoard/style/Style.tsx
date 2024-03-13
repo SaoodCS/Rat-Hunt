@@ -29,15 +29,17 @@ export const BoardCell = styled.div<{ isActiveWord?: boolean; isUserRat?: boolea
    align-items: center;
    position: relative;
    background-color: ${Color.setRgbOpacity(Color.darkThm.bg, 1)};
-   filter: brightness(1.2);
+   //filter: brightness(1.2);
    // create an inner bevelling effect
+   border-left: 1px solid ${Color.setRgbOpacity(Color.darkThm.accentDarkerShade, 0.7)};
+   border-top: 1px solid ${Color.setRgbOpacity(Color.darkThm.accentDarkerShade, 0.7)};
 
    box-shadow: ${({ isActiveWord, isUserRat }) => {
       if (isActiveWord && !isUserRat) {
-         return `inset 0.05em 0.05em 0em 0 ${Color.setRgbOpacity(Color.darkThm.success, 1)},
+         return `inset 0.05em 0.05em 0em 0 ${Color.setRgbOpacity(Color.darkThm.accentDarkerShade, 0.7)},
          inset -0.1em -0.1em 0.1em 0 ${Color.setRgbOpacity(Color.darkThm.bg, 1)}`;
       }
-      return `inset 0.05em 0.05em 0em 0 ${Color.setRgbOpacity(Color.darkThm.accent, 0.5)},
+      return `inset 0.05em 0.05em 0em 0em ${Color.setRgbOpacity(Color.darkThm.accentDarkerShade, 0.7)},
          inset -0.1em -0.1em 0.1em 0 ${Color.setRgbOpacity(Color.darkThm.bg, 1)}`;
    }};
 `;

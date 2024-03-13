@@ -9,7 +9,7 @@ export const Header = styled.div<{ isDarkTheme: boolean }>`
    top: 0;
    height: 10%;
    width: 100dvw;
-   border-bottom: 1px solid ${Color.darkThm.accentDarkerShade};
+   border-bottom: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.4)};
    border-bottom-left-radius: 10px;
    border-bottom-right-radius: 10px;
    display: flex;

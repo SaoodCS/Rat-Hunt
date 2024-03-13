@@ -208,12 +208,11 @@ export default function Play(): JSX.Element {
                   isDarkTheme
                   style={{
                      alignItems: 'center',
-                     borderLeft: `1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.8)}`,
-                     borderTop: `1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.8)}`,
-                     backgroundColor: Color.darkThm.accentDarkerShade,
+                     borderRadius: '0.25em',
+                     borderBottom: `2px solid ${Color.setRgbOpacity(Color.darkThm.warning, 0.5)}`,
                   }}
                >
-                  <LogoText size={'1em'} color={Color.setRgbOpacity(Color.darkThm.warning, 0.8)}>
+                  <LogoText size={'1.25em'} color={Color.setRgbOpacity(Color.darkThm.warning, 0.8)}>
                      {HTMLEntities.space}ENTER {HTMLEntities.space}
                   </LogoText>
                   <Enter width={'1.25em'} color={Color.setRgbOpacity(Color.darkThm.warning, 0.8)} />

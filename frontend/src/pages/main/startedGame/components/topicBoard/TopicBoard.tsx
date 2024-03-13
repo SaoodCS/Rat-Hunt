@@ -35,7 +35,7 @@ export default function TopicBoard(): JSX.Element {
       if (isItemActiveWord(word) && !isThisUserRat) {
          return Color.darkThm.success;
       }
-      return Color.setRgbOpacity(Color.darkThm.txt, 0.35);
+      return Color.setRgbOpacity(Color.darkThm.txt, 0.6);
    }
 
    return (
