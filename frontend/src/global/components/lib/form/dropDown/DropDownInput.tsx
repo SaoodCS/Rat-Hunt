@@ -18,11 +18,22 @@ interface IDropDownInput {
    id: string;
    value: string | number;
    isDisabled?: boolean | undefined;
+   hidePlaceholderOnFocus?: boolean;
 }
 
 export default function DropDownInput(props: IDropDownInput): JSX.Element {
-   const { placeholder, name, isRequired, handleChange, error, options, id, value, isDisabled } =
-      props;
+   const {
+      placeholder,
+      name,
+      isRequired,
+      handleChange,
+      error,
+      options,
+      id,
+      value,
+      isDisabled,
+      hidePlaceholderOnFocus,
+   } = props;
    const { isDarkTheme } = useThemeContext();
    const [isActive, setIsActive] = useState(false);
    const [isEmpty, setIsEmpty] = useState(true);
@@ -39,6 +50,16 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
       handleChange(e);
    }
 
+   function transformHidePlaceholderStyle(): { style: React.CSSProperties } | undefined {
+      if (hidePlaceholderOnFocus) {
+         return {
+            style: {
+               transform: 'translateY(1em)',
+            },
+         };
+      }
+   }
+
    return (
       <InputContainer>
          <DropDownLabelWrapper>
@@ -48,6 +69,8 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
                inputHasValue={!isEmpty || !!value}
                isDarkTheme={isDarkTheme}
                isDisabled={isDisabled || false}
+               hideLabel={!!hidePlaceholderOnFocus && (!!isActive || !!value)}
+               {...transformHidePlaceholderStyle()}
             >
                {placeholder}
             </InputLabel>

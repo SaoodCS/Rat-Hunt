@@ -15,6 +15,7 @@ interface IInputLabel extends IInputAttr {
    focusedInput: boolean;
    inputHasValue: boolean;
    isDarkTheme: boolean;
+   hideLabel?: boolean;
 }
 
 export const InputContainer = styled.div`
@@ -41,6 +42,7 @@ export const InputLabel = styled.div<IInputLabel>`
       color: ${Color.darkThm.error};
       padding: 2px;
    }
+   opacity: ${({ hideLabel }) => (hideLabel ? 0 : 1)};
 `;
 
 export const TextInput = styled.input.attrs<IInputAttr>(({ isRequired, isDisabled }) => ({
@@ -56,11 +58,11 @@ export const TextInput = styled.input.attrs<IInputAttr>(({ isRequired, isDisable
          ? Color.setRgbOpacity(Color.darkThm.accent, 0.6)
          : Color.setRgbOpacity(Color.darkThm.txt, 0.8)};
    border-bottom: ${({ hasError }) =>
-      hasError ? `2px solid red` : `2px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.4)}`};
+      hasError ? `2px solid red` : `2px solid ${Color.setRgbOpacity(Color.darkThm.txt, 0.4)}`};
    &:focus,
    &:active {
       border-bottom: ${({ hasError }) =>
-         hasError ? `2px solid ${Color.darkThm.error}` : `2px solid ${Color.darkThm.accent}`};
+         hasError ? `2px solid ${Color.darkThm.error}` : `2px solid ${Color.darkThm.txt}`};
       color: ${({ isDisabled }) =>
          isDisabled
             ? Color.setRgbOpacity(Color.darkThm.accent, 0.6)

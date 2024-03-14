@@ -18,6 +18,7 @@ interface IInputCombination {
    value: string | number | Date;
    autoComplete?: 'current-password' | 'new-password';
    isDisabled?: boolean | undefined;
+   hidePlaceholderOnFocus?: boolean;
 }
 
 export default function InputCombination(props: IInputCombination): JSX.Element {
@@ -33,6 +34,7 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
       value,
       autoComplete,
       isDisabled,
+      hidePlaceholderOnFocus,
    } = props;
 
    const hasDropDownOptions = !!dropDownOptions;
@@ -59,6 +61,7 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
                error={error}
                id={id}
                isDisabled={isDisabled}
+               hidePlaceholderOnFocus={hidePlaceholderOnFocus}
             />
          )}
          {hasDropDownOptions && !isValueDate(value) && !isTypeDate(type) && (
@@ -72,6 +75,7 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
                handleChange={handleChange}
                id={id}
                isDisabled={isDisabled}
+               hidePlaceholderOnFocus={hidePlaceholderOnFocus}
             />
          )}
          {isTypeDate(type) && isValueDate(value) && (

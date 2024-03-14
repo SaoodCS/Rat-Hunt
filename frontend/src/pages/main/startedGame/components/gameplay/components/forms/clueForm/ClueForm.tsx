@@ -6,14 +6,15 @@ import InputCombination from '../../../../../../../../global/components/lib/form
 import { GameContext } from '../../../../../../../../global/context/game/GameContext';
 import useThemeContext from '../../../../../../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
+import ArrayHelper from '../../../../../../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
+import ArrOfObj from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../../../../../../global/hooks/useForm';
 import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
 import { gameFormStyles } from '../style/Style';
 import ClueFormClass from './class/ClueFormClass';
-import ArrOfObj from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import ArrayHelper from '../../../../../../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
+import Color from '../../../../../../../../global/css/colors';
 
 export default function ClueForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -73,11 +74,12 @@ export default function ClueForm(): JSX.Element {
                error={errors[input.name]}
                type={input.type}
                value={form[input.name]}
+               hidePlaceholderOnFocus={true}
             />
          ))}
 
-         <TextBtn isDarkTheme={isDarkTheme} type="submit">
-            <Send size="1.5em" />
+         <TextBtn isDarkTheme={isDarkTheme} type="submit" style={{ filter: 'brightness(0.8)' }}>
+            <Send size="1.5em" color={Color.darkThm.warning} />
          </TextBtn>
       </StyledForm>
    );

@@ -13,6 +13,7 @@ interface IInput {
    id: string;
    autoComplete?: 'current-password' | 'new-password';
    isDisabled?: boolean | undefined;
+   hidePlaceholderOnFocus?: boolean;
 }
 
 export default function InputComponent(props: IInput): JSX.Element {
@@ -27,6 +28,7 @@ export default function InputComponent(props: IInput): JSX.Element {
       id,
       autoComplete,
       isDisabled,
+      hidePlaceholderOnFocus,
    } = props;
    const [isActive, setIsActive] = useState(false);
    const { isDarkTheme } = useThemeContext();
@@ -39,6 +41,16 @@ export default function InputComponent(props: IInput): JSX.Element {
       setIsActive(false);
    }
 
+   function transformHidePlaceholderStyle(): { style: React.CSSProperties } | undefined {
+      if (hidePlaceholderOnFocus) {
+         return {
+            style: {
+               transform: 'translateY(1em)',
+            },
+         };
+      }
+   }
+
    return (
       <InputContainer>
          <LabelWrapper htmlFor={id || name.toString()}>
@@ -48,10 +60,13 @@ export default function InputComponent(props: IInput): JSX.Element {
                inputHasValue={!!value || value === 0}
                isDarkTheme={isDarkTheme}
                isDisabled={isDisabled || false}
+               hideLabel={!!hidePlaceholderOnFocus && (!!isActive || !!value)}
+               {...transformHidePlaceholderStyle()}
             >
                {placeholder}
             </InputLabel>
          </LabelWrapper>
+
          <TextInput
             id={id || name.toString()}
             onFocus={handleFocus}
