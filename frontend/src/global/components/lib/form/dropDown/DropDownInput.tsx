@@ -1,7 +1,13 @@
 import { useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
-import { ErrorLabel, InputContainer, InputLabel } from '../input/Style';
-import { DropDownArrow, DropDownLabelWrapper, StyledOption, StyledSelect } from './Style';
+import { ErrorLabel, InputLabel } from '../input/Style';
+import {
+   DropDownArrow,
+   DropDownInputContainer,
+   DropDownLabelWrapper,
+   StyledOption,
+   StyledSelect,
+} from './Style';
 
 export interface IDropDownOption {
    value: string | number;
@@ -50,18 +56,9 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
       handleChange(e);
    }
 
-   function transformHidePlaceholderStyle(): { style: React.CSSProperties } | undefined {
-      if (hidePlaceholderOnFocus) {
-         return {
-            style: {
-               transform: 'translateY(1em)',
-            },
-         };
-      }
-   }
-
    return (
-      <InputContainer>
+      <DropDownInputContainer>
+         <DropDownArrow darktheme={isDarkTheme.toString()} focusedinput={isActive.toString()} />
          <DropDownLabelWrapper>
             <InputLabel
                focusedInput={isActive}
@@ -69,12 +66,10 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
                inputHasValue={!isEmpty || !!value}
                isDarkTheme={isDarkTheme}
                isDisabled={isDisabled || false}
-               hideLabel={!!hidePlaceholderOnFocus && (!!isActive || !!value)}
-               {...transformHidePlaceholderStyle()}
+               hideLabel={!(!!isActive || !!value) || !!hidePlaceholderOnFocus}
             >
                {placeholder}
             </InputLabel>
-            <DropDownArrow darktheme={isDarkTheme.toString()} focusedinput={isActive.toString()} />
          </DropDownLabelWrapper>
          <StyledSelect
             name={name.toString()}
@@ -87,8 +82,15 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
             isRequired={isRequired || false}
             value={value}
             isDisabled={isDisabled || false}
+            isActive={!!isActive}
+            valueExists={!!value}
          >
-            <StyledOption isDarkTheme={isDarkTheme} value="" hidden={isRequired || false} />
+            <StyledOption
+               isDarkTheme={isDarkTheme}
+               label={!(!!isActive || !!value) ? placeholder : ''}
+               value=""
+               hidden={isRequired || false}
+            />
             {options.map((option) => (
                <StyledOption isDarkTheme={isDarkTheme} value={option.value} key={option.value}>
                   {option.label}
@@ -96,6 +98,6 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
             ))}
          </StyledSelect>
          <ErrorLabel isDarkTheme={isDarkTheme}>{error}</ErrorLabel>
-      </InputContainer>
+      </DropDownInputContainer>
    );
 }

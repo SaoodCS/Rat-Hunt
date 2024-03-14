@@ -15,7 +15,7 @@ export default class PlayFormClass {
       {
          name: 'name',
          id: 'user-name',
-         placeholder: 'User Name',
+         placeholder: 'Username',
          type: 'text',
          isRequired: true,
          validator: (value: string): string | true => {

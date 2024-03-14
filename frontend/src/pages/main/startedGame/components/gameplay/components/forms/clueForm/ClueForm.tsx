@@ -78,7 +78,6 @@ export default function ClueForm(): JSX.Element {
                   type={input.type}
                   value={form[input.name]}
                   hasError={!!errors[input.name]}
-                  style={{}}
                />
                <ErrorLabel isDarkTheme={isDarkTheme} style={{ position: 'absolute', bottom: 0 }}>
                   {errors[input.name]}

@@ -41,16 +41,6 @@ export default function InputComponent(props: IInput): JSX.Element {
       setIsActive(false);
    }
 
-   function transformHidePlaceholderStyle(): { style: React.CSSProperties } | undefined {
-      if (hidePlaceholderOnFocus) {
-         return {
-            style: {
-               transform: 'translateY(1em)',
-            },
-         };
-      }
-   }
-
    return (
       <InputContainer>
          <LabelWrapper htmlFor={id || name.toString()}>
@@ -61,7 +51,6 @@ export default function InputComponent(props: IInput): JSX.Element {
                isDarkTheme={isDarkTheme}
                isDisabled={isDisabled || false}
                hideLabel={!!hidePlaceholderOnFocus && (!!isActive || !!value)}
-               {...transformHidePlaceholderStyle()}
             >
                {placeholder}
             </InputLabel>

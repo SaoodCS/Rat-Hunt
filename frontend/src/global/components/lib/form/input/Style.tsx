@@ -89,7 +89,8 @@ export const TextInputAlt = styled.input.attrs<IInputAttr>(({ isRequired, isDisa
    padding-bottom: 0.25em;
    padding-left: 0.5em;
    padding-right: 0.5em;
-   background-color: ${Color.setRgbOpacity(Color.darkThm.txt, 0.8)};
+   background-color: ${({ isDisabled }) =>
+      Color.setRgbOpacity(Color.darkThm.txt, isDisabled ? 0.5 : 0.8)};
    border-radius: 0.25em;
    box-shadow:
       inset 0.05em 0.05em 0em 0 ${Color.setRgbOpacity(Color.darkThm.bg, 0.7)},
