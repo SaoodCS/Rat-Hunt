@@ -209,8 +209,10 @@ export default function Play(): JSX.Element {
                   style={{
                      alignItems: 'center',
                      borderRadius: '0.25em',
-                     border: `2px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.4)}`,
+                     border: `2px solid ${Color.setRgbOpacity(Color.darkThm.accent, 1)}`,
                      background: Color.setRgbOpacity(Color.darkThm.accent, 0.1),
+                     boxShadow: `inset 0.1em 0.1em 0em 0 ${Color.setRgbOpacity(Color.darkThm.bg, 0.7)},
+                     inset -0.1em -0.1em 0.1em 0 ${Color.setRgbOpacity(Color.darkThm.bg, 0.7)}`,
                   }}
                >
                   <LogoText

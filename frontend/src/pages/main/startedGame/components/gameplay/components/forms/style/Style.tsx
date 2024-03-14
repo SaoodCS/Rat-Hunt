@@ -1,10 +1,10 @@
 export const gameFormStyles: React.CSSProperties = {
    display: 'flex',
    flexDirection: 'row',
-   justifyContent: 'space-between',
-   alignItems: '',
    margin: 0,
-   padding: 0,
-   width: '90%',
-   boxSizing: 'border-box',
+   height: '100%',
+   alignItems: 'center',
+   justifyContent: 'center',
+   width: '100%',
+   position: 'relative',
 };

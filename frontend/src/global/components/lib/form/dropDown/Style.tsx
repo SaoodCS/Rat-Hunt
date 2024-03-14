@@ -32,7 +32,7 @@ export const StyledSelect = styled.select.attrs<IStyledSelectAttr>(
          : Color.setRgbOpacity(Color.darkThm.txt, 0.8)};
 
    border-bottom: ${({ hasError }) =>
-      hasError ? `2px solid red` : `2px solid ${Color.setRgbOpacity(Color.darkThm.txt, 0.4)}`};
+      hasError ? `2px solid red` : `2px solid ${Color.setRgbOpacity(Color.darkThm.txt, 0.3)}`};
    &:focus,
    &:active {
       outline: none;

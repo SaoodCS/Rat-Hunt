@@ -30,7 +30,7 @@ export const LabelWrapper = styled.label`
 export const InputLabel = styled.div<IInputLabel>`
    font-size: 0.75em;
    color: ${({ focusedInput }) =>
-      focusedInput ? Color.darkThm.txt : Color.setRgbOpacity(Color.darkThm.txt, 0.6)};
+      focusedInput ? Color.darkThm.txt : Color.setRgbOpacity(Color.darkThm.txt, 0.4)};
    transform: ${({ focusedInput, inputHasValue }) =>
       focusedInput || inputHasValue ? 'translateY(-0.5em)' : 'translateY(0.5em)'};
    font-size: ${({ focusedInput, inputHasValue }) =>
@@ -58,7 +58,7 @@ export const TextInput = styled.input.attrs<IInputAttr>(({ isRequired, isDisable
          ? Color.setRgbOpacity(Color.darkThm.accent, 0.6)
          : Color.setRgbOpacity(Color.darkThm.txt, 0.8)};
    border-bottom: ${({ hasError }) =>
-      hasError ? `2px solid red` : `2px solid ${Color.setRgbOpacity(Color.darkThm.txt, 0.4)}`};
+      hasError ? `2px solid red` : `2px solid ${Color.setRgbOpacity(Color.darkThm.txt, 0.3)}`};
    &:focus,
    &:active {
       border-bottom: ${({ hasError }) =>
@@ -76,4 +76,35 @@ export const ErrorLabel = styled.div<{ isDarkTheme: boolean }>`
    font-size: 0.75em;
    margin-top: 0.2em;
    color: ${Color.darkThm.error};
+`;
+
+export const TextInputAlt = styled.input.attrs<IInputAttr>(({ isRequired, isDisabled }) => ({
+   required: isRequired,
+   disabled: isDisabled,
+}))<IInputAttr & { hasError: boolean }>`
+   all: unset;
+   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+   width: 100%;
+   padding-top: 0.25em;
+   padding-bottom: 0.25em;
+   padding-left: 0.5em;
+   padding-right: 0.5em;
+   background-color: ${Color.setRgbOpacity(Color.darkThm.txt, 0.8)};
+   border-radius: 0.25em;
+   box-shadow:
+      inset 0.05em 0.05em 0em 0 ${Color.setRgbOpacity(Color.darkThm.bg, 0.7)},
+      inset -0.1em -0.1em 0.1em 0 ${Color.setRgbOpacity(Color.darkThm.bg, 0.25)};
+   border: ${({ hasError }) =>
+      hasError ? `2px solid red` : `2px solid ${Color.setRgbOpacity(Color.darkThm.accent, 1)}`};
+   &:focus,
+   &:active {
+      border: ${({ hasError }) =>
+         hasError ? `2px solid ${Color.darkThm.error}` : `2px solid ${Color.darkThm.accent}`};
+      &::placeholder {
+         opacity: 0;
+      }
+   }
+   &::placeholder {
+      color: ${Color.setRgbOpacity(Color.darkThm.accentDarkerShade, 0.9)};
+   }
 `;
