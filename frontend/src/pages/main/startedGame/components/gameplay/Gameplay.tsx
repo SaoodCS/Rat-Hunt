@@ -1,10 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
-import { css } from 'styled-components';
-import { LogoText } from '../../../../../global/components/app/logo/LogoText';
+import styled, { css } from 'styled-components';
 import Fader from '../../../../../global/components/lib/animation/fader/Fader';
-import AnimatedDots from '../../../../../global/components/lib/font/animatedDots/AnimatedDots';
-import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { FlexRowWrapper } from '../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
 import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../global/context/game/GameContext';
@@ -17,8 +14,28 @@ import GameHelper from '../../../../../global/utils/GameHelper/GameHelper';
 import ClueForm from './components/forms/clueForm/ClueForm';
 import RatVoteForm from './components/forms/ratVoteForm/RatVoteForm';
 import WordGuessForm from './components/forms/wordGuessForm/WordGuessForm';
-import GameStateTable from './components/gameStateTable/GameStateTable';
 import RoundSummary from './components/summary/RoundSummary';
+
+const FormContainer = styled.div`
+   box-sizing: border-box;
+   padding-left: 1em;
+   padding-right: 1em;
+   filter: brightness(0.8);
+   height: 100%;
+   width: 100%;
+   color: ${Color.darkThm.accentDarkerShade};
+`;
+
+const CurrentTurnAndFormWrapper = styled.div`
+   border-bottom: 1px solid ${Color.darkThm.accentDarkerShade};
+   width: 100%;
+   box-sizing: border-box;
+   height: 4em;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   font-size: 0.8em;
+`;
 
 export default function Gameplay(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -113,7 +130,7 @@ export default function Gameplay(): JSX.Element {
          condition: showRoundSummary,
       },
       {
-         text: `Current Turn: ${roomData?.gameState?.currentTurn}`,
+         text: `Current Turn = ${roomData?.gameState?.currentTurn}`,
          condition: showCurrentTurnMsg,
       },
       {
@@ -125,7 +142,30 @@ export default function Gameplay(): JSX.Element {
    return (
       <>
          <ConditionalRender condition={!showRoundSummary}>
-            <FlexColumnWrapper
+            <CurrentTurnAndFormWrapper>
+               {/* <FlexColumnWrapper
+                  height="100%"
+                  justifyContent="center"
+                  width="100%"
+                  alignItems="center"
+               >
+                  <FadeInOut>
+                     <LogoText size="1em" color={Color.setRgbOpacity(Color.darkThm.success, 0.75)}>
+                        {gameplayHeadMap.find((map) => map.condition)?.text || ''}
+                     </LogoText>
+                  </FadeInOut>
+               </FlexColumnWrapper> */}
+
+               <Fader fadeInCondition={true} transitionDuration={0.5} height="100%" width="100%">
+                  <FlexRowWrapper width="100%" height="100%" alignItems="center">
+                     <FormContainer>
+                        <WordGuessForm />
+                     </FormContainer>
+                  </FlexRowWrapper>
+               </Fader>
+            </CurrentTurnAndFormWrapper>
+
+            {/* <FlexColumnWrapper
                position="relative"
                height="100%"
                padding="1em 1em 1em 1em"
@@ -146,12 +186,14 @@ export default function Gameplay(): JSX.Element {
                            </ConditionalRender>
                            <ConditionalRender condition={!!text}>
                               <FlexColumnWrapper height="100%" justifyContent="center">
-                                 <LogoText
-                                    size="1.25em"
-                                    color={Color.setRgbOpacity(Color.darkThm.success, 0.75)}
-                                 >
-                                    {text} <AnimatedDots count={3} />
-                                 </LogoText>
+                                 <FadeInOut>
+                                    <LogoText
+                                       size="1em"
+                                       color={Color.setRgbOpacity(Color.darkThm.success, 0.75)}
+                                    >
+                                       {text}
+                                    </LogoText>
+                                 </FadeInOut>
                               </FlexColumnWrapper>
                            </ConditionalRender>
                         </Fader>
@@ -159,7 +201,7 @@ export default function Gameplay(): JSX.Element {
                   ))}
                </FlexRowWrapper>
                <GameStateTable />
-            </FlexColumnWrapper>
+            </FlexColumnWrapper> */}
          </ConditionalRender>
          <ConditionalRender condition={showRoundSummary}>
             <Fader fadeInCondition={showRoundSummary} transitionDuration={2} height={'100%'}>

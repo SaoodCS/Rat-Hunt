@@ -1,11 +1,15 @@
 import { Send } from '@styled-icons/ionicons-sharp/Send';
-import { useContext } from 'react';
+import { Fragment, useContext } from 'react';
 import { TextBtn } from '../../../../../../../../global/components/lib/button/textBtn/Style';
 import { StyledForm } from '../../../../../../../../global/components/lib/form/form/Style';
-import InputCombination from '../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
+import {
+   ErrorLabel,
+   TextInputAlt,
+} from '../../../../../../../../global/components/lib/form/input/Style';
 import { GameContext } from '../../../../../../../../global/context/game/GameContext';
 import useThemeContext from '../../../../../../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
+import Color from '../../../../../../../../global/css/colors';
 import ArrayHelper from '../../../../../../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
 import ArrOfObj from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
@@ -14,7 +18,6 @@ import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect'
 import GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
 import { gameFormStyles } from '../style/Style';
 import ClueFormClass from './class/ClueFormClass';
-import Color from '../../../../../../../../global/css/colors';
 
 export default function ClueForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -63,22 +66,27 @@ export default function ClueForm(): JSX.Element {
    return (
       <StyledForm onSubmit={handleSubmit} apiError={apiError} style={gameFormStyles}>
          {ClueFormClass.form.inputs.map((input) => (
-            <InputCombination
-               key={input.id}
-               id={input.id}
-               placeholder={input.placeholder}
-               name={input.name}
-               isRequired={input.isRequired}
-               autoComplete={input.autoComplete}
-               handleChange={handleChange}
-               error={errors[input.name]}
-               type={input.type}
-               value={form[input.name]}
-               hidePlaceholderOnFocus={true}
-            />
+            <Fragment key={input.id}>
+               <TextInputAlt
+                  id={input.id}
+                  placeholder={input.placeholder}
+                  name={input.name}
+                  isRequired={input.isRequired}
+                  isDisabled={false}
+                  autoComplete={input.autoComplete}
+                  onChange={handleChange}
+                  type={input.type}
+                  value={form[input.name]}
+                  hasError={!!errors[input.name]}
+                  style={{}}
+               />
+               <ErrorLabel isDarkTheme={isDarkTheme} style={{ position: 'absolute', bottom: 0 }}>
+                  {errors[input.name]}
+               </ErrorLabel>
+            </Fragment>
          ))}
 
-         <TextBtn isDarkTheme={isDarkTheme} type="submit" style={{ filter: 'brightness(0.8)' }}>
+         <TextBtn isDarkTheme={isDarkTheme} type="submit">
             <Send size="1.5em" color={Color.darkThm.warning} />
          </TextBtn>
       </StyledForm>

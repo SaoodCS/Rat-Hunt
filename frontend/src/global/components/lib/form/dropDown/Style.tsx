@@ -71,3 +71,46 @@ export const StyledOption = styled.option<{ isDarkTheme: boolean }>`
    background-color: ${Color.setRgbOpacity(Color.darkThm.dialog, 1)};
    color: ${({ isDarkTheme }) => (isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt)};
 `;
+
+export const StyledSelectAlt = styled.select.attrs<IStyledSelectAttr>(
+   ({ isRequired, isDisabled }) => ({
+      required: isRequired,
+      disabled: isDisabled,
+   }),
+)<IStyledSelect>`
+   all: unset;
+   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+   width: 100%;
+   padding-top: 0.25em;
+   padding-bottom: 0.25em;
+   padding-left: 0.5em;
+   padding-right: 0.5em;
+   background-color: ${Color.setRgbOpacity(Color.darkThm.txt, 0.8)};
+   border-radius: 0.25em;
+   box-shadow:
+      inset 0.05em 0.05em 0em 0 ${Color.setRgbOpacity(Color.darkThm.bg, 0.7)},
+      inset -0.1em -0.1em 0.1em 0 ${Color.setRgbOpacity(Color.darkThm.bg, 0.25)};
+   border: ${({ hasError }) =>
+      hasError ? `2px solid red` : `2px solid ${Color.setRgbOpacity(Color.darkThm.accent, 1)}`};
+   position: relative;
+
+   &:focus,
+   &:active {
+      border: ${({ hasError }) =>
+         hasError ? `2px solid ${Color.darkThm.error}` : `2px solid ${Color.darkThm.accent}`};
+   }
+`;
+
+export const DropDownArrowAlt = styled(DownArrow)<{ darktheme: string; focusedinput: string }>`
+   position: absolute;
+   right: 3em;
+   z-index: 1;
+   color: ${({ focusedinput }) =>
+      focusedinput === 'true'
+         ? Color.darkThm.accentDarkerShade
+         : Color.setRgbOpacity(Color.darkThm.accentDarkerShade, 1)};
+   width: 0.9em;
+   transform: ${({ focusedinput }) =>
+      focusedinput === 'true' ? 'rotate(180deg)' : 'rotate(0deg)'};
+   transition: transform 0.3s ease-in-out;
+`;
