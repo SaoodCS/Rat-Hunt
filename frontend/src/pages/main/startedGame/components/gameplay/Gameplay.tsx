@@ -1,16 +1,20 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import styled, { css } from 'styled-components';
+import { FadeInOut } from '../../../../../global/components/lib/animation/fadeInOut/FadeInOut';
 import Fader from '../../../../../global/components/lib/animation/fader/Fader';
+import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { FlexRowWrapper } from '../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
 import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../global/context/game/GameContext';
 import MyCSS from '../../../../../global/css/MyCSS';
 import Color from '../../../../../global/css/colors';
 import ArrOfObj from '../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import HTMLEntities from '../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import MiscHelper from '../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import DBConnect from '../../../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../../../global/utils/GameHelper/GameHelper';
+import { ItemLabel } from '../header/style/Style';
 import ClueForm from './components/forms/clueForm/ClueForm';
 import RatVoteForm from './components/forms/ratVoteForm/RatVoteForm';
 import WordGuessForm from './components/forms/wordGuessForm/WordGuessForm';
@@ -130,7 +134,7 @@ export default function Gameplay(): JSX.Element {
          condition: showRoundSummary,
       },
       {
-         text: `Current Turn = ${roomData?.gameState?.currentTurn}`,
+         text: `${roomData?.gameState?.currentTurn}`,
          condition: showCurrentTurnMsg,
       },
       {
@@ -143,62 +147,48 @@ export default function Gameplay(): JSX.Element {
       <>
          <ConditionalRender condition={!showRoundSummary}>
             <CurrentTurnAndFormWrapper>
-               {/* <FlexColumnWrapper
+               <FlexColumnWrapper
                   height="100%"
                   justifyContent="center"
                   width="100%"
-                  alignItems="center"
+                  alignItems="start"
                >
-                  <FadeInOut>
-                     <LogoText size="1em" color={Color.setRgbOpacity(Color.darkThm.success, 0.75)}>
-                        {gameplayHeadMap.find((map) => map.condition)?.text || ''}
-                     </LogoText>
-                  </FadeInOut>
-               </FlexColumnWrapper> */}
-
-               <Fader fadeInCondition={true} transitionDuration={0.5} height="100%" width="100%">
-                  <FlexRowWrapper width="100%" height="100%" alignItems="center">
-                     <FormContainer>
-                        <WordGuessForm />
-                     </FormContainer>
-                  </FlexRowWrapper>
-               </Fader>
-            </CurrentTurnAndFormWrapper>
-
-            {/* <FlexColumnWrapper
-               position="relative"
-               height="100%"
-               padding="1em 1em 1em 1em"
-               boxSizing="border-box"
-               localStyles={screenStyles()}
-            >
-               <FlexRowWrapper position="absolute" height="3em" width="100%">
                   {gameplayHeadMap.map(({ text, condition, component }, index) => (
                      <ConditionalRender key={index} condition={condition}>
-                        <Fader
-                           fadeInCondition={condition}
-                           transitionDuration={0.5}
-                           width="100%"
-                           height="100%"
-                        >
-                           <ConditionalRender condition={!!component}>
-                              {component}
-                           </ConditionalRender>
-                           <ConditionalRender condition={!!text}>
-                              <FlexColumnWrapper height="100%" justifyContent="center">
-                                 <FadeInOut>
-                                    <LogoText
-                                       size="1em"
-                                       color={Color.setRgbOpacity(Color.darkThm.success, 0.75)}
-                                    >
-                                       {text}
-                                    </LogoText>
-                                 </FadeInOut>
-                              </FlexColumnWrapper>
-                           </ConditionalRender>
-                        </Fader>
+                        <ConditionalRender condition={!!text}>
+                           <FadeInOut
+                              style={{
+                                 width: '100%',
+                                 display: 'flex',
+                                 alignItems: 'center',
+                                 fontSize: '1.1em',
+                              }}
+                           >
+                              <ItemLabel color={'yellow'} style={{ width: 'fit-content' }}>
+                                 Current Turn:{HTMLEntities.space}
+                                 {HTMLEntities.space} {text}
+                              </ItemLabel>
+                           </FadeInOut>
+                        </ConditionalRender>
+                        <ConditionalRender condition={!!component}>
+                           <Fader
+                              fadeInCondition={condition}
+                              transitionDuration={0.5}
+                              height="100%"
+                              width="100%"
+                           >
+                              <FlexRowWrapper width="100%" height="100%" alignItems="center">
+                                 <FormContainer>
+                                    <WordGuessForm />
+                                 </FormContainer>
+                              </FlexRowWrapper>
+                           </Fader>
+                        </ConditionalRender>
                      </ConditionalRender>
                   ))}
+               </FlexColumnWrapper>
+            </CurrentTurnAndFormWrapper>
+            {/* 
                </FlexRowWrapper>
                <GameStateTable />
             </FlexColumnWrapper> */}
