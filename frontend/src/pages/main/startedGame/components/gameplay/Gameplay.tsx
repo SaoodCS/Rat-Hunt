@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
-import styled, { css } from 'styled-components';
+import { css } from 'styled-components';
 import { FadeInOut } from '../../../../../global/components/lib/animation/fadeInOut/FadeInOut';
 import Fader from '../../../../../global/components/lib/animation/fader/Fader';
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
@@ -8,7 +8,6 @@ import { FlexRowWrapper } from '../../../../../global/components/lib/positionMod
 import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../global/context/game/GameContext';
 import MyCSS from '../../../../../global/css/MyCSS';
-import Color from '../../../../../global/css/colors';
 import ArrOfObj from '../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import HTMLEntities from '../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import MiscHelper from '../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
@@ -19,27 +18,7 @@ import ClueForm from './components/forms/clueForm/ClueForm';
 import RatVoteForm from './components/forms/ratVoteForm/RatVoteForm';
 import WordGuessForm from './components/forms/wordGuessForm/WordGuessForm';
 import RoundSummary from './components/summary/RoundSummary';
-
-const FormContainer = styled.div`
-   box-sizing: border-box;
-   padding-left: 1em;
-   padding-right: 1em;
-   filter: brightness(0.8);
-   height: 100%;
-   width: 100%;
-   color: ${Color.darkThm.accentDarkerShade};
-`;
-
-const CurrentTurnAndFormWrapper = styled.div`
-   border-bottom: 1px solid ${Color.darkThm.accentDarkerShade};
-   width: 100%;
-   box-sizing: border-box;
-   height: 4em;
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   font-size: 0.8em;
-`;
+import { CurrentTurnAndFormWrapper, FormContainer, GameStateTableWrapper } from './style/Style';
 
 export default function Gameplay(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -152,17 +131,16 @@ export default function Gameplay(): JSX.Element {
                   justifyContent="center"
                   width="100%"
                   alignItems="start"
+                  style={{ fontSize: '0.8em' }}
                >
                   {gameplayHeadMap.map(({ text, condition, component }, index) => (
                      <ConditionalRender key={index} condition={condition}>
                         <ConditionalRender condition={!!text}>
                            <FadeInOut
-                              style={{
-                                 width: '100%',
-                                 display: 'flex',
-                                 alignItems: 'center',
-                                 fontSize: '1.1em',
-                              }}
+                              width="100%"
+                              display="flex"
+                              alignItems="center"
+                              fontSize="1.1em"
                            >
                               <ItemLabel color={'yellow'} style={{ width: 'fit-content' }}>
                                  Current Turn:{HTMLEntities.space}
@@ -178,9 +156,7 @@ export default function Gameplay(): JSX.Element {
                               width="100%"
                            >
                               <FlexRowWrapper width="100%" height="100%" alignItems="center">
-                                 <FormContainer>
-                                    <WordGuessForm />
-                                 </FormContainer>
+                                 <FormContainer>{component}</FormContainer>
                               </FlexRowWrapper>
                            </Fader>
                         </ConditionalRender>
@@ -188,10 +164,7 @@ export default function Gameplay(): JSX.Element {
                   ))}
                </FlexColumnWrapper>
             </CurrentTurnAndFormWrapper>
-            {/* 
-               </FlexRowWrapper>
-               <GameStateTable />
-            </FlexColumnWrapper> */}
+            <GameStateTableWrapper>{/* <GameStateTable /> */}</GameStateTableWrapper>
          </ConditionalRender>
          <ConditionalRender condition={showRoundSummary}>
             <Fader fadeInCondition={showRoundSummary} transitionDuration={2} height={'100%'}>
