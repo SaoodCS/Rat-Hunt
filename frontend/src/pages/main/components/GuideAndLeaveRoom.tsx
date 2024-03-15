@@ -69,7 +69,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
                { key: 'gameState', value: updatedGameState },
             ]);
             await updateRoomStateMutation.mutateAsync(updatedRoomState);
-         } else if (currentTurn === localDbUser) {
+         } else if (GameHelper.Get.currentTurnUserId(currentTurn) === localDbUser) {
             const nextUser = GameHelper.Get.nextTurnUserId(
                userStates,
                localDbUser,

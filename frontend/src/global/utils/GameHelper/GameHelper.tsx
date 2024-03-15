@@ -1,5 +1,6 @@
 import ArrayHelper from '../../helpers/dataTypes/arrayHelper/ArrayHelper';
 import ArrOfObj from '../../helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../helpers/dataTypes/miscHelper/MiscHelper';
 import type DBConnect from '../DBConnect/DBConnect';
 
 export namespace GameHelper {
@@ -159,6 +160,9 @@ export namespace GameHelper {
          if (currentTurn === '') return 'roundSummary';
          const currentTurnUserId = GameHelper.Get.currentTurnUserId(currentTurn);
          const currentTurnUserState = ArrOfObj.findObj(userStates, 'userId', currentTurnUserId);
+         if (!MiscHelper.isNotFalsyOrEmpty(currentTurnUserState)) {
+            throw new Error('Current turn is set to a user that does not exist in userStates.');
+         }
          const hasRatGuessed = GameHelper.Check.hasRatGuessed(gameState);
          if (currentTurnUserState.spectate) {
             // Spectating user's clue and votedFor values are already set to 'SKIP' for the round

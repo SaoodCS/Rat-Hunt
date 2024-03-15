@@ -43,7 +43,10 @@ export default function GameStateTable(): JSX.Element {
                <TableRow
                   key={user.userId}
                   thisUser={localDbUser === user.userId}
-                  currentTurn={roomData?.gameState.currentTurn === user.userId}
+                  currentTurn={
+                     GameHelper.Get.currentTurnUserId(roomData?.gameState.currentTurn || '') ===
+                     user.userId
+                  }
                   disconnected={disconnectedUsers.includes(user.userId)}
                   spectating={user.spectate}
                >
