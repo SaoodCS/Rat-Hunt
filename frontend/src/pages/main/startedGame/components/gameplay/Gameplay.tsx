@@ -17,6 +17,7 @@ import { ItemLabel } from '../header/style/Style';
 import ClueForm from './components/forms/clueForm/ClueForm';
 import RatVoteForm from './components/forms/ratVoteForm/RatVoteForm';
 import WordGuessForm from './components/forms/wordGuessForm/WordGuessForm';
+import GameStateTable from './components/gameStateTable/GameStateTable';
 import RoundSummary from './components/summary/RoundSummary';
 import { CurrentTurnAndFormWrapper, FormContainer, GameStateTableWrapper } from './style/Style';
 
@@ -132,6 +133,7 @@ export default function Gameplay(): JSX.Element {
                   width="100%"
                   alignItems="start"
                   style={{ fontSize: '0.8em' }}
+                  localStyles={screenStyles()}
                >
                   {gameplayHeadMap.map(({ text, condition, component }, index) => (
                      <ConditionalRender key={index} condition={condition}>
@@ -164,7 +166,9 @@ export default function Gameplay(): JSX.Element {
                   ))}
                </FlexColumnWrapper>
             </CurrentTurnAndFormWrapper>
-            <GameStateTableWrapper>{/* <GameStateTable /> */}</GameStateTableWrapper>
+            <GameStateTableWrapper>
+               <GameStateTable />
+            </GameStateTableWrapper>
          </ConditionalRender>
          <ConditionalRender condition={showRoundSummary}>
             <Fader fadeInCondition={showRoundSummary} transitionDuration={2} height={'100%'}>
@@ -177,17 +181,23 @@ export default function Gameplay(): JSX.Element {
 
 const screenStyles = (): FlattenSimpleInterpolation => {
    const forDesktop = MyCSS.Media.desktop(css`
-      font-size: 1.1em;
-      & > :first-child {
-         width: 25em;
-         text-align: center;
-         align-self: center;
-      }
-      & > :nth-child(2) {
-         margin-left: 8em;
-         margin-right: 8em;
+      &:first-child {
+         & > * {
+            font-size: 1.25em;
+         }
       }
    `);
    const forTablet = MyCSS.Media.tablet(css``);
-   return MyCSS.Helper.concatStyles(forDesktop, forTablet);
+   const medium = css`
+      @media (min-width: 544px) {
+         max-width: 35em;
+         margin: 0 auto;
+         &:first-child {
+            & > * {
+               justify-content: center;
+            }
+         }
+      }
+   `;
+   return MyCSS.Helper.concatStyles(forDesktop, forTablet, medium);
 };

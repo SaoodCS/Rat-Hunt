@@ -1,23 +1,28 @@
 import { useContext, useEffect, useState } from 'react';
-import { LogoText } from '../../../../../../../global/components/app/logo/LogoText';
+import type { FlattenSimpleInterpolation } from 'styled-components';
+import { css } from 'styled-components';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
-import Color from '../../../../../../../global/css/colors';
+import MyCSS from '../../../../../../../global/css/MyCSS';
 import ArrOfObj from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useScrollFader from '../../../../../../../global/hooks/useScrollFader';
 import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
-import {
-   Cell,
-   DataTableWrapper,
-   HeaderRowContainer,
-   RowContainer,
-   UserRowsWrapper,
-} from './style/Style';
+import GameHelper from '../../../../../../../global/utils/GameHelper/GameHelper';
+import { TableBody, TableCell, TableContainer, TableHead, TableRow } from './style/Style';
+
 export default function GameStateTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [sortedUserStates, setSortedUserStates] = useState<DBConnect.FSDB.I.UserState[]>();
    const { faderElRef, handleScroll } = useScrollFader([roomData], 1);
+   const [disconnectedUsers, setDisconnectedUsers] = useState<string[]>([]);
+
+   useEffect(() => {
+      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
+      const { users } = roomData;
+      const disconnectedUsers = GameHelper.Get.disconnectedUserIds(users);
+      setDisconnectedUsers(disconnectedUsers);
+   }, [roomData?.users]);
 
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
@@ -26,55 +31,49 @@ export default function GameStateTable(): JSX.Element {
       setSortedUserStates(ArrOfObj.sort(userStates, 'userId'));
    }, [roomData?.gameState?.userStates, localDbUser]);
 
-   function valueCol(userState: DBConnect.FSDB.I.UserState): string {
-      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return 'disconnected';
-      if (!MiscHelper.isNotFalsyOrEmpty(userState)) return 'disconnected';
-      const { users } = roomData;
-      const thisUser = ArrOfObj.findObj(users, 'userId', userState.userId);
-      const isSpectating = userState.spectate;
-      const isDisconnected = thisUser?.userStatus === 'disconnected';
-      if (isDisconnected || isSpectating) return Color.setRgbOpacity(Color.darkThm.txt, 0.35);
-      return '';
-   }
-
    return (
-      <DataTableWrapper>
-         <HeaderRowContainer height="2.5em">
-            <Cell>
-               <LogoText size="1em"> User</LogoText>
-            </Cell>
-            <Cell>
-               <LogoText size="1em"> Clue</LogoText>
-            </Cell>
-            <Cell>
-               <LogoText size="1em"> Voted For</LogoText>
-            </Cell>
-         </HeaderRowContainer>
-         <UserRowsWrapper headerRowHeight="3em" ref={faderElRef} onScroll={(e) => handleScroll(e)}>
+      <TableContainer noOfColumns={3} localStyles={screenStyles(3)}>
+         <TableHead>
+            <TableCell>User</TableCell>
+            <TableCell>Clue</TableCell>
+            <TableCell>Voted For</TableCell>
+         </TableHead>
+         <TableBody ref={faderElRef} onScroll={(e) => handleScroll(e)}>
             {sortedUserStates?.map((user) => (
-               <RowContainer
+               <TableRow
                   key={user.userId}
-                  isThisUser={user.userId === localDbUser}
-                  currentTurn={user.userId === roomData?.gameState.currentTurn}
+                  thisUser={localDbUser === user.userId}
+                  currentTurn={roomData?.gameState.currentTurn === user.userId}
+                  disconnected={disconnectedUsers.includes(user.userId)}
+                  spectating={user.spectate}
                >
-                  <Cell>
-                     <LogoText size="1em" color={valueCol(user)}>
-                        {user.userId}
-                     </LogoText>
-                  </Cell>
-                  <Cell>
-                     <LogoText size="1em" color={valueCol(user)}>
-                        {user.clue}
-                     </LogoText>
-                  </Cell>
-                  <Cell>
-                     <LogoText size="1em" color={valueCol(user)}>
-                        {user.votedFor}
-                     </LogoText>
-                  </Cell>
-               </RowContainer>
+                  <TableCell>{user.userId}</TableCell>
+                  <TableCell>{user.clue}</TableCell>
+                  <TableCell>{user.votedFor}</TableCell>
+               </TableRow>
             ))}
-         </UserRowsWrapper>
-      </DataTableWrapper>
+         </TableBody>
+      </TableContainer>
    );
 }
+
+const screenStyles = (noOfColumn: number): FlattenSimpleInterpolation => {
+   const forDesktop = MyCSS.Media.desktop(css`
+      font-size: 1em;
+   `);
+   const forTablet = MyCSS.Media.tablet(css``);
+   const medium = css`
+      @media (min-width: 544px) {
+         ${TableHead} {
+            justify-content: center;
+         }
+         ${TableRow} {
+            justify-content: center;
+         }
+         ${TableCell} {
+            max-width: calc(40em / ${noOfColumn});
+         }
+      }
+   `;
+   return MyCSS.Helper.concatStyles(forDesktop, forTablet, medium);
+};

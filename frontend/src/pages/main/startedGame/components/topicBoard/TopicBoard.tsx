@@ -74,6 +74,7 @@ const screenStyles = (): FlattenSimpleInterpolation => {
       margin: 0 auto;
    `;
    const forDesktop = MyCSS.Media.desktop(css`
+      font-size: 1.15em;
    `);
    const forTablet = MyCSS.Media.tablet(css``);
    return MyCSS.Helper.concatStyles(forDesktop, forTablet, allStyles);
