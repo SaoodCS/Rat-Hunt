@@ -20,7 +20,12 @@ async function updateTopics(): Promise<void> {
    await topicsRef.set({ topics });
 }
 
-updateTopics().catch((error) => {
-   // eslint-disable-next-line no-console
-   console.error('Error updating topics:', error);
-});
+updateTopics()
+   .then(() => {
+      // eslint-disable-next-line no-console
+      console.log('Topics updated');
+   })
+   .catch((error) => {
+      // eslint-disable-next-line no-console
+      console.error('Error updating topics:', error);
+   });

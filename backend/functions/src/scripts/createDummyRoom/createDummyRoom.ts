@@ -38,7 +38,12 @@ async function createDummyRoom(): Promise<void> {
    await roomRef.set(roomWithDummyUsers);
 }
 
-createDummyRoom().catch((error) => {
-   // eslint-disable-next-line no-console
-   console.error('Error creating dummy room:', error);
-});
+createDummyRoom()
+   .then(() => {
+      // eslint-disable-next-line no-console
+      console.log('Dummy room created');
+   })
+   .catch((error) => {
+      // eslint-disable-next-line no-console
+      console.error('Error creating dummy room:', error);
+   });
