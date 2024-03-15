@@ -57,7 +57,7 @@ export default function GameStateTable(): JSX.Element {
    );
 }
 
-const screenStyles = (noOfColumn: number): FlattenSimpleInterpolation => {
+const screenStyles = (noOfColumns: number): FlattenSimpleInterpolation => {
    const forDesktop = MyCSS.Media.desktop(css`
       font-size: 1em;
    `);
@@ -71,7 +71,7 @@ const screenStyles = (noOfColumn: number): FlattenSimpleInterpolation => {
             justify-content: center;
          }
          ${TableCell} {
-            max-width: calc(40em / ${noOfColumn});
+            max-width: calc(40em / ${noOfColumns});
          }
       }
    `;

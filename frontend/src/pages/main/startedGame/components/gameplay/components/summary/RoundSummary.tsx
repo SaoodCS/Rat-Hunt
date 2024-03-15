@@ -1,24 +1,25 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
-import { LogoText } from '../../../../../../../global/components/app/logo/LogoText';
-import { TextBtn } from '../../../../../../../global/components/lib/button/textBtn/Style';
-import { TextColourizer } from '../../../../../../../global/components/lib/font/textColorizer/TextColourizer';
 import { FlexColumnWrapper } from '../../../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
-import { FlexRowWrapper } from '../../../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
 import ConditionalRender from '../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import { ModalContext } from '../../../../../../../global/context/widget/modal/ModalContext';
 import MyCSS from '../../../../../../../global/css/MyCSS';
-import Color from '../../../../../../../global/css/colors';
-import HTMLEntities from '../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import MiscHelper from '../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
-import { BtnContainer } from '../../../header/style/Style';
 import RoundEndForm from './components/form/RoundEndForm';
-import ScoresTable from './components/scoresTable/ScoresTable';
-import SummaryData from './components/summaryData/SummaryData';
+import SummaryMarquee from './components/summaryMarquee/SummaryMarquee';
+import SummaryTable from './components/summaryTable/SummaryTable';
 import WinnerLoserSplash from './components/winnerLoserSplash/WinnerLoserSplash';
+import {
+   MarqueeContainer,
+   NextPlayAgainBtnContainer,
+   NextRoundPlayAgainBtn,
+   RoundSummaryTitle,
+   SummaryTableWrapper,
+} from './style/Style';
+import Color from '../../../../../../../global/css/colors';
 
 export default function RoundSummary(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);
@@ -55,35 +56,25 @@ export default function RoundSummary(): JSX.Element {
             height="100%"
             position="relative"
             boxSizing="border-box"
+            width="100%"
             localStyles={screenStyles()}
          >
             <ConditionalRender condition={displayWinnerLoserSplash}>
                <WinnerLoserSplash />
             </ConditionalRender>
             <ConditionalRender condition={!displayWinnerLoserSplash}>
-               <FlexRowWrapper position="absolute" height="1.5em" margin="1em">
-                  <LogoText size="1.4em">Round Summary {HTMLEntities.space} </LogoText>
-                  <BtnContainer>
-                     <TextBtn isDarkTheme onClick={handleUpdateGameState}>
-                        <TextColourizer fontSize="0.7em">
-                           {!isLastRound ? 'Next Round' : 'Play Again'}
-                        </TextColourizer>
-                     </TextBtn>
-                  </BtnContainer>
-               </FlexRowWrapper>
-               <FlexRowWrapper
-                  position="absolute"
-                  top="2em"
-                  margin="1em"
-                  left="0"
-                  right="0"
-                  bottom="0"
-                  justifyContent="start"
-                  alignItems="start"
-               >
-                  <SummaryData />
-                  <ScoresTable />
-               </FlexRowWrapper>
+               <RoundSummaryTitle>Round Summary</RoundSummaryTitle>
+               <NextPlayAgainBtnContainer onClick={handleUpdateGameState}>
+                  <NextRoundPlayAgainBtn>
+                     {!isLastRound ? 'Next Round' : 'Play Again'}
+                  </NextRoundPlayAgainBtn>
+               </NextPlayAgainBtnContainer>
+               <MarqueeContainer>
+                  <SummaryMarquee />
+               </MarqueeContainer>
+               <SummaryTableWrapper>
+                  <SummaryTable />
+               </SummaryTableWrapper>
             </ConditionalRender>
          </FlexColumnWrapper>
       </>
@@ -92,30 +83,28 @@ export default function RoundSummary(): JSX.Element {
 
 const screenStyles = (): FlattenSimpleInterpolation => {
    const forAll = css`
-      & > :nth-child(2) {
-         text-align: center;
-         align-items: center;
-         border: 2px solid ${Color.setRgbOpacity(Color.darkThm.accent, 1)};
-         border-radius: 1em;
-         & > :first-child {
-            border-right: 2px solid ${Color.setRgbOpacity(Color.darkThm.accent, 1)};
-            overflow-y: scroll;
-            ${MyCSS.Scrollbar.hide};
-            border-bottom-right-radius: 0.25em;
-            border-top-right-radius: 0.25em;
-            padding-left: 0.5em;
-            padding-right: 0.5em;
+      font-size: 0.8em;
+   `;
+   const forDesktop = MyCSS.Media.desktop(css`
+      font-size: 1em;
+   `);
+   const forTablet = MyCSS.Media.tablet(css``);
+
+   const medium = css`
+      @media (min-width: 544px) {
+         ${NextPlayAgainBtnContainer} {
+            left: 50%;
+            right: 0;
+            justify-content: center;
+            max-width: 28em;
+         }
+         ${MarqueeContainer} {
+            max-width: 45em;
+            margin: 0 auto;
+            border-left: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.5)};
+            border-right: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.5)};
          }
       }
    `;
-   const forDesktop = MyCSS.Media.desktop(css`
-      font-size: 1.2em;
-      align-items: center;
-      & > :nth-child(2) {
-         width: 31em;
-         justify-self: center;
-      }
-   `);
-   const forTablet = MyCSS.Media.tablet(css``);
-   return MyCSS.Helper.concatStyles(forAll, forDesktop, forTablet);
+   return MyCSS.Helper.concatStyles(forAll, forDesktop, forTablet, medium);
 };

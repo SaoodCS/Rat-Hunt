@@ -178,6 +178,12 @@ export namespace GameHelper {
          if (hasRatGuessed) return 'roundSummary';
          return 'guess';
       }
+
+      export function ratGuess(gameState: DBConnect.FSDB.I.GameState): string {
+         const { currentRat, userStates } = gameState;
+         const ratUserState = ArrOfObj.findObj(userStates, 'userId', currentRat);
+         return ratUserState.guess;
+      }
    }
 
    export namespace SetRoomState {
