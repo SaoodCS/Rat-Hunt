@@ -3,17 +3,6 @@ import styled from 'styled-components';
 import MyCSS from '../../../../../../../../global/css/MyCSS';
 import Color from '../../../../../../../../global/css/colors';
 
-export const Cell = styled.div<{ noOfTableRows?: number }>`
-   width: ${({ noOfTableRows }) => `calc(100% / ${noOfTableRows || 3})`};
-   text-align: center;
-   padding-left: 0.5em;
-   padding-right: 0.5em;
-   box-sizing: border-box;
-   word-wrap: break-word;
-   text-overflow: ellipsis;
-   hyphens: auto;
-`;
-
 export const RowContainer = styled.div<{
    isThisUser?: boolean;
    currentTurn?: boolean;
@@ -58,15 +47,6 @@ export const HeaderRowContainer = styled.div<{ height?: string }>`
    border-top-left-radius: 1em;
    box-sizing: border-box;
    margin-top: 0.5em;
-`;
-
-export const DataTableWrapper = styled.div`
-   position: absolute;
-   margin-bottom: 1em;
-   top: 4em;
-   bottom: 0;
-   right: 1em;
-   left: 1em;
 `;
 
 // ------ NEW BELOW ------
