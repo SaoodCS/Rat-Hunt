@@ -11,7 +11,7 @@ export const WaitingRoomTitle = styled.div`
 export const PlayBtnContainer = styled.div<{ disablePlay?: boolean }>`
    ${MyCSS.Clickables.removeDefaultEffects};
    ${MyCSS.Clickables.desktop.changeBrightnessOnHover(0.8)};
-   ${MyCSS.Clickables.portable.changeBrightnessOnClick(0.8, 'persist')}
+   ${MyCSS.Clickables.portable.changeBrightnessOnClick(0.8, 'revert')}
    display: flex;
    position: absolute;
    color: ${Color.darkThm.warning};
