@@ -26,6 +26,8 @@ import {
    WaitingRoomTitle,
 } from './style/Style';
 
+const MIN_PLAYERS = 3;
+
 export default function WaitingRoom(): JSX.Element {
    const { allUsers, localDbRoom, localDbUser } = useContext(GameContext);
    const navigation = useNavigate();
@@ -45,8 +47,7 @@ export default function WaitingRoom(): JSX.Element {
    const setRoomData = DBConnect.FSDB.Set.room({});
 
    useEffect(() => {
-      // change to < 3 when testing is done
-      setDisablePlay(allUsers.length < 1 ? true : false);
+      setDisablePlay(allUsers.length < MIN_PLAYERS ? true : false);
    }, [allUsers]);
 
    useEffect(() => {
