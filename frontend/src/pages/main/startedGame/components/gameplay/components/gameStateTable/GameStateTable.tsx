@@ -3,7 +3,6 @@ import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import MyCSS from '../../../../../../../global/css/MyCSS';
-import ArrOfObj from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useScrollFader from '../../../../../../../global/hooks/useScrollFader';
 import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
@@ -27,8 +26,8 @@ export default function GameStateTable(): JSX.Element {
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
-      const { userStates } = gameState;
-      setSortedUserStates(ArrOfObj.sort(userStates, 'userId'));
+      const { userStates, currentRound } = gameState;
+      setSortedUserStates(GameHelper.Get.sortedUserStates(currentRound, userStates));
    }, [roomData?.gameState?.userStates, localDbUser]);
 
    return (

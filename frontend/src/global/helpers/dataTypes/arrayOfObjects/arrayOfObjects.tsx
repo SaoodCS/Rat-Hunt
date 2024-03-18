@@ -26,6 +26,10 @@ export default class ArrOfObj {
       });
    }
 
+   static orderByArrOfVals<T, K extends keyof T>(arr: T[], prop: K, order: T[K][]): T[] {
+      return arr.sort((a, b) => order.indexOf(a[prop]) - order.indexOf(b[prop]));
+   }
+
    static findObj<T>(arr: T[], key: keyof T, value: T[keyof T]): T {
       return arr.find((obj) => obj[key] === value) as T;
    }

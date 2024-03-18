@@ -75,9 +75,32 @@ export namespace GameHelper {
          return wordsWithCellIds;
       }
 
-      export function firstUser(userStates: DBConnect.FSDB.I.UserState[]): string {
-         const sortedUserStates = ArrOfObj.sort(userStates, 'userId');
-         return sortedUserStates[0].userId;
+      export function sortedUserQueue(
+         roundNo: number,
+         userStates: DBConnect.FSDB.I.UserState[],
+      ): string[] {
+         const usersQueued: string[] = [];
+         const usersLength = userStates.length;
+         const users = ArrOfObj.getArrOfValuesFromKey(userStates, 'userId');
+         const sortedUsers = ArrayHelper.sort(users);
+         for (let i = 0; i < usersLength; i++) {
+            const index = (roundNo - 1 + i) % usersLength;
+            usersQueued.push(sortedUsers[index]);
+         }
+         return usersQueued;
+      }
+
+      export function sortedUserStates(
+         roundNo: number,
+         userStates: DBConnect.FSDB.I.UserState[],
+      ): DBConnect.FSDB.I.UserState[] {
+         const sortedUserIdQueue = Get.sortedUserQueue(roundNo, userStates);
+         return ArrOfObj.orderByArrOfVals(userStates, 'userId', sortedUserIdQueue);
+      }
+
+      export function firstUser(roundNo: number, userStates: DBConnect.FSDB.I.UserState[]): string {
+         const sortedUsers = Get.sortedUserQueue(roundNo, userStates);
+         return sortedUsers[0];
       }
 
       export function currentTurnUserId(currentTurn: string): string {
@@ -85,13 +108,14 @@ export namespace GameHelper {
       }
 
       export function nextTurnUserId(
-         userStates: DBConnect.FSDB.I.UserState[],
+         gameState: DBConnect.FSDB.I.GameState,
          currentTurnUser: string,
          type: 'votedFor' | 'clue' | 'guess' | 'leaveRoom',
          currentRat: string,
       ): string {
-         const sortedUserStates = ArrOfObj.sort(userStates, 'userId');
-         const thisUserIndex = sortedUserStates.findIndex((u) => u.userId === currentTurnUser);
+         const { userStates, currentRound } = gameState;
+         const sortedUserQueue = Get.sortedUserQueue(currentRound, userStates);
+         const thisUserIndex = sortedUserQueue.indexOf(currentTurnUser);
          const userStatesWithoutThisUser = ArrOfObj.filterOut(
             userStates,
             'userId',
@@ -108,13 +132,13 @@ export namespace GameHelper {
             '',
          );
          if (type === 'votedFor') {
-            const nextUser = sortedUserStates[thisUserIndex + 1]?.userId || currentRat;
+            const nextUser = sortedUserQueue[thisUserIndex + 1] || currentRat;
             const updatedCurrentTurn = finalVoteSubmission ? `${currentRat}.wordGuess` : nextUser;
             return updatedCurrentTurn;
          }
          if (type === 'clue') {
-            const firstUser = sortedUserStates[0].userId;
-            const nextUser = sortedUserStates[thisUserIndex + 1]?.userId || firstUser;
+            const firstUser = sortedUserQueue[0];
+            const nextUser = sortedUserQueue[thisUserIndex + 1] || firstUser;
             const updatedCurrentTurn = finalClueSubmission ? firstUser : nextUser;
             return updatedCurrentTurn;
          }
@@ -128,12 +152,12 @@ export namespace GameHelper {
          const ratUserState = ArrOfObj.findObj(userStates, 'userId', currentRat);
          const ratSubmittedGuess = ratUserState.guess !== '';
          if (ratSubmittedGuess) return '';
-         if (thisUserIsRat) return sortedUserStates[0].userId;
+         if (thisUserIsRat) return sortedUserQueue[0];
          if (allVotesSubmitted) return `${currentRat}.wordGuess`;
-         if (allCluesSubmitted) return sortedUserStates[0].userId;
+         if (allCluesSubmitted) return sortedUserQueue[0];
          // If not all clues are submitted:
-         const firstUser = sortedUserStates[0].userId;
-         const nextUser = sortedUserStates[thisUserIndex + 1]?.userId || firstUser;
+         const firstUser = sortedUserQueue[0];
+         const nextUser = sortedUserQueue[thisUserIndex + 1] || firstUser;
          const updatedCurrentTurn = nextUser;
          return updatedCurrentTurn;
       }
@@ -308,17 +332,23 @@ export namespace GameHelper {
                     { key: 'spectate', value: false },
                  ],
          );
-         const updatedCurrentTurn = GameHelper.Get.firstUser(userStatesWithoutDelUser);
+         const newCurrentRound = resetRoundToOneIsTrue
+            ? 1
+            : resetCurrentRoundIsTrue
+              ? currentRound
+              : currentRound + 1;
+         const updatedCurrentTurn = GameHelper.Get.firstUser(
+            newCurrentRound,
+            userStatesWithoutDelUser,
+         );
+         // console.log("newCurrentRound", newCurrentRound)
+         // console.log("updatedCurrentTurn", updatedCurrentTurn);
          const updatedGameState: DBConnect.FSDB.I.GameState = {
             ...gameState,
             activeTopic: newTopic,
             activeWord: newWord,
             currentRat: newRat,
-            currentRound: resetRoundToOneIsTrue
-               ? 1
-               : resetCurrentRoundIsTrue
-                 ? currentRound
-                 : currentRound + 1,
+            currentRound: newCurrentRound,
             currentTurn: updatedCurrentTurn,
             userStates: updatedUserStates,
             numberOfRoundsSet: newNoOfRoundsExists ? newNoOfRounds : numberOfRoundsSet,

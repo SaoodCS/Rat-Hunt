@@ -173,14 +173,26 @@ export class FBHelp {
       };
    }
 
+   static sortedUserQueue(roundNo: number, userStates: IUserStates[]): string[] {
+      const usersQueued: string[] = [];
+      const usersLength = userStates.length;
+      const users = ArrayHelp.getArrOfValuesFromKey(userStates, 'userId');
+      const sortedUsers = ArrayHelp.sort(users);
+      for (let i = 0; i < usersLength; i++) {
+         const index = (roundNo - 1 + i) % usersLength;
+         usersQueued.push(sortedUsers[index]);
+      }
+      return usersQueued;
+   }
+
    static resetRoundGameState(
       gameState: IGameState,
       userStatesWithoutLeavingUser: IUserStates[],
       activeTopic: string,
       topics: ITopic[],
    ): IGameState {
+      const { currentRound } = gameState;
       const newRat = ArrayHelp.getRandItem(userStatesWithoutLeavingUser).userId;
-
       const newWords = FBHelp.getActiveTopicWords(topics, activeTopic);
       const newWord = newWords[Math.floor(Math.random() * newWords.length)].word;
       const updatedUserStates = ArrayHelp.setAllValuesOfKeys(userStatesWithoutLeavingUser, [
@@ -188,8 +200,8 @@ export class FBHelp {
          { key: 'guess', value: '' },
          { key: 'votedFor', value: '' },
       ]);
-      const sortedUserStates = ArrayHelp.sortObjects(userStatesWithoutLeavingUser, 'userId');
-      const updatedCurrentTurn = sortedUserStates[0].userId;
+      const sortedUserQueue = FBHelp.sortedUserQueue(currentRound, userStatesWithoutLeavingUser);
+      const updatedCurrentTurn = sortedUserQueue[0];
       const updatedGameState: IGameState = {
          ...gameState,
          activeTopic,

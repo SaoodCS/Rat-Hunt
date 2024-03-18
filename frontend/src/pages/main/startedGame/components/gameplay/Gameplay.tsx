@@ -46,7 +46,7 @@ export default function Gameplay(): JSX.Element {
       const gamePhase = GameHelper.Get.gamePhase(gameState);
       if (gamePhase === 'roundSummary') return;
       const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(
-         userStates,
+         gameState,
          currentTurn,
          gamePhase,
          currentRat,

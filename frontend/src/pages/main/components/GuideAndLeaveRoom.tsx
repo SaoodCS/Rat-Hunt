@@ -71,7 +71,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
             await updateRoomStateMutation.mutateAsync(updatedRoomState);
          } else if (GameHelper.Get.currentTurnUserId(currentTurn) === localDbUser) {
             const nextUser = GameHelper.Get.nextTurnUserId(
-               userStates,
+               gameState,
                localDbUser,
                'leaveRoom',
                currentRat,

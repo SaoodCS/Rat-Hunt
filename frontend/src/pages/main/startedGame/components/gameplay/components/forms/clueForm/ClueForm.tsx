@@ -48,7 +48,7 @@ export default function ClueForm(): JSX.Element {
          { key: 'clue', value: userClue },
       ]);
       const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(
-         userStates,
+         gameState,
          localDbUser,
          'clue',
          currentRat,

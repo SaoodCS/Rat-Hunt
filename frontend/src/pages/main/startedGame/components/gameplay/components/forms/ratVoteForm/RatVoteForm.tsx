@@ -52,7 +52,7 @@ export default function RatVoteForm(): JSX.Element {
          { key: 'votedFor', value: form.vote },
       ]);
       const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(
-         userStates,
+         gameState,
          localDbUser,
          'votedFor',
          currentRat,
