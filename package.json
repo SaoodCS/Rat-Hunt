@@ -15,7 +15,7 @@
     "app-deploy": "npm run f-deploy && npm run b-deploy",
     "git-prune-remote": "git remote update origin --prune",
     "git-prune-local": "npx git-removed-branches --prune --force",
-    "git-sync": "git pull --all && npm run git-prune-remote && npm run git-prune-local && npm run app-install"
+    "git-sync": "git pull && npm run git-prune-remote && npm run git-prune-local && npm run app-install"
   },
   "engines": {
     "node": "18.19.0"
