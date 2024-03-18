@@ -15,6 +15,7 @@ export const ModalBody = styled.div`
    overflow-y: auto;
    ${MyCSS.Scrollbar.gradientStyle};
    font-size: 0.85em;
+   word-spacing: 0.1em;
 `;
 
 export const ModalHeaderContainer = styled.div<{ isDarkTheme: boolean }>`
@@ -22,8 +23,7 @@ export const ModalHeaderContainer = styled.div<{ isDarkTheme: boolean }>`
    display: flex;
    justify-content: space-between;
    align-items: center;
-   border-bottom: ${({ isDarkTheme }) =>
-      isDarkTheme ? `1px solid ${Color.darkThm.accent}` : `1px solid ${Color.lightThm.accent}`};
+   border-bottom: ${Color.setRgbOpacity(Color.darkThm.accent, 0.3)} 1px solid;
    border-radius: 5px;
    font-size: 1em;
    font-weight: 500;
@@ -36,12 +36,10 @@ export const ModalContainer = styled.div<{ isDarkTheme: boolean }>`
       isDarkTheme
          ? Color.setRgbOpacity(Color.darkThm.dialog, 1)
          : Color.setRgbOpacity(Color.lightThm.dialog, 1)};
-   color: ${({ isDarkTheme }) => (isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt)};
-   border: ${({ isDarkTheme }) =>
-      isDarkTheme ? `1px solid ${Color.darkThm.accent}` : `1px solid ${Color.lightThm.accent}`};
+   color: ${Color.darkThm.txt};
    backdrop-filter: blur(50px);
-   // increase the brightness of the modal
    filter: brightness(1.25);
+   border: ${Color.setRgbOpacity(Color.darkThm.accent, 0.3)} 1px solid;
 `;
 
 export const ModalCloseButton = styled(Close)`
