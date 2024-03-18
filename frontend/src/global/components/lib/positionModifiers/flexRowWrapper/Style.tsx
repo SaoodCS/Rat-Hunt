@@ -17,6 +17,7 @@ export const FlexRowWrapper = styled.div<{
    top?: string;
    bottom?: string;
    localStyles?: FlattenSimpleInterpolation;
+   filter?: string;
 }>`
    display: flex;
    flex-direction: row;
@@ -35,5 +36,6 @@ export const FlexRowWrapper = styled.div<{
    right: ${({ right }) => right};
    top: ${({ top }) => top};
    bottom: ${({ bottom }) => bottom};
+   filter: ${({ filter }) => filter};
    ${({ localStyles }) => localStyles};
 `;

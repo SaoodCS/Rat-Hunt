@@ -3,8 +3,8 @@ import { CircleUser } from '@styled-icons/fa-solid/CircleUser';
 import { Copy } from '@styled-icons/fluentui-system-regular/Copy';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogoText } from '../../../global/components/app/logo/LogoText';
-import { TextBtn } from '../../../global/components/lib/button/textBtn/Style';
+import type { FlattenSimpleInterpolation } from 'styled-components';
+import { css } from 'styled-components';
 import AnimatedDots from '../../../global/components/lib/font/animatedDots/AnimatedDots';
 import { TextColourizer } from '../../../global/components/lib/font/textColorizer/TextColourizer';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
@@ -12,14 +12,19 @@ import { FlexRowWrapper } from '../../../global/components/lib/positionModifiers
 import { GameContext } from '../../../global/context/game/GameContext';
 import { BannerContext } from '../../../global/context/widget/banner/BannerContext';
 import { ToastContext } from '../../../global/context/widget/toast/ToastContext';
-import Color from '../../../global/css/colors';
+import MyCSS from '../../../global/css/MyCSS';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import StringHelper from '../../../global/helpers/dataTypes/string/StringHelper';
 import DBConnect from '../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../global/utils/GameHelper/GameHelper';
-import type { FlattenSimpleInterpolation } from 'styled-components';
-import { css } from 'styled-components';
-import MyCSS from '../../../global/css/MyCSS';
+import {
+   ItemLabel,
+   ItemValue,
+   PlayBtnContainer,
+   RoomIdTopicItemContainer,
+   UserListItemContainer,
+   WaitingRoomTitle,
+} from './style/Style';
 
 export default function WaitingRoom(): JSX.Element {
    const { allUsers, localDbRoom, localDbUser } = useContext(GameContext);
@@ -87,63 +92,30 @@ export default function WaitingRoom(): JSX.Element {
    return (
       <>
          <FlexColumnWrapper padding="2em" localStyles={screenStyles()}>
-            <FlexRowWrapper justifyContent="left" position="relative" alignItems="center">
-               <LogoText size={'1.75em'} color={Color.darkThm.accentAlt}>
+            <FlexRowWrapper position="relative" alignItems="center" padding="0em 0em 1em 0em">
+               <WaitingRoomTitle>
                   Waiting Room <AnimatedDots count={3} />
-               </LogoText>
-
-               <FlexRowWrapper position="absolute" style={{ right: 0 }}>
-                  <TextBtn isDarkTheme onClick={() => handleStartGame()}>
-                     <PlayCircleFill
-                        size="2.5em"
-                        style={{ filter: disablePlay ? 'brightness(0.5)' : 'none' }}
-                     />
-                  </TextBtn>
-               </FlexRowWrapper>
+               </WaitingRoomTitle>
+               <PlayBtnContainer onClick={() => handleStartGame()}>
+                  <PlayCircleFill size="2.5em" />
+               </PlayBtnContainer>
             </FlexRowWrapper>
-            <FlexRowWrapper
-               alignItems="center"
-               padding="0.5em 0em 0em 0em"
-               color={Color.darkThm.accentAlt}
-            >
-               <TextColourizer bold>Room ID:&nbsp;</TextColourizer>
-               <TextColourizer>{localDbRoom}</TextColourizer>
-               <Copy
-                  size="1em"
-                  onClick={copyToClipboard}
-                  style={{ cursor: 'pointer', padding: '0em 0em 0em 0.2em' }}
-               />
-            </FlexRowWrapper>
-            <FlexRowWrapper
-               alignItems="center"
-               padding="0.5em 0em 0em 0em"
-               color={Color.darkThm.accentAlt}
-            >
-               <TextColourizer bold>Topic:&nbsp;</TextColourizer>
-               <TextColourizer>
+            <RoomIdTopicItemContainer>
+               <ItemLabel>Room ID</ItemLabel>
+               <ItemValue>{localDbRoom}</ItemValue>
+               <Copy size="1em" onClick={copyToClipboard} style={{ cursor: 'pointer' }} />
+            </RoomIdTopicItemContainer>
+            <RoomIdTopicItemContainer>
+               <ItemLabel>Topic</ItemLabel>
+               <ItemValue>
                   {StringHelper.firstLetterToUpper(roomData?.gameState?.activeTopic ?? '')}
-               </TextColourizer>
-            </FlexRowWrapper>
+               </ItemValue>
+            </RoomIdTopicItemContainer>
             {allUsers.map((user, index) => (
-               <FlexRowWrapper
-                  alignItems="center"
-                  bgColor={Color.darkThm.accentAlt}
-                  margin="1em 0em 0em 0em"
-                  borderRadius="1em"
-                  key={index}
-               >
-                  <CircleUser
-                     size="1.75em"
-                     color={localDbUser === user ? Color.darkThm.error : Color.darkThm.accent}
-                  />
-                  <TextColourizer
-                     padding="0em 0em 0em 1em"
-                     bold
-                     color={localDbUser === user ? Color.darkThm.error : Color.darkThm.accent}
-                  >
-                     {user}
-                  </TextColourizer>
-               </FlexRowWrapper>
+               <UserListItemContainer key={index} isThisUser={user === localDbUser}>
+                  <CircleUser size="1.75em" />
+                  <TextColourizer padding="0em 0em 0em 1em">{user}</TextColourizer>
+               </UserListItemContainer>
             ))}
          </FlexColumnWrapper>
       </>
