@@ -97,7 +97,7 @@ export default function WaitingRoom(): JSX.Element {
                <WaitingRoomTitle>
                   Waiting Room <AnimatedDots count={3} />
                </WaitingRoomTitle>
-               <PlayBtnContainer onClick={() => handleStartGame()}>
+               <PlayBtnContainer onClick={() => handleStartGame()} disablePlay={disablePlay}>
                   <PlayCircleFill size="2.5em" />
                </PlayBtnContainer>
             </FlexRowWrapper>
