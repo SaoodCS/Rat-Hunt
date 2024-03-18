@@ -1,6 +1,8 @@
+import type { DocumentData, DocumentSnapshot } from 'firebase/firestore';
 import StringHelper from '../../../../global/helpers/dataTypes/string/StringHelper';
 import type { InputArray } from '../../../../global/helpers/react/form/FormHelper';
 import FormHelper from '../../../../global/helpers/react/form/FormHelper';
+import type DBConnect from '../../../../global/utils/DBConnect/DBConnect';
 
 export interface IPlayFormClass {
    name: string;
@@ -102,10 +104,34 @@ export default class PlayFormClass {
       return formValidation;
    }
 
+   private static validateJoin(
+      roomDocSnap: DocumentSnapshot<DocumentData, DocumentData>,
+      form: IPlayFormClass,
+   ): Partial<Record<keyof IPlayFormClass, string>> {
+      if (!roomDocSnap.exists()) {
+         return { roomId: 'Room does not exist' };
+      }
+      const roomData = roomDocSnap.data() as DBConnect.FSDB.I.Room;
+      const { users } = roomData;
+      const usernameTaken = users.some(
+         (user) => user.userId.trim().toUpperCase() === form.name.trim().toUpperCase(),
+      );
+      if (usernameTaken) {
+         return { name: 'Username already taken' };
+      }
+      const MAX_USERS = 10;
+      const roomIsFull = users.length >= MAX_USERS;
+      if (roomIsFull) {
+         return { roomId: 'Room is full' };
+      }
+      return {};
+   }
+
    static form = {
       inputs: PlayFormClass.inputs,
       initialState: PlayFormClass.initialState,
       initialErrors: PlayFormClass.initialErrors,
       validate: PlayFormClass.validate,
+      validateJoin: PlayFormClass.validateJoin,
    };
 }

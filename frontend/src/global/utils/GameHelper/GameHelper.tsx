@@ -225,6 +225,70 @@ export namespace GameHelper {
          });
          return updatedRoomData;
       }
+
+      export function newRoom(
+         generatedRoomId: string,
+         hostUserId: string,
+         topic: string,
+         noOfRounds: number,
+      ): DBConnect.FSDB.I.Room {
+         return {
+            gameStarted: false,
+            roomId: generatedRoomId,
+            users: [
+               {
+                  userStatus: 'connected',
+                  statusUpdatedAt: new Date().toUTCString(),
+                  userId: hostUserId,
+               },
+            ],
+            gameState: {
+               activeTopic: topic,
+               activeWord: '',
+               currentRat: '',
+               currentRound: 0,
+               numberOfRoundsSet: noOfRounds,
+               currentTurn: '',
+               userStates: [
+                  {
+                     userId: hostUserId,
+                     totalScore: 0,
+                     roundScores: [],
+                     clue: '',
+                     guess: '',
+                     votedFor: '',
+                     spectate: false,
+                  },
+               ],
+            },
+         };
+      }
+
+      export function newUser(
+         roomData: DBConnect.FSDB.I.Room,
+         userId: string,
+      ): DBConnect.FSDB.I.Room {
+         const { gameStarted, gameState, users } = roomData;
+         const { userStates } = gameState;
+         const newUser: DBConnect.FSDB.I.User = {
+            userStatus: 'connected',
+            statusUpdatedAt: new Date().toUTCString(),
+            userId,
+         };
+         const newUserState: DBConnect.FSDB.I.UserState = {
+            userId,
+            totalScore: 0,
+            roundScores: [],
+            clue: gameStarted ? 'SKIP' : '',
+            guess: '',
+            votedFor: gameStarted ? 'SKIP' : '',
+            spectate: gameStarted,
+         };
+         const updatedUsers = [...users, newUser];
+         const updatedUserStates = [...userStates, newUserState];
+         const updatedGameState = { ...gameState, userStates: updatedUserStates };
+         return { ...roomData, users: updatedUsers, gameState: updatedGameState };
+      }
    }
 
    export namespace SetGameState {
@@ -341,8 +405,6 @@ export namespace GameHelper {
             newCurrentRound,
             userStatesWithoutDelUser,
          );
-         // console.log("newCurrentRound", newCurrentRound)
-         // console.log("updatedCurrentTurn", updatedCurrentTurn);
          const updatedGameState: DBConnect.FSDB.I.GameState = {
             ...gameState,
             activeTopic: newTopic,

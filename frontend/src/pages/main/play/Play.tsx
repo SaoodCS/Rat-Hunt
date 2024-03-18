@@ -31,7 +31,7 @@ import PlayFormClass from './class/PlayForm';
 export default function Play(): JSX.Element {
    const { apiError } = useApiErrorContext();
    const { setLocalDbRoom, setLocalDbUser } = useContext(GameContext);
-   const { form, errors, handleChange, initHandleSubmit } = useForm(
+   const { form, errors, setErrors, handleChange, initHandleSubmit } = useForm(
       PlayFormClass.form.initialState,
       PlayFormClass.form.initialErrors,
       PlayFormClass.form.validate,
@@ -40,7 +40,6 @@ export default function Play(): JSX.Element {
    const { data: allRoomIds } = DBConnect.FSDB.Get.allRoomIds();
    const navigation = useNavigate();
    const setRoomData = DBConnect.FSDB.Set.room({});
-   const addUserToRoom = DBConnect.FSDB.Set.user({});
    const [showHostFields, setShowHostFields] = useState(false);
    const [showRoomIdField, setShowRoomIdField] = useState(false);
 
@@ -68,83 +67,26 @@ export default function Play(): JSX.Element {
          `${DBConnect.FSDB.CONSTS.ROOM_DOC_PREFIX}${roomId}`,
       );
       const docSnap = await getDoc(docRef);
-      if (!docSnap.exists()) {
-         alert('Room does not exist!');
+      const joinRoomErrors = PlayFormClass.form.validateJoin(docSnap, form);
+      if (MiscHelper.isNotFalsyOrEmpty(joinRoomErrors)) {
+         setErrors((prev) => ({ ...prev, ...joinRoomErrors }));
          return;
       }
       const roomData = docSnap.data() as DBConnect.FSDB.I.Room;
-      const { gameStarted, users, gameState } = roomData;
-      const clientUserExistsInRoom = users.some(
-         (user) => user.userId.trim().toUpperCase() === formName.toUpperCase(),
-      );
-      if (clientUserExistsInRoom) {
-         alert('Be original, Ben');
-         return;
-      }
-      const roomIsFull = users.length >= 10;
-      if (roomIsFull) {
-         alert('Room is full');
-         return;
-      }
-      const user: DBConnect.FSDB.I.User = {
-         userStatus: 'connected',
-         statusUpdatedAt: new Date().toUTCString(),
-         userId: formName,
-      };
-      const userState: DBConnect.FSDB.I.UserState = {
-         userId: formName,
-         totalScore: 0,
-         roundScores: [],
-         clue: gameStarted ? 'SKIP' : '',
-         guess: '',
-         votedFor: gameStarted ? 'SKIP' : '',
-         spectate: gameStarted,
-      };
-      await addUserToRoom.mutateAsync({
-         roomId: roomId,
-         userObjForUsers: user,
-         userObjForUserState: userState,
-         gameStateObj: gameState,
-      });
+      const roomDataWithAddedUser = GameHelper.SetRoomState.newUser(roomData, formName);
+      await setRoomData.mutateAsync(roomDataWithAddedUser);
       setLocalDbRoom(roomId);
       setLocalDbUser(formName);
       await DBConnect.RTDB.Set.userStatus(formName, roomId);
+      const { gameStarted } = roomData;
       navigation(gameStarted ? '/main/startedgame' : '/main/waitingroom', { replace: true });
    }
 
    async function handleHostGame(): Promise<void> {
       const generatedRoomId = GameHelper.New.roomUID(allRoomIds ?? ['']);
-      const formName = form.name.trim();
-      const room: DBConnect.FSDB.I.Room = {
-         gameStarted: false,
-         roomId: generatedRoomId,
-         users: [
-            {
-               userStatus: 'connected',
-               statusUpdatedAt: new Date().toUTCString(),
-               userId: formName,
-            },
-         ],
-         gameState: {
-            activeTopic: form.topic,
-            activeWord: '',
-            currentRat: '',
-            currentRound: 0,
-            numberOfRoundsSet: form.noOfRounds,
-            currentTurn: '',
-            userStates: [
-               {
-                  userId: formName,
-                  totalScore: 0,
-                  roundScores: [],
-                  clue: '',
-                  guess: '',
-                  votedFor: '',
-                  spectate: false,
-               },
-            ],
-         },
-      };
+      const { name, topic, noOfRounds } = form;
+      const formName = name.trim();
+      const room = GameHelper.SetRoomState.newRoom(generatedRoomId, formName, topic, noOfRounds);
       await setRoomData.mutateAsync(room);
       setLocalDbRoom(generatedRoomId);
       setLocalDbUser(formName);
