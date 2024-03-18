@@ -26,7 +26,7 @@ export const RoomIdTopicItemContainer = styled.div`
    padding: 0.5em;
    border-bottom: 1px solid ${Color.setRgbOpacity(Color.darkThm.accentDarkerShade, 1)};
    border-radius: 0.5em;
-   filter: brightness(0.8);
+   filter: brightness(0.9);
    & > svg {
       color: ${Color.darkThm.success};
    }
