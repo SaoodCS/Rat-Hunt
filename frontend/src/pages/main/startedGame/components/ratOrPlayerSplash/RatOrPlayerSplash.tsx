@@ -35,7 +35,7 @@ export default function RatOrPlayerSplash(props: IRatOrPlayerSplash): JSX.Elemen
             <TargettedRatLogo sizeEm={20} />
          </ConditionalRender>
          <ConditionalRender condition={isUserRat}>
-            <RatLogo size={'12em'} color={Color.setRgbOpacity(Color.darkThm.accent, 0.5)} />
+            <RatLogo size={'12em'} color={Color.setRgbOpacity(Color.darkThm.error, 0.75)} />
          </ConditionalRender>
       </RatOrPlayerSplashWrapper>
    );

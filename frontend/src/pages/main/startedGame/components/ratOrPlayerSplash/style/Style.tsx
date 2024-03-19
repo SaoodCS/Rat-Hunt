@@ -8,5 +8,5 @@ export const RatOrPlayerSplashWrapper = styled.div`
    flex-direction: column;
    justify-content: center;
    align-items: center;
-   padding: 0.75em;
+   padding: 1em;
 `;
