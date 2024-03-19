@@ -1,7 +1,21 @@
 import type { FlattenSimpleInterpolation } from 'styled-components';
-import styled from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import MyCSS from '../../../../../../../../global/css/MyCSS';
 import Color from '../../../../../../../../global/css/colors';
+import type GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
+
+const flash = keyframes`
+   0% {
+      background-color: ${Color.setRgbOpacity(Color.darkThm.warning, 1)};
+   }
+   50% {
+      background-color: ${'rgba(0,0,0,0)'};
+   }
+   100% {
+      background-color: ${Color.setRgbOpacity(Color.darkThm.warning, 1)};
+   }
+
+`;
 
 export const TableCell = styled.div``;
 
@@ -10,6 +24,7 @@ export const TableRow = styled.div<{
    currentTurn?: boolean;
    disconnected?: boolean;
    spectating?: boolean;
+   gamePhase?: ReturnType<typeof GameHelper.Get.gamePhase>;
 }>`
    border-bottom: 1px solid ${Color.darkThm.accentDarkerShade};
    display: flex;
@@ -17,10 +32,29 @@ export const TableRow = styled.div<{
    color: ${({ thisUser, currentTurn, disconnected, spectating }) => {
       if (thisUser) return Color.darkThm.error;
       if (disconnected || spectating) return 'grey';
-      if (currentTurn) return 'yellow';
+      if (currentTurn) return Color.darkThm.success;
       return Color.darkThm.success;
    }};
-   transition: color 0.2s;
+   ${TableCell}:nth-child(2) {
+      animation: ${({ currentTurn, gamePhase }) => {
+         if (currentTurn && gamePhase === 'clue')
+            return css`
+               ${flash} 2s infinite
+            `;
+         return 'none';
+      }};
+   }
+   ${TableCell}:nth-child(3) {
+      animation: ${({ currentTurn, gamePhase }) => {
+         if (currentTurn && gamePhase === 'votedFor')
+            return css`
+               ${flash} 2s infinite
+            `;
+         return 'none';
+      }};
+   }
+
+   transition: color animation 0.2s;
 `;
 
 export const TableBody = styled.div`

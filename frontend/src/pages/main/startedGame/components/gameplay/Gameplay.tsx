@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
-import { FadeInOut } from '../../../../../global/components/lib/animation/fadeInOut/FadeInOut';
 import Fader from '../../../../../global/components/lib/animation/fader/Fader';
+import AnimatedDots from '../../../../../global/components/lib/font/animatedDots/AnimatedDots';
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { FlexRowWrapper } from '../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
 import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
@@ -138,17 +138,12 @@ export default function Gameplay(): JSX.Element {
                   {gameplayHeadMap.map(({ text, condition, component }, index) => (
                      <ConditionalRender key={index} condition={condition}>
                         <ConditionalRender condition={!!text}>
-                           <FadeInOut
-                              width="100%"
-                              display="flex"
-                              alignItems="center"
-                              fontSize="1.1em"
-                           >
+                           <FlexRowWrapper width="100%" alignItems="center" fontSize="1.1em">
                               <ItemLabel color={'yellow'} style={{ width: 'fit-content' }}>
                                  Current Turn:{HTMLEntities.space}
-                                 {HTMLEntities.space} {text}
+                                 {HTMLEntities.space} {text} <AnimatedDots count={3} />
                               </ItemLabel>
-                           </FadeInOut>
+                           </FlexRowWrapper>
                         </ConditionalRender>
                         <ConditionalRender condition={!!component}>
                            <Fader

@@ -15,6 +15,7 @@ export default function GameStateTable(): JSX.Element {
    const [sortedUserStates, setSortedUserStates] = useState<DBConnect.FSDB.I.UserState[]>();
    const { faderElRef, handleScroll } = useScrollFader([roomData], 1);
    const [disconnectedUsers, setDisconnectedUsers] = useState<string[]>([]);
+   const [gamePhase, setGamePhase] = useState<ReturnType<typeof GameHelper.Get.gamePhase>>();
 
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
@@ -28,6 +29,7 @@ export default function GameStateTable(): JSX.Element {
       const { gameState } = roomData;
       const { userStates, currentRound } = gameState;
       setSortedUserStates(GameHelper.Get.sortedUserStates(currentRound, userStates));
+      setGamePhase(GameHelper.Get.gamePhase(gameState));
    }, [roomData?.gameState?.userStates, localDbUser]);
 
    return (
@@ -42,12 +44,10 @@ export default function GameStateTable(): JSX.Element {
                <TableRow
                   key={user.userId}
                   thisUser={localDbUser === user.userId}
-                  currentTurn={
-                     GameHelper.Get.currentTurnUserId(roomData?.gameState.currentTurn || '') ===
-                     user.userId
-                  }
+                  currentTurn={(roomData?.gameState.currentTurn || '') === user.userId}
                   disconnected={disconnectedUsers.includes(user.userId)}
                   spectating={user.spectate}
+                  gamePhase={gamePhase}
                >
                   <TableCell>{user.userId}</TableCell>
                   <TableCell>{user.clue}</TableCell>

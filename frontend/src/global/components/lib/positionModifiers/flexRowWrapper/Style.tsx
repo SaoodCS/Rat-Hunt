@@ -18,6 +18,7 @@ export const FlexRowWrapper = styled.div<{
    bottom?: string;
    localStyles?: FlattenSimpleInterpolation;
    filter?: string;
+   fontSize?: string;
 }>`
    display: flex;
    flex-direction: row;
@@ -38,4 +39,5 @@ export const FlexRowWrapper = styled.div<{
    bottom: ${({ bottom }) => bottom};
    filter: ${({ filter }) => filter};
    ${({ localStyles }) => localStyles};
+   font-size: ${({ fontSize }) => fontSize};
 `;
