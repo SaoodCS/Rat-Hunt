@@ -6,6 +6,7 @@ import HeaderContextProvider from './header/HeaderContextProvider';
 import { LoaderContextProvider } from './loader/LoaderContextProvider';
 import ModalContextProvider from './modal/ModalContextProvider';
 import PopupMenuContextProvider from './popupMenu/PopupMenuContextProvider';
+import SplashScreenContextProvider from './splashScreen/SplashScreenContextProvider';
 import ToastContextProvider from './toast/ToastContextProvider';
 
 interface IWidgetContextProvidersProps {
@@ -16,19 +17,21 @@ export default function WidgetContextProviders(props: IWidgetContextProvidersPro
    const { children } = props;
    return (
       <LoaderContextProvider>
-         <ApiErrorContextProvider>
-            <BannerContextProvider>
-               <ToastContextProvider>
-                  <ModalContextProvider>
-                     <BottomPanelContextProvider>
-                        <PopupMenuContextProvider>
-                           <HeaderContextProvider>{children}</HeaderContextProvider>
-                        </PopupMenuContextProvider>
-                     </BottomPanelContextProvider>
-                  </ModalContextProvider>
-               </ToastContextProvider>
-            </BannerContextProvider>
-         </ApiErrorContextProvider>
+         <SplashScreenContextProvider>
+            <ApiErrorContextProvider>
+               <BannerContextProvider>
+                  <ToastContextProvider>
+                     <ModalContextProvider>
+                        <BottomPanelContextProvider>
+                           <PopupMenuContextProvider>
+                              <HeaderContextProvider>{children}</HeaderContextProvider>
+                           </PopupMenuContextProvider>
+                        </BottomPanelContextProvider>
+                     </ModalContextProvider>
+                  </ToastContextProvider>
+               </BannerContextProvider>
+            </ApiErrorContextProvider>
+         </SplashScreenContextProvider>
       </LoaderContextProvider>
    );
 }

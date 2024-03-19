@@ -10,10 +10,11 @@ import { SplashScreenFooter } from './Style';
 
 interface ISplashScreen {
    isDisplayed: boolean;
+   component?: JSX.Element;
 }
 
 export default function SplashScreen(props: ISplashScreen): JSX.Element {
-   const { isDisplayed } = props;
+   const { isDisplayed, component } = props;
    const [renderSplashScreen, setRenderSplashScreen] = useState(isDisplayed);
    const { isDarkTheme } = useThemeContext();
 
@@ -35,18 +36,23 @@ export default function SplashScreen(props: ISplashScreen): JSX.Element {
       <ConditionalRender condition={renderSplashScreen}>
          <Fader fadeInCondition={isDisplayed}>
             <OpaqueOverlay isDarkTheme={isDarkTheme}>
-               <FlexColumnWrapper
-                  justifyContent="center"
-                  alignItems="center"
-                  height="100dvh"
-                  width="100dvw"
-               >
-                  <LogoText size={'4.5em'} style={{ marginBottom: '0.25em' }}>
-                     RAT HUNT
-                  </LogoText>
-                  <RatExterminationLogo size="16em" />
-               </FlexColumnWrapper>
-               <SplashScreenFooter>{'Rat Hunt'} v0.1.0</SplashScreenFooter>
+               <ConditionalRender condition={component === undefined}>
+                  <FlexColumnWrapper
+                     justifyContent="center"
+                     alignItems="center"
+                     height="100dvh"
+                     width="100dvw"
+                  >
+                     <LogoText size={'4.5em'} style={{ marginBottom: '0.25em' }}>
+                        RAT HUNT
+                     </LogoText>
+                     <RatExterminationLogo size="16em" />
+                  </FlexColumnWrapper>
+                  <SplashScreenFooter>{'Rat Hunt'} v0.1.0</SplashScreenFooter>
+               </ConditionalRender>
+               <ConditionalRender condition={component !== undefined}>
+                  {component}
+               </ConditionalRender>
             </OpaqueOverlay>
          </Fader>
       </ConditionalRender>

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const TextColourizer = styled.span<{
    color?: string;
@@ -7,6 +7,8 @@ export const TextColourizer = styled.span<{
    padding?: string;
    textAlign?: string;
    thickening?: { color: string; amount: number };
+   brightness?: number;
+   gradient?: { deg: string; startColor: string; endColor: string };
 }>`
    font-size: ${({ fontSize }) => (fontSize ? fontSize : '1em')};
    color: ${({ color }) => color};
@@ -17,4 +19,18 @@ export const TextColourizer = styled.span<{
       thickening
          ? `${thickening.amount}px ${thickening.amount}px ${thickening.amount}px ${thickening.color}`
          : 'none'};
+   filter: ${({ brightness }) => `brightness(${brightness || 1})`};
+   ${({ gradient }) => {
+      if (gradient) {
+         return css`
+            background: linear-gradient(
+               ${gradient.deg},
+               ${gradient.startColor},
+               ${gradient.endColor}
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+         `;
+      }
+   }}
 `;
