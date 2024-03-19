@@ -2,9 +2,9 @@ import { Fragment } from 'react';
 import Color from '../../../css/colors';
 import Device from '../../../helpers/pwa/deviceHelper';
 import { TextColourizer } from '../../lib/font/textColorizer/TextColourizer';
-import { TextIndenter } from '../../lib/font/textIndenter/TextIndenter';
 import { VerticalSeperator } from '../../lib/positionModifiers/verticalSeperator/VerticalSeperator';
 import ConditionalRender from '../../lib/renderModifiers/conditionalRender/ConditionalRender';
+import { ListItem, OrderedList } from '../../lib/newList/Style';
 
 interface IInstallAppSteps {
    title?: string;
@@ -36,44 +36,41 @@ export default function InstallAppSteps(props: IInstallAppSteps): JSX.Element {
    return (
       <>
          <ConditionalRender condition={!!title}>
-            <TextColourizer bold>
+            <TextColourizer>
                {title}
                <VerticalSeperator />
             </TextColourizer>
          </ConditionalRender>
-         <ConditionalRender condition={Device.isIphone()}>
-            {iPhoneInstallSteps.map((step, index) => (
-               <Fragment key={step}>
-                  <TextColourizer color={Color.darkThm.accent}>
-                     <TextIndenter /> {`${index + 1}. `}
-                  </TextColourizer>
-                  {step}
-                  <VerticalSeperator />
-               </Fragment>
-            ))}
-         </ConditionalRender>
-         <ConditionalRender condition={Device.isAndroid()}>
-            {androidInstallSteps.map((step, index) => (
-               <Fragment key={step}>
-                  <TextColourizer color={Color.darkThm.accent}>
-                     <TextIndenter /> {`${index + 1}. `}
-                  </TextColourizer>
-                  {step}
-                  <VerticalSeperator />
-               </Fragment>
-            ))}
-         </ConditionalRender>
-         <ConditionalRender condition={Device.isDesktop()}>
-            {desktopInstallSteps.map((step, index) => (
-               <Fragment key={step}>
-                  <TextColourizer color={Color.darkThm.accent}>
-                     <TextIndenter /> {`${index + 1}. `}
-                  </TextColourizer>
-                  {step}
-                  <VerticalSeperator />
-               </Fragment>
-            ))}
-         </ConditionalRender>
+         <OrderedList
+            bulletType="decimal"
+            padding="0.5em 0em 1em 1.5em"
+            margin="0"
+            bulletAndTextSpacing="0.3em"
+            bulletColor={Color.darkThm.accent}
+            bulletBold
+         >
+            <ConditionalRender condition={Device.isIphone()}>
+               {iPhoneInstallSteps.map((step) => (
+                  <ListItem key={step}>
+                     <TextColourizer color={Color.darkThm.txt}>{step}</TextColourizer>
+                  </ListItem>
+               ))}
+            </ConditionalRender>
+            <ConditionalRender condition={Device.isAndroid()}>
+               {androidInstallSteps.map((step) => (
+                  <ListItem key={step}>
+                     <TextColourizer color={Color.darkThm.txt}>{step}</TextColourizer>
+                  </ListItem>
+               ))}
+            </ConditionalRender>
+            <ConditionalRender condition={Device.isDesktop()}>
+               {desktopInstallSteps.map((step) => (
+                  <ListItem key={step}>
+                     <TextColourizer color={Color.darkThm.txt}>{step}</TextColourizer>
+                  </ListItem>
+               ))}
+            </ConditionalRender>
+         </OrderedList>
       </>
    );
 }

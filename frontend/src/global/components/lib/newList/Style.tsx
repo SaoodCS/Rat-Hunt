@@ -12,6 +12,7 @@ export const OrderedList = styled.ol<{
    margin?: string;
    bulletColor?: string;
    bulletBold?: boolean;
+   bulletAndTextSpacing?: string;
 }>`
    list-style-type: ${({ bulletType }) => bulletType};
    padding: ${({ padding }) => padding};
@@ -23,4 +24,8 @@ export const OrderedList = styled.ol<{
    filter: brightness(1.3);
    line-height: 1.2;
    letter-spacing: 0.01em;
+
+   & > ${ListItem} {
+      padding-left: ${({ bulletAndTextSpacing }) => bulletAndTextSpacing};
+   }
 `;
