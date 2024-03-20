@@ -1,15 +1,20 @@
-import type { IDateChangeEvent } from '../../../../hooks/useForm';
+import MiscHelper from '../../../../helpers/dataTypes/miscHelper/MiscHelper';
+import type { IDateChangeEvent, INumberRangeChangeEvent } from '../../../../hooks/useForm';
 import DatePickerInput from '../datePicker/DatePickerInput';
 import type { IDropDownOption } from '../dropDown/DropDownInput';
 import DropDownInput from '../dropDown/DropDownInput';
 import InputComponent from '../input/Input';
+import NumberSliderInput from '../numberSlider/NumberSliderInput';
 
 interface IInputCombination {
    placeholder: string;
    name: string | number;
    isRequired?: boolean;
    handleChange: (
-      e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement> | IDateChangeEvent,
+      e:
+         | React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+         | IDateChangeEvent
+         | INumberRangeChangeEvent,
    ) => void;
    error: string;
    dropDownOptions?: IDropDownOption[];
@@ -19,6 +24,7 @@ interface IInputCombination {
    autoComplete?: 'current-password' | 'new-password';
    isDisabled?: boolean | undefined;
    hidePlaceholderOnFocus?: boolean;
+   numberRange?: { min: number; max: number };
 }
 
 export default function InputCombination(props: IInputCombination): JSX.Element {
@@ -35,6 +41,7 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
       autoComplete,
       isDisabled,
       hidePlaceholderOnFocus,
+      numberRange,
    } = props;
 
    const hasDropDownOptions = !!dropDownOptions;
@@ -47,23 +54,34 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
       return type === 'date';
    }
 
+   function isTypeNumberSlider(numberRange: unknown): numberRange is { min: number; max: number } {
+      return MiscHelper.isNotFalsyOrEmpty(numberRange);
+   }
+
+   function isValueNumber(value: unknown): value is number {
+      return typeof value === 'number' || value === '';
+   }
+
    return (
       <>
-         {!hasDropDownOptions && !isValueDate(value) && !isTypeDate(type) && (
-            <InputComponent
-               placeholder={placeholder}
-               type={type}
-               name={name}
-               isRequired={isRequired}
-               autoComplete={autoComplete}
-               handleChange={handleChange}
-               value={value}
-               error={error}
-               id={id}
-               isDisabled={isDisabled}
-               hidePlaceholderOnFocus={hidePlaceholderOnFocus}
-            />
-         )}
+         {!hasDropDownOptions &&
+            !isValueDate(value) &&
+            !isTypeNumberSlider(numberRange) &&
+            !isTypeDate(type) && (
+               <InputComponent
+                  placeholder={placeholder}
+                  type={type}
+                  name={name}
+                  isRequired={isRequired}
+                  autoComplete={autoComplete}
+                  handleChange={handleChange}
+                  value={value}
+                  error={error}
+                  id={id}
+                  isDisabled={isDisabled}
+                  hidePlaceholderOnFocus={hidePlaceholderOnFocus}
+               />
+            )}
          {hasDropDownOptions && !isValueDate(value) && !isTypeDate(type) && (
             <DropDownInput
                placeholder={placeholder}
@@ -89,6 +107,20 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
                id={id}
                isDisabled={isDisabled}
                type={type}
+            />
+         )}
+         {isTypeNumberSlider(numberRange) && isValueNumber(value) && (
+            <NumberSliderInput
+               placeholder={placeholder}
+               name={name}
+               isRequired={isRequired}
+               value={value}
+               error={error}
+               handleChange={handleChange}
+               id={id}
+               isDisabled={isDisabled}
+               type={type}
+               numberRange={numberRange}
             />
          )}
       </>

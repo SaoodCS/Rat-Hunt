@@ -3,6 +3,11 @@ import useApiErrorContext from '../context/widget/apiError/hooks/useApiErrorCont
 import StringHelper from '../helpers/dataTypes/string/StringHelper';
 import FormHelper from '../helpers/react/form/FormHelper';
 
+export interface INumberRangeChangeEvent {
+   numberRangeValue: number;
+   name: string | number;
+}
+
 export interface IDateChangeEvent {
    date: Date | null;
    name: string | number;
@@ -14,7 +19,10 @@ interface IUseFormReturn<T> {
    errors: Record<keyof T, string>;
    setErrors: React.Dispatch<React.SetStateAction<Record<keyof T, string>>>;
    handleChange: (
-      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement> | IDateChangeEvent,
+      e:
+         | React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+         | IDateChangeEvent
+         | INumberRangeChangeEvent,
    ) => void;
    initHandleSubmit: (e: React.FormEvent<HTMLFormElement>) => { isFormValid: boolean };
 }
@@ -41,8 +49,15 @@ export default function useForm<T>(
    }
 
    function handleChange(
-      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement> | IDateChangeEvent,
+      e:
+         | React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+         | IDateChangeEvent
+         | INumberRangeChangeEvent,
    ): void {
+      if ('numberRangeValue' in e) {
+         setForm((prevState) => ({ ...prevState, [e.name]: e.numberRangeValue }));
+         return;
+      }
       if ('date' in e) {
          setForm((prevState) => ({ ...prevState, [e.name]: e.date }));
          return;

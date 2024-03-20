@@ -10,6 +10,7 @@ type InputObject<FieldName, ValueType> = {
    validator: (value: ValueType) => string | true;
    isDropDown?: boolean;
    dropDownOptions?: IDropDownOption[];
+   numberRange?: { min: number; max: number };
 };
 
 export type InputArray<FormInputs> = {

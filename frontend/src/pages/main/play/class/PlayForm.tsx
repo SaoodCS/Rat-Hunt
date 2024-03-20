@@ -78,6 +78,7 @@ export default class PlayFormClass {
          id: 'no-of-rounds',
          placeholder: 'Number of Rounds',
          type: 'number',
+         numberRange: { min: 1, max: 10 },
          isRequired: true,
          validator: (value: number): string | true => {
             if (typeof value !== 'number') return 'Please enter the number of rounds';
