@@ -8,6 +8,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 const oneDayInSeconds = 86400;
 
 export default defineConfig(({ mode }) => {
+   // Drop the console and debugger statements in production
    function buildOptions(): ESBuildOptions {
       const isProd = mode === 'production';
       return isProd ? { drop: ['console', 'debugger'] } : {};
