@@ -9,7 +9,6 @@ export interface IDatePickerInputProps {
    name: string | number;
    id: string;
    placeholder: string;
-   type: string;
    isRequired: boolean;
    isDisabled: boolean;
    value: Date;

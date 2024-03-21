@@ -41,85 +41,75 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
       numberLineOptions,
    } = props;
 
-   const hasDropDownOptions = !!dropDownOptions;
-
-   function isValueDate(value: unknown): value is Date {
-      return value instanceof Date;
-   }
-
-   function isTypeDate(type: string): type is 'date' {
-      return type === 'date';
-   }
-
-   function isTypeNumberLine(numberLineInput: unknown): numberLineInput is INumberLineOptions {
-      return MiscHelper.isNotFalsyOrEmpty(numberLineOptions);
-   }
-
    function isValueNumber(value: unknown): value is number {
       return typeof value === 'number' || value === '';
    }
 
+   if (MiscHelper.isNotFalsyOrEmpty(numberLineOptions)) {
+      if (!isValueNumber(value)) {
+         throw new Error('NumberLineInput requires a number value');
+      }
+      return (
+         <NumberLineInput
+            placeholder={placeholder}
+            name={name}
+            isRequired={isRequired || false}
+            value={value}
+            error={error}
+            handleChange={handleChange}
+            id={id}
+            isDisabled={isDisabled || false}
+            type={type}
+            numberLineOptions={numberLineOptions}
+         />
+      );
+   }
+
+   if (value instanceof Date) {
+      return (
+         <DatePickerInput
+            placeholder={placeholder}
+            name={name}
+            isRequired={isRequired || false}
+            value={value}
+            error={error}
+            handleChange={handleChange}
+            id={id}
+            isDisabled={isDisabled || false}
+         />
+      );
+   }
+
+   if (dropDownOptions) {
+      return (
+         <DropDownInput
+            placeholder={placeholder}
+            name={name}
+            dropDownOptions={dropDownOptions}
+            isRequired={isRequired || false}
+            value={value}
+            error={error}
+            handleChange={handleChange}
+            id={id}
+            isDisabled={isDisabled || false}
+            hidePlaceholderOnFocus={hidePlaceholderOnFocus || false}
+         />
+      );
+   }
+
    return (
-      <>
-         {!hasDropDownOptions &&
-            !isValueDate(value) &&
-            !isTypeNumberLine(numberLineOptions) &&
-            !isTypeDate(type) && (
-               <TextOrNumFieldInput
-                  placeholder={placeholder}
-                  type={type}
-                  name={name}
-                  isRequired={isRequired || false}
-                  autoComplete={autoComplete}
-                  handleChange={handleChange}
-                  value={value}
-                  error={error}
-                  id={id}
-                  isDisabled={isDisabled || false}
-                  hidePlaceholderOnFocus={hidePlaceholderOnFocus || false}
-               />
-            )}
-         {hasDropDownOptions && !isValueDate(value) && !isTypeDate(type) && (
-            <DropDownInput
-               placeholder={placeholder}
-               name={name}
-               dropDownOptions={dropDownOptions}
-               isRequired={isRequired || false}
-               value={value}
-               error={error}
-               handleChange={handleChange}
-               id={id}
-               isDisabled={isDisabled || false}
-               hidePlaceholderOnFocus={hidePlaceholderOnFocus || false}
-            />
-         )}
-         {isTypeDate(type) && isValueDate(value) && (
-            <DatePickerInput
-               placeholder={placeholder}
-               name={name}
-               isRequired={isRequired || false}
-               value={value}
-               error={error}
-               handleChange={handleChange}
-               id={id}
-               isDisabled={isDisabled || false}
-               type={type}
-            />
-         )}
-         {isTypeNumberLine(numberLineOptions) && isValueNumber(value) && (
-            <NumberLineInput
-               placeholder={placeholder}
-               name={name}
-               isRequired={isRequired || false}
-               value={value}
-               error={error}
-               handleChange={handleChange}
-               id={id}
-               isDisabled={isDisabled || false}
-               type={type}
-               numberLineOptions={numberLineOptions}
-            />
-         )}
-      </>
+      <TextOrNumFieldInput
+         placeholder={placeholder}
+         type={type}
+         name={name}
+         isRequired={isRequired || false}
+         autoComplete={autoComplete}
+         handleChange={handleChange}
+         value={value}
+         error={error}
+         id={id}
+         isDisabled={isDisabled || false}
+         hidePlaceholderOnFocus={hidePlaceholderOnFocus || false}
+      />
    );
 }
