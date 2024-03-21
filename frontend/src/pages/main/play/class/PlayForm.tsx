@@ -40,7 +40,7 @@ export default class PlayFormClass {
          name: 'joinOrHost',
          id: 'join-or-host',
          placeholder: 'Join or Host',
-         type: 'select',
+         type: 'text',
          isRequired: true,
          dropDownOptions: [
             { value: 'join', label: 'Join' },
@@ -69,7 +69,7 @@ export default class PlayFormClass {
          name: 'topic',
          id: 'select-topic',
          placeholder: 'Select Topic',
-         type: 'select',
+         type: 'text',
          isRequired: true,
          dropDownOptions: [],
          validator: (value: string): string | true => {

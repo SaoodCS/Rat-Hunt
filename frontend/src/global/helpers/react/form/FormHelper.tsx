@@ -6,17 +6,10 @@ import type { INumberLineOptions } from '../../../components/lib/form/numberLine
 import NumberLineInput from '../../../components/lib/form/numberLine/NumberLineInput';
 import TextOrNumFieldInput from '../../../components/lib/form/textOrNumber/TextOrNumFieldInput';
 
-export type InputType =
-   | 'text'
-   | 'password'
-   | 'email'
-   | 'number'
-   | 'date'
-   | 'checkbox'
-   | 'select'
-   | 'boolean';
+export type InputType = 'text' | 'password' | 'email' | 'number' | 'boolean';
 
 type InputObject<FieldName, ValueType> = {
+   Component: IInputComponents;
    name: FieldName;
    id: string;
    placeholder: string;
@@ -28,7 +21,6 @@ type InputObject<FieldName, ValueType> = {
    hidePlaceholderOnFocus?: boolean;
    isRequired?: boolean;
    isDisabled?: boolean;
-   Component: IInputComponents;
 };
 
 export type InputArray<FormInputs> = {
@@ -43,18 +35,22 @@ export default class FormHelper {
       const initialState: any = {};
       arr.forEach((input) => {
          if (input.Component === TextOrNumFieldInput) {
-            const { type } = input;
-            initialState[input.name] = type === 'checkbox' ? false : '';
+            initialState[input.name] = '';
+            return;
          }
          if (input.Component === DatePickerInput) {
             initialState[input.name] = new Date();
+            return;
          }
          if (input.Component === DropDownInput) {
             initialState[input.name] = '';
+            return;
          }
          if (input.Component === NumberLineInput) {
             initialState[input.name] = '';
+            return;
          }
+         initialState[input.name] = '';
       });
       return initialState as T;
    }

@@ -15,7 +15,7 @@ export default class RoundEndFormClass {
          name: 'newTopic',
          id: 'select-newTopic',
          placeholder: 'Select a Topic',
-         type: 'select',
+         type: 'text',
          isRequired: true,
          dropDownOptions: [],
          validator: (value: string): string | true => {

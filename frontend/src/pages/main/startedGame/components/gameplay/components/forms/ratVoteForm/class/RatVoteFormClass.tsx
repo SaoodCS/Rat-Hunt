@@ -13,7 +13,7 @@ export default class RatVoteFormClass {
          name: 'vote',
          id: 'select-vote',
          placeholder: 'Vote who you think the rat is',
-         type: 'select',
+         type: 'text',
          isRequired: true,
          dropDownOptions: [],
          validator: (value: string): string | true => {
