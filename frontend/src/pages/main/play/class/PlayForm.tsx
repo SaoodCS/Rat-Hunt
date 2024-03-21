@@ -1,4 +1,7 @@
 import type { DocumentData, DocumentSnapshot } from 'firebase/firestore';
+import DropDownInput from '../../../../global/components/lib/form/dropDown/DropDownInput';
+import NumberLineInput from '../../../../global/components/lib/form/numberLine/NumberLineInput';
+import TextOrNumFieldInput from '../../../../global/components/lib/form/textOrNumber/TextOrNumFieldInput';
 import StringHelper from '../../../../global/helpers/dataTypes/string/StringHelper';
 import type { InputArray } from '../../../../global/helpers/react/form/FormHelper';
 import FormHelper from '../../../../global/helpers/react/form/FormHelper';
@@ -15,6 +18,7 @@ export interface IPlayFormClass {
 export default class PlayFormClass {
    private static inputs: InputArray<IPlayFormClass> = [
       {
+         Component: TextOrNumFieldInput,
          name: 'name',
          id: 'user-name',
          placeholder: 'Username',
@@ -32,6 +36,7 @@ export default class PlayFormClass {
          },
       },
       {
+         Component: DropDownInput,
          name: 'joinOrHost',
          id: 'join-or-host',
          placeholder: 'Join or Host',
@@ -48,6 +53,7 @@ export default class PlayFormClass {
          },
       },
       {
+         Component: TextOrNumFieldInput,
          name: 'roomId',
          id: 'join-room-id',
          placeholder: 'Room Id',
@@ -59,6 +65,7 @@ export default class PlayFormClass {
          },
       },
       {
+         Component: DropDownInput,
          name: 'topic',
          id: 'select-topic',
          placeholder: 'Select Topic',
@@ -71,6 +78,7 @@ export default class PlayFormClass {
          },
       },
       {
+         Component: NumberLineInput,
          name: 'noOfRounds',
          id: 'no-of-rounds',
          placeholder: 'Number of Rounds',

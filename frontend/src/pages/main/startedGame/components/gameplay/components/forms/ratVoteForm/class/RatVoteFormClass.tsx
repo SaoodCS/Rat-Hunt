@@ -1,3 +1,4 @@
+import DropDownInput from '../../../../../../../../../global/components/lib/form/dropDown/DropDownInput';
 import type { InputArray } from '../../../../../../../../../global/helpers/react/form/FormHelper';
 import FormHelper from '../../../../../../../../../global/helpers/react/form/FormHelper';
 
@@ -8,6 +9,7 @@ export interface IRatVoteFormClass {
 export default class RatVoteFormClass {
    private static inputs: InputArray<IRatVoteFormClass> = [
       {
+         Component: DropDownInput,
          name: 'vote',
          id: 'select-vote',
          placeholder: 'Vote who you think the rat is',

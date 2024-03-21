@@ -1,5 +1,10 @@
+import DatePickerInput from '../../../components/lib/form/datePicker/DatePickerInput';
 import type { IDropDownOption } from '../../../components/lib/form/dropDown/DropDownInput';
+import DropDownInput from '../../../components/lib/form/dropDown/DropDownInput';
+import type { IInputComponents } from '../../../components/lib/form/inputCombination/InputCombination';
 import type { INumberLineOptions } from '../../../components/lib/form/numberLine/NumberLineInput';
+import NumberLineInput from '../../../components/lib/form/numberLine/NumberLineInput';
+import TextOrNumFieldInput from '../../../components/lib/form/textOrNumber/TextOrNumFieldInput';
 
 export type InputType =
    | 'text'
@@ -23,6 +28,7 @@ type InputObject<FieldName, ValueType> = {
    hidePlaceholderOnFocus?: boolean;
    isRequired?: boolean;
    isDisabled?: boolean;
+   Component: IInputComponents;
 };
 
 export type InputArray<FormInputs> = {
@@ -36,17 +42,21 @@ export default class FormHelper {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const initialState: any = {};
       arr.forEach((input) => {
-         if (input.type === 'checkbox') {
-            initialState[input.name] = false;
+         if (input.Component === TextOrNumFieldInput) {
+            if (input.type === 'checkbox') {
+               initialState[input.name] = false;
+            } else {
+               initialState[input.name] = '';
+            }
          }
-         if (input.type === 'password' || input.type === 'email' || input.type === 'text') {
-            initialState[input.name] = '';
-         }
-         if (input.type === 'number') {
-            initialState[input.name] = '';
-         }
-         if (input.type === 'date') {
+         if (input.Component === DatePickerInput) {
             initialState[input.name] = new Date();
+         }
+         if (input.Component === DropDownInput) {
+            initialState[input.name] = '';
+         }
+         if (input.Component === NumberLineInput) {
+            initialState[input.name] = '';
          }
       });
       return initialState as T;

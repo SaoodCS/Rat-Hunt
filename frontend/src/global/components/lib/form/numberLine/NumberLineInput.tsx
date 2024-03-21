@@ -31,7 +31,6 @@ interface INumberLineInput {
    name: string | number;
    id: string;
    placeholder: string;
-   type: string;
    numberLineOptions: INumberLineOptions;
    isRequired: boolean;
    isDisabled: boolean;

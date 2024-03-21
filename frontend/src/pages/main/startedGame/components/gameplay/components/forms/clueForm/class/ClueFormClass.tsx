@@ -1,3 +1,4 @@
+import TextOrNumFieldInput from '../../../../../../../../../global/components/lib/form/textOrNumber/TextOrNumFieldInput';
 import type { InputArray } from '../../../../../../../../../global/helpers/react/form/FormHelper';
 import FormHelper from '../../../../../../../../../global/helpers/react/form/FormHelper';
 
@@ -8,6 +9,7 @@ export interface IClueFormClass {
 export default class ClueFormClass {
    private static inputs: InputArray<IClueFormClass> = [
       {
+         Component: TextOrNumFieldInput,
          name: 'clue',
          id: 'clue',
          placeholder: 'Please enter a clue',

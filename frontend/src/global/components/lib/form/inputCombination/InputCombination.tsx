@@ -1,4 +1,3 @@
-import MiscHelper from '../../../../helpers/dataTypes/miscHelper/MiscHelper';
 import type { InputType } from '../../../../helpers/react/form/FormHelper';
 import type { IUseFormHandleChange } from '../../../../hooks/useForm';
 import DatePickerInput from '../datePicker/DatePickerInput';
@@ -8,7 +7,14 @@ import type { INumberLineOptions } from '../numberLine/NumberLineInput';
 import NumberLineInput from '../numberLine/NumberLineInput';
 import TextOrNumFieldInput from '../textOrNumber/TextOrNumFieldInput';
 
+export type IInputComponents =
+   | typeof DatePickerInput
+   | typeof DropDownInput
+   | typeof NumberLineInput
+   | typeof TextOrNumFieldInput;
+
 interface IInputCombination {
+   Component: IInputComponents;
    name: string | number;
    id: string;
    placeholder: string;
@@ -39,15 +45,17 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
       isDisabled,
       hidePlaceholderOnFocus,
       numberLineOptions,
+      Component,
    } = props;
 
    function isValueNumber(value: unknown): value is number {
       return typeof value === 'number' || value === '';
    }
 
-   if (MiscHelper.isNotFalsyOrEmpty(numberLineOptions)) {
-      if (!isValueNumber(value)) {
-         throw new Error('NumberLineInput requires a number value');
+   if (Component === NumberLineInput) {
+      if (!numberLineOptions || !isValueNumber(value)) {
+         const errSuffix = !numberLineOptions ? 'numberLineOptions' : 'a value of type number';
+         throw new Error(`${name} does not have ${errSuffix}`);
       }
       return (
          <NumberLineInput
@@ -59,13 +67,15 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
             handleChange={handleChange}
             id={id}
             isDisabled={isDisabled || false}
-            type={type}
             numberLineOptions={numberLineOptions}
          />
       );
    }
 
-   if (value instanceof Date) {
+   if (Component === DatePickerInput) {
+      if (!(value instanceof Date)) {
+         throw new Error(`${name} does not have a value of type Date`);
+      }
       return (
          <DatePickerInput
             placeholder={placeholder}
@@ -80,12 +90,15 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
       );
    }
 
-   if (dropDownOptions) {
+   if (Component === DropDownInput) {
+      if (!dropDownOptions || !(typeof value === 'string' || typeof value === 'number')) {
+         throw new Error(`${name} does not have dropDownOptions`);
+      }
       return (
          <DropDownInput
             placeholder={placeholder}
             name={name}
-            dropDownOptions={dropDownOptions}
+            dropDownOptions={dropDownOptions || []}
             isRequired={isRequired || false}
             value={value}
             error={error}
@@ -97,6 +110,9 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
       );
    }
 
+   if (!(typeof value === 'string' || typeof value === 'number')) {
+      throw new Error(`${name} does not have a value of type string or number`);
+   }
    return (
       <TextOrNumFieldInput
          placeholder={placeholder}

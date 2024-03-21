@@ -130,6 +130,7 @@ export default function Play(): JSX.Element {
                .filter((input) => input.name !== 'noOfRounds' || showHostFields)
                .map((input) => (
                   <InputCombination
+                     Component={input.Component}
                      key={input.id}
                      name={input.name}
                      id={input.id}

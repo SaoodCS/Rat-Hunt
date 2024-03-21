@@ -1,3 +1,5 @@
+import DropDownInput from '../../../../../../../../../../global/components/lib/form/dropDown/DropDownInput';
+import NumberLineInput from '../../../../../../../../../../global/components/lib/form/numberLine/NumberLineInput';
 import type { InputArray } from '../../../../../../../../../../global/helpers/react/form/FormHelper';
 import FormHelper from '../../../../../../../../../../global/helpers/react/form/FormHelper';
 
@@ -9,6 +11,7 @@ export interface IRoundEndForm {
 export default class RoundEndFormClass {
    private static inputs: InputArray<IRoundEndForm> = [
       {
+         Component: DropDownInput,
          name: 'newTopic',
          id: 'select-newTopic',
          placeholder: 'Select a Topic',
@@ -22,6 +25,7 @@ export default class RoundEndFormClass {
       },
 
       {
+         Component: NumberLineInput,
          name: 'noOfRounds',
          id: 'no-of-rounds',
          placeholder: 'Number of Rounds',

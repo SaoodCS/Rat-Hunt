@@ -1,3 +1,4 @@
+import DropDownInput from '../../../../../../../../../global/components/lib/form/dropDown/DropDownInput';
 import type { InputArray } from '../../../../../../../../../global/helpers/react/form/FormHelper';
 import FormHelper from '../../../../../../../../../global/helpers/react/form/FormHelper';
 
@@ -8,6 +9,7 @@ export interface IWordGuessFormClass {
 export default class WordGuessFormClass {
    private static inputs: InputArray<IWordGuessFormClass> = [
       {
+         Component: DropDownInput,
          name: 'guess',
          id: 'select-guess',
          placeholder: 'Select a word to guess',

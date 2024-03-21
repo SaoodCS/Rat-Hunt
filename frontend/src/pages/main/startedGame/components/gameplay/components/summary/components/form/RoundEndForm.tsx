@@ -74,6 +74,7 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
             .filter((input) => input.name !== 'noOfRounds' || isLastRound)
             .map((input) => (
                <InputCombination
+                  Component={input.Component}
                   key={input.id}
                   name={input.name}
                   id={input.id}
