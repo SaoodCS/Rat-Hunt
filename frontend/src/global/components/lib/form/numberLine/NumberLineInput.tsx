@@ -84,7 +84,7 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
       for (let i = min; i <= max; i++) {
          if (i === min && !inputHasValue) continue;
          marks[i] = {
-            style: numberLabelStyles(value === i, min, max, i, displayAllNumbers || false),
+            style: numberLabelStyles(value === i, min, max, i, displayAllNumbers),
             label: i,
          };
       }
@@ -130,7 +130,7 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
                dotStyle={dotTouchAreaStyles(min, max)}
                style={numberLineStyles}
             />
-            <ConditionalRender condition={displayLinePointers || false}>
+            <ConditionalRender condition={displayLinePointers}>
                <LabelIndicatorLineWrapper currentValue={value}>
                   {JSXHelper.repeatJSX(<LabelIndicatorLine minValue={min} maxValue={max} />, 9)}
                </LabelIndicatorLineWrapper>
