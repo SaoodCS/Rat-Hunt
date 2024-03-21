@@ -43,11 +43,8 @@ export default class FormHelper {
       const initialState: any = {};
       arr.forEach((input) => {
          if (input.Component === TextOrNumFieldInput) {
-            if (input.type === 'checkbox') {
-               initialState[input.name] = false;
-            } else {
-               initialState[input.name] = '';
-            }
+            const { type } = input;
+            initialState[input.name] = type === 'checkbox' ? false : '';
          }
          if (input.Component === DatePickerInput) {
             initialState[input.name] = new Date();
@@ -73,7 +70,6 @@ export default class FormHelper {
    static validation<T>(formStateVal: T, formInputsArr: InputArray<T>): Record<keyof T, string> {
       const validated = formInputsArr.map((input) => {
          const validationValue = input.validator(formStateVal[input.name]);
-
          return { [input.name]: validationValue === true ? '' : validationValue };
       });
       return Object.assign({}, ...validated);
