@@ -14,6 +14,7 @@ export default class Color {
       boxShadow: '0px 0px 10px rgba(10,10,10, 1)',
       inactive: 'rgb(32, 42, 58)',
       dialog: 'rgb(9, 9, 11)',
+      grey: 'rgb(78, 78, 96)',
    };
 
    static darkThm = {
@@ -33,6 +34,7 @@ export default class Color {
       inactive: 'rgb(32, 42, 58)',
       dialog: 'rgb(9, 9, 11)',
       dialogBright: 'rgb(125, 125, 150)',
+      grey: 'rgb(78, 78, 96)',
    };
 
    static setRgbOpacity = (color: string, opacity: number): string => {

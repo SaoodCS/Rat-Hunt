@@ -6,7 +6,7 @@ import { InputLabel } from '../../textOrNumber/Style';
 
 export const NumberLineInputLabel = styled(InputLabel)<{ inputHasValue?: boolean }>`
    padding-top: 5px;
-   transform: ${({ inputHasValue }) => (inputHasValue ? 'translateY(-11px)' : 'translateY(-5px)')};
+   transform: ${({ inputHasValue }) => (inputHasValue ? 'translateY(-11px)' : 'translateY(-7px)')};
 `;
 
 export const InputSliderWrapper = styled.div<{ inputHasValue: boolean }>`
@@ -63,12 +63,12 @@ export const inactiveLineStyles = (hasError: boolean): CSSProperties => {
 
 export const activeDotStyles = (hasValue: boolean): CSSProperties => {
    return {
-      backgroundColor: Color.darkThm.txt,
-      border: `2px solid ${Color.darkThm.txt}`,
-      width: hasValue ? '1.35em' : '1.1em',
-      height: hasValue ? '1.35em' : '1.1em',
-      marginTop: hasValue ? '-0.6em' : '-0.4em',
-      boxShadow: `0px 0px 0px 0px ${Color.darkThm.txt}`,
+      backgroundColor: hasValue ? Color.darkThm.txt : Color.darkThm.grey,
+      border: `2px solid ${hasValue ? Color.darkThm.txt : Color.setRgbOpacity(Color.darkThm.txt, 0.5)}`,
+      width: hasValue ? '1.35em' : '1.25em',
+      height: hasValue ? '1.35em' : '1.25em',
+      marginTop: hasValue ? '-0.6em' : '-0.5em',
+      boxShadow: `0px 0px 0px 0px ${hasValue ? Color.darkThm.txt : Color.darkThm.grey}`,
       transition: 'width 0.2s ease, height 0.2s ease, margin-top 0.2s ease',
       opacity: 1,
    };

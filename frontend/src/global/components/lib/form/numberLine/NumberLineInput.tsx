@@ -54,18 +54,22 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
    const { min, max, displayAllNumbers, displayLinePointers } = numberLineOptions;
    const { isDarkTheme } = useThemeContext();
    const [isActive, setIsActive] = useState(false);
-   const [inputHasValue, setInputHasValue] = useState(!!value || value !== '');
+   const [inputHasValue, setInputHasValue] = useState(value !== '');
+   const [hasError, setHasError] = useState(!!error);
 
    useEffect(() => {
-      if (isRequired) {
-         const val = (value || min) as number;
-         handleChange({ numberRangeValue: val, name });
+      if (isActive && !inputHasValue) {
+         handleChange({ numberRangeValue: min, name });
       }
-   }, []);
+   }, [isActive]);
 
    useEffect(() => {
-      setInputHasValue(!!value || value !== '');
+      setInputHasValue(value !== '');
    }, [value]);
+
+   useEffect(() => {
+      setHasError(!!error);
+   }, [error]);
 
    function handleFocus(): void {
       setIsActive(true);
@@ -75,9 +79,10 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
       setIsActive(false);
    }
 
-   function createMarks(min: number, max: number, value: number): { [key: number]: MarkObj } {
+   function createMarks(): { [key: number]: MarkObj } {
       const marks: { [key: number]: MarkObj } = {};
       for (let i = min; i <= max; i++) {
+         if (i === min && !inputHasValue) continue;
          marks[i] = {
             style: numberLabelStyles(value === i, min, max, i, displayAllNumbers || false),
             label: i,
@@ -88,13 +93,13 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
 
    return (
       <InputContainer style={{ height: '5em' }}>
-         <LabelWrapper htmlFor={id || name.toString()} style={{}}>
+         <LabelWrapper htmlFor={id}>
             <NumberLineInputLabel
                focusedInput={isActive}
-               isRequired={isRequired || false}
+               isRequired={isRequired}
                inputHasValue={inputHasValue}
                isDarkTheme
-               isDisabled={isDisabled || false}
+               isDisabled={isDisabled}
                hideLabel={false}
             >
                {placeholder}
@@ -112,15 +117,14 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
                min={min}
                max={max}
                value={value || min}
-               onChange={(currentVal) => {
-                  const val = (currentVal || min) as number;
-                  handleChange({ numberRangeValue: val, name });
-               }}
+               onChange={(currentVal) =>
+                  handleChange({ numberRangeValue: currentVal as number, name })
+               }
                disabled={isDisabled}
-               marks={createMarks(min, max, value || min)}
+               marks={createMarks()}
                styles={{
                   track: activeLineStyles,
-                  rail: inactiveLineStyles(!!error),
+                  rail: inactiveLineStyles(hasError),
                   handle: activeDotStyles(inputHasValue),
                }}
                dotStyle={dotTouchAreaStyles(min, max)}

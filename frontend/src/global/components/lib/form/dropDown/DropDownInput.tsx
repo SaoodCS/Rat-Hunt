@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import type { IUseFormHandleChange } from '../../../../hooks/useForm';
 import { ErrorLabel, InputLabel } from '../textOrNumber/Style';
@@ -43,7 +43,12 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
    } = props;
    const { isDarkTheme } = useThemeContext();
    const [isActive, setIsActive] = useState(false);
-   const [isEmpty, setIsEmpty] = useState(true);
+   const [inputHasValue, setInputHasValue] = useState(value !== '');
+
+   useEffect(() => {
+      setInputHasValue(value !== '');
+   }, [value]);
+
    function handleFocus(): void {
       setIsActive(true);
    }
@@ -52,45 +57,40 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
       setIsActive(false);
    }
 
-   function selectCurrentValue(e: React.ChangeEvent<HTMLSelectElement>): void {
-      setIsEmpty(e.target.value === '');
-      handleChange(e);
-   }
-
    return (
       <DropDownInputContainer>
          <DropDownArrow darktheme={isDarkTheme.toString()} focusedinput={isActive.toString()} />
          <DropDownLabelWrapper>
             <InputLabel
                focusedInput={isActive}
-               isRequired={isRequired || false}
-               inputHasValue={!isEmpty || !!value}
+               isRequired={isRequired}
+               inputHasValue={inputHasValue}
                isDarkTheme={isDarkTheme}
-               isDisabled={isDisabled || false}
-               hideLabel={!(!!isActive || !!value) || !!hidePlaceholderOnFocus}
+               isDisabled={isDisabled}
+               hideLabel={!(!!isActive || inputHasValue) || !!hidePlaceholderOnFocus}
             >
                {placeholder}
             </InputLabel>
          </DropDownLabelWrapper>
          <StyledSelect
             name={name.toString()}
-            onChange={selectCurrentValue}
+            onChange={handleChange}
             id={id}
             hasError={!!error}
             isDarkTheme={isDarkTheme}
             onFocus={handleFocus}
             onBlur={handleBlur}
-            isRequired={isRequired || false}
+            isRequired={isRequired}
             value={value}
-            isDisabled={isDisabled || false}
+            isDisabled={isDisabled}
             isActive={!!isActive}
             valueExists={!!value}
          >
             <StyledOption
                isDarkTheme={isDarkTheme}
-               label={!(!!isActive || !!value) ? placeholder : ''}
+               label={!(!!isActive || inputHasValue) ? placeholder : ''}
                value=""
-               hidden={isRequired || false}
+               hidden={isRequired}
             />
             {dropDownOptions.map((option) => (
                <StyledOption isDarkTheme={isDarkTheme} value={option.value} key={option.value}>

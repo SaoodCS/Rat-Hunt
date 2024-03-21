@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import type { IUseFormHandleChange } from '../../../../hooks/useForm';
 import { ErrorLabel, InputContainer, InputLabel, LabelWrapper, TextInput } from './Style';
@@ -33,6 +33,11 @@ export default function TextOrNumFieldInput(props: IInput): JSX.Element {
    } = props;
    const [isActive, setIsActive] = useState(false);
    const { isDarkTheme } = useThemeContext();
+   const [inputHasValue, setInputHasValue] = useState(value !== '');
+
+   useEffect(() => {
+      setInputHasValue(value !== '');
+   }, [value]);
 
    function handleFocus(): void {
       setIsActive(true);
@@ -44,32 +49,32 @@ export default function TextOrNumFieldInput(props: IInput): JSX.Element {
 
    return (
       <InputContainer>
-         <LabelWrapper htmlFor={id || name.toString()}>
+         <LabelWrapper htmlFor={id}>
             <InputLabel
                focusedInput={isActive}
-               isRequired={isRequired || false}
-               inputHasValue={!!value || value === 0}
+               isRequired={isRequired}
+               inputHasValue={inputHasValue}
                isDarkTheme={isDarkTheme}
-               isDisabled={isDisabled || false}
-               hideLabel={!!hidePlaceholderOnFocus && (!!isActive || !!value)}
+               isDisabled={isDisabled}
+               hideLabel={!!hidePlaceholderOnFocus && (!!isActive || inputHasValue)}
             >
                {placeholder}
             </InputLabel>
          </LabelWrapper>
 
          <TextInput
-            id={id || name.toString()}
+            id={id}
             onFocus={handleFocus}
             onBlur={handleBlur}
             type={type}
             name={name.toString()}
-            isRequired={isRequired || false}
+            isRequired={isRequired}
             onChange={handleChange}
             value={value}
             hasError={!!error}
             isDarkTheme={isDarkTheme}
             autoComplete={autoComplete}
-            isDisabled={isDisabled || false}
+            isDisabled={isDisabled}
          />
          <ErrorLabel isDarkTheme={isDarkTheme}>{error}</ErrorLabel>
       </InputContainer>

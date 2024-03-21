@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import type { IUseFormHandleChange } from '../../../../hooks/useForm';
@@ -18,9 +18,13 @@ export interface IDatePickerInputProps {
 
 export default function DatePickerInput(props: IDatePickerInputProps): JSX.Element {
    const { placeholder, name, isRequired, value, error, handleChange, id, isDisabled } = props;
-
    const [isActive, setIsActive] = useState(false);
+   const [inputHasValue, setInputHasValue] = useState(!!value);
    const { isDarkTheme } = useThemeContext();
+
+   useEffect(() => {
+      setInputHasValue(!!value);
+   }, [value]);
 
    function handleFocus(e: React.FocusEvent<HTMLInputElement, Element>): void {
       setIsActive(true);
@@ -38,13 +42,13 @@ export default function DatePickerInput(props: IDatePickerInputProps): JSX.Eleme
 
    return (
       <InputContainer>
-         <LabelWrapper htmlFor={id || name.toString()}>
+         <LabelWrapper htmlFor={id}>
             <InputLabel
                focusedInput={isActive}
-               isRequired={isRequired || false}
-               inputHasValue={!!value || value === 0}
+               isRequired={isRequired}
+               inputHasValue={inputHasValue}
                isDarkTheme={isDarkTheme}
-               isDisabled={isDisabled || false}
+               isDisabled={isDisabled}
             >
                {placeholder}
             </InputLabel>
