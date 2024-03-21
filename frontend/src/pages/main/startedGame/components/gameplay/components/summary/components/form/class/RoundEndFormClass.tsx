@@ -28,7 +28,12 @@ export default class RoundEndFormClass {
          placeholder: 'Number of Rounds',
          type: 'number',
          isRequired: true,
-         numberRange: { min: 1, max: 10 },
+         numberLineInputProps: {
+            min: 1,
+            max: 10,
+            displayAllNumbers: false,
+            displayLinePointers: true,
+         },
          validator: (value: number): string | true => {
             if (typeof value !== 'number') return 'Please enter the number of rounds';
             if (value < 1) return 'Number of rounds must be at least 1';

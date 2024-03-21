@@ -10,7 +10,12 @@ type InputObject<FieldName, ValueType> = {
    validator: (value: ValueType) => string | true;
    isDropDown?: boolean;
    dropDownOptions?: IDropDownOption[];
-   numberRange?: { min: number; max: number };
+   numberLineInputProps?: {
+      min: number;
+      max: number;
+      displayAllNumbers?: boolean;
+      displayLinePointers?: boolean;
+   };
 };
 
 export type InputArray<FormInputs> = {

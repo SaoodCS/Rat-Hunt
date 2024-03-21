@@ -74,14 +74,14 @@ export const activeDotStyles = (hasValue: boolean): CSSProperties => {
    };
 };
 
-export const dotTouchAreaStyles = (numberRange: { min: number; max: number }): CSSProperties => {
+export const dotTouchAreaStyles = (min: number, max: number): CSSProperties => {
    return {
       boxSizing: 'border-box',
       marginBottom: '-40px',
       backgroundColor: 'transparent',
       borderColor: 'transparent',
       borderCollapse: 'separate',
-      width: `calc(100% / ${numberRange.max - numberRange.min})`,
+      width: `calc(100% / ${max - min})`,
       height: '70px',
       borderRadius: '0',
       zIndex: 1,

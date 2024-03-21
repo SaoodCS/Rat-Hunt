@@ -85,7 +85,7 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
                   type={input.type}
                   value={form[input.name]}
                   dropDownOptions={dropDownOptions(input)}
-                  numberRange={input.numberRange}
+                  numberLineInputProps={input.numberLineInputProps}
                />
             ))}
 

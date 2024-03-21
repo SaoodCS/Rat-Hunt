@@ -24,7 +24,12 @@ interface IInputCombination {
    autoComplete?: 'current-password' | 'new-password';
    isDisabled?: boolean | undefined;
    hidePlaceholderOnFocus?: boolean;
-   numberRange?: { min: number; max: number };
+   numberLineInputProps?: {
+      min: number;
+      max: number;
+      displayAllNumbers?: boolean;
+      displayLinePointers?: boolean;
+   };
 }
 
 export default function InputCombination(props: IInputCombination): JSX.Element {
@@ -41,7 +46,7 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
       autoComplete,
       isDisabled,
       hidePlaceholderOnFocus,
-      numberRange,
+      numberLineInputProps,
    } = props;
 
    const hasDropDownOptions = !!dropDownOptions;
@@ -54,8 +59,10 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
       return type === 'date';
    }
 
-   function isTypeNumberSlider(numberRange: unknown): numberRange is { min: number; max: number } {
-      return MiscHelper.isNotFalsyOrEmpty(numberRange);
+   type INumberLineInputProps = Exclude<typeof numberLineInputProps, undefined>;
+
+   function isTypeNumberSlider(numberLineInput: unknown): numberLineInput is INumberLineInputProps {
+      return MiscHelper.isNotFalsyOrEmpty(numberLineInputProps);
    }
 
    function isValueNumber(value: unknown): value is number {
@@ -66,7 +73,7 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
       <>
          {!hasDropDownOptions &&
             !isValueDate(value) &&
-            !isTypeNumberSlider(numberRange) &&
+            !isTypeNumberSlider(numberLineInputProps) &&
             !isTypeDate(type) && (
                <InputComponent
                   placeholder={placeholder}
@@ -109,7 +116,7 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
                type={type}
             />
          )}
-         {isTypeNumberSlider(numberRange) && isValueNumber(value) && (
+         {isTypeNumberSlider(numberLineInputProps) && isValueNumber(value) && (
             <NumberSliderInput
                placeholder={placeholder}
                name={name}
@@ -120,7 +127,7 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
                id={id}
                isDisabled={isDisabled}
                type={type}
-               numberRange={numberRange}
+               numberLineInputProps={numberLineInputProps}
             />
          )}
       </>

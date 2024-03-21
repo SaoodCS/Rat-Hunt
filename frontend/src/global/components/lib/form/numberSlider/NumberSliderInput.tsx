@@ -18,6 +18,7 @@ import {
    numberLabelStyles,
    numberSliderStyles,
 } from './style/Style';
+import ConditionalRender from '../../renderModifiers/conditionalRender/ConditionalRender';
 
 interface INumberSliderInput {
    placeholder: string;
@@ -34,8 +35,12 @@ interface INumberSliderInput {
    id: string;
    isDisabled: boolean | undefined;
    type: string;
-   numberRange: { min: number; max: number };
-   displayAllNumbers?: boolean;
+   numberLineInputProps: {
+      min: number;
+      max: number;
+      displayAllNumbers?: boolean;
+      displayLinePointers?: boolean;
+   };
 }
 
 export default function NumberSliderInput(props: INumberSliderInput): JSX.Element {
@@ -48,16 +53,16 @@ export default function NumberSliderInput(props: INumberSliderInput): JSX.Elemen
       handleChange,
       id,
       isDisabled,
-      numberRange,
-      displayAllNumbers,
+      numberLineInputProps,
    } = props;
+   const { min, max, displayAllNumbers, displayLinePointers } = numberLineInputProps;
    const { isDarkTheme } = useThemeContext();
    const [isActive, setIsActive] = useState(false);
    const [inputHasValue, setInputHasValue] = useState(!!value || value === 0 || value !== '');
 
    useEffect(() => {
       if (isRequired) {
-         const val = (value || numberRange.min) as number;
+         const val = (value || min) as number;
          handleChange({ numberRangeValue: val, name });
       }
    }, []);
@@ -108,29 +113,28 @@ export default function NumberSliderInput(props: INumberSliderInput): JSX.Elemen
                allowCross
                keyboard
                step={1}
-               min={numberRange.min}
-               max={numberRange.max}
-               value={value || numberRange.min}
+               min={min}
+               max={max}
+               value={value || min}
                onChange={(currentVal) => {
-                  const val = (currentVal || numberRange.min) as number;
+                  const val = (currentVal || min) as number;
                   handleChange({ numberRangeValue: val, name });
                }}
                disabled={isDisabled}
-               marks={createMarks(numberRange.min, numberRange.max, value || numberRange.min)}
+               marks={createMarks(min, max, value || min)}
                styles={{
                   track: activeLineStyles,
                   rail: inactiveLineStyles(!!error),
                   handle: activeDotStyles(inputHasValue),
                }}
-               dotStyle={dotTouchAreaStyles(numberRange)}
+               dotStyle={dotTouchAreaStyles(min, max)}
                style={numberSliderStyles}
             />
-            <LabelIndicatorLineWrapper currentValue={value}>
-               {JSXHelper.repeatJSX(
-                  <LabelIndicatorLine minValue={numberRange.min} maxValue={numberRange.max} />,
-                  9,
-               )}
-            </LabelIndicatorLineWrapper>
+            <ConditionalRender condition={displayLinePointers || false}>
+               <LabelIndicatorLineWrapper currentValue={value}>
+                  {JSXHelper.repeatJSX(<LabelIndicatorLine minValue={min} maxValue={max} />, 9)}
+               </LabelIndicatorLineWrapper>
+            </ConditionalRender>
          </InputSliderWrapper>
          <ErrorLabel isDarkTheme={isDarkTheme} style={{ marginTop: '1.5em' }}>
             {error}
