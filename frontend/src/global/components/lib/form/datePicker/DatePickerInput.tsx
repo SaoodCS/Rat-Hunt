@@ -5,7 +5,7 @@ import type { IDateChangeEvent, INumberRangeChangeEvent } from '../../../../hook
 import { ErrorLabel, InputContainer, InputLabel, LabelWrapper } from '../input/Style';
 import { DatePickerWrapper } from './Style';
 
-interface IDatePickerInput {
+export interface IDatePickerInputProps {
    placeholder: string;
    name: string | number;
    isRequired?: boolean;
@@ -18,11 +18,11 @@ interface IDatePickerInput {
          | INumberRangeChangeEvent,
    ) => void;
    id: string;
-   isDisabled: boolean | undefined;
+   isDisabled?: boolean | undefined;
    type: string;
 }
 
-export default function DatePickerInput(props: IDatePickerInput): JSX.Element {
+export default function DatePickerInput(props: IDatePickerInputProps): JSX.Element {
    const { placeholder, name, isRequired, value, error, handleChange, id, isDisabled } = props;
 
    const [isActive, setIsActive] = useState(false);
