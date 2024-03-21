@@ -10,17 +10,24 @@ import {
    InputSliderWrapper,
    LabelIndicatorLine,
    LabelIndicatorLineWrapper,
-   NumberSliderInputLabel,
+   NumberLineInputLabel,
    activeDotStyles,
    activeLineStyles,
    dotTouchAreaStyles,
    inactiveLineStyles,
    numberLabelStyles,
-   numberSliderStyles,
+   numberLineStyles,
 } from './style/Style';
 import ConditionalRender from '../../renderModifiers/conditionalRender/ConditionalRender';
 
-interface INumberSliderInput {
+export interface INumberLineOptions {
+   min: number;
+   max: number;
+   displayAllNumbers?: boolean;
+   displayLinePointers?: boolean;
+}
+
+interface INumberLineInput {
    placeholder: string;
    name: string | number;
    isRequired?: boolean;
@@ -35,15 +42,10 @@ interface INumberSliderInput {
    id: string;
    isDisabled: boolean | undefined;
    type: string;
-   numberLineInputProps: {
-      min: number;
-      max: number;
-      displayAllNumbers?: boolean;
-      displayLinePointers?: boolean;
-   };
+   numberLineInputProps: INumberLineOptions;
 }
 
-export default function NumberSliderInput(props: INumberSliderInput): JSX.Element {
+export default function NumberLineInput(props: INumberLineInput): JSX.Element {
    const {
       placeholder,
       name,
@@ -93,7 +95,7 @@ export default function NumberSliderInput(props: INumberSliderInput): JSX.Elemen
    return (
       <InputContainer style={{ height: '5em' }}>
          <LabelWrapper htmlFor={id || name.toString()} style={{}}>
-            <NumberSliderInputLabel
+            <NumberLineInputLabel
                focusedInput={isActive}
                isRequired={isRequired || false}
                inputHasValue={inputHasValue}
@@ -102,7 +104,7 @@ export default function NumberSliderInput(props: INumberSliderInput): JSX.Elemen
                hideLabel={false}
             >
                {placeholder}
-            </NumberSliderInputLabel>
+            </NumberLineInputLabel>
          </LabelWrapper>
          <InputSliderWrapper inputHasValue={inputHasValue}>
             <Slider
@@ -128,7 +130,7 @@ export default function NumberSliderInput(props: INumberSliderInput): JSX.Elemen
                   handle: activeDotStyles(inputHasValue),
                }}
                dotStyle={dotTouchAreaStyles(min, max)}
-               style={numberSliderStyles}
+               style={numberLineStyles}
             />
             <ConditionalRender condition={displayLinePointers || false}>
                <LabelIndicatorLineWrapper currentValue={value}>

@@ -4,7 +4,7 @@ import MyCSS from '../../../../../css/MyCSS';
 import Color from '../../../../../css/colors';
 import { InputLabel } from '../../input/Style';
 
-export const NumberSliderInputLabel = styled(InputLabel)<{ inputHasValue?: boolean }>`
+export const NumberLineInputLabel = styled(InputLabel)<{ inputHasValue?: boolean }>`
    padding-top: 5px;
    transform: ${({ inputHasValue }) => (inputHasValue ? 'translateY(-11px)' : 'translateY(-5px)')};
 `;
@@ -17,7 +17,7 @@ export const InputSliderWrapper = styled.div<{ inputHasValue: boolean }>`
    ${MyCSS.Clickables.removeDefaultEffects};
 `;
 
-export const numberSliderStyles: CSSProperties = {
+export const numberLineStyles: CSSProperties = {
    borderRadius: 0,
    position: 'relative',
    width: '100%',

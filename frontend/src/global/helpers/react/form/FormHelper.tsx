@@ -1,4 +1,5 @@
 import type { IDropDownOption } from '../../../components/lib/form/dropDown/DropDownInput';
+import type { INumberLineOptions } from '../../../components/lib/form/numberLine/NumberLineInput';
 
 type InputObject<FieldName, ValueType> = {
    name: FieldName;
@@ -9,12 +10,7 @@ type InputObject<FieldName, ValueType> = {
    autoComplete?: 'current-password' | 'new-password';
    validator: (value: ValueType) => string | true;
    dropDownOptions?: IDropDownOption[];
-   numberLineInputProps?: {
-      min: number;
-      max: number;
-      displayAllNumbers?: boolean;
-      displayLinePointers?: boolean;
-   };
+   numberLineInputProps?: INumberLineOptions;
 };
 
 export type InputArray<FormInputs> = {

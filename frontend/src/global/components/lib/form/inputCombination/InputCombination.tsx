@@ -4,7 +4,8 @@ import DatePickerInput from '../datePicker/DatePickerInput';
 import type { IDropDownOption } from '../dropDown/DropDownInput';
 import DropDownInput from '../dropDown/DropDownInput';
 import InputComponent from '../input/Input';
-import NumberSliderInput from '../numberSlider/NumberSliderInput';
+import type { INumberLineOptions } from '../numberLine/NumberLineInput';
+import NumberLineInput from '../numberLine/NumberLineInput';
 
 interface IInputCombination {
    placeholder: string;
@@ -59,9 +60,7 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
       return type === 'date';
    }
 
-   type INumberLineInputProps = Exclude<typeof numberLineInputProps, undefined>;
-
-   function isTypeNumberSlider(numberLineInput: unknown): numberLineInput is INumberLineInputProps {
+   function isTypeNumberLine(numberLineInput: unknown): numberLineInput is INumberLineOptions {
       return MiscHelper.isNotFalsyOrEmpty(numberLineInputProps);
    }
 
@@ -73,7 +72,7 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
       <>
          {!hasDropDownOptions &&
             !isValueDate(value) &&
-            !isTypeNumberSlider(numberLineInputProps) &&
+            !isTypeNumberLine(numberLineInputProps) &&
             !isTypeDate(type) && (
                <InputComponent
                   placeholder={placeholder}
@@ -116,8 +115,8 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
                type={type}
             />
          )}
-         {isTypeNumberSlider(numberLineInputProps) && isValueNumber(value) && (
-            <NumberSliderInput
+         {isTypeNumberLine(numberLineInputProps) && isValueNumber(value) && (
+            <NumberLineInput
                placeholder={placeholder}
                name={name}
                isRequired={isRequired}
