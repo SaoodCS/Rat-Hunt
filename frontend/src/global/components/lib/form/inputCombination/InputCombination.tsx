@@ -4,9 +4,9 @@ import type { IUseFormHandleChange } from '../../../../hooks/useForm';
 import DatePickerInput from '../datePicker/DatePickerInput';
 import type { IDropDownOption } from '../dropDown/DropDownInput';
 import DropDownInput from '../dropDown/DropDownInput';
-import InputComponent from '../input/Input';
 import type { INumberLineOptions } from '../numberLine/NumberLineInput';
 import NumberLineInput from '../numberLine/NumberLineInput';
+import TextOrNumFieldInput from '../textOrNumber/TextOrNumFieldInput';
 
 interface IInputCombination {
    name: string | number;
@@ -65,7 +65,7 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
             !isValueDate(value) &&
             !isTypeNumberLine(numberLineOptions) &&
             !isTypeDate(type) && (
-               <InputComponent
+               <TextOrNumFieldInput
                   placeholder={placeholder}
                   type={type}
                   name={name}

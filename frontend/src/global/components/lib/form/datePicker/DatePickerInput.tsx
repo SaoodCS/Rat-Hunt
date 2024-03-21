@@ -2,7 +2,7 @@ import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import type { IUseFormHandleChange } from '../../../../hooks/useForm';
-import { ErrorLabel, InputContainer, InputLabel, LabelWrapper } from '../input/Style';
+import { ErrorLabel, InputContainer, InputLabel, LabelWrapper } from '../textOrNumber/Style';
 import { DatePickerWrapper } from './Style';
 
 export interface IDatePickerInputProps {

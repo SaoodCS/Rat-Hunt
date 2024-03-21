@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
-import { ErrorLabel, InputContainer, InputLabel, LabelWrapper, TextInput } from './Style';
 import type { IUseFormHandleChange } from '../../../../hooks/useForm';
+import { ErrorLabel, InputContainer, InputLabel, LabelWrapper, TextInput } from './Style';
 
 interface IInput {
    name: string | number;
@@ -17,7 +17,7 @@ interface IInput {
    handleChange: IUseFormHandleChange;
 }
 
-export default function InputComponent(props: IInput): JSX.Element {
+export default function TextOrNumFieldInput(props: IInput): JSX.Element {
    const {
       placeholder,
       type,

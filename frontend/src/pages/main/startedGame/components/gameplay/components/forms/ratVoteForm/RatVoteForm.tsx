@@ -8,7 +8,7 @@ import {
    StyledSelectAlt,
 } from '../../../../../../../../global/components/lib/form/dropDown/Style';
 import { StyledForm } from '../../../../../../../../global/components/lib/form/form/Style';
-import { ErrorLabel } from '../../../../../../../../global/components/lib/form/input/Style';
+import { ErrorLabel } from '../../../../../../../../global/components/lib/form/textOrNumber/Style';
 import { GameContext } from '../../../../../../../../global/context/game/GameContext';
 import useThemeContext from '../../../../../../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';

@@ -6,7 +6,7 @@ import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import JSXHelper from '../../../../helpers/dataTypes/jsx/jsxHelper';
 import type { IUseFormHandleChange } from '../../../../hooks/useForm';
 import ConditionalRender from '../../renderModifiers/conditionalRender/ConditionalRender';
-import { ErrorLabel, InputContainer, LabelWrapper } from '../input/Style';
+import { ErrorLabel, InputContainer, LabelWrapper } from '../textOrNumber/Style';
 import {
    InputSliderWrapper,
    LabelIndicatorLine,
@@ -55,7 +55,7 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
    const { min, max, displayAllNumbers, displayLinePointers } = numberLineOptions;
    const { isDarkTheme } = useThemeContext();
    const [isActive, setIsActive] = useState(false);
-   const [inputHasValue, setInputHasValue] = useState(!!value || value === 0 || value !== '');
+   const [inputHasValue, setInputHasValue] = useState(!!value || value !== '');
 
    useEffect(() => {
       if (isRequired) {
@@ -65,7 +65,7 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
    }, []);
 
    useEffect(() => {
-      setInputHasValue(!!value || value === 0 || value !== '');
+      setInputHasValue(!!value || value !== '');
    }, [value]);
 
    function handleFocus(): void {

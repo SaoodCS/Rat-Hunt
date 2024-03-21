@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import type { IUseFormHandleChange } from '../../../../hooks/useForm';
-import { ErrorLabel, InputLabel } from '../input/Style';
+import { ErrorLabel, InputLabel } from '../textOrNumber/Style';
 import {
    DropDownArrow,
    DropDownInputContainer,

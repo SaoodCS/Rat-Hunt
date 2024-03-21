@@ -5,7 +5,7 @@ import { StyledForm } from '../../../../../../../../global/components/lib/form/f
 import {
    ErrorLabel,
    TextInputAlt,
-} from '../../../../../../../../global/components/lib/form/input/Style';
+} from '../../../../../../../../global/components/lib/form/textOrNumber/Style';
 import { GameContext } from '../../../../../../../../global/context/game/GameContext';
 import useThemeContext from '../../../../../../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';

@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import MyCSS from '../../../../../css/MyCSS';
 import Color from '../../../../../css/colors';
-import { InputLabel } from '../../input/Style';
+import { InputLabel } from '../../textOrNumber/Style';
 
 export const NumberLineInputLabel = styled(InputLabel)<{ inputHasValue?: boolean }>`
    padding-top: 5px;
