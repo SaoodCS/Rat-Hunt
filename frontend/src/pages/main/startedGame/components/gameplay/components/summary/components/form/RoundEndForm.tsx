@@ -75,17 +75,19 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
             .map((input) => (
                <InputCombination
                   key={input.id}
+                  name={input.name}
                   id={input.id}
                   placeholder={input.placeholder}
-                  name={input.name}
-                  isRequired={input.isRequired}
-                  autoComplete={input.autoComplete}
-                  handleChange={handleChange}
-                  error={errors[input.name]}
                   type={input.type}
-                  value={form[input.name]}
+                  autoComplete={input.autoComplete}
                   dropDownOptions={dropDownOptions(input)}
                   numberLineOptions={input.numberLineOptions}
+                  hidePlaceholderOnFocus={input.hidePlaceholderOnFocus}
+                  isRequired={input.isRequired}
+                  isDisabled={input.isDisabled}
+                  value={form[input.name]}
+                  error={errors[input.name]}
+                  handleChange={handleChange}
                />
             ))}
 

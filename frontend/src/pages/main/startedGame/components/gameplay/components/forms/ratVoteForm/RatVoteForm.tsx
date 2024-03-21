@@ -88,7 +88,7 @@ export default function RatVoteForm(): JSX.Element {
                <StyledSelectAlt
                   id={input.id}
                   name={input.name}
-                  isRequired={input.isRequired}
+                  isRequired={input.isRequired || false}
                   autoComplete={input.autoComplete}
                   onChange={handleChange}
                   isDarkTheme

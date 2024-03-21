@@ -1,16 +1,28 @@
 import type { IDropDownOption } from '../../../components/lib/form/dropDown/DropDownInput';
 import type { INumberLineOptions } from '../../../components/lib/form/numberLine/NumberLineInput';
 
+export type InputType =
+   | 'text'
+   | 'password'
+   | 'email'
+   | 'number'
+   | 'date'
+   | 'checkbox'
+   | 'select'
+   | 'boolean';
+
 type InputObject<FieldName, ValueType> = {
    name: FieldName;
    id: string;
    placeholder: string;
-   type: 'text' | 'password' | 'email' | 'number' | 'date' | 'checkbox' | 'select' | 'boolean';
-   isRequired: boolean;
-   autoComplete?: 'current-password' | 'new-password';
+   type: InputType;
    validator: (value: ValueType) => string | true;
+   autoComplete?: 'current-password' | 'new-password';
    dropDownOptions?: IDropDownOption[];
    numberLineOptions?: INumberLineOptions;
+   hidePlaceholderOnFocus?: boolean;
+   isRequired?: boolean;
+   isDisabled?: boolean;
 };
 
 export type InputArray<FormInputs> = {

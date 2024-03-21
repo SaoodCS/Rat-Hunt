@@ -1,5 +1,6 @@
 import MiscHelper from '../../../../helpers/dataTypes/miscHelper/MiscHelper';
-import type { IDateChangeEvent, INumberRangeChangeEvent } from '../../../../hooks/useForm';
+import type { InputType } from '../../../../helpers/react/form/FormHelper';
+import type { IUseFormHandleChange } from '../../../../hooks/useForm';
 import DatePickerInput from '../datePicker/DatePickerInput';
 import type { IDropDownOption } from '../dropDown/DropDownInput';
 import DropDownInput from '../dropDown/DropDownInput';
@@ -8,24 +9,19 @@ import type { INumberLineOptions } from '../numberLine/NumberLineInput';
 import NumberLineInput from '../numberLine/NumberLineInput';
 
 interface IInputCombination {
-   placeholder: string;
    name: string | number;
-   isRequired?: boolean;
-   handleChange: (
-      e:
-         | React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
-         | IDateChangeEvent
-         | INumberRangeChangeEvent,
-   ) => void;
-   error: string;
-   dropDownOptions?: IDropDownOption[];
    id: string;
-   type: string;
+   placeholder: string;
+   type: InputType;
+   autoComplete: 'current-password' | 'new-password' | undefined;
+   dropDownOptions: IDropDownOption[] | undefined;
+   numberLineOptions: INumberLineOptions | undefined;
+   hidePlaceholderOnFocus: boolean | undefined;
+   isRequired: boolean | undefined;
+   isDisabled: boolean | undefined;
    value: string | number | Date;
-   autoComplete?: 'current-password' | 'new-password';
-   isDisabled?: boolean | undefined;
-   hidePlaceholderOnFocus?: boolean;
-   numberLineOptions?: INumberLineOptions;
+   error: string;
+   handleChange: IUseFormHandleChange;
 }
 
 export default function InputCombination(props: IInputCombination): JSX.Element {
@@ -73,40 +69,40 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
                   placeholder={placeholder}
                   type={type}
                   name={name}
-                  isRequired={isRequired}
+                  isRequired={isRequired || false}
                   autoComplete={autoComplete}
                   handleChange={handleChange}
                   value={value}
                   error={error}
                   id={id}
-                  isDisabled={isDisabled}
-                  hidePlaceholderOnFocus={hidePlaceholderOnFocus}
+                  isDisabled={isDisabled || false}
+                  hidePlaceholderOnFocus={hidePlaceholderOnFocus || false}
                />
             )}
          {hasDropDownOptions && !isValueDate(value) && !isTypeDate(type) && (
             <DropDownInput
                placeholder={placeholder}
                name={name}
-               options={dropDownOptions}
-               isRequired={isRequired}
+               dropDownOptions={dropDownOptions}
+               isRequired={isRequired || false}
                value={value}
                error={error}
                handleChange={handleChange}
                id={id}
-               isDisabled={isDisabled}
-               hidePlaceholderOnFocus={hidePlaceholderOnFocus}
+               isDisabled={isDisabled || false}
+               hidePlaceholderOnFocus={hidePlaceholderOnFocus || false}
             />
          )}
          {isTypeDate(type) && isValueDate(value) && (
             <DatePickerInput
                placeholder={placeholder}
                name={name}
-               isRequired={isRequired}
+               isRequired={isRequired || false}
                value={value}
                error={error}
                handleChange={handleChange}
                id={id}
-               isDisabled={isDisabled}
+               isDisabled={isDisabled || false}
                type={type}
             />
          )}
@@ -114,12 +110,12 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
             <NumberLineInput
                placeholder={placeholder}
                name={name}
-               isRequired={isRequired}
+               isRequired={isRequired || false}
                value={value}
                error={error}
                handleChange={handleChange}
                id={id}
-               isDisabled={isDisabled}
+               isDisabled={isDisabled || false}
                type={type}
                numberLineOptions={numberLineOptions}
             />

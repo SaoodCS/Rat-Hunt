@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
+import type { IUseFormHandleChange } from '../../../../hooks/useForm';
 import { ErrorLabel, InputLabel } from '../input/Style';
 import {
    DropDownArrow,
@@ -15,16 +16,16 @@ export interface IDropDownOption {
 }
 
 interface IDropDownInput {
-   placeholder: string;
    name: number | string;
-   isRequired?: boolean;
-   handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-   error: string;
-   options: IDropDownOption[];
    id: string;
+   placeholder: string;
+   dropDownOptions: IDropDownOption[];
+   hidePlaceholderOnFocus: boolean;
+   isRequired: boolean;
+   isDisabled: boolean;
    value: string | number;
-   isDisabled?: boolean | undefined;
-   hidePlaceholderOnFocus?: boolean;
+   error: string;
+   handleChange: IUseFormHandleChange;
 }
 
 export default function DropDownInput(props: IDropDownInput): JSX.Element {
@@ -34,7 +35,7 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
       isRequired,
       handleChange,
       error,
-      options,
+      dropDownOptions,
       id,
       value,
       isDisabled,
@@ -91,7 +92,7 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
                value=""
                hidden={isRequired || false}
             />
-            {options.map((option) => (
+            {dropDownOptions.map((option) => (
                <StyledOption isDarkTheme={isDarkTheme} value={option.value} key={option.value}>
                   {option.label}
                </StyledOption>

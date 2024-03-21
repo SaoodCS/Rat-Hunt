@@ -4,7 +4,8 @@ import type { MarkObj } from 'rc-slider/lib/Marks';
 import { useEffect, useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import JSXHelper from '../../../../helpers/dataTypes/jsx/jsxHelper';
-import type { IDateChangeEvent, INumberRangeChangeEvent } from '../../../../hooks/useForm';
+import type { IUseFormHandleChange } from '../../../../hooks/useForm';
+import ConditionalRender from '../../renderModifiers/conditionalRender/ConditionalRender';
 import { ErrorLabel, InputContainer, LabelWrapper } from '../input/Style';
 import {
    InputSliderWrapper,
@@ -18,31 +19,25 @@ import {
    numberLabelStyles,
    numberLineStyles,
 } from './style/Style';
-import ConditionalRender from '../../renderModifiers/conditionalRender/ConditionalRender';
 
 export interface INumberLineOptions {
    min: number;
    max: number;
-   displayAllNumbers?: boolean;
-   displayLinePointers?: boolean;
+   displayAllNumbers: boolean;
+   displayLinePointers: boolean;
 }
 
 interface INumberLineInput {
-   placeholder: string;
    name: string | number;
-   isRequired?: boolean;
-   value: number | '';
-   error: string;
-   handleChange: (
-      e:
-         | React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
-         | IDateChangeEvent
-         | INumberRangeChangeEvent,
-   ) => void;
    id: string;
-   isDisabled: boolean | undefined;
+   placeholder: string;
    type: string;
    numberLineOptions: INumberLineOptions;
+   isRequired: boolean;
+   isDisabled: boolean;
+   value: number | '';
+   error: string;
+   handleChange: IUseFormHandleChange;
 }
 
 export default function NumberLineInput(props: INumberLineInput): JSX.Element {

@@ -1,19 +1,20 @@
 import { useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import { ErrorLabel, InputContainer, InputLabel, LabelWrapper, TextInput } from './Style';
+import type { IUseFormHandleChange } from '../../../../hooks/useForm';
 
 interface IInput {
+   name: string | number;
+   id: string;
    placeholder: string;
    type: string;
-   name: string | number;
-   isRequired?: boolean;
-   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-   error: string;
+   autoComplete: 'current-password' | 'new-password' | undefined;
+   hidePlaceholderOnFocus: boolean;
+   isRequired: boolean;
+   isDisabled: boolean;
    value: string | number;
-   id: string;
-   autoComplete?: 'current-password' | 'new-password';
-   isDisabled?: boolean | undefined;
-   hidePlaceholderOnFocus?: boolean;
+   error: string;
+   handleChange: IUseFormHandleChange;
 }
 
 export default function InputComponent(props: IInput): JSX.Element {

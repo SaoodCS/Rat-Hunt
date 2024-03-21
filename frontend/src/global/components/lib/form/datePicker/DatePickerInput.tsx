@@ -1,25 +1,20 @@
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
-import type { IDateChangeEvent, INumberRangeChangeEvent } from '../../../../hooks/useForm';
+import type { IUseFormHandleChange } from '../../../../hooks/useForm';
 import { ErrorLabel, InputContainer, InputLabel, LabelWrapper } from '../input/Style';
 import { DatePickerWrapper } from './Style';
 
 export interface IDatePickerInputProps {
-   placeholder: string;
    name: string | number;
-   isRequired?: boolean;
+   id: string;
+   placeholder: string;
+   type: string;
+   isRequired: boolean;
+   isDisabled: boolean;
    value: Date;
    error: string;
-   handleChange: (
-      e:
-         | React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
-         | IDateChangeEvent
-         | INumberRangeChangeEvent,
-   ) => void;
-   id: string;
-   isDisabled?: boolean | undefined;
-   type: string;
+   handleChange: IUseFormHandleChange;
 }
 
 export default function DatePickerInput(props: IDatePickerInputProps): JSX.Element {

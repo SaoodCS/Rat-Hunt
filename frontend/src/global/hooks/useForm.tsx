@@ -13,17 +13,19 @@ export interface IDateChangeEvent {
    name: string | number;
 }
 
+export type IUseFormHandleChange = (
+   e:
+      | React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+      | IDateChangeEvent
+      | INumberRangeChangeEvent,
+) => void;
+
 interface IUseFormReturn<T> {
    form: T;
    setForm: React.Dispatch<React.SetStateAction<T>>;
    errors: Record<keyof T, string>;
    setErrors: React.Dispatch<React.SetStateAction<Record<keyof T, string>>>;
-   handleChange: (
-      e:
-         | React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-         | IDateChangeEvent
-         | INumberRangeChangeEvent,
-   ) => void;
+   handleChange: IUseFormHandleChange;
    initHandleSubmit: (e: React.FormEvent<HTMLFormElement>) => { isFormValid: boolean };
 }
 
@@ -48,12 +50,7 @@ export default function useForm<T>(
       return { isFormValid: true };
    }
 
-   function handleChange(
-      e:
-         | React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-         | IDateChangeEvent
-         | INumberRangeChangeEvent,
-   ): void {
+   function handleChange(e: Parameters<IUseFormHandleChange>[0]): void {
       if ('numberRangeValue' in e) {
          setForm((prevState) => ({ ...prevState, [e.name]: e.numberRangeValue }));
          return;

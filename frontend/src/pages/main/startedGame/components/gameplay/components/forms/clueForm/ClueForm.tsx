@@ -68,14 +68,14 @@ export default function ClueForm(): JSX.Element {
          {ClueFormClass.form.inputs.map((input) => (
             <Fragment key={input.id}>
                <TextInputAlt
+                  name={input.name}
                   id={input.id}
                   placeholder={input.placeholder}
-                  name={input.name}
-                  isRequired={input.isRequired}
-                  isDisabled={false}
-                  autoComplete={input.autoComplete}
-                  onChange={handleChange}
                   type={input.type}
+                  autoComplete={input.autoComplete}
+                  isRequired={input.isRequired || false}
+                  isDisabled={false}
+                  onChange={handleChange}
                   value={form[input.name]}
                   hasError={!!errors[input.name]}
                />
