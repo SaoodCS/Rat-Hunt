@@ -25,12 +25,7 @@ interface IInputCombination {
    autoComplete?: 'current-password' | 'new-password';
    isDisabled?: boolean | undefined;
    hidePlaceholderOnFocus?: boolean;
-   numberLineInputProps?: {
-      min: number;
-      max: number;
-      displayAllNumbers?: boolean;
-      displayLinePointers?: boolean;
-   };
+   numberLineOptions?: INumberLineOptions;
 }
 
 export default function InputCombination(props: IInputCombination): JSX.Element {
@@ -47,7 +42,7 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
       autoComplete,
       isDisabled,
       hidePlaceholderOnFocus,
-      numberLineInputProps,
+      numberLineOptions,
    } = props;
 
    const hasDropDownOptions = !!dropDownOptions;
@@ -61,7 +56,7 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
    }
 
    function isTypeNumberLine(numberLineInput: unknown): numberLineInput is INumberLineOptions {
-      return MiscHelper.isNotFalsyOrEmpty(numberLineInputProps);
+      return MiscHelper.isNotFalsyOrEmpty(numberLineOptions);
    }
 
    function isValueNumber(value: unknown): value is number {
@@ -72,7 +67,7 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
       <>
          {!hasDropDownOptions &&
             !isValueDate(value) &&
-            !isTypeNumberLine(numberLineInputProps) &&
+            !isTypeNumberLine(numberLineOptions) &&
             !isTypeDate(type) && (
                <InputComponent
                   placeholder={placeholder}
@@ -115,7 +110,7 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
                type={type}
             />
          )}
-         {isTypeNumberLine(numberLineInputProps) && isValueNumber(value) && (
+         {isTypeNumberLine(numberLineOptions) && isValueNumber(value) && (
             <NumberLineInput
                placeholder={placeholder}
                name={name}
@@ -126,7 +121,7 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
                id={id}
                isDisabled={isDisabled}
                type={type}
-               numberLineInputProps={numberLineInputProps}
+               numberLineOptions={numberLineOptions}
             />
          )}
       </>

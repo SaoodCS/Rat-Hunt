@@ -141,7 +141,7 @@ export default function Play(): JSX.Element {
                      type={input.type}
                      value={form[input.name]}
                      dropDownOptions={dropDownOptions(input)}
-                     numberLineInputProps={input.numberLineInputProps}
+                     numberLineOptions={input.numberLineOptions}
                   />
                ))}
 

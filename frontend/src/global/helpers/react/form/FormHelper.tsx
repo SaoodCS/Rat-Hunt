@@ -10,7 +10,7 @@ type InputObject<FieldName, ValueType> = {
    autoComplete?: 'current-password' | 'new-password';
    validator: (value: ValueType) => string | true;
    dropDownOptions?: IDropDownOption[];
-   numberLineInputProps?: INumberLineOptions;
+   numberLineOptions?: INumberLineOptions;
 };
 
 export type InputArray<FormInputs> = {

@@ -27,7 +27,7 @@ export default class RoundEndFormClass {
          placeholder: 'Number of Rounds',
          type: 'number',
          isRequired: true,
-         numberLineInputProps: {
+         numberLineOptions: {
             min: 1,
             max: 10,
             displayAllNumbers: false,

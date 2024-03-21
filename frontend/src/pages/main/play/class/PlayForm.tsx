@@ -75,7 +75,7 @@ export default class PlayFormClass {
          id: 'no-of-rounds',
          placeholder: 'Number of Rounds',
          type: 'number',
-         numberLineInputProps: {
+         numberLineOptions: {
             min: 1,
             max: 10,
             displayAllNumbers: false,

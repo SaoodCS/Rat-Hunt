@@ -42,7 +42,7 @@ interface INumberLineInput {
    id: string;
    isDisabled: boolean | undefined;
    type: string;
-   numberLineInputProps: INumberLineOptions;
+   numberLineOptions: INumberLineOptions;
 }
 
 export default function NumberLineInput(props: INumberLineInput): JSX.Element {
@@ -55,9 +55,9 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
       handleChange,
       id,
       isDisabled,
-      numberLineInputProps,
+      numberLineOptions,
    } = props;
-   const { min, max, displayAllNumbers, displayLinePointers } = numberLineInputProps;
+   const { min, max, displayAllNumbers, displayLinePointers } = numberLineOptions;
    const { isDarkTheme } = useThemeContext();
    const [isActive, setIsActive] = useState(false);
    const [inputHasValue, setInputHasValue] = useState(!!value || value === 0 || value !== '');
