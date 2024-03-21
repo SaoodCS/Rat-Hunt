@@ -64,7 +64,7 @@ export default function WordGuessForm(): JSX.Element {
    function dropDownOptions(
       input: (typeof WordGuessFormClass.form.inputs)[0],
    ): IDropDownOption[] | undefined {
-      if (!input.isDropDown) return;
+      if (input.dropDownOptions === undefined) return;
       if (input.name !== 'guess') return;
       const topicWords = ArrOfObj.getArrOfValuesFromKey(activeTopicWords, 'word');
       const dropDownOptions = topicWords.map((word) => ({ value: word, label: word }));

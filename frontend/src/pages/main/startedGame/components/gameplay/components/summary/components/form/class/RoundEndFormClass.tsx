@@ -14,7 +14,6 @@ export default class RoundEndFormClass {
          placeholder: 'Select a Topic',
          type: 'select',
          isRequired: true,
-         isDropDown: true,
          dropDownOptions: [],
          validator: (value: string): string | true => {
             if (!value) return 'Please select a topic';

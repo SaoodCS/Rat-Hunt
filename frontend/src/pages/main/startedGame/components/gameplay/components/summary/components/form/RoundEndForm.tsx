@@ -54,7 +54,7 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
    function dropDownOptions(
       input: (typeof RoundEndFormClass.form.inputs)[0],
    ): IDropDownOption[] | undefined {
-      if (!input.isDropDown) return;
+      if (input.dropDownOptions === undefined) return;
       if (input.name === 'newTopic' && MiscHelper.isNotFalsyOrEmpty(topicsData)) {
          const topics = topicsData.flatMap((topic) => topic.key);
          if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return input.dropDownOptions;

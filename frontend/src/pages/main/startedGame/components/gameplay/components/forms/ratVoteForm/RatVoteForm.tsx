@@ -70,7 +70,7 @@ export default function RatVoteForm(): JSX.Element {
    function dropDownOptions(
       input: (typeof RatVoteFormClass.form.inputs)[0],
    ): IDropDownOption[] | undefined {
-      if (!input.isDropDown) return;
+      if (input.dropDownOptions === undefined) return;
       if (!(input.name === 'vote' && MiscHelper.isNotFalsyOrEmpty(roomData))) return;
       const usersArr = roomData.users;
       const dropDownOptions: IDropDownOption[] = usersArr.map((user) => ({

@@ -24,7 +24,6 @@ export default class PlayFormClass {
             if (!value) return 'Please enter your name';
             if (value.trim() === '') return 'Name cannot be empty';
             if (value.length < 2) return 'Name must be at least 1 characters';
-            // names cannot contain: ".", "#", "$", "[", or "]":
             const invalidChars = ['.', '#', '$', '[', ']'];
             if (StringHelper.containsOneOf(value, invalidChars)) {
                return 'Name cannot contain: ".", "#", "$", "[", or "]"';
@@ -38,7 +37,6 @@ export default class PlayFormClass {
          placeholder: 'Join or Host',
          type: 'select',
          isRequired: true,
-         isDropDown: true,
          dropDownOptions: [
             { value: 'join', label: 'Join' },
             { value: 'host', label: 'Host' },
@@ -66,7 +64,6 @@ export default class PlayFormClass {
          placeholder: 'Select Topic',
          type: 'select',
          isRequired: true,
-         isDropDown: true,
          dropDownOptions: [],
          validator: (value: string): string | true => {
             if (!value) return 'Please select a topic';

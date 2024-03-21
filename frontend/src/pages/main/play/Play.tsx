@@ -97,7 +97,7 @@ export default function Play(): JSX.Element {
    function dropDownOptions(
       input: (typeof PlayFormClass.form.inputs)[0],
    ): IDropDownOption[] | undefined {
-      if (!input.isDropDown) return;
+      if (input.dropDownOptions === undefined) return;
       if (input.name === 'topic' && MiscHelper.isNotFalsyOrEmpty(data)) {
          const topics = data.flatMap((topic) => topic.key);
          if (!MiscHelper.isNotFalsyOrEmpty(data)) return input.dropDownOptions;

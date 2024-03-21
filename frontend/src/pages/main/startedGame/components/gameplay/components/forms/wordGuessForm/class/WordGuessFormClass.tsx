@@ -13,7 +13,6 @@ export default class WordGuessFormClass {
          placeholder: 'Select a word to guess',
          type: 'select',
          isRequired: true,
-         isDropDown: true,
          dropDownOptions: [],
          validator: (value: string): string | true => {
             if (!value) return 'Please select a word to guess';
