@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
-import type { IUseFormHandleChange } from '../../../../hooks/useForm';
+import type { IDateChangeEvent, IUseFormHandleChange } from '../../../../hooks/useForm';
 import { ErrorLabel, InputContainer, InputLabel, LabelWrapper } from '../textOrNumber/Style';
 import { DatePickerWrapper } from './Style';
 
@@ -17,7 +17,8 @@ export interface IDatePickerInputProps {
 }
 
 export default function DatePickerInput(props: IDatePickerInputProps): JSX.Element {
-   const { placeholder, name, isRequired, value, error, handleChange, id, isDisabled } = props;
+   const { placeholder, name, isRequired, value, error, handleChange, id, isDisabled } =
+      props;
    const [isActive, setIsActive] = useState(false);
    const [inputHasValue, setInputHasValue] = useState(!!value);
    const { isDarkTheme } = useThemeContext();
@@ -40,6 +41,17 @@ export default function DatePickerInput(props: IDatePickerInputProps): JSX.Eleme
       setIsActive(false);
    }
 
+   function handleChangeWithValueType(date: Date | null): void {
+      const event: IDateChangeEvent = {
+         target: {
+            name,
+            value: date,
+            valueType: 'date',
+         },
+      };
+      handleChange(event);
+   }
+
    return (
       <InputContainer>
          <LabelWrapper htmlFor={id}>
@@ -57,7 +69,7 @@ export default function DatePickerInput(props: IDatePickerInputProps): JSX.Eleme
             <DatePicker
                id={id}
                selected={value}
-               onChange={(date) => handleChange({ date, name })}
+               onChange={(date) => handleChangeWithValueType(date)}
                onBlur={handleBlur}
                onFocus={(e) => handleFocus(e)}
                dateFormat="MMMM d, yyyy h:mm aa"

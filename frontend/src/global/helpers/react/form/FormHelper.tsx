@@ -5,15 +5,14 @@ import type { IInputComponents } from '../../../components/lib/form/inputCombina
 import type { INumberLineOptions } from '../../../components/lib/form/numberLine/NumberLineInput';
 import NumberLineInput from '../../../components/lib/form/numberLine/NumberLineInput';
 import TextOrNumFieldInput from '../../../components/lib/form/textOrNumber/TextOrNumFieldInput';
-
-export type InputType = 'text' | 'password' | 'email' | 'number' | 'boolean';
+import type { InputValueTypes } from '../../../hooks/useForm';
 
 type InputObject<FieldName, ValueType> = {
    Component: IInputComponents;
    name: FieldName;
    id: string;
    placeholder: string;
-   type: InputType;
+   type: InputValueTypes;
    validator: (value: ValueType) => string | true;
    autoComplete?: 'current-password' | 'new-password';
    dropDownOptions?: IDropDownOption[];

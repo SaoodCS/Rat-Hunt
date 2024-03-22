@@ -1,5 +1,4 @@
-import type { InputType } from '../../../../helpers/react/form/FormHelper';
-import type { IUseFormHandleChange } from '../../../../hooks/useForm';
+import type { IUseFormHandleChange, InputValueTypes } from '../../../../hooks/useForm';
 import DatePickerInput from '../datePicker/DatePickerInput';
 import type { IDropDownOption } from '../dropDown/DropDownInput';
 import DropDownInput from '../dropDown/DropDownInput';
@@ -18,14 +17,14 @@ interface IInputCombination {
    name: string | number;
    id: string;
    placeholder: string;
-   type: InputType;
+   type: InputValueTypes;
    autoComplete: 'current-password' | 'new-password' | undefined;
    dropDownOptions: IDropDownOption[] | undefined;
    numberLineOptions: INumberLineOptions | undefined;
    hidePlaceholderOnFocus: boolean | undefined;
    isRequired: boolean | undefined;
    isDisabled: boolean | undefined;
-   value: string | number | Date;
+   value: string | number | Date | boolean;
    error: string;
    handleChange: IUseFormHandleChange;
 }
@@ -98,6 +97,7 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
          <DropDownInput
             placeholder={placeholder}
             name={name}
+            type={type}
             dropDownOptions={dropDownOptions || []}
             isRequired={isRequired || false}
             value={value}
@@ -112,6 +112,11 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
 
    if (!(typeof value === 'string' || typeof value === 'number')) {
       throw new Error(`${name} does not have a value of type string or number`);
+   }
+   if (type === 'boolean' || type === 'date') {
+      throw new Error(
+         `${name} must have a type prop set to 'text' | 'email' | 'password' | 'number'`,
+      );
    }
    return (
       <TextOrNumFieldInput

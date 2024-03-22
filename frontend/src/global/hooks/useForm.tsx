@@ -1,23 +1,51 @@
+import type { ChangeEvent } from 'react';
 import { useState } from 'react';
 import useApiErrorContext from '../context/widget/apiError/hooks/useApiErrorContext';
-import StringHelper from '../helpers/dataTypes/string/StringHelper';
 import FormHelper from '../helpers/react/form/FormHelper';
 
+export type TextOrNumInputTypes = 'string' | 'text' | 'email' | 'password' | 'number';
+
+export type InputValueTypes = TextOrNumInputTypes | 'boolean' | 'date';
+
+export interface ITextOrNumFieldChangeEvent extends ChangeEvent<HTMLInputElement> {
+   target: HTMLInputElement & { valueType: InputValueTypes };
+}
+
+export interface ISelectFieldChangeEvent extends ChangeEvent<HTMLSelectElement> {
+   target: HTMLSelectElement & { valueType: InputValueTypes };
+}
+
 export interface INumberRangeChangeEvent {
-   numberRangeValue: number;
-   name: string | number;
+   target: {
+      name: string | number;
+      value: number | '';
+      valueType: 'number';
+   };
 }
 
 export interface IDateChangeEvent {
-   date: Date | null;
-   name: string | number;
+   target: {
+      name: string | number;
+      value: Date | null;
+      valueType: 'date';
+   };
+}
+
+export interface ICheckboxSwitchRadioChangeEvent {
+   target: {
+      name: string | number;
+      value: boolean;
+      valueType: 'boolean';
+   };
 }
 
 export type IUseFormHandleChange = (
    e:
-      | React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+      | ITextOrNumFieldChangeEvent
+      | ISelectFieldChangeEvent
       | IDateChangeEvent
-      | INumberRangeChangeEvent,
+      | INumberRangeChangeEvent
+      | ICheckboxSwitchRadioChangeEvent,
 ) => void;
 
 interface IUseFormReturn<T> {
@@ -51,26 +79,17 @@ export default function useForm<T>(
    }
 
    function handleChange(e: Parameters<IUseFormHandleChange>[0]): void {
-      if ('numberRangeValue' in e) {
-         setForm((prevState) => ({ ...prevState, [e.name]: e.numberRangeValue }));
-         return;
-      }
-      if ('date' in e) {
-         setForm((prevState) => ({ ...prevState, [e.name]: e.date }));
-         return;
-      }
-      const isESelect = e.target instanceof HTMLSelectElement;
-      const selectElIsNumber = isESelect && StringHelper.isNumber(e.target.value);
-      const { name, value, type } = e.target;
-      if (type === 'number' || selectElIsNumber) {
-         setForm((prevState) => ({ ...prevState, [name]: value === '' ? '' : Number(value) }));
-         return;
-      }
-      if (type === 'checkbox') {
-         setForm((prevState) => ({ ...prevState, [name]: Boolean(value) }));
-         return;
-      }
-      setForm((prevState) => ({ ...prevState, [name]: value }));
+      const { name, value, valueType } = e.target;
+      const typesAndNewValues: Record<InputValueTypes, typeof value> = {
+         boolean: value === '' ? false : value,
+         number: value,
+         date: value,
+         string: value,
+         text: value,
+         email: value,
+         password: value,
+      };
+      setForm((prevState) => ({ ...prevState, [name]: typesAndNewValues[valueType] }));
    }
 
    return {
@@ -82,13 +101,3 @@ export default function useForm<T>(
       initHandleSubmit,
    };
 }
-
-// Potential update:
-//1 - rather than passing initialErrors as a prop, create initialErrors from initialState in the hook
-// --- adv: less code to write in each form's class (DRY principle)
-// --- disadv: less consistency as initialState and initialErrors won't both created in same place
-// --- disadv2: as initialErrors would be create in a hook / react component, it would be re-calculated on every render (unless memoized)
-//2 - rather than passing initialErrors and initialState, pass the inputs prop from the form's class and then create the initialErrors and initialState in the hook
-// -- adv: less code to write in each form's class (DRY principle)
-// --- disadv: less control over setting the initialState for an individual form
-// --- disadv2: both initialState and initialErrors would be created in a hook / react component, so they would be re-calculated on every render (unless memoized)

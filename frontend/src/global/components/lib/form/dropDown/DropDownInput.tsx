@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
-import type { IUseFormHandleChange } from '../../../../hooks/useForm';
+import type {
+   ISelectFieldChangeEvent,
+   IUseFormHandleChange,
+   InputValueTypes,
+} from '../../../../hooks/useForm';
 import { ErrorLabel, InputLabel } from '../textOrNumber/Style';
 import {
    DropDownArrow,
@@ -19,6 +23,7 @@ interface IDropDownInput {
    name: number | string;
    id: string;
    placeholder: string;
+   type: InputValueTypes;
    dropDownOptions: IDropDownOption[];
    hidePlaceholderOnFocus: boolean;
    isRequired: boolean;
@@ -40,6 +45,7 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
       value,
       isDisabled,
       hidePlaceholderOnFocus,
+      type,
    } = props;
    const { isDarkTheme } = useThemeContext();
    const [isActive, setIsActive] = useState(false);
@@ -55,6 +61,12 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
 
    function handleBlur(): void {
       setIsActive(false);
+   }
+
+   function handleChangeWithValueType(e: React.ChangeEvent<HTMLSelectElement>): void {
+      const assertEType = e as ISelectFieldChangeEvent;
+      assertEType.target.valueType = type;
+      handleChange(assertEType);
    }
 
    return (
@@ -74,7 +86,7 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
          </DropDownLabelWrapper>
          <StyledSelect
             name={name.toString()}
-            onChange={handleChange}
+            onChange={handleChangeWithValueType}
             id={id}
             hasError={!!error}
             isDarkTheme={isDarkTheme}

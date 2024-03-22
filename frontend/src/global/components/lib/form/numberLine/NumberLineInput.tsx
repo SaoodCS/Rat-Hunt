@@ -4,7 +4,7 @@ import type { MarkObj } from 'rc-slider/lib/Marks';
 import { useEffect, useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import JSXHelper from '../../../../helpers/dataTypes/jsx/jsxHelper';
-import type { IUseFormHandleChange } from '../../../../hooks/useForm';
+import type { INumberRangeChangeEvent, IUseFormHandleChange } from '../../../../hooks/useForm';
 import ConditionalRender from '../../renderModifiers/conditionalRender/ConditionalRender';
 import { ErrorLabel, InputContainer, LabelWrapper } from '../textOrNumber/Style';
 import {
@@ -59,7 +59,14 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
 
    useEffect(() => {
       if (isActive && !inputHasValue) {
-         handleChange({ numberRangeValue: min, name });
+         const event: INumberRangeChangeEvent = {
+            target: {
+               name,
+               value: min,
+               valueType: 'number',
+            },
+         };
+         handleChange(event);
       }
    }, [isActive]);
 
@@ -91,6 +98,17 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
       return marks;
    }
 
+   function handleChangeWithValueType(currentVal: number | number[]): void {
+      const event: INumberRangeChangeEvent = {
+         target: {
+            name,
+            value: currentVal as number,
+            valueType: 'number',
+         },
+      };
+      handleChange(event);
+   }
+
    return (
       <InputContainer style={{ height: '5em' }}>
          <LabelWrapper htmlFor={id}>
@@ -117,9 +135,7 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
                min={min}
                max={max}
                value={value || min}
-               onChange={(currentVal) =>
-                  handleChange({ numberRangeValue: currentVal as number, name })
-               }
+               onChange={(currentVal) => handleChangeWithValueType(currentVal)}
                disabled={isDisabled}
                marks={createMarks()}
                styles={{

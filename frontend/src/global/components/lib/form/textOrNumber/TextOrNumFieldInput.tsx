@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
-import type { IUseFormHandleChange } from '../../../../hooks/useForm';
+import type {
+   ITextOrNumFieldChangeEvent,
+   IUseFormHandleChange,
+   TextOrNumInputTypes,
+} from '../../../../hooks/useForm';
 import { ErrorLabel, InputContainer, InputLabel, LabelWrapper, TextInput } from './Style';
 
 interface IInput {
    name: string | number;
    id: string;
    placeholder: string;
-   type: string;
+   type: TextOrNumInputTypes;
    autoComplete: 'current-password' | 'new-password' | undefined;
    hidePlaceholderOnFocus: boolean;
    isRequired: boolean;
@@ -47,6 +51,12 @@ export default function TextOrNumFieldInput(props: IInput): JSX.Element {
       setIsActive(false);
    }
 
+   function handleChangeWithValueType(e: React.ChangeEvent<HTMLInputElement>): void {
+      const assertEType = e as ITextOrNumFieldChangeEvent;
+      assertEType.target.valueType = type;
+      handleChange(assertEType);
+   }
+
    return (
       <InputContainer>
          <LabelWrapper htmlFor={id}>
@@ -69,7 +79,7 @@ export default function TextOrNumFieldInput(props: IInput): JSX.Element {
             type={type}
             name={name.toString()}
             isRequired={isRequired}
-            onChange={handleChange}
+            onChange={handleChangeWithValueType}
             value={value}
             hasError={!!error}
             isDarkTheme={isDarkTheme}
