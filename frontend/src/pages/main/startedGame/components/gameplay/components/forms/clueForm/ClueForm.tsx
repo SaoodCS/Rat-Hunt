@@ -1,7 +1,7 @@
 import { Send } from '@styled-icons/ionicons-sharp/Send';
 import { Fragment, useContext } from 'react';
 import { TextBtn } from '../../../../../../../../global/components/lib/button/textBtn/Style';
-import { StyledForm } from '../../../../../../../../global/components/lib/form/form/Style';
+import { StyledForm } from '../../../../../../../../global/components/lib/form/style/Style';
 import {
    ErrorLabel,
    TextInputAlt,

@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import { StaticButton } from '../../../../../../../../../global/components/lib/button/staticButton/Style';
 import type { IDropDownOption } from '../../../../../../../../../global/components/lib/form/dropDown/DropDownInput';
-import { StyledForm } from '../../../../../../../../../global/components/lib/form/form/Style';
 import InputCombination from '../../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
+import { StyledForm } from '../../../../../../../../../global/components/lib/form/style/Style';
 import { GameContext } from '../../../../../../../../../global/context/game/GameContext';
 import useApiErrorContext from '../../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import ArrayHelper from '../../../../../../../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
