@@ -1,4 +1,3 @@
-import type { ChangeEvent } from 'react';
 import { useEffect, useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import type { N_Form } from '../N_Form';
@@ -11,17 +10,12 @@ import {
    StyledSelect,
 } from './Style';
 
-export interface ISelectFieldChangeEvent extends ChangeEvent<HTMLSelectElement> {
-   target: HTMLSelectElement & { valueType: N_Form.Inputs.I.TypeProp };
-}
-
 export interface IDropDownOption {
    value: string | number;
    label: string;
 }
 
 interface IDropDownInput extends N_Form.Inputs.I.CommonInputProps {
-   type: N_Form.Inputs.I.TypeProp;
    dropDownOptions: IDropDownOption[];
    hidePlaceholderOnFocus: boolean;
    value: string | number;
@@ -39,7 +33,6 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
       value,
       isDisabled,
       hidePlaceholderOnFocus,
-      type,
    } = props;
    const { isDarkTheme } = useThemeContext();
    const [isActive, setIsActive] = useState(false);
@@ -55,12 +48,6 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
 
    function handleBlur(): void {
       setIsActive(false);
-   }
-
-   function handleChangeWithValueType(e: React.ChangeEvent<HTMLSelectElement>): void {
-      const assertEType = e as ISelectFieldChangeEvent;
-      assertEType.target.valueType = type;
-      handleChange(assertEType);
    }
 
    return (
@@ -80,7 +67,7 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
          </DropDownLabelWrapper>
          <StyledSelect
             name={name.toString()}
-            onChange={handleChangeWithValueType}
+            onChange={handleChange}
             id={id}
             hasError={!!error}
             isDarkTheme={isDarkTheme}

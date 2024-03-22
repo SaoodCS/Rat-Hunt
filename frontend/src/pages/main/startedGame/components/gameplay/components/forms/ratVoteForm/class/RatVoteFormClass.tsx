@@ -6,7 +6,7 @@ export interface IRatVoteFormClass {
 }
 
 export default class RatVoteFormClass {
-   private static inputs: N_Form.Inputs.I.InputArray<IRatVoteFormClass> = [
+   private static inputs: N_Form.Inputs.I.ArrOfInputObjects<IRatVoteFormClass> = [
       {
          Component: DropDownInput,
          name: 'vote',
@@ -14,6 +14,7 @@ export default class RatVoteFormClass {
          placeholder: 'Vote who you think the rat is',
          type: 'text',
          isRequired: true,
+         isDisabled: false,
          dropDownOptions: [],
          validator: (value: string): string | true => {
             if (!value) return 'Please select a player';

@@ -4,13 +4,9 @@ import DropDownInput from '../dropDown/DropDownInput';
 import NumberLineInput from '../numberLine/NumberLineInput';
 import TextOrNumFieldInput from '../textOrNumber/TextOrNumFieldInput';
 
-interface IInputCombination extends N_Form.Inputs.I.AllInputProps {
-   value: string | number | Date | boolean;
-   error: string;
-   handleChange: N_Form.Inputs.I.HandleChange;
-}
-
-export default function InputCombination(props: IInputCombination): JSX.Element {
+export default function InputCombination(
+   props: N_Form.Inputs.I.AllInputPropsAsRequired,
+): JSX.Element {
    const {
       placeholder,
       name,
@@ -53,7 +49,7 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
    }
 
    if (Component === DatePickerInput) {
-      if (!(value instanceof Date)) {
+      if (!(value instanceof Date || value === null)) {
          throw new Error(`${name} does not have a value of type Date`);
       }
       return (
@@ -78,7 +74,6 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
          <DropDownInput
             placeholder={placeholder}
             name={name}
-            type={type}
             dropDownOptions={dropDownOptions || []}
             isRequired={isRequired || false}
             value={value}
@@ -94,7 +89,7 @@ export default function InputCombination(props: IInputCombination): JSX.Element 
    if (!(typeof value === 'string' || typeof value === 'number')) {
       throw new Error(`${name} does not have a value of type string or number`);
    }
-   if (type === 'boolean' || type === 'date') {
+   if (!type) {
       throw new Error(
          `${name} must have a type prop set to 'text' | 'email' | 'password' | 'number'`,
       );

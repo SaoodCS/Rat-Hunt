@@ -6,7 +6,7 @@ export interface IClueFormClass {
 }
 
 export default class ClueFormClass {
-   private static inputs: N_Form.Inputs.I.InputArray<IClueFormClass> = [
+   private static inputs: N_Form.Inputs.I.ArrOfInputObjects<IClueFormClass> = [
       {
          Component: TextOrNumFieldInput,
          name: 'clue',
@@ -14,6 +14,7 @@ export default class ClueFormClass {
          placeholder: 'Please enter a clue',
          type: 'text',
          isRequired: true,
+         isDisabled: false,
          validator: (value: string): string | true => {
             if (!value) return 'Please enter a clue';
             if (value.length < 1) return 'Clue must be at least 1 character';

@@ -33,7 +33,7 @@ export default function useForm<T>(
    }
 
    function handleChange(e: Parameters<N_Form.Inputs.I.HandleChange>[0]): void {
-      const { name, value, valueType } = e.target;
+      const { name, value } = e.target;
       setForm((prevState) => ({ ...prevState, [name]: value }));
    }
 

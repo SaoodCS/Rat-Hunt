@@ -6,7 +6,7 @@ export interface IWordGuessFormClass {
 }
 
 export default class WordGuessFormClass {
-   private static inputs: N_Form.Inputs.I.InputArray<IWordGuessFormClass> = [
+   private static inputs: N_Form.Inputs.I.ArrOfInputObjects<IWordGuessFormClass> = [
       {
          Component: DropDownInput,
          name: 'guess',
@@ -14,6 +14,7 @@ export default class WordGuessFormClass {
          placeholder: 'Select a word to guess',
          type: 'text',
          isRequired: true,
+         isDisabled: false,
          dropDownOptions: [],
          validator: (value: string): string | true => {
             if (!value) return 'Please select a word to guess';

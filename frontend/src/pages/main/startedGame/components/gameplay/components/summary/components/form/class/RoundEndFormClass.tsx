@@ -8,7 +8,7 @@ export interface IRoundEndForm {
 }
 
 export default class RoundEndFormClass {
-   private static inputs: N_Form.Inputs.I.InputArray<IRoundEndForm> = [
+   private static inputs: N_Form.Inputs.I.ArrOfInputObjects<IRoundEndForm> = [
       {
          Component: DropDownInput,
          name: 'newTopic',
@@ -16,6 +16,7 @@ export default class RoundEndFormClass {
          placeholder: 'Select a Topic',
          type: 'text',
          isRequired: true,
+         isDisabled: false,
          dropDownOptions: [],
          validator: (value: string): string | true => {
             if (!value) return 'Please select a topic';
@@ -30,6 +31,7 @@ export default class RoundEndFormClass {
          placeholder: 'Number of Rounds',
          type: 'number',
          isRequired: true,
+         isDisabled: false,
          numberLineOptions: {
             min: 1,
             max: 10,

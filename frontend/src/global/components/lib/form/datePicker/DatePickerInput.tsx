@@ -5,26 +5,18 @@ import type { N_Form } from '../N_Form';
 import { ErrorLabel, InputContainer, InputLabel, LabelWrapper } from '../textOrNumber/Style';
 import { DatePickerWrapper } from './Style';
 
-export interface IDateChangeEvent {
-   target: {
-      name: string | number;
-      value: Date | null;
-      valueType: 'date';
-   };
-}
-
 export interface IDatePickerInputProps extends N_Form.Inputs.I.CommonInputProps {
-   value: Date;
+   value: Date | null;
 }
 
 export default function DatePickerInput(props: IDatePickerInputProps): JSX.Element {
    const { placeholder, name, isRequired, value, error, handleChange, id, isDisabled } = props;
    const [isActive, setIsActive] = useState(false);
-   const [inputHasValue, setInputHasValue] = useState(!!value);
+   const [inputHasValue, setInputHasValue] = useState(value !== null);
    const { isDarkTheme } = useThemeContext();
 
    useEffect(() => {
-      setInputHasValue(!!value);
+      setInputHasValue(value !== null);
    }, [value]);
 
    function handleFocus(e: React.FocusEvent<HTMLInputElement, Element>): void {
@@ -39,17 +31,6 @@ export default function DatePickerInput(props: IDatePickerInputProps): JSX.Eleme
 
    function handleBlur(): void {
       setIsActive(false);
-   }
-
-   function handleChangeWithValueType(date: Date | null): void {
-      const event: IDateChangeEvent = {
-         target: {
-            name,
-            value: date,
-            valueType: 'date',
-         },
-      };
-      handleChange(event);
    }
 
    return (
@@ -69,7 +50,14 @@ export default function DatePickerInput(props: IDatePickerInputProps): JSX.Eleme
             <DatePicker
                id={id}
                selected={value}
-               onChange={(date) => handleChangeWithValueType(date)}
+               onChange={(date) => {
+                  handleChange({
+                     target: {
+                        name,
+                        value: date,
+                     },
+                  });
+               }}
                onBlur={handleBlur}
                onFocus={(e) => handleFocus(e)}
                dateFormat="MMMM d, yyyy h:mm aa"

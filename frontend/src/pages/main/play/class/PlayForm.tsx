@@ -15,7 +15,7 @@ export interface IPlayFormClass {
 }
 
 export default class PlayFormClass {
-   private static inputs: N_Form.Inputs.I.InputArray<IPlayFormClass> = [
+   private static inputs: N_Form.Inputs.I.ArrOfInputObjects<IPlayFormClass> = [
       {
          Component: TextOrNumFieldInput,
          name: 'name',
@@ -23,6 +23,7 @@ export default class PlayFormClass {
          placeholder: 'Username',
          type: 'text',
          isRequired: true,
+         isDisabled: false,
          validator: (value: string): string | true => {
             if (!value) return 'Please enter your name';
             if (value.trim() === '') return 'Name cannot be empty';
@@ -41,6 +42,7 @@ export default class PlayFormClass {
          placeholder: 'Join or Host',
          type: 'text',
          isRequired: true,
+         isDisabled: false,
          dropDownOptions: [
             { value: 'join', label: 'Join' },
             { value: 'host', label: 'Host' },
@@ -58,6 +60,7 @@ export default class PlayFormClass {
          placeholder: 'Room Id',
          type: 'text',
          isRequired: true,
+         isDisabled: false,
          validator: (value: string): string | true => {
             if (!value) return 'Please enter the room id';
             return true;
@@ -70,6 +73,7 @@ export default class PlayFormClass {
          placeholder: 'Select Topic',
          type: 'text',
          isRequired: true,
+         isDisabled: false,
          dropDownOptions: [],
          validator: (value: string): string | true => {
             if (!value) return 'Please select a topic';
@@ -89,6 +93,7 @@ export default class PlayFormClass {
             displayLinePointers: true,
          },
          isRequired: true,
+         isDisabled: false,
          validator: (value: number): string | true => {
             if (typeof value !== 'number') return 'Please enter the number of rounds';
             if (value < 1) return 'Number of rounds must be at least 1';

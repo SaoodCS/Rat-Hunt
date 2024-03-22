@@ -1,35 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { IDateChangeEvent } from './datePicker/DatePickerInput';
+import type { Types } from '../../../helpers/types/Types';
 import DatePickerInput from './datePicker/DatePickerInput';
-import type { IDropDownOption, ISelectFieldChangeEvent } from './dropDown/DropDownInput';
+import type { IDropDownOption } from './dropDown/DropDownInput';
 import DropDownInput from './dropDown/DropDownInput';
-import type { INumberLineOptions, INumberRangeChangeEvent } from './numberLine/NumberLineInput';
+import type { INumberLineOptions } from './numberLine/NumberLineInput';
 import NumberLineInput from './numberLine/NumberLineInput';
-import type { ITextOrNumFieldChangeEvent } from './textOrNumber/TextOrNumFieldInput';
 import TextOrNumFieldInput from './textOrNumber/TextOrNumFieldInput';
-
-//TEMPORARILY HERE:
-export interface ICheckboxSwitchRadioChangeEvent {
-   target: {
-      name: string | number;
-      value: boolean;
-      valueType: 'boolean';
-   };
-}
 
 export namespace N_Form {
    export namespace Inputs {
       export namespace I {
-         type InputObject<FieldName, ValueType> = AllInputProps & {
-            name: FieldName;
-            validator: (value: ValueType) => boolean | string;
-         };
-         export type InputArray<FormInputs> = {
-            [FieldName in keyof FormInputs]: InputObject<FieldName, FormInputs[FieldName]>;
-         }[keyof FormInputs][];
-         export type TextOrNumTypeProp = 'string' | 'text' | 'email' | 'password' | 'number';
-         export type TypeProp = TextOrNumTypeProp | 'boolean' | 'date';
-
          export type Components =
             // -- UPDATE HERE WHEN ADDING NEW INPUT COMPONENTS (after creating its component) -- //
             | typeof DatePickerInput
@@ -37,14 +17,18 @@ export namespace N_Form {
             | typeof NumberLineInput
             | typeof TextOrNumFieldInput;
 
+         export type HandleChangeEvent =
+            | {
+                 target: {
+                    name: string | number;
+                    value: string | number | Date | boolean | null;
+                 };
+              }
+            | React.ChangeEvent<HTMLSelectElement | HTMLInputElement>;
+
          export type HandleChange = (
             // -- UPDATE HERE WHEN ADDING NEW INPUT COMPONENTS (after defining its handleChange type in its component) -- //
-            e:
-               | ITextOrNumFieldChangeEvent
-               | ISelectFieldChangeEvent
-               | IDateChangeEvent
-               | INumberRangeChangeEvent
-               | ICheckboxSwitchRadioChangeEvent,
+            e: HandleChangeEvent,
          ) => void;
 
          export type CommonInputProps = {
@@ -57,28 +41,39 @@ export namespace N_Form {
             handleChange: HandleChange;
          };
 
-         export type AllInputProps = Omit<CommonInputProps, 'error' | 'handleChange'> & {
-            // -- UPDATE HERE WHEN ADDING NEW INPUT COMPONENTS (if it takes any additional props) -- //
+         export type AllInputProps = CommonInputProps & {
+            // -- UPDATE HERE WHEN ADDING NEW INPUT COMPONENTS (if it takes any additional props, add it as an optional) -- //
             Component: Inputs.I.Components;
-            type: TypeProp;
-            autoComplete?: 'current-password' | 'new-password' | undefined;
-            dropDownOptions?: IDropDownOption[] | undefined;
-            numberLineOptions?: INumberLineOptions | undefined;
-            hidePlaceholderOnFocus?: boolean | undefined;
-            isRequired?: boolean | undefined;
-            isDisabled?: boolean | undefined;
+            value: string | number | Date | boolean;
+            type?: 'text' | 'email' | 'password' | 'number';
+            autoComplete?: 'current-password' | 'new-password';
+            dropDownOptions?: IDropDownOption[];
+            numberLineOptions?: INumberLineOptions;
+            hidePlaceholderOnFocus?: boolean;
          };
+
+         export type ArrOfInputObjects<FormInputs> = {
+            [FieldName in keyof FormInputs]: Omit<
+               AllInputProps,
+               'error' | 'handleChange' | 'value' | 'name'
+            > & {
+               name: FieldName;
+               validator: (value: FormInputs[FieldName]) => boolean | string;
+            };
+         }[keyof FormInputs][];
+
+         export type AllInputPropsAsRequired = Types.MakeAllRequired.AddORUndefined<AllInputProps>;
       }
    }
 
    export namespace Helper {
-      export function createInitialState<T>(arr: Inputs.I.InputArray<T>): T {
+      export function createInitialState<T>(arr: Inputs.I.ArrOfInputObjects<T>): T {
          // -- UPDATE HERE WHEN ADDING NEW INPUT COMPONENTS -- //
          const initialState: any = {};
          for (let i = 0; i < arr.length; i++) {
             const input = arr[i];
             if (input.Component === DatePickerInput) {
-               initialState[input.name] = new Date();
+               initialState[input.name] = null;
                continue;
             }
             if (input.Component === TextOrNumFieldInput) {
@@ -98,7 +93,9 @@ export namespace N_Form {
          return initialState as T;
       }
 
-      export function createInitialErrors<T>(arr: Inputs.I.InputArray<T>): Record<keyof T, string> {
+      export function createInitialErrors<T>(
+         arr: Inputs.I.ArrOfInputObjects<T>,
+      ): Record<keyof T, string> {
          const errors: Record<keyof T, string> = {} as Record<keyof T, string>;
          arr.forEach((input) => {
             errors[input.name] = '';
@@ -108,7 +105,7 @@ export namespace N_Form {
 
       export function validation<T>(
          formStateVal: T,
-         formInputsArr: Inputs.I.InputArray<T>,
+         formInputsArr: Inputs.I.ArrOfInputObjects<T>,
       ): Record<keyof T, string> {
          const validated = formInputsArr.map((input) => {
             const validationValue = input.validator(formStateVal[input.name]);

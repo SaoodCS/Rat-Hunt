@@ -1,16 +1,11 @@
-import type { ChangeEvent } from 'react';
 import { useEffect, useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import type { N_Form } from '../N_Form';
 import { ErrorLabel, InputContainer, InputLabel, LabelWrapper, TextInput } from './Style';
 
-export interface ITextOrNumFieldChangeEvent extends ChangeEvent<HTMLInputElement> {
-   target: HTMLInputElement & { valueType: N_Form.Inputs.I.TypeProp };
-}
-
 interface IInput extends N_Form.Inputs.I.CommonInputProps {
-   type: N_Form.Inputs.I.TextOrNumTypeProp;
-   autoComplete: 'current-password' | 'new-password' | undefined;
+   type: N_Form.Inputs.I.AllInputPropsAsRequired['type'];
+   autoComplete: N_Form.Inputs.I.AllInputPropsAsRequired['autoComplete'];
    hidePlaceholderOnFocus: boolean;
    value: string | number;
 }
@@ -45,12 +40,6 @@ export default function TextOrNumFieldInput(props: IInput): JSX.Element {
       setIsActive(false);
    }
 
-   function handleChangeWithValueType(e: React.ChangeEvent<HTMLInputElement>): void {
-      const assertEType = e as ITextOrNumFieldChangeEvent;
-      assertEType.target.valueType = type;
-      handleChange(assertEType);
-   }
-
    return (
       <InputContainer>
          <LabelWrapper htmlFor={id}>
@@ -73,7 +62,7 @@ export default function TextOrNumFieldInput(props: IInput): JSX.Element {
             type={type}
             name={name.toString()}
             isRequired={isRequired}
-            onChange={handleChangeWithValueType}
+            onChange={handleChange}
             value={value}
             hasError={!!error}
             isDarkTheme={isDarkTheme}

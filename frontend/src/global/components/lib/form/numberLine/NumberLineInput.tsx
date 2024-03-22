@@ -20,14 +20,6 @@ import {
    numberLineStyles,
 } from './style/Style';
 
-export interface INumberRangeChangeEvent {
-   target: {
-      name: string | number;
-      value: number | '';
-      valueType: 'number';
-   };
-}
-
 export interface INumberLineOptions {
    min: number;
    max: number;
@@ -60,14 +52,12 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
 
    useEffect(() => {
       if (isActive && !inputHasValue) {
-         const event: INumberRangeChangeEvent = {
+         handleChange({
             target: {
                name,
                value: min,
-               valueType: 'number',
             },
-         };
-         handleChange(event);
+         });
       }
    }, [isActive]);
 
@@ -99,17 +89,6 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
       return marks;
    }
 
-   function handleChangeWithValueType(currentVal: number | number[]): void {
-      const event: INumberRangeChangeEvent = {
-         target: {
-            name,
-            value: currentVal as number,
-            valueType: 'number',
-         },
-      };
-      handleChange(event);
-   }
-
    return (
       <InputContainer style={{ height: '5em' }}>
          <LabelWrapper htmlFor={id}>
@@ -136,7 +115,14 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
                min={min}
                max={max}
                value={value || min}
-               onChange={(currentVal) => handleChangeWithValueType(currentVal)}
+               onChange={(currentVal) => {
+                  handleChange({
+                     target: {
+                        name,
+                        value: currentVal as number,
+                     },
+                  });
+               }}
                disabled={isDisabled}
                marks={createMarks()}
                styles={{
