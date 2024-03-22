@@ -1,7 +1,6 @@
+import { N_Form } from '../../../../../../../../../../global/components/lib/form/N_Form';
 import DropDownInput from '../../../../../../../../../../global/components/lib/form/dropDown/DropDownInput';
 import NumberLineInput from '../../../../../../../../../../global/components/lib/form/numberLine/NumberLineInput';
-import type { InputArray } from '../../../../../../../../../../global/helpers/react/form/FormHelper';
-import FormHelper from '../../../../../../../../../../global/helpers/react/form/FormHelper';
 
 export interface IRoundEndForm {
    newTopic: string;
@@ -9,7 +8,7 @@ export interface IRoundEndForm {
 }
 
 export default class RoundEndFormClass {
-   private static inputs: InputArray<IRoundEndForm> = [
+   private static inputs: N_Form.Inputs.I.InputArray<IRoundEndForm> = [
       {
          Component: DropDownInput,
          name: 'newTopic',
@@ -46,17 +45,17 @@ export default class RoundEndFormClass {
       },
    ];
 
-   private static initialState: IRoundEndForm = FormHelper.createInitialState<IRoundEndForm>(
+   private static initialState: IRoundEndForm = N_Form.Helper.createInitialState<IRoundEndForm>(
       RoundEndFormClass.inputs,
    );
 
-   private static initialErrors = FormHelper.createInitialErrors(RoundEndFormClass.inputs);
+   private static initialErrors = N_Form.Helper.createInitialErrors(RoundEndFormClass.inputs);
 
    private static validate(
       isLastRound: boolean,
    ): (formValues: IRoundEndForm) => Record<keyof IRoundEndForm, string> {
       return (formValues: IRoundEndForm): Record<keyof IRoundEndForm, string> => {
-         const formValidation = FormHelper.validation(formValues, RoundEndFormClass.inputs);
+         const formValidation = N_Form.Helper.validation(formValues, RoundEndFormClass.inputs);
          if (!isLastRound) formValidation.noOfRounds = '';
          return formValidation;
       };

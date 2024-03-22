@@ -1,59 +1,13 @@
-import type { ChangeEvent } from 'react';
 import { useState } from 'react';
+import { N_Form } from '../components/lib/form/N_Form';
 import useApiErrorContext from '../context/widget/apiError/hooks/useApiErrorContext';
-import FormHelper from '../helpers/react/form/FormHelper';
-
-export type TextOrNumInputTypes = 'string' | 'text' | 'email' | 'password' | 'number';
-
-export type InputValueTypes = TextOrNumInputTypes | 'boolean' | 'date';
-
-export interface ITextOrNumFieldChangeEvent extends ChangeEvent<HTMLInputElement> {
-   target: HTMLInputElement & { valueType: InputValueTypes };
-}
-
-export interface ISelectFieldChangeEvent extends ChangeEvent<HTMLSelectElement> {
-   target: HTMLSelectElement & { valueType: InputValueTypes };
-}
-
-export interface INumberRangeChangeEvent {
-   target: {
-      name: string | number;
-      value: number | '';
-      valueType: 'number';
-   };
-}
-
-export interface IDateChangeEvent {
-   target: {
-      name: string | number;
-      value: Date | null;
-      valueType: 'date';
-   };
-}
-
-export interface ICheckboxSwitchRadioChangeEvent {
-   target: {
-      name: string | number;
-      value: boolean;
-      valueType: 'boolean';
-   };
-}
-
-export type IUseFormHandleChange = (
-   e:
-      | ITextOrNumFieldChangeEvent
-      | ISelectFieldChangeEvent
-      | IDateChangeEvent
-      | INumberRangeChangeEvent
-      | ICheckboxSwitchRadioChangeEvent,
-) => void;
 
 interface IUseFormReturn<T> {
    form: T;
    setForm: React.Dispatch<React.SetStateAction<T>>;
    errors: Record<keyof T, string>;
    setErrors: React.Dispatch<React.SetStateAction<Record<keyof T, string>>>;
-   handleChange: IUseFormHandleChange;
+   handleChange: N_Form.Inputs.I.HandleChange;
    initHandleSubmit: (e: React.FormEvent<HTMLFormElement>) => { isFormValid: boolean };
 }
 
@@ -71,25 +25,16 @@ export default function useForm<T>(
       setApiError('');
       setErrors(initialErrors);
       const validationErrors = validationFunc(form);
-      if (FormHelper.hasErrors(validationErrors)) {
+      if (N_Form.Helper.hasErrors(validationErrors)) {
          setErrors(validationErrors);
          return { isFormValid: false };
       }
       return { isFormValid: true };
    }
 
-   function handleChange(e: Parameters<IUseFormHandleChange>[0]): void {
+   function handleChange(e: Parameters<N_Form.Inputs.I.HandleChange>[0]): void {
       const { name, value, valueType } = e.target;
-      const typesAndNewValues: Record<InputValueTypes, typeof value> = {
-         boolean: value === '' ? false : value,
-         number: value,
-         date: value,
-         string: value,
-         text: value,
-         email: value,
-         password: value,
-      };
-      setForm((prevState) => ({ ...prevState, [name]: typesAndNewValues[valueType] }));
+      setForm((prevState) => ({ ...prevState, [name]: value }));
    }
 
    return {

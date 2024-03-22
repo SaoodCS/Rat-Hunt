@@ -1,13 +1,12 @@
+import { N_Form } from '../../../../../../../../../global/components/lib/form/N_Form';
 import TextOrNumFieldInput from '../../../../../../../../../global/components/lib/form/textOrNumber/TextOrNumFieldInput';
-import type { InputArray } from '../../../../../../../../../global/helpers/react/form/FormHelper';
-import FormHelper from '../../../../../../../../../global/helpers/react/form/FormHelper';
 
 export interface IClueFormClass {
    clue: string;
 }
 
 export default class ClueFormClass {
-   private static inputs: InputArray<IClueFormClass> = [
+   private static inputs: N_Form.Inputs.I.InputArray<IClueFormClass> = [
       {
          Component: TextOrNumFieldInput,
          name: 'clue',
@@ -26,16 +25,16 @@ export default class ClueFormClass {
       },
    ];
 
-   private static initialState: IClueFormClass = FormHelper.createInitialState<IClueFormClass>(
+   private static initialState: IClueFormClass = N_Form.Helper.createInitialState<IClueFormClass>(
       ClueFormClass.inputs,
    );
 
-   private static initialErrors = FormHelper.createInitialErrors<IClueFormClass>(
+   private static initialErrors = N_Form.Helper.createInitialErrors<IClueFormClass>(
       ClueFormClass.inputs,
    );
 
    private static validate(formValues: IClueFormClass): Record<keyof IClueFormClass, string> {
-      const validation = FormHelper.validation(formValues, ClueFormClass.inputs);
+      const validation = N_Form.Helper.validation(formValues, ClueFormClass.inputs);
       return validation;
    }
 

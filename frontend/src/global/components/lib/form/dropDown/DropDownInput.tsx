@@ -1,10 +1,7 @@
+import type { ChangeEvent } from 'react';
 import { useEffect, useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
-import type {
-   ISelectFieldChangeEvent,
-   IUseFormHandleChange,
-   InputValueTypes,
-} from '../../../../hooks/useForm';
+import type { N_Form } from '../N_Form';
 import { ErrorLabel, InputLabel } from '../textOrNumber/Style';
 import {
    DropDownArrow,
@@ -14,23 +11,20 @@ import {
    StyledSelect,
 } from './Style';
 
+export interface ISelectFieldChangeEvent extends ChangeEvent<HTMLSelectElement> {
+   target: HTMLSelectElement & { valueType: N_Form.Inputs.I.TypeProp };
+}
+
 export interface IDropDownOption {
    value: string | number;
    label: string;
 }
 
-interface IDropDownInput {
-   name: number | string;
-   id: string;
-   placeholder: string;
-   type: InputValueTypes;
+interface IDropDownInput extends N_Form.Inputs.I.CommonInputProps {
+   type: N_Form.Inputs.I.TypeProp;
    dropDownOptions: IDropDownOption[];
    hidePlaceholderOnFocus: boolean;
-   isRequired: boolean;
-   isDisabled: boolean;
    value: string | number;
-   error: string;
-   handleChange: IUseFormHandleChange;
 }
 
 export default function DropDownInput(props: IDropDownInput): JSX.Element {

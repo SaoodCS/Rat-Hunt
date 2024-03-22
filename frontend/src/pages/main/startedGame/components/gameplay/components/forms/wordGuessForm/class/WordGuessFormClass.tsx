@@ -1,13 +1,12 @@
+import { N_Form } from '../../../../../../../../../global/components/lib/form/N_Form';
 import DropDownInput from '../../../../../../../../../global/components/lib/form/dropDown/DropDownInput';
-import type { InputArray } from '../../../../../../../../../global/helpers/react/form/FormHelper';
-import FormHelper from '../../../../../../../../../global/helpers/react/form/FormHelper';
 
 export interface IWordGuessFormClass {
    guess: string;
 }
 
 export default class WordGuessFormClass {
-   private static inputs: InputArray<IWordGuessFormClass> = [
+   private static inputs: N_Form.Inputs.I.InputArray<IWordGuessFormClass> = [
       {
          Component: DropDownInput,
          name: 'guess',
@@ -24,16 +23,16 @@ export default class WordGuessFormClass {
    ];
 
    private static initialState: IWordGuessFormClass =
-      FormHelper.createInitialState<IWordGuessFormClass>(WordGuessFormClass.inputs);
+      N_Form.Helper.createInitialState<IWordGuessFormClass>(WordGuessFormClass.inputs);
 
-   private static initialErrors = FormHelper.createInitialErrors<IWordGuessFormClass>(
+   private static initialErrors = N_Form.Helper.createInitialErrors<IWordGuessFormClass>(
       WordGuessFormClass.inputs,
    );
 
    private static validate(
       formValues: IWordGuessFormClass,
    ): Record<keyof IWordGuessFormClass, string> {
-      const validation = FormHelper.validation(formValues, WordGuessFormClass.inputs);
+      const validation = N_Form.Helper.validation(formValues, WordGuessFormClass.inputs);
       return validation;
    }
 

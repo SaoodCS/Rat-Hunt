@@ -4,8 +4,8 @@ import type { MarkObj } from 'rc-slider/lib/Marks';
 import { useEffect, useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import JSXHelper from '../../../../helpers/dataTypes/jsx/jsxHelper';
-import type { INumberRangeChangeEvent, IUseFormHandleChange } from '../../../../hooks/useForm';
 import ConditionalRender from '../../renderModifiers/conditionalRender/ConditionalRender';
+import type { N_Form } from '../N_Form';
 import { ErrorLabel, InputContainer, LabelWrapper } from '../textOrNumber/Style';
 import {
    InputSliderWrapper,
@@ -20,6 +20,14 @@ import {
    numberLineStyles,
 } from './style/Style';
 
+export interface INumberRangeChangeEvent {
+   target: {
+      name: string | number;
+      value: number | '';
+      valueType: 'number';
+   };
+}
+
 export interface INumberLineOptions {
    min: number;
    max: number;
@@ -27,16 +35,9 @@ export interface INumberLineOptions {
    displayLinePointers: boolean;
 }
 
-interface INumberLineInput {
-   name: string | number;
-   id: string;
-   placeholder: string;
+interface INumberLineInput extends N_Form.Inputs.I.CommonInputProps {
    numberLineOptions: INumberLineOptions;
-   isRequired: boolean;
-   isDisabled: boolean;
    value: number | '';
-   error: string;
-   handleChange: IUseFormHandleChange;
 }
 
 export default function NumberLineInput(props: INumberLineInput): JSX.Element {

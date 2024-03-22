@@ -1,10 +1,9 @@
 import type { DocumentData, DocumentSnapshot } from 'firebase/firestore';
+import { N_Form } from '../../../../global/components/lib/form/N_Form';
 import DropDownInput from '../../../../global/components/lib/form/dropDown/DropDownInput';
 import NumberLineInput from '../../../../global/components/lib/form/numberLine/NumberLineInput';
 import TextOrNumFieldInput from '../../../../global/components/lib/form/textOrNumber/TextOrNumFieldInput';
 import StringHelper from '../../../../global/helpers/dataTypes/string/StringHelper';
-import type { InputArray } from '../../../../global/helpers/react/form/FormHelper';
-import FormHelper from '../../../../global/helpers/react/form/FormHelper';
 import type DBConnect from '../../../../global/utils/DBConnect/DBConnect';
 
 export interface IPlayFormClass {
@@ -16,7 +15,7 @@ export interface IPlayFormClass {
 }
 
 export default class PlayFormClass {
-   private static inputs: InputArray<IPlayFormClass> = [
+   private static inputs: N_Form.Inputs.I.InputArray<IPlayFormClass> = [
       {
          Component: TextOrNumFieldInput,
          name: 'name',
@@ -99,14 +98,14 @@ export default class PlayFormClass {
       },
    ];
 
-   private static initialState: IPlayFormClass = FormHelper.createInitialState<IPlayFormClass>(
+   private static initialState: IPlayFormClass = N_Form.Helper.createInitialState<IPlayFormClass>(
       PlayFormClass.inputs,
    );
 
-   private static initialErrors = FormHelper.createInitialErrors(PlayFormClass.inputs);
+   private static initialErrors = N_Form.Helper.createInitialErrors(PlayFormClass.inputs);
 
    private static validate(formValues: IPlayFormClass): Record<keyof IPlayFormClass, string> {
-      const formValidation = FormHelper.validation(formValues, PlayFormClass.inputs);
+      const formValidation = N_Form.Helper.validation(formValues, PlayFormClass.inputs);
       if (formValues.joinOrHost === 'host') formValidation.roomId = '';
       if (formValues.joinOrHost === 'join') {
          formValidation.topic = '';

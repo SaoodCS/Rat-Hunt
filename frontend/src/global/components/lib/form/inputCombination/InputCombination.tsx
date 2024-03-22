@@ -1,32 +1,13 @@
-import type { IUseFormHandleChange, InputValueTypes } from '../../../../hooks/useForm';
+import type { N_Form } from '../N_Form';
 import DatePickerInput from '../datePicker/DatePickerInput';
-import type { IDropDownOption } from '../dropDown/DropDownInput';
 import DropDownInput from '../dropDown/DropDownInput';
-import type { INumberLineOptions } from '../numberLine/NumberLineInput';
 import NumberLineInput from '../numberLine/NumberLineInput';
 import TextOrNumFieldInput from '../textOrNumber/TextOrNumFieldInput';
 
-export type IInputComponents =
-   | typeof DatePickerInput
-   | typeof DropDownInput
-   | typeof NumberLineInput
-   | typeof TextOrNumFieldInput;
-
-interface IInputCombination {
-   Component: IInputComponents;
-   name: string | number;
-   id: string;
-   placeholder: string;
-   type: InputValueTypes;
-   autoComplete: 'current-password' | 'new-password' | undefined;
-   dropDownOptions: IDropDownOption[] | undefined;
-   numberLineOptions: INumberLineOptions | undefined;
-   hidePlaceholderOnFocus: boolean | undefined;
-   isRequired: boolean | undefined;
-   isDisabled: boolean | undefined;
+interface IInputCombination extends N_Form.Inputs.I.AllInputProps {
    value: string | number | Date | boolean;
    error: string;
-   handleChange: IUseFormHandleChange;
+   handleChange: N_Form.Inputs.I.HandleChange;
 }
 
 export default function InputCombination(props: IInputCombination): JSX.Element {

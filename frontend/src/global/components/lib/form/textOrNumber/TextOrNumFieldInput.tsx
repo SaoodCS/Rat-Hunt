@@ -1,24 +1,18 @@
+import type { ChangeEvent } from 'react';
 import { useEffect, useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
-import type {
-   ITextOrNumFieldChangeEvent,
-   IUseFormHandleChange,
-   TextOrNumInputTypes,
-} from '../../../../hooks/useForm';
+import type { N_Form } from '../N_Form';
 import { ErrorLabel, InputContainer, InputLabel, LabelWrapper, TextInput } from './Style';
 
-interface IInput {
-   name: string | number;
-   id: string;
-   placeholder: string;
-   type: TextOrNumInputTypes;
+export interface ITextOrNumFieldChangeEvent extends ChangeEvent<HTMLInputElement> {
+   target: HTMLInputElement & { valueType: N_Form.Inputs.I.TypeProp };
+}
+
+interface IInput extends N_Form.Inputs.I.CommonInputProps {
+   type: N_Form.Inputs.I.TextOrNumTypeProp;
    autoComplete: 'current-password' | 'new-password' | undefined;
    hidePlaceholderOnFocus: boolean;
-   isRequired: boolean;
-   isDisabled: boolean;
    value: string | number;
-   error: string;
-   handleChange: IUseFormHandleChange;
 }
 
 export default function TextOrNumFieldInput(props: IInput): JSX.Element {
