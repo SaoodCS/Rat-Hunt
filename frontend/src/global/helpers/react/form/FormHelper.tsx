@@ -33,25 +33,26 @@ export default class FormHelper {
    static createInitialState<T>(arr: InputArray<T>): T {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const initialState: any = {};
-      arr.forEach((input) => {
-         if (input.Component === TextOrNumFieldInput) {
-            initialState[input.name] = '';
-            return;
-         }
+      for (let i = 0; i < arr.length; i++) {
+         const input = arr[i];
          if (input.Component === DatePickerInput) {
             initialState[input.name] = new Date();
-            return;
+            continue;
+         }
+         if (input.Component === TextOrNumFieldInput) {
+            initialState[input.name] = '';
+            continue;
          }
          if (input.Component === DropDownInput) {
             initialState[input.name] = '';
-            return;
+            continue;
          }
          if (input.Component === NumberLineInput) {
             initialState[input.name] = '';
-            return;
+            continue;
          }
          initialState[input.name] = '';
-      });
+      }
       return initialState as T;
    }
 
