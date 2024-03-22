@@ -17,8 +17,7 @@ export interface IDatePickerInputProps {
 }
 
 export default function DatePickerInput(props: IDatePickerInputProps): JSX.Element {
-   const { placeholder, name, isRequired, value, error, handleChange, id, isDisabled } =
-      props;
+   const { placeholder, name, isRequired, value, error, handleChange, id, isDisabled } = props;
    const [isActive, setIsActive] = useState(false);
    const [inputHasValue, setInputHasValue] = useState(!!value);
    const { isDarkTheme } = useThemeContext();
