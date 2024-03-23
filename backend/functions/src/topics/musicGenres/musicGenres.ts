@@ -1,7 +1,7 @@
 import type ITopic from '../../helpers/FirebaseHelp';
 
-export const musicGenres: ITopic = {
-   key: 'musicGenres',
+export const music: ITopic = {
+   key: 'music',
    values: [
       'Rock',
       'Rap',

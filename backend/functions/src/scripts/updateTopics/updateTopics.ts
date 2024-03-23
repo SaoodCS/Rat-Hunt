@@ -6,6 +6,9 @@ import { countries } from '../../topics/countries/countries';
 import { food } from '../../topics/food/food';
 import { movies } from '../../topics/movies/movies';
 import { sports } from '../../topics/sports/sports';
+import { music } from '../../topics/musicGenres/musicGenres';
+import { singers } from '../../topics/singers/singers';
+import { clothing } from '../../topics/itemOfClothing/itemOfClothing';
 
 if (!admin.apps.length) {
    admin.initializeApp({
@@ -13,7 +16,7 @@ if (!admin.apps.length) {
    });
 }
 
-const topics: ITopic[] = [animals, countries, movies, sports, food];
+const topics: ITopic[] = [animals, countries, movies, sports, food, music, clothing, singers];
 
 async function updateTopics(): Promise<void> {
    const topicsRef = admin.firestore().collection('topics').doc('topics');
