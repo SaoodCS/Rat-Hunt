@@ -18,23 +18,24 @@ export const CellUID = styled.div`
 
 export const BoardCell = styled.div<{ isActiveWord?: boolean; isUserRat?: boolean }>`
    width: calc(25%);
-   height: calc(100% - 2px);
-   margin-right: 1px;
-   margin-left: 1px;
-   border-radius: 1em;
+   height: calc(100% - 8px);
+   margin-right: 4px;
+   margin-left: 4px;
+   border-radius: 0.75em;
    display: flex;
    justify-content: center;
    align-items: center;
    position: relative;
-   background-color: ${Color.setRgbOpacity(Color.darkThm.bg, 1)};
-   border-left: 1px solid ${Color.setRgbOpacity(Color.darkThm.accentDarkerShade, 0.7)};
-   border-top: 1px solid ${Color.setRgbOpacity(Color.darkThm.accentDarkerShade, 0.7)};
+   filter: contrast(2) brightness(1);
+   background-color: ${Color.setRgbOpacity(Color.darkThm.bg, 0.7)};
+   border-left: 1px solid ${Color.setRgbOpacity(Color.darkThm.bg, 1)};
+   border-top: 1px solid ${Color.setRgbOpacity(Color.darkThm.bg, 1)};
    box-shadow: ${({ isActiveWord, isUserRat }) => {
       if (isActiveWord && !isUserRat) {
-         return `inset 0.05em 0.05em 0em 0 ${Color.setRgbOpacity(Color.darkThm.accentDarkerShade, 0.7)},
+         return `inset 0.1em 0.1em 0em 0 ${Color.setRgbOpacity(Color.darkThm.txt, 0.25)},
          inset -0.1em -0.1em 0.1em 0 ${Color.setRgbOpacity(Color.darkThm.bg, 1)}`;
       }
-      return `inset 0.05em 0.05em 0em 0em ${Color.setRgbOpacity(Color.darkThm.accentDarkerShade, 0.7)},
+      return `inset 0.1em 0.1em 0em 0em ${Color.setRgbOpacity(Color.darkThm.txt, 0.25)},
          inset -0.1em -0.1em 0.1em 0 ${Color.setRgbOpacity(Color.darkThm.bg, 1)}`;
    }};
 `;
