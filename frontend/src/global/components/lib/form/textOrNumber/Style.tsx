@@ -1,5 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Color from '../../../../css/colors';
+import MyCSS from '../../../../css/MyCSS';
 
 interface IInputAttr {
    isRequired: boolean;
@@ -29,19 +30,26 @@ export const LabelWrapper = styled.label`
 
 export const InputLabel = styled.div<IInputLabel>`
    font-size: 0.75em;
-   color: ${({ focusedInput }) =>
-      focusedInput ? Color.darkThm.txt : Color.setRgbOpacity(Color.darkThm.txt, 0.4)};
+   ${({ focusedInput, isDarkTheme, isRequired }) => {
+      const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+      const mainColor = theme.txt;
+      const mainColorOpacity = focusedInput ? 1 : 0.4;
+      const asteriskColor = theme.error;
+      return css`
+         color: ${Color.setRgbOpacity(mainColor, mainColorOpacity)};
+         &:after {
+            content: ${isRequired ? "'*'" : "''"};
+            color: ${asteriskColor};
+            padding: 2px;
+         }
+      `;
+   }}
    transform: ${({ focusedInput, inputHasValue }) =>
       focusedInput || inputHasValue ? 'translateY(-0.5em)' : 'translateY(0.5em)'};
    font-size: ${({ focusedInput, inputHasValue }) =>
       focusedInput || inputHasValue ? '0.8em' : '0.8em'};
    pointer-events: none;
    transition: all 0.2s ease-in-out;
-   &:after {
-      content: ${({ isRequired }) => (isRequired ? "'*'" : "''")};
-      color: ${Color.darkThm.error};
-      padding: 2px;
-   }
    opacity: ${({ hideLabel }) => (hideLabel ? 0 : 1)};
 `;
 
@@ -50,33 +58,37 @@ export const TextInput = styled.input.attrs<IInputAttr>(({ isRequired, isDisable
    disabled: isDisabled,
 }))<ITextInput>`
    all: unset;
+   ${MyCSS.Clickables.removeDefaultEffects};
    font-size: 1em;
    width: 100%;
-   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-   color: ${({ isDisabled }) =>
-      isDisabled
-         ? Color.setRgbOpacity(Color.darkThm.accent, 0.6)
-         : Color.setRgbOpacity(Color.darkThm.txt, 0.8)};
-   border-bottom: ${({ hasError }) =>
-      hasError ? `2px solid red` : `2px solid ${Color.setRgbOpacity(Color.darkThm.txt, 0.3)}`};
-   &:focus,
-   &:active {
-      border-bottom: ${({ hasError }) =>
-         hasError ? `2px solid ${Color.darkThm.error}` : `2px solid ${Color.darkThm.txt}`};
-      color: ${({ isDisabled }) =>
-         isDisabled
-            ? Color.setRgbOpacity(Color.darkThm.accent, 0.6)
-            : Color.setRgbOpacity(Color.darkThm.txt, 1)};
-   }
    font-weight: 100;
    z-index: 1;
+   ${({ isDarkTheme, hasError, isDisabled }) => {
+      const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+      const colorPropColor = isDisabled ? theme.accent : theme.txt;
+      const colorPropOpacity = isDisabled ? 0.6 : 0.8;
+      const activeColorPropOpacity = isDisabled ? 0.6 : 1;
+      const borderColor = hasError ? theme.error : theme.txt;
+      const borderOpacity = hasError ? 1 : 0.3;
+      return css`
+         color: ${Color.setRgbOpacity(colorPropColor, colorPropOpacity)};
+         border-bottom: 2px solid ${Color.setRgbOpacity(borderColor, borderOpacity)};
+         &:focus,
+         &:active {
+            border-bottom: 2px solid ${borderColor};
+            color: ${Color.setRgbOpacity(colorPropColor, activeColorPropOpacity)};
+         }
+      `;
+   }}
 `;
 
 export const ErrorLabel = styled.div<{ isDarkTheme: boolean }>`
    font-size: 0.75em;
    margin-top: 0.2em;
-   color: ${Color.darkThm.error};
+   color: ${({ isDarkTheme }) => (isDarkTheme ? Color.darkThm.error : Color.lightThm.error)};
 `;
+
+// -- SPECIFIC ALT INPUT FOR THIS APP -- //
 
 export const TextInputAlt = styled.input.attrs<IInputAttr>(({ isRequired, isDisabled }) => ({
    required: isRequired,

@@ -82,7 +82,14 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
       for (let i = min; i <= max; i++) {
          if (i === min && !inputHasValue) continue;
          marks[i] = {
-            style: numberLabelStyles(value === i, min, max, i, displayAllNumbers),
+            style: numberLabelStyles({
+               isLabelCurrentVal: value === i,
+               minValue: min,
+               maxValue: max,
+               label: i,
+               displayAllNumbers: displayAllNumbers,
+               isDarkTheme: isDarkTheme,
+            }),
             label: i,
          };
       }
@@ -126,16 +133,19 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
                disabled={isDisabled}
                marks={createMarks()}
                styles={{
-                  track: activeLineStyles,
-                  rail: inactiveLineStyles(hasError),
-                  handle: activeDotStyles(inputHasValue),
+                  track: activeLineStyles({ isDarkTheme }),
+                  rail: inactiveLineStyles({ isDarkTheme: isDarkTheme, hasError: hasError }),
+                  handle: activeDotStyles({ hasValue: inputHasValue, isDarkTheme: isDarkTheme }),
                }}
                dotStyle={dotTouchAreaStyles(min, max)}
-               style={numberLineStyles}
+               style={numberLineStyles({ isDarkTheme })}
             />
             <ConditionalRender condition={displayLinePointers}>
                <LabelIndicatorLineWrapper currentValue={value}>
-                  {JSXHelper.repeatJSX(<LabelIndicatorLine minValue={min} maxValue={max} />, 9)}
+                  {JSXHelper.repeatJSX(
+                     <LabelIndicatorLine minValue={min} maxValue={max} isDarkTheme={isDarkTheme} />,
+                     9,
+                  )}
                </LabelIndicatorLineWrapper>
             </ConditionalRender>
          </InputSliderWrapper>

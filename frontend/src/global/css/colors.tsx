@@ -2,6 +2,7 @@ export default class Color {
    static lightThm = {
       bg: 'rgb(2,8,23)',
       accent: 'rgb(108, 50, 209)',
+      accentDarkerShade: 'rgb(39, 18, 76)',
       accentAlt: 'rgb(151, 209, 50)',
       border: 'rgba(255, 255, 255, 0.1)',
       txt: 'rgb(255, 255, 255)',
@@ -14,6 +15,7 @@ export default class Color {
       boxShadow: '0px 0px 10px rgba(10,10,10, 1)',
       inactive: 'rgb(32, 42, 58)',
       dialog: 'rgb(9, 9, 11)',
+      dialogBright: 'rgb(125, 125, 150)',
       grey: 'rgb(78, 78, 96)',
    };
 

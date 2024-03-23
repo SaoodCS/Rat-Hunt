@@ -17,24 +17,31 @@ export const InputSliderWrapper = styled.div<{ inputHasValue: boolean }>`
    ${MyCSS.Clickables.removeDefaultEffects};
 `;
 
-export const numberLineStyles: CSSProperties = {
-   borderRadius: 0,
-   position: 'relative',
-   width: '100%',
-   borderRight: `2px solid ${Color.setRgbOpacity(Color.darkThm.txt, 0.3)}`,
-   borderLeft: `2px solid ${Color.setRgbOpacity(Color.darkThm.txt, 0.3)}`,
+export const numberLineStyles = (options: { isDarkTheme: boolean }): CSSProperties => {
+   const { isDarkTheme } = options;
+   const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+   return {
+      borderRadius: 0,
+      position: 'relative',
+      width: '100%',
+      borderRight: `2px solid ${Color.setRgbOpacity(theme.txt, 0.3)}`,
+      borderLeft: `2px solid ${Color.setRgbOpacity(theme.txt, 0.3)}`,
+   };
 };
 
-export const numberLabelStyles = (
-   isLabelCurrentVal: boolean,
-   minValue: number,
-   maxValue: number,
-   label: number,
-   displayAllNumbers: boolean,
-): CSSProperties => {
+export const numberLabelStyles = (options: {
+   isLabelCurrentVal: boolean;
+   minValue: number;
+   maxValue: number;
+   label: number;
+   displayAllNumbers: boolean;
+   isDarkTheme: boolean;
+}): CSSProperties => {
+   const { isLabelCurrentVal, minValue, maxValue, label, displayAllNumbers, isDarkTheme } = options;
    const isLabelMinOrMax = label === minValue || label === maxValue;
+   const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
    return {
-      color: Color.setRgbOpacity(Color.darkThm.txt, isLabelCurrentVal ? 1 : 0.3),
+      color: Color.setRgbOpacity(theme.txt, isLabelCurrentVal ? 1 : 0.3),
       paddingTop: isLabelCurrentVal ? '4px' : '0.1em',
       fontSize: isLabelCurrentVal ? '1.1em' : '1em',
       opacity: isLabelCurrentVal || isLabelMinOrMax || displayAllNumbers ? 1 : 0,
@@ -42,18 +49,27 @@ export const numberLabelStyles = (
    };
 };
 
-export const activeLineStyles: CSSProperties = {
-   borderRadius: '0em',
-   height: '1px',
-   overflow: 'hidden',
-   background: `linear-gradient(to right, ${Color.setRgbOpacity(Color.darkThm.txt, 0)} 0%,  ${Color.darkThm.txt} 100%)`,
-   borderBottom: `1px solid ${Color.setRgbOpacity(Color.darkThm.txt, 0)}`,
-   borderTop: `1px solid ${Color.setRgbOpacity(Color.darkThm.txt, 0)}`,
-   marginTop: '4.5px',
+export const activeLineStyles = (options: { isDarkTheme: boolean }): CSSProperties => {
+   const { isDarkTheme } = options;
+   const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+   return {
+      borderRadius: '0em',
+      height: '1px',
+      overflow: 'hidden',
+      background: `linear-gradient(to right, ${Color.setRgbOpacity(theme.txt, 0)} 0%,  ${theme.txt} 100%)`,
+      borderBottom: `1px solid ${Color.setRgbOpacity(theme.txt, 0)}`,
+      borderTop: `1px solid ${Color.setRgbOpacity(theme.txt, 0)}`,
+      marginTop: '4.5px',
+   };
 };
 
-export const inactiveLineStyles = (hasError: boolean): CSSProperties => {
-   const color = hasError ? Color.darkThm.error : Color.darkThm.txt;
+export const inactiveLineStyles = (options: {
+   hasError: boolean;
+   isDarkTheme: boolean;
+}): CSSProperties => {
+   const { hasError, isDarkTheme } = options;
+   const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+   const color = hasError ? theme.error : theme.txt;
    const opacity = hasError ? 1 : 0.3;
    return {
       backgroundColor: Color.setRgbOpacity(color, opacity),
@@ -61,14 +77,19 @@ export const inactiveLineStyles = (hasError: boolean): CSSProperties => {
    };
 };
 
-export const activeDotStyles = (hasValue: boolean): CSSProperties => {
+export const activeDotStyles = (options: {
+   hasValue: boolean;
+   isDarkTheme: boolean;
+}): CSSProperties => {
+   const { hasValue, isDarkTheme } = options;
+   const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
    return {
-      backgroundColor: hasValue ? Color.darkThm.txt : Color.darkThm.grey,
-      border: `2px solid ${hasValue ? Color.darkThm.txt : Color.setRgbOpacity(Color.darkThm.txt, 0.5)}`,
+      backgroundColor: hasValue ? theme.txt : theme.grey,
+      border: `2px solid ${hasValue ? theme.txt : Color.setRgbOpacity(theme.txt, 0.5)}`,
       width: hasValue ? '1.35em' : '1.25em',
       height: hasValue ? '1.35em' : '1.25em',
       marginTop: hasValue ? '-0.6em' : '-0.5em',
-      boxShadow: `0px 0px 0px 0px ${hasValue ? Color.darkThm.txt : Color.darkThm.grey}`,
+      boxShadow: `0px 0px 0px 0px ${hasValue ? theme.txt : theme.grey}`,
       transition: 'width 0.2s ease, height 0.2s ease, margin-top 0.2s ease',
       opacity: 1,
    };
@@ -88,9 +109,18 @@ export const dotTouchAreaStyles = (min: number, max: number): CSSProperties => {
    };
 };
 
-export const LabelIndicatorLine = styled.div<{ minValue: number; maxValue: number }>`
-   border-right: 1px solid ${Color.setRgbOpacity(Color.darkThm.txt, 0.3)};
-   border-left: 1px solid ${Color.setRgbOpacity(Color.darkThm.txt, 0.3)};
+export const LabelIndicatorLine = styled.div<{
+   minValue: number;
+   maxValue: number;
+   isDarkTheme: boolean;
+}>`
+   ${({ isDarkTheme }) => {
+      const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+      return css`
+         border-right: 1px solid ${Color.setRgbOpacity(theme.txt, 0.3)};
+         border-left: 1px solid ${Color.setRgbOpacity(theme.txt, 0.3)};
+      `;
+   }}
    width: ${({ minValue, maxValue }) => `calc((100% / (${maxValue} - ${minValue})))`};
    height: 100%;
    box-sizing: border-box;
