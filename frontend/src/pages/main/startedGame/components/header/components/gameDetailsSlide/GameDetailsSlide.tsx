@@ -116,7 +116,6 @@ export default function GameDetailsSlide(props: IGameDetailsSlide): JSX.Element 
                      ratUser={!!value && value.includes('THE RAT')}
                   >
                      {value}
-                     {label === 'Topic' && 'dfg rteghtrg htrgyh'}
                   </ItemValue>
                </GameDetailsItemWrapper>
             ))}
