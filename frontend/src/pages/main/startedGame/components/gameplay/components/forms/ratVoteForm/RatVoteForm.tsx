@@ -20,6 +20,7 @@ import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect'
 import GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
 import { gameFormStyles } from '../style/Style';
 import RatVoteFormClass from './class/RatVoteFormClass';
+import BoolHelper from '../../../../../../../../global/helpers/dataTypes/bool/BoolHelper';
 
 export default function RatVoteForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -84,7 +85,10 @@ export default function RatVoteForm(): JSX.Element {
       <StyledForm onSubmit={handleSubmit} apiError={apiError} style={gameFormStyles}>
          {RatVoteFormClass.form.inputs.map((input) => (
             <Fragment key={input.id}>
-               <DropDownArrowAlt darktheme={'false'} focusedinput={isActive.toString()} />
+               <DropDownArrowAlt
+                  darktheme={'false'}
+                  focusedinput={BoolHelper.boolToStr(isActive)}
+               />
                <StyledSelectAlt
                   id={input.id}
                   name={input.name}

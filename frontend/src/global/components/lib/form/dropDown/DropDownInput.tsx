@@ -9,6 +9,7 @@ import {
    StyledOption,
    StyledSelect,
 } from './Style';
+import BoolHelper from '../../../../helpers/dataTypes/bool/BoolHelper';
 
 export interface IDropDownOption {
    value: string | number;
@@ -52,7 +53,10 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
 
    return (
       <DropDownInputContainer>
-         <DropDownArrow darktheme={isDarkTheme.toString()} focusedinput={isActive.toString()} />
+         <DropDownArrow
+            darktheme={BoolHelper.boolToStr(isDarkTheme)}
+            focusedinput={BoolHelper.boolToStr(isActive)}
+         />
          <DropDownLabelWrapper>
             <InputLabel
                focusedInput={isActive}

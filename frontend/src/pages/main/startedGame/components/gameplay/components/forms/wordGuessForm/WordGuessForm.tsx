@@ -20,6 +20,7 @@ import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect'
 import GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
 import { gameFormStyles } from '../style/Style';
 import WordGuessFormClass from './class/WordGuessFormClass';
+import BoolHelper from '../../../../../../../../global/helpers/dataTypes/bool/BoolHelper';
 
 export default function WordGuessForm(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
@@ -75,7 +76,10 @@ export default function WordGuessForm(): JSX.Element {
       <StyledForm onSubmit={handleSubmit} apiError={apiError} style={gameFormStyles}>
          {WordGuessFormClass.form.inputs.map((input) => (
             <Fragment key={input.id}>
-               <DropDownArrowAlt darktheme={'false'} focusedinput={isActive.toString()} />
+               <DropDownArrowAlt
+                  darktheme={'false'}
+                  focusedinput={BoolHelper.boolToStr(isActive)}
+               />
                <StyledSelectAlt
                   id={input.id}
                   name={input.name}
