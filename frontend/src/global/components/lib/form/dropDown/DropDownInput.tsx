@@ -80,14 +80,16 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
             isRequired={isRequired}
             value={value}
             isDisabled={isDisabled}
-            isActive={!!isActive}
+            isActive={isActive}
             valueExists={!!value}
          >
             <StyledOption
                isDarkTheme={isDarkTheme}
-               label={!(!!isActive || inputHasValue) ? label : ''}
+               label={!(isActive || inputHasValue) ? label : ''}
                value=""
                hidden={isRequired}
+               disabled={isRequired}
+               selected={false}
             />
             {dropDownOptions.map((option) => (
                <StyledOption isDarkTheme={isDarkTheme} value={option.value} key={option.value}>
