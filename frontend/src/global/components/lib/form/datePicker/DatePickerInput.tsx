@@ -10,7 +10,7 @@ export interface IDatePickerInputProps extends N_Form.Inputs.I.CommonInputProps 
 }
 
 export default function DatePickerInput(props: IDatePickerInputProps): JSX.Element {
-   const { placeholder, name, isRequired, value, error, handleChange, id, isDisabled } = props;
+   const { label, name, isRequired, value, error, handleChange, id, isDisabled } = props;
    const [isActive, setIsActive] = useState(false);
    const [inputHasValue, setInputHasValue] = useState(value !== null);
    const { isDarkTheme } = useThemeContext();
@@ -43,7 +43,7 @@ export default function DatePickerInput(props: IDatePickerInputProps): JSX.Eleme
                isDarkTheme={isDarkTheme}
                isDisabled={isDisabled}
             >
-               {placeholder}
+               {label}
             </InputLabel>
          </LabelWrapper>
          <DatePickerWrapper isDarkTheme={isDarkTheme} isActive={isActive} hasError={!!error}>

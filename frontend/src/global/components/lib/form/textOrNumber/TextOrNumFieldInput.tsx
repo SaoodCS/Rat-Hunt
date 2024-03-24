@@ -6,13 +6,13 @@ import { ErrorLabel, InputContainer, InputLabel, LabelWrapper, TextInput } from 
 interface IInput extends N_Form.Inputs.I.CommonInputProps {
    type: N_Form.Inputs.I.AllInputPropsAsRequired['type'];
    autoComplete: N_Form.Inputs.I.AllInputPropsAsRequired['autoComplete'];
-   hidePlaceholderOnFocus: boolean;
+   hideLabelOnFocus: boolean;
    value: string | number;
 }
 
 export default function TextOrNumFieldInput(props: IInput): JSX.Element {
    const {
-      placeholder,
+      label,
       type,
       name,
       isRequired,
@@ -22,7 +22,7 @@ export default function TextOrNumFieldInput(props: IInput): JSX.Element {
       id,
       autoComplete,
       isDisabled,
-      hidePlaceholderOnFocus,
+      hideLabelOnFocus,
    } = props;
    const [isActive, setIsActive] = useState(false);
    const { isDarkTheme } = useThemeContext();
@@ -49,9 +49,9 @@ export default function TextOrNumFieldInput(props: IInput): JSX.Element {
                inputHasValue={inputHasValue}
                isDarkTheme={isDarkTheme}
                isDisabled={isDisabled}
-               hideLabel={!!hidePlaceholderOnFocus && (!!isActive || inputHasValue)}
+               hideLabel={!!hideLabelOnFocus && (!!isActive || inputHasValue)}
             >
-               {placeholder}
+               {label}
             </InputLabel>
          </LabelWrapper>
 

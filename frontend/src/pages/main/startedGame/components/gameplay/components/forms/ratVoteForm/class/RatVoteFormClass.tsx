@@ -11,7 +11,7 @@ export default class RatVoteFormClass {
          Component: DropDownInput,
          name: 'vote',
          id: 'select-vote',
-         placeholder: 'Vote who you think the rat is',
+         label: 'Vote who you think the rat is',
          type: 'text',
          isRequired: true,
          isDisabled: false,

@@ -70,7 +70,7 @@ export default function ClueForm(): JSX.Element {
                <TextInputAlt
                   name={input.name}
                   id={input.id}
-                  placeholder={input.placeholder}
+                  placeholder={input.label}
                   type={input.type}
                   autoComplete={input.autoComplete}
                   isRequired={input.isRequired || false}

@@ -11,7 +11,7 @@ export default class WordGuessFormClass {
          Component: DropDownInput,
          name: 'guess',
          id: 'select-guess',
-         placeholder: 'Select a word to guess',
+         label: 'Select a word to guess',
          type: 'text',
          isRequired: true,
          isDisabled: false,

@@ -134,12 +134,12 @@ export default function Play(): JSX.Element {
                      key={input.id}
                      name={input.name}
                      id={input.id}
-                     placeholder={input.placeholder}
+                     label={input.label}
                      type={input.type}
                      autoComplete={input.autoComplete}
                      dropDownOptions={dropDownOptions(input)}
                      numberLineOptions={input.numberLineOptions}
-                     hidePlaceholderOnFocus={input.hidePlaceholderOnFocus}
+                     hideLabelOnFocus={input.hideLabelOnFocus}
                      isRequired={input.isRequired}
                      isDisabled={input.isDisabled}
                      value={form[input.name]}

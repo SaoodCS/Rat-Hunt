@@ -11,7 +11,7 @@ export default class ClueFormClass {
          Component: TextOrNumFieldInput,
          name: 'clue',
          id: 'clue',
-         placeholder: 'Please enter a clue',
+         label: 'Please enter a clue',
          type: 'text',
          isRequired: true,
          isDisabled: false,

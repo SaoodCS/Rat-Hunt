@@ -18,13 +18,13 @@ export interface IDropDownOption {
 
 interface IDropDownInput extends N_Form.Inputs.I.CommonInputProps {
    dropDownOptions: IDropDownOption[];
-   hidePlaceholderOnFocus: boolean;
+   hideLabelOnFocus: boolean;
    value: string | number;
 }
 
 export default function DropDownInput(props: IDropDownInput): JSX.Element {
    const {
-      placeholder,
+      label,
       name,
       isRequired,
       handleChange,
@@ -33,7 +33,7 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
       id,
       value,
       isDisabled,
-      hidePlaceholderOnFocus,
+      hideLabelOnFocus,
    } = props;
    const { isDarkTheme } = useThemeContext();
    const [isActive, setIsActive] = useState(false);
@@ -64,9 +64,9 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
                inputHasValue={inputHasValue}
                isDarkTheme={isDarkTheme}
                isDisabled={isDisabled}
-               hideLabel={!(!!isActive || inputHasValue) || !!hidePlaceholderOnFocus}
+               hideLabel={!(!!isActive || inputHasValue) || !!hideLabelOnFocus}
             >
-               {placeholder}
+               {label}
             </InputLabel>
          </DropDownLabelWrapper>
          <StyledSelect
@@ -85,7 +85,7 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
          >
             <StyledOption
                isDarkTheme={isDarkTheme}
-               label={!(!!isActive || inputHasValue) ? placeholder : ''}
+               label={!(!!isActive || inputHasValue) ? label : ''}
                value=""
                hidden={isRequired}
             />

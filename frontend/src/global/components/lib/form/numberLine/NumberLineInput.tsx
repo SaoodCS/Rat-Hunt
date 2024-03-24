@@ -34,7 +34,7 @@ interface INumberLineInput extends N_Form.Inputs.I.CommonInputProps {
 
 export default function NumberLineInput(props: INumberLineInput): JSX.Element {
    const {
-      placeholder,
+      label,
       name,
       isRequired,
       value,
@@ -107,7 +107,7 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
                isDisabled={isDisabled}
                hideLabel={false}
             >
-               {placeholder}
+               {label}
             </NumberLineInputLabel>
          </LabelWrapper>
          <InputSliderWrapper inputHasValue={inputHasValue}>

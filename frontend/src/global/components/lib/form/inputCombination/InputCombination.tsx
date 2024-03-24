@@ -9,7 +9,7 @@ export default function InputCombination(
    props: N_Form.Inputs.I.AllInputPropsAsRequired,
 ): JSX.Element {
    const {
-      placeholder,
+      label,
       name,
       isRequired,
       handleChange,
@@ -20,7 +20,7 @@ export default function InputCombination(
       value,
       autoComplete,
       isDisabled,
-      hidePlaceholderOnFocus,
+      hideLabelOnFocus,
       numberLineOptions,
       Component,
    } = props;
@@ -35,7 +35,7 @@ export default function InputCombination(
       }
       return (
          <CheckboxInput
-            placeholder={placeholder}
+            label={label}
             name={name}
             isRequired={isRequired || false}
             value={value}
@@ -54,7 +54,7 @@ export default function InputCombination(
       }
       return (
          <NumberLineInput
-            placeholder={placeholder}
+            label={label}
             name={name}
             isRequired={isRequired || false}
             value={value}
@@ -73,7 +73,7 @@ export default function InputCombination(
       }
       return (
          <DatePickerInput
-            placeholder={placeholder}
+            label={label}
             name={name}
             isRequired={isRequired || false}
             value={value}
@@ -91,7 +91,7 @@ export default function InputCombination(
       }
       return (
          <DropDownInput
-            placeholder={placeholder}
+            label={label}
             name={name}
             dropDownOptions={dropDownOptions || []}
             isRequired={isRequired || false}
@@ -100,7 +100,7 @@ export default function InputCombination(
             handleChange={handleChange}
             id={id}
             isDisabled={isDisabled || false}
-            hidePlaceholderOnFocus={hidePlaceholderOnFocus || false}
+            hideLabelOnFocus={hideLabelOnFocus || false}
          />
       );
    }
@@ -115,7 +115,7 @@ export default function InputCombination(
    }
    return (
       <TextOrNumFieldInput
-         placeholder={placeholder}
+         label={label}
          type={type}
          name={name}
          isRequired={isRequired || false}
@@ -125,7 +125,7 @@ export default function InputCombination(
          error={error}
          id={id}
          isDisabled={isDisabled || false}
-         hidePlaceholderOnFocus={hidePlaceholderOnFocus || false}
+         hideLabelOnFocus={hideLabelOnFocus || false}
       />
    );
 }

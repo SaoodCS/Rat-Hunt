@@ -106,7 +106,7 @@ export default function RatVoteForm(): JSX.Element {
                      isDarkTheme={isDarkTheme}
                      value=""
                      hidden={input.isRequired || false}
-                     label={input.placeholder}
+                     label={input.label}
                   />
                   {dropDownOptions(input)?.map((option) => (
                      <StyledOption

@@ -9,7 +9,7 @@ export interface ICheckboxInput extends N_Form.Inputs.I.CommonInputProps {
 }
 
 export default function CheckboxInput(props: ICheckboxInput): JSX.Element {
-   const { placeholder, name, isRequired, handleChange, value, error, id, isDisabled } = props;
+   const { label, name, isRequired, handleChange, value, error, id, isDisabled } = props;
    const { isDarkTheme } = useThemeContext();
    return (
       <InputContainer style={{ height: 'fit-content', marginBottom: '1.5em' }}>
@@ -32,7 +32,7 @@ export default function CheckboxInput(props: ICheckboxInput): JSX.Element {
                   hasError={!!error}
                />
             </CheckboxContainer>
-            <CheckboxLabel htmlFor={id}>{placeholder}</CheckboxLabel>
+            <CheckboxLabel htmlFor={id}>{label}</CheckboxLabel>
          </CheckboxAndLabelWrapper>
       </InputContainer>
    );

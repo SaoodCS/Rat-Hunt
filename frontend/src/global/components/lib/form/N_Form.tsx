@@ -34,7 +34,7 @@ export namespace N_Form {
          export type CommonInputProps = {
             name: string | number;
             id: string;
-            placeholder: string;
+            label: string;
             isRequired: boolean;
             isDisabled: boolean;
             error: string;
@@ -49,7 +49,7 @@ export namespace N_Form {
             autoComplete?: 'current-password' | 'new-password';
             dropDownOptions?: IDropDownOption[];
             numberLineOptions?: INumberLineOptions;
-            hidePlaceholderOnFocus?: boolean;
+            hideLabelOnFocus?: boolean;
          };
 
          export type ArrOfInputObjects<FormInputs> = {
