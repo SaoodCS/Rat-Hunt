@@ -1,14 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
-import { LogoText } from '../../../../../global/components/app/logo/LogoText';
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { GameContext } from '../../../../../global/context/game/GameContext';
 import MyCSS from '../../../../../global/css/MyCSS';
-import Color from '../../../../../global/css/colors';
 import DBConnect from '../../../../../global/utils/DBConnect/DBConnect';
 import type GameHelper from '../../../../../global/utils/GameHelper/GameHelper';
-import { BoardCell, BoardContainer, BoardRow, CellUID, CellValue } from './style/Style';
+import { BoardCell, BoardContainer, BoardRow, CellValue } from './style/Style';
 
 export default function TopicBoard(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
@@ -31,13 +29,6 @@ export default function TopicBoard(): JSX.Element {
       return roomData?.gameState?.activeWord === word;
    }
 
-   function setColor(word: string): string {
-      if (isItemActiveWord(word) && !isThisUserRat) {
-         return Color.darkThm.success;
-      }
-      return Color.setRgbOpacity(Color.darkThm.txt, 0.6);
-   }
-
    return (
       <FlexColumnWrapper localStyles={screenStyles()}>
          <BoardContainer>
@@ -49,16 +40,7 @@ export default function TopicBoard(): JSX.Element {
                         isActiveWord={isItemActiveWord(item.word)}
                         isUserRat={isThisUserRat}
                      >
-                        <CellUID>
-                           <LogoText size="0.6em" color={setColor(item.word)}>
-                              {item.cellId}
-                           </LogoText>
-                        </CellUID>
-                        <CellValue>
-                           <LogoText size="0.65em" color={setColor(item.word)}>
-                              {item.word}
-                           </LogoText>
-                        </CellValue>
+                        <CellValue>{item.word}</CellValue>
                      </BoardCell>
                   ))}
                </BoardRow>

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Color from '../../../../../../global/css/colors';
 
 export const CellValue = styled.div`
@@ -7,6 +7,7 @@ export const CellValue = styled.div`
    align-items: center;
    justify-content: center;
    text-align: center;
+   font-size: 0.65em;
 `;
 
 export const CellUID = styled.div`
@@ -18,26 +19,29 @@ export const CellUID = styled.div`
 
 export const BoardCell = styled.div<{ isActiveWord?: boolean; isUserRat?: boolean }>`
    width: calc(25%);
-   height: calc(100% - 8px);
-   margin-right: 4px;
-   margin-left: 4px;
-   border-radius: 0.75em;
+   height: calc(100% - 6px);
+   margin-right: 3px;
+   margin-left: 3px;
+   border-radius: 1em;
    display: flex;
    justify-content: center;
    align-items: center;
    position: relative;
-   filter: contrast(2) brightness(1);
-   background-color: ${Color.setRgbOpacity(Color.darkThm.bg, 0.7)};
-   border-left: 1px solid ${Color.setRgbOpacity(Color.darkThm.bg, 1)};
-   border-top: 1px solid ${Color.setRgbOpacity(Color.darkThm.bg, 1)};
-   box-shadow: ${({ isActiveWord, isUserRat }) => {
-      if (isActiveWord && !isUserRat) {
-         return `inset 0.1em 0.1em 0em 0 ${Color.setRgbOpacity(Color.darkThm.txt, 0.25)},
-         inset -0.1em -0.1em 0.1em 0 ${Color.setRgbOpacity(Color.darkThm.bg, 1)}`;
-      }
-      return `inset 0.1em 0.1em 0em 0em ${Color.setRgbOpacity(Color.darkThm.txt, 0.25)},
-         inset -0.1em -0.1em 0.1em 0 ${Color.setRgbOpacity(Color.darkThm.bg, 1)}`;
-   }};
+   filter: contrast(1) brightness(1) drop-shadow(0px 0px 0px rgba(255, 255, 255, 0.05));
+   ${({ isActiveWord, isUserRat }) => {
+      const showActiveWord = isActiveWord && !isUserRat;
+      const colorPropColor = Color.darkThm.txt;
+      const colorPropOpacity = showActiveWord ? 1 : 0.5;
+      const bgColorPropColor = showActiveWord ? Color.darkThm.accent : 'rgb(230, 218, 255)';
+      const bgColorPropOpacity = showActiveWord ? 0.8 : 0.175;
+      return css`
+         color: ${Color.setRgbOpacity(colorPropColor, colorPropOpacity)};
+         background-color: ${Color.setRgbOpacity(bgColorPropColor, bgColorPropOpacity)};
+      `;
+   }}
+   box-shadow:
+      inset 0.05em 0.05em 0em 0 ${Color.setRgbOpacity(Color.darkThm.bg, 0.3)},
+      inset -0.05em -0.05em 0.05em 0 ${Color.setRgbOpacity(Color.darkThm.bg, 0.7)};
 `;
 
 export const BoardRow = styled.div`

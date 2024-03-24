@@ -7,7 +7,6 @@ import { GameContext } from '../../../../../../../global/context/game/GameContex
 import { ToastContext } from '../../../../../../../global/context/widget/toast/ToastContext';
 import MyCSS from '../../../../../../../global/css/MyCSS';
 import Color from '../../../../../../../global/css/colors';
-import ArrOfObj from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import HTMLEntities from '../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import useScrollFader from '../../../../../../../global/hooks/useScrollFader';
 import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
@@ -54,17 +53,17 @@ export default function GameDetailsSlide(props: IGameDetailsSlide): JSX.Element 
             label: 'Topic',
             value: roomData?.gameState?.activeTopic || 'No Topic',
          },
-         {
-            label: 'Word',
-            value:
-               roomData?.gameState?.currentRat === localDbUser
-                  ? 'YOU ARE THE RAT'
-                  : ArrOfObj.findObj(
-                       activeTopicWords,
-                       'word',
-                       roomData?.gameState?.activeWord || '',
-                    )?.cellId,
-         },
+         // {
+         //    label: 'Word',
+         //    value:
+         //       roomData?.gameState?.currentRat === localDbUser
+         //          ? 'YOU ARE THE RAT'
+         //          : ArrOfObj.findObj(
+         //               activeTopicWords,
+         //               'word',
+         //               roomData?.gameState?.activeWord || '',
+         //            )?.cellId,
+         // },
       ];
       setGameHeaderDetails(newGameHeaderDetails);
    }, [
