@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Types } from '../../../helpers/types/Types';
+import CheckboxInput from './checkbox/Checkbox';
 import DatePickerInput from './datePicker/DatePickerInput';
 import type { IDropDownOption } from './dropDown/DropDownInput';
 import DropDownInput from './dropDown/DropDownInput';
@@ -16,7 +17,8 @@ export namespace N_Form {
             | typeof DatePickerInput
             | typeof DropDownInput
             | typeof NumberLineInput
-            | typeof TextOrNumFieldInput;
+            | typeof TextOrNumFieldInput
+            | typeof CheckboxInput;
 
          export type HandleChangeEvent =
             | {
@@ -27,10 +29,7 @@ export namespace N_Form {
               }
             | React.ChangeEvent<HTMLSelectElement | HTMLInputElement>;
 
-         export type HandleChange = (
-            // -- UPDATE HERE WHEN ADDING NEW INPUT COMPONENTS (after defining its handleChange type in its component) -- //
-            e: HandleChangeEvent,
-         ) => void;
+         export type HandleChange = (e: HandleChangeEvent) => void;
 
          export type CommonInputProps = {
             name: string | number;
@@ -77,6 +76,11 @@ export namespace N_Form {
                initialState[input.name] = null;
                continue;
             }
+            if (input.Component === CheckboxInput) {
+               initialState[input.name] = false;
+               continue;
+            }
+
             if (input.Component === TextOrNumFieldInput) {
                initialState[input.name] = '';
                continue;

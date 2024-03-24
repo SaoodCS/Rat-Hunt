@@ -1,4 +1,5 @@
 import type { N_Form } from '../N_Form';
+import CheckboxInput from '../checkbox/Checkbox';
 import DatePickerInput from '../datePicker/DatePickerInput';
 import DropDownInput from '../dropDown/DropDownInput';
 import NumberLineInput from '../numberLine/NumberLineInput';
@@ -26,6 +27,24 @@ export default function InputCombination(
 
    function isValueNumber(value: unknown): value is number {
       return typeof value === 'number' || value === '';
+   }
+
+   if (Component === CheckboxInput) {
+      if (typeof value !== 'boolean') {
+         throw new Error(`${name} does not have a value of type boolean`);
+      }
+      return (
+         <CheckboxInput
+            placeholder={placeholder}
+            name={name}
+            isRequired={isRequired || false}
+            value={value}
+            error={error}
+            handleChange={handleChange}
+            id={id}
+            isDisabled={isDisabled || false}
+         />
+      );
    }
 
    if (Component === NumberLineInput) {
