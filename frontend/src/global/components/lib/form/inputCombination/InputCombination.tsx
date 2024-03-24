@@ -50,7 +50,7 @@ export default function InputCombination(
 
    if (Component === DatePickerInput) {
       if (!(value instanceof Date || value === null)) {
-         throw new Error(`${name} does not have a value of type Date`);
+         throw new Error(`${name} does not have a value of type Date or unset as null`);
       }
       return (
          <DatePickerInput

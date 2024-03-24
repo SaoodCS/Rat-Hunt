@@ -3,16 +3,22 @@ import 'react-datepicker/dist/react-datepicker.css';
 import styled from 'styled-components';
 import Color from '../../../../css/colors';
 
-export const DatePickerWrapper = styled.div<{ isDarkTheme: boolean; isActive: boolean }>`
-   border-bottom: ${({ isDarkTheme, isActive }) => {
-      const colorType = isActive ? 'accent' : 'border';
-      const color = isDarkTheme ? Color.darkThm[colorType] : Color.lightThm[colorType];
-      return `1px solid ${color}`;
+export const DatePickerWrapper = styled.div<{
+   isDarkTheme: boolean;
+   isActive: boolean;
+   hasError: boolean;
+}>`
+   border-bottom: ${({ isDarkTheme, isActive, hasError }) => {
+      const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+      const borderColor = hasError ? theme.error : theme.txt;
+      const borderOpacity = hasError || isActive ? 1 : 0.3;
+      return `2px solid ${Color.setRgbOpacity(borderColor, borderOpacity)}`;
    }};
    width: 100%;
 
    .react-datepicker__input-container input {
       background-color: transparent;
+      font-family: inherit;
       color: unset;
       border: none;
       font-size: 1em;

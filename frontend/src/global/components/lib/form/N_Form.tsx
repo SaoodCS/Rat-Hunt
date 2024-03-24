@@ -10,6 +10,7 @@ import TextOrNumFieldInput from './textOrNumber/TextOrNumFieldInput';
 export namespace N_Form {
    export namespace Inputs {
       export namespace I {
+         type InputValue = string | number | Date | boolean | null;
          export type Components =
             // -- UPDATE HERE WHEN ADDING NEW INPUT COMPONENTS (after creating its component) -- //
             | typeof DatePickerInput
@@ -21,7 +22,7 @@ export namespace N_Form {
             | {
                  target: {
                     name: string | number;
-                    value: string | number | Date | boolean | null;
+                    value: InputValue;
                  };
               }
             | React.ChangeEvent<HTMLSelectElement | HTMLInputElement>;
@@ -44,7 +45,7 @@ export namespace N_Form {
          export type AllInputProps = CommonInputProps & {
             // -- UPDATE HERE WHEN ADDING NEW INPUT COMPONENTS (if it takes any additional props, add it as an optional) -- //
             Component: Inputs.I.Components;
-            value: string | number | Date | boolean;
+            value: InputValue;
             type?: 'text' | 'email' | 'password' | 'number';
             autoComplete?: 'current-password' | 'new-password';
             dropDownOptions?: IDropDownOption[];

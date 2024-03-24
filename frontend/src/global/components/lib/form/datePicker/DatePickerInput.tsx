@@ -46,7 +46,7 @@ export default function DatePickerInput(props: IDatePickerInputProps): JSX.Eleme
                {placeholder}
             </InputLabel>
          </LabelWrapper>
-         <DatePickerWrapper isDarkTheme={isDarkTheme} isActive={isActive}>
+         <DatePickerWrapper isDarkTheme={isDarkTheme} isActive={isActive} hasError={!!error}>
             <DatePicker
                id={id}
                selected={value}
