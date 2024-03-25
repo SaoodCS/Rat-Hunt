@@ -43,6 +43,11 @@ export default function Play(): JSX.Element {
    const [showHostFields, setShowHostFields] = useState(false);
    const [showRoomIdField, setShowRoomIdField] = useState(false);
 
+   // TODO: Delete this afer testing new input components
+   useEffect(() => {
+      console.log(`form: `, form);
+   }, [form]);
+
    useEffect(() => {
       setShowRoomIdField(form.joinOrHost === 'join');
       setShowHostFields(MiscHelper.isNotFalsyOrEmpty(data) && form.joinOrHost === 'host');
@@ -123,7 +128,12 @@ export default function Play(): JSX.Element {
          localStyles={screenStyles()}
       >
          <LogoFader />
-         <StyledForm onSubmit={handleSubmit} apiError={apiError} padding={1}>
+         <StyledForm
+            onSubmit={handleSubmit}
+            apiError={apiError}
+            padding={1}
+            fieldsMargin="0em 0em 1em 0em"
+         >
             {PlayFormClass.form.inputs
                .filter((input) => input.name !== 'roomId' || showRoomIdField)
                .filter((input) => input.name !== 'topic' || showHostFields)

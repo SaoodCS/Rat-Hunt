@@ -13,7 +13,6 @@ export const parentContainerStyles = (
    const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
    return {
       ...provided,
-      paddingBottom: '1em',
       fontSize: '0.8em',
    };
 };

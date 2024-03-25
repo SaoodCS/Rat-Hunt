@@ -56,10 +56,10 @@ export default function DropDownInputNew(props: IDropDownInput): JSX.Element {
             styles={{
                container: (provided) => parentContainerStyles(isDarkTheme, provided),
                control: (provided, state) => inputFieldStyles(isDarkTheme, provided, state),
-               menu: (provided) => dropDownMenuStyles(isDarkTheme, provided),
-               option: (provided, state) => dropDownOptionsStyles(isDarkTheme, provided, state),
                singleValue: (provided) => inputFieldValueStyles(isDarkTheme, provided),
                placeholder: (provided) => inputFieldPlaceholderStyle(isDarkTheme, provided),
+               menu: (provided) => dropDownMenuStyles(isDarkTheme, provided),
+               option: (provided, state) => dropDownOptionsStyles(isDarkTheme, provided, state),
                dropdownIndicator: (provided, state) => iconStyles(isDarkTheme, provided, state),
             }}
          />

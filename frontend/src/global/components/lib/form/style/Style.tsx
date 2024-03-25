@@ -2,7 +2,11 @@ import styled from 'styled-components';
 import MyCSS from '../../../../css/MyCSS';
 import Color from '../../../../css/colors';
 
-export const StyledForm = styled.form<{ apiError?: string; padding?: number }>`
+export const StyledForm = styled.form<{
+   apiError?: string;
+   padding?: number;
+   fieldsMargin?: string;
+}>`
    ${({ padding }) => MyCSS.LayoutStyle.paddingBorderBox(padding ? `${padding}em` : '0em')};
    border-radius: 0.7em;
    display: flex;
@@ -23,4 +27,7 @@ export const StyledForm = styled.form<{ apiError?: string; padding?: number }>`
             width: '90%',
          },
       }}
+   & > * {
+      margin: ${({ fieldsMargin }) => fieldsMargin || '0em'};
+   }
 `;
