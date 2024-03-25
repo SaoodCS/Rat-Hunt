@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Range } from 'react-range';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import type { N_Form } from '../N_Form';
+import { ErrorLabel } from '../style/Style';
 import {
    Label,
    NumberLineInputWrapper,
@@ -17,7 +18,6 @@ import {
    ValueItem,
    ValueItemContainer,
 } from './Style';
-import { ErrorLabel } from '../style/Style';
 
 export interface INumberLineOptions {
    min: number;
@@ -34,31 +34,39 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
    const { label, name, value, error, handleChange, id, isDisabled, numberLineOptions } = props;
    const { min, max, increment } = numberLineOptions;
    const { isDarkTheme } = useThemeContext();
+   const [lineStart, setLineStart] = useState(min - increment);
    const [inputHasValue, setInputHasValue] = useState(value !== '');
    const [hasError, setHasError] = useState(!!error);
+
+   useEffect(() => {
+      setLineStart(min - increment);
+   }, [min, increment]);
+
+   useEffect(() => {
+      setInputHasValue(!(value === '' || value === lineStart));
+   }, [value, lineStart]);
 
    useEffect(() => {
       setHasError(!!error);
    }, [error]);
 
-   useEffect(() => {
-      setInputHasValue(value !== '');
-   }, [value]);
+   function amendHandleChange(newValue: number): void {
+      const atLineStart = newValue === lineStart;
+      handleChange({
+         target: { name, value: atLineStart ? '' : newValue },
+      });
+   }
 
    return (
       <div>
          <NumberLineInputWrapper id={id}>
             <Range
                step={increment}
-               min={min}
+               min={lineStart}
                max={max}
-               values={[inputHasValue ? (value as number) : min]}
+               values={[inputHasValue ? (value as number) : lineStart]}
                disabled={isDisabled}
-               onChange={(values) => {
-                  handleChange({
-                     target: { name, value: values[0] },
-                  });
-               }}
+               onChange={(values) => amendHandleChange(values[0])}
                renderTrack={({ props, children, isDragged }) => {
                   const defaultStyles: CSSProperties = { ...props.style };
                   return (
@@ -77,6 +85,9 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
                            ref={props.ref}
                            inputHasValue={inputHasValue}
                            isDarkTheme={isDarkTheme}
+                           value={value}
+                           min={lineStart}
+                           max={max}
                         >
                            {children}
                         </StyledLine>
@@ -103,18 +114,12 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
                   </ValueItemContainer>
                   <RefreshBtnContainer>
                      <RefreshBtnTransitioner
+                        onClick={() => amendHandleChange(lineStart)}
                         inputHasValue={inputHasValue}
                         isDarkTheme={isDarkTheme}
                         style={{ transition: 'all 0.2s ease' }}
                      >
-                        <Refresh
-                           height="1.4em"
-                           onClick={() => {
-                              handleChange({
-                                 target: { name, value: '' },
-                              });
-                           }}
-                        />
+                        <Refresh height="1.4em" />
                      </RefreshBtnTransitioner>
                   </RefreshBtnContainer>
                </ValueAndRefreshBtnContainer>

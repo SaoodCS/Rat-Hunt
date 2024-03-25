@@ -91,7 +91,7 @@ export default class PlayFormClass {
          Component: NumberLineInput,
          name: 'noOfRounds',
          id: 'no-of-rounds',
-         label: 'Number of Rounds',
+         label: 'Rounds',
          type: 'number',
          numberLineOptions: {
             min: 1,

@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { getTrackBackground } from 'react-range';
 import styled, { css } from 'styled-components';
 import MyCSS from '../../../../css/MyCSS';
 import Color from '../../../../css/colors';
@@ -54,14 +55,27 @@ export const Label = styled.div<{ isDragged: boolean; value: number | ''; isDark
    }}
 `;
 
-export const StyledLine = styled.div<{ inputHasValue: boolean; isDarkTheme: boolean }>`
+export const StyledLine = styled.div<{
+   inputHasValue: boolean;
+   isDarkTheme: boolean;
+   value: number | '';
+   min: number;
+   max: number;
+}>`
    height: 5px;
    border-radius: 5px;
    box-sizing: border-box;
-   ${({ isDarkTheme, inputHasValue }) => {
+   ${({ isDarkTheme, inputHasValue, value, min, max }) => {
       const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+      const activeColor = theme.txt;
+      const inactiveColor = Color.setRgbOpacity(theme.txt, 0.5);
       return css`
-         background-color: ${Color.setRgbOpacity(theme.txt, inputHasValue ? 1 : 0.5)};
+         background: ${getTrackBackground({
+            values: [inputHasValue ? (value as number) : 0],
+            colors: [activeColor, inactiveColor],
+            min: min,
+            max: max,
+         })};
       `;
    }}
 `;
@@ -120,6 +134,7 @@ export const ValueItemContainer = styled.div`
 
 export const ValueItem = styled.div<{ inputHasValue: boolean }>`
    ${MyCSS.Clickables.removeDefaultEffects};
+   opacity: ${({ inputHasValue }) => !inputHasValue && '0'};
    padding-top: 0.2em;
    padding-right: ${({ inputHasValue }) => (inputHasValue ? '1.65em' : '0em')};
    transition: all 0.2s ease-in-out;
@@ -132,15 +147,15 @@ export const RefreshBtnContainer = styled.div`
 `;
 
 export const RefreshBtnTransitioner = styled.div<{ inputHasValue: boolean; isDarkTheme: boolean }>`
+   ${MyCSS.Clickables.removeDefaultEffects};
+   ${MyCSS.Clickables.desktop.changeBrightnessOnHover(2)};
+   ${MyCSS.Clickables.portable.changeBrightnessOnClick(3, 'revert')};
    ${({ isDarkTheme }) => {
       const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
       return css`
          color: ${Color.setRgbOpacity(theme.txt, 0.5)};
       `;
    }}
-   ${MyCSS.Clickables.removeDefaultEffects};
-   ${MyCSS.Clickables.desktop.changeBrightnessOnHover(2)};
-   ${MyCSS.Clickables.portable.changeBrightnessOnClick(3, 'revert')};
    padding-left: ${({ inputHasValue }) => (inputHasValue ? '1.65em' : '0em')};
    cursor: pointer;
 `;
