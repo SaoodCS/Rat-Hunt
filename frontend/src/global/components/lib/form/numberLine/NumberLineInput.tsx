@@ -46,7 +46,7 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
    }, [value]);
 
    return (
-      <div style={{}}>
+      <div>
          <NumberLineInputWrapper id={id}>
             <Range
                step={increment}
