@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
+import BoolHelper from '../../../../helpers/dataTypes/bool/BoolHelper';
 import type { N_Form } from '../N_Form';
 import { ErrorLabel, InputLabel } from '../textOrNumber/Style';
 import {
@@ -9,7 +10,6 @@ import {
    StyledOption,
    StyledSelect,
 } from './Style';
-import BoolHelper from '../../../../helpers/dataTypes/bool/BoolHelper';
 
 export interface IDropDownOption {
    value: string | number;
@@ -88,8 +88,7 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
                label={!(isActive || inputHasValue) ? label : ''}
                value=""
                hidden={isRequired}
-               disabled={isRequired}
-               selected={false}
+               disabled={isRequired} // TODO: NEED TO ALSO GET RID OF THE SELECTED PROP IN THE 3L FRONTEND TEMPALTE PROJ AND THE BAREBONES TEMPLATE
             />
             {dropDownOptions.map((option) => (
                <StyledOption isDarkTheme={isDarkTheme} value={option.value} key={option.value}>

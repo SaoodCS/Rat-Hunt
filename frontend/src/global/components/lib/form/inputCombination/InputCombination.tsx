@@ -2,6 +2,7 @@ import type { N_Form } from '../N_Form';
 import CheckboxInput from '../checkbox/Checkbox';
 import DatePickerInput from '../datePicker/DatePickerInput';
 import DropDownInput from '../dropDown/DropDownInput';
+import DropDownInputNew from '../dropDownNew/DropDownNew';
 import NumberLineInput from '../numberLine/NumberLineInput';
 import TextOrNumFieldInput from '../textOrNumber/TextOrNumFieldInput';
 
@@ -85,9 +86,30 @@ export default function InputCombination(
       );
    }
 
+   if (Component === DropDownInputNew) {
+      if (!dropDownOptions || !(typeof value === 'string' || typeof value === 'number')) {
+         const suffix = !dropDownOptions ? 'dropDownOptions' : 'a value of type string or number';
+         throw new Error(`${name} does not have ${suffix}`);
+      }
+      return (
+         <DropDownInputNew
+            label={label}
+            name={name}
+            dropDownOptions={dropDownOptions || []}
+            isRequired={isRequired || false}
+            value={value}
+            error={error}
+            handleChange={handleChange}
+            id={id}
+            isDisabled={isDisabled || false}
+         />
+      );
+   }
+
    if (Component === DropDownInput) {
       if (!dropDownOptions || !(typeof value === 'string' || typeof value === 'number')) {
-         throw new Error(`${name} does not have dropDownOptions`);
+         const suffix = !dropDownOptions ? 'dropDownOptions' : 'a value of type string or number';
+         throw new Error(`${name} does not have ${suffix}`);
       }
       return (
          <DropDownInput

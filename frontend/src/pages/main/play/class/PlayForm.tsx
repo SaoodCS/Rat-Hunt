@@ -1,10 +1,10 @@
 import type { DocumentData, DocumentSnapshot } from 'firebase/firestore';
 import { N_Form } from '../../../../global/components/lib/form/N_Form';
-import DropDownInput from '../../../../global/components/lib/form/dropDown/DropDownInput';
 import NumberLineInput from '../../../../global/components/lib/form/numberLine/NumberLineInput';
 import TextOrNumFieldInput from '../../../../global/components/lib/form/textOrNumber/TextOrNumFieldInput';
 import StringHelper from '../../../../global/helpers/dataTypes/string/StringHelper';
 import type DBConnect from '../../../../global/utils/DBConnect/DBConnect';
+import DropDownInputNew from '../../../../global/components/lib/form/dropDownNew/DropDownNew';
 
 export interface IPlayFormClass {
    name: string;
@@ -36,7 +36,7 @@ export default class PlayFormClass {
          },
       },
       {
-         Component: DropDownInput,
+         Component: DropDownInputNew,
          name: 'joinOrHost',
          id: 'join-or-host',
          label: 'Join or Host',
@@ -67,7 +67,7 @@ export default class PlayFormClass {
          },
       },
       {
-         Component: DropDownInput,
+         Component: DropDownInputNew,
          name: 'topic',
          id: 'select-topic',
          label: 'Select Topic',

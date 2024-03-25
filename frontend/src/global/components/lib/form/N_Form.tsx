@@ -4,6 +4,7 @@ import CheckboxInput from './checkbox/Checkbox';
 import DatePickerInput from './datePicker/DatePickerInput';
 import type { IDropDownOption } from './dropDown/DropDownInput';
 import DropDownInput from './dropDown/DropDownInput';
+import DropDownInputNew from './dropDownNew/DropDownNew';
 import type { INumberLineOptions } from './numberLine/NumberLineInput';
 import NumberLineInput from './numberLine/NumberLineInput';
 import TextOrNumFieldInput from './textOrNumber/TextOrNumFieldInput';
@@ -18,7 +19,8 @@ export namespace N_Form {
             | typeof DropDownInput
             | typeof NumberLineInput
             | typeof TextOrNumFieldInput
-            | typeof CheckboxInput;
+            | typeof CheckboxInput
+            | typeof DropDownInputNew;
 
          export type HandleChangeEvent =
             | {
@@ -85,10 +87,15 @@ export namespace N_Form {
                initialState[input.name] = '';
                continue;
             }
+            if (input.Component === DropDownInputNew) {
+               initialState[input.name] = '';
+               continue;
+            }
             if (input.Component === DropDownInput) {
                initialState[input.name] = '';
                continue;
             }
+
             if (input.Component === NumberLineInput) {
                initialState[input.name] = '';
                continue;
