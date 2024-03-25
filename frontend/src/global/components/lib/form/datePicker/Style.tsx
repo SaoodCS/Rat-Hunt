@@ -1,7 +1,12 @@
 import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 import 'react-datepicker/dist/react-datepicker.css';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Color from '../../../../css/colors';
+
+interface IInputAttr {
+   isRequired: boolean;
+   isDisabled: boolean;
+}
 
 export const DatePickerWrapper = styled.div<{
    isDarkTheme: boolean;
@@ -93,4 +98,45 @@ export const DatePickerWrapper = styled.div<{
       background-color: ${({ isDarkTheme }) =>
          isDarkTheme ? Color.darkThm.dialog : Color.lightThm.dialog};
    }
+`;
+
+interface IInputLabel extends IInputAttr {
+   focusedInput: boolean;
+   inputHasValue: boolean;
+   isDarkTheme: boolean;
+   hideLabel?: boolean;
+}
+
+export const InputContainer = styled.div`
+   width: 100%;
+   height: 4em;
+`;
+
+export const LabelWrapper = styled.label`
+   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+`;
+
+export const InputLabel = styled.div<IInputLabel>`
+   font-size: 0.75em;
+   ${({ focusedInput, isDarkTheme, isRequired }) => {
+      const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+      const mainColor = theme.txt;
+      const mainColorOpacity = focusedInput ? 1 : 0.4;
+      const asteriskColor = theme.error;
+      return css`
+         color: ${Color.setRgbOpacity(mainColor, mainColorOpacity)};
+         &:after {
+            content: ${isRequired ? "'*'" : "''"};
+            color: ${asteriskColor};
+            padding: 2px;
+         }
+      `;
+   }}
+   transform: ${({ focusedInput, inputHasValue }) =>
+      focusedInput || inputHasValue ? 'translateY(-0.5em)' : 'translateY(0.5em)'};
+   font-size: ${({ focusedInput, inputHasValue }) =>
+      focusedInput || inputHasValue ? '0.8em' : '0.8em'};
+   pointer-events: none;
+   transition: all 0.2s ease-in-out;
+   opacity: ${({ hideLabel }) => (hideLabel ? 0 : 1)};
 `;

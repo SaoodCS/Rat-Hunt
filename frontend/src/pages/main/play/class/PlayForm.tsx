@@ -1,10 +1,10 @@
 import type { DocumentData, DocumentSnapshot } from 'firebase/firestore';
 import { N_Form } from '../../../../global/components/lib/form/N_Form';
 import DropDownInput from '../../../../global/components/lib/form/dropDown/dropDownInput';
+import NumberLineInput from '../../../../global/components/lib/form/numberLine/NumberLineInp';
 import TextOrNumFieldInput from '../../../../global/components/lib/form/textOrNumber/TextOrNumFieldInput';
 import StringHelper from '../../../../global/helpers/dataTypes/string/StringHelper';
 import type DBConnect from '../../../../global/utils/DBConnect/DBConnect';
-import NumberLineInput from '../../../../global/components/lib/form/numberLine/numberLineInput';
 
 export interface IPlayFormClass {
    name: string;
@@ -27,7 +27,7 @@ export default class PlayFormClass {
          validator: (value: string): string | true => {
             if (!value) return 'Please enter your name';
             if (value.trim() === '') return 'Name cannot be empty';
-            if (value.length < 2) return 'Name must be at least 1 characters';
+            if (value.length < 2) return 'Name must be at least 2 characters';
             const invalidChars = ['.', '#', '$', '[', ']'];
             if (StringHelper.containsOneOf(value, invalidChars)) {
                return 'Name cannot contain: ".", "#", "$", "[", or "]"';

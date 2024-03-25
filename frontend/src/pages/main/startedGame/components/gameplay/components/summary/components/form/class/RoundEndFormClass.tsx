@@ -1,6 +1,6 @@
 import { N_Form } from '../../../../../../../../../../global/components/lib/form/N_Form';
 import DropDownInput from '../../../../../../../../../../global/components/lib/form/dropDown/dropDownInput';
-import NumberLineInput from '../../../../../../../../../../global/components/lib/form/numberLine/numberLineInput';
+import NumberLineInput from '../../../../../../../../../../global/components/lib/form/numberLine/NumberLineInp';
 
 export interface IRoundEndForm {
    newTopic: string;

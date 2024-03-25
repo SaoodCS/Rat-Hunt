@@ -5,6 +5,9 @@ import type { CSSObjectWithLabel, GroupBase } from 'react-select/dist/declaratio
 import Color from '../../../../css/colors';
 import Device from '../../../../helpers/pwa/deviceHelper';
 import type { IDropDownOptions } from './dropDownInput';
+import styled from 'styled-components';
+
+export const SelectInputWrapper = styled.div``;
 
 export const parentContainerStyles = (
    isDarkTheme: boolean,

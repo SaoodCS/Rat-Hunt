@@ -4,8 +4,9 @@ import CheckboxInput from './checkbox/Checkbox';
 import DatePickerInput from './datePicker/DatePickerInput';
 import type { IDropDownOptions } from './dropDown/dropDownInput';
 import DropDownInput from './dropDown/dropDownInput';
-import type { INumberLineOptions } from './numberLine/numberLineInput';
-import NumberLineInput from './numberLine/numberLineInput';
+import type { INumberLineOptions } from './numberLine/NumberLineInp';
+import NumberLineInput from './numberLine/NumberLineInp';
+import type { IAutoComplete, ITextOrNumInputType } from './textOrNumber/TextOrNumFieldInput';
 import TextOrNumFieldInput from './textOrNumber/TextOrNumFieldInput';
 
 export namespace N_Form {
@@ -45,11 +46,10 @@ export namespace N_Form {
             // -- UPDATE HERE WHEN ADDING NEW INPUT COMPONENTS (if it takes any additional props, add it as an optional) -- //
             Component: Inputs.I.Components;
             value: InputValue;
-            type?: 'text' | 'email' | 'password' | 'number';
-            autoComplete?: 'current-password' | 'new-password';
+            type?: ITextOrNumInputType;
+            autoComplete?: IAutoComplete;
             dropDownOptions?: IDropDownOptions;
             numberLineOptions?: INumberLineOptions;
-            hideLabelOnFocus?: boolean;
          };
 
          export type ArrOfInputObjects<FormInputs> = {

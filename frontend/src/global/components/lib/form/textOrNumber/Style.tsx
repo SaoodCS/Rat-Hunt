@@ -12,70 +12,41 @@ interface ITextInput extends IInputAttr {
    isDarkTheme: boolean;
 }
 
-interface IInputLabel extends IInputAttr {
-   focusedInput: boolean;
-   inputHasValue: boolean;
-   isDarkTheme: boolean;
-   hideLabel?: boolean;
-}
-
-export const InputContainer = styled.div`
-   width: 100%;
-   height: 4em;
-`;
-
-export const LabelWrapper = styled.label`
-   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-`;
-
-export const InputLabel = styled.div<IInputLabel>`
-   font-size: 0.75em;
-   ${({ focusedInput, isDarkTheme, isRequired }) => {
-      const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
-      const mainColor = theme.txt;
-      const mainColorOpacity = focusedInput ? 1 : 0.4;
-      const asteriskColor = theme.error;
-      return css`
-         color: ${Color.setRgbOpacity(mainColor, mainColorOpacity)};
-         &:after {
-            content: ${isRequired ? "'*'" : "''"};
-            color: ${asteriskColor};
-            padding: 2px;
-         }
-      `;
-   }}
-   transform: ${({ focusedInput, inputHasValue }) =>
-      focusedInput || inputHasValue ? 'translateY(-0.5em)' : 'translateY(0.5em)'};
-   font-size: ${({ focusedInput, inputHasValue }) =>
-      focusedInput || inputHasValue ? '0.8em' : '0.8em'};
-   pointer-events: none;
-   transition: all 0.2s ease-in-out;
-   opacity: ${({ hideLabel }) => (hideLabel ? 0 : 1)};
-`;
+export const TextInputWrapper = styled.div``;
 
 export const TextInput = styled.input.attrs<IInputAttr>(({ isRequired, isDisabled }) => ({
    required: isRequired,
    disabled: isDisabled,
 }))<ITextInput>`
    all: unset;
-   ${MyCSS.Clickables.removeDefaultEffects};
-   font-size: 1em;
+   height: 2.7em;
+   font-size: 0.8em;
+   font-family: inherit;
    width: 100%;
-   font-weight: 100;
-   z-index: 1;
+   border: 1px solid red;
+   box-sizing: border-box;
+   padding-left: 0.6em;
+   border-radius: 0.25em;
+   transition: all 0.1s ease-in-out;
+   ${MyCSS.Clickables.removeDefaultEffects};
+   &::placeholder {
+      color: ${Color.setRgbOpacity(Color.darkThm.txt, 0.5)};
+   }
+
    ${({ isDarkTheme, hasError, isDisabled }) => {
       const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
       const colorPropColor = isDisabled ? theme.accent : theme.txt;
-      const colorPropOpacity = isDisabled ? 0.6 : 0.8;
+      const colorPropOpacity = isDisabled ? 0.6 : 1;
       const activeColorPropOpacity = isDisabled ? 0.6 : 1;
       const borderColor = hasError ? theme.error : theme.txt;
       const borderOpacity = hasError ? 1 : 0.3;
       return css`
          color: ${Color.setRgbOpacity(colorPropColor, colorPropOpacity)};
-         border-bottom: 2px solid ${Color.setRgbOpacity(borderColor, borderOpacity)};
+         background-color: ${Color.setRgbOpacity(theme.txt, 0.1)};
+         border: 2px solid ${Color.setRgbOpacity(borderColor, borderOpacity)};
          &:focus,
          &:active {
-            border-bottom: 2px solid ${borderColor};
+            border: 2px solid ${borderColor};
             color: ${Color.setRgbOpacity(colorPropColor, activeColorPropOpacity)};
          }
       `;

@@ -2,7 +2,7 @@ import type { N_Form } from '../N_Form';
 import CheckboxInput from '../checkbox/Checkbox';
 import DatePickerInput from '../datePicker/DatePickerInput';
 import DropDownInput from '../dropDown/dropDownInput';
-import NumberLineInput from '../numberLine/numberLineInput';
+import NumberLineInput from '../numberLine/NumberLineInp';
 import TextOrNumFieldInput from '../textOrNumber/TextOrNumFieldInput';
 
 export default function InputCombination(
@@ -20,7 +20,6 @@ export default function InputCombination(
       value,
       autoComplete,
       isDisabled,
-      hideLabelOnFocus,
       numberLineOptions,
       Component,
    } = props;
@@ -125,7 +124,6 @@ export default function InputCombination(
          error={error}
          id={id}
          isDisabled={isDisabled || false}
-         hideLabelOnFocus={hideLabelOnFocus || false}
       />
    );
 }

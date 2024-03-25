@@ -1,7 +1,10 @@
+import { useEffect, useState } from 'react';
 import Select from 'react-select';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import type { N_Form } from '../N_Form';
+import { ErrorLabel } from '../style/Style';
 import {
+   SelectInputWrapper,
    dropDownMenuStyles,
    dropDownOptionsStyles,
    iconStyles,
@@ -10,8 +13,6 @@ import {
    inputFieldValueStyles,
    parentContainerStyles,
 } from './Style';
-import { ErrorLabel } from '../style/Style';
-import { useEffect, useState } from 'react';
 
 export interface IDropDownOptions {
    options: {
@@ -41,7 +42,7 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
    }, [error]);
 
    return (
-      <div>
+      <SelectInputWrapper>
          <Select
             name={name.toString()}
             id={id}
@@ -75,6 +76,6 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
             }}
          />
          <ErrorLabel isDarkTheme={isDarkTheme}>{error}</ErrorLabel>
-      </div>
+      </SelectInputWrapper>
    );
 }

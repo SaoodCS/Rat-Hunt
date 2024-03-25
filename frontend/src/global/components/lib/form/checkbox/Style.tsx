@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import MyCSS from '../../../../css/MyCSS';
 import Color from '../../../../css/colors';
 import { FlexRowWrapper } from '../../positionModifiers/flexRowWrapper/Style';
-import { LabelWrapper } from '../textOrNumber/Style';
 
 export interface ICheckInputAttr {
    isRequired: boolean;
@@ -72,4 +71,6 @@ export const StyledCheckbox = styled.input.attrs<ICheckInputAttr>(({ isRequired,
    }
 `;
 
-export const CheckboxLabel = styled(LabelWrapper)``;
+export const CheckboxLabel = styled.label`
+   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+`;

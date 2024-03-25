@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import type { N_Form } from '../N_Form';
-import { InputContainer, InputLabel, LabelWrapper, TextInput } from './Style';
+import { TextInput, TextInputWrapper } from './Style';
 import { ErrorLabel } from '../style/Style';
 
+export type ITextOrNumInputType = 'text' | 'email' | 'password' | 'number';
+export type IAutoComplete = 'current-password' | 'new-password';
+
 interface IInput extends N_Form.Inputs.I.CommonInputProps {
-   type: N_Form.Inputs.I.AllInputPropsAsRequired['type'];
-   autoComplete: N_Form.Inputs.I.AllInputPropsAsRequired['autoComplete'];
-   hideLabelOnFocus: boolean;
+   type: ITextOrNumInputType;
+   autoComplete?: IAutoComplete;
    value: string | number;
 }
 
@@ -23,54 +25,48 @@ export default function TextOrNumFieldInput(props: IInput): JSX.Element {
       id,
       autoComplete,
       isDisabled,
-      hideLabelOnFocus,
    } = props;
-   const [isActive, setIsActive] = useState(false);
    const { isDarkTheme } = useThemeContext();
-   const [inputHasValue, setInputHasValue] = useState(value !== '');
+   const [hasError, setHasError] = useState(!!error);
+   const [isTypeNumber, setIsTypeNumber] = useState(type === 'number');
 
    useEffect(() => {
-      setInputHasValue(value !== '');
-   }, [value]);
+      setIsTypeNumber(type === 'number');
+   }, [type]);
 
-   function handleFocus(): void {
-      setIsActive(true);
-   }
+   useEffect(() => {
+      setHasError(!!error);
+   }, [error]);
 
-   function handleBlur(): void {
-      setIsActive(false);
+   function displayNumKeypad(): {
+      inputMode?: 'numeric';
+      pattern?: string;
+   } {
+      if (!isTypeNumber) return {};
+      return {
+         inputMode: 'numeric',
+         pattern: '[0-9]*',
+      };
    }
 
    return (
-      <InputContainer>
-         <LabelWrapper htmlFor={id}>
-            <InputLabel
-               focusedInput={isActive}
-               isRequired={isRequired}
-               inputHasValue={inputHasValue}
-               isDarkTheme={isDarkTheme}
-               isDisabled={isDisabled}
-               hideLabel={!!hideLabelOnFocus && (!!isActive || inputHasValue)}
-            >
-               {label}
-            </InputLabel>
-         </LabelWrapper>
-
+      <TextInputWrapper>
          <TextInput
-            id={id}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
             type={type}
             name={name.toString()}
-            isRequired={isRequired}
+            id={id}
             onChange={handleChange}
             value={value}
-            hasError={!!error}
-            isDarkTheme={isDarkTheme}
             autoComplete={autoComplete}
+            placeholder={label}
+            required={isRequired}
+            isDarkTheme={isDarkTheme}
+            hasError={hasError}
             isDisabled={isDisabled}
+            isRequired={isRequired}
+            {...displayNumKeypad()}
          />
          <ErrorLabel isDarkTheme={isDarkTheme}>{error}</ErrorLabel>
-      </InputContainer>
+      </TextInputWrapper>
    );
 }

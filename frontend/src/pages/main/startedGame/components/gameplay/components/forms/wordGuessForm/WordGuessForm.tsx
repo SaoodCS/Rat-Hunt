@@ -76,7 +76,6 @@ export default function WordGuessForm(): JSX.Element {
                value={form[input.name]}
                autoComplete={input.autoComplete}
                isDisabled={input.isDisabled}
-               hideLabelOnFocus={input.hideLabelOnFocus}
                numberLineOptions={input.numberLineOptions}
                Component={input.Component}
             />
