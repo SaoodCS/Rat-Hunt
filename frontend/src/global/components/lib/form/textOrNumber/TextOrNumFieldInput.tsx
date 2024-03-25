@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import type { N_Form } from '../N_Form';
-import { TextInput, TextInputWrapper } from './Style';
-import { ErrorLabel } from '../style/Style';
+import { TextInput } from './Style';
+import { ErrorLabel, InputWrapper } from '../style/Style';
 
 export type ITextOrNumInputType = 'text' | 'email' | 'password' | 'number';
 export type IAutoComplete = 'current-password' | 'new-password';
@@ -50,7 +50,7 @@ export default function TextOrNumFieldInput(props: IInput): JSX.Element {
    }
 
    return (
-      <TextInputWrapper>
+      <InputWrapper>
          <TextInput
             type={type}
             name={name.toString()}
@@ -67,6 +67,6 @@ export default function TextOrNumFieldInput(props: IInput): JSX.Element {
             {...displayNumKeypad()}
          />
          <ErrorLabel isDarkTheme={isDarkTheme}>{error}</ErrorLabel>
-      </TextInputWrapper>
+      </InputWrapper>
    );
 }

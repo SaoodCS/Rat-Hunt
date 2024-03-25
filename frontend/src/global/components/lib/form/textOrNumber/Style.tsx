@@ -12,8 +12,6 @@ interface ITextInput extends IInputAttr {
    isDarkTheme: boolean;
 }
 
-export const TextInputWrapper = styled.div``;
-
 export const TextInput = styled.input.attrs<IInputAttr>(({ isRequired, isDisabled }) => ({
    required: isRequired,
    disabled: isDisabled,

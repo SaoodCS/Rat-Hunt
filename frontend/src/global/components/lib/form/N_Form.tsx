@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Types } from '../../../helpers/types/Types';
 import CheckboxInput from './checkbox/Checkbox';
-import DatePickerInput from './datePicker/DatePickerInput';
 import type { IDropDownOptions } from './dropDown/dropDownInput';
 import DropDownInput from './dropDown/dropDownInput';
 import type { INumberLineOptions } from './numberLine/NumberLineInp';
@@ -15,7 +14,6 @@ export namespace N_Form {
          type InputValue = string | number | Date | boolean | null;
          export type Components =
             // -- UPDATE HERE WHEN ADDING NEW INPUT COMPONENTS (after creating its component) -- //
-            | typeof DatePickerInput
             | typeof TextOrNumFieldInput
             | typeof CheckboxInput
             | typeof DropDownInput
@@ -72,10 +70,6 @@ export namespace N_Form {
          const initialState: any = {};
          for (let i = 0; i < arr.length; i++) {
             const input = arr[i];
-            if (input.Component === DatePickerInput) {
-               initialState[input.name] = null;
-               continue;
-            }
             if (input.Component === CheckboxInput) {
                initialState[input.name] = false;
                continue;

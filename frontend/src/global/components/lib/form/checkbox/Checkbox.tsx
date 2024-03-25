@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-no-undef */
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import type { N_Form } from '../N_Form';
+import { InputWrapper } from '../style/Style';
 import { CheckboxAndLabelWrapper, CheckboxContainer, CheckboxLabel, StyledCheckbox } from './Style';
 
 export interface ICheckboxInput extends N_Form.Inputs.I.CommonInputProps {
@@ -11,7 +12,7 @@ export default function CheckboxInput(props: ICheckboxInput): JSX.Element {
    const { label, name, isRequired, handleChange, value, error, id, isDisabled } = props;
    const { isDarkTheme } = useThemeContext();
    return (
-      <div>
+      <InputWrapper>
          <CheckboxAndLabelWrapper>
             <CheckboxContainer>
                <StyledCheckbox
@@ -33,6 +34,6 @@ export default function CheckboxInput(props: ICheckboxInput): JSX.Element {
             </CheckboxContainer>
             <CheckboxLabel htmlFor={id}>{label}</CheckboxLabel>
          </CheckboxAndLabelWrapper>
-      </div>
+      </InputWrapper>
    );
 }

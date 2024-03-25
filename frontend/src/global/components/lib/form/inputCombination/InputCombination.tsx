@@ -1,6 +1,5 @@
 import type { N_Form } from '../N_Form';
 import CheckboxInput from '../checkbox/Checkbox';
-import DatePickerInput from '../datePicker/DatePickerInput';
 import DropDownInput from '../dropDown/dropDownInput';
 import NumberLineInput from '../numberLine/NumberLineInp';
 import TextOrNumFieldInput from '../textOrNumber/TextOrNumFieldInput';
@@ -62,24 +61,6 @@ export default function InputCombination(
             id={id}
             isDisabled={isDisabled || false}
             numberLineOptions={numberLineOptions}
-         />
-      );
-   }
-
-   if (Component === DatePickerInput) {
-      if (!(value instanceof Date || value === null)) {
-         throw new Error(`${name} does not have a value of type Date or unset as null`);
-      }
-      return (
-         <DatePickerInput
-            label={label}
-            name={name}
-            isRequired={isRequired || false}
-            value={value}
-            error={error}
-            handleChange={handleChange}
-            id={id}
-            isDisabled={isDisabled || false}
          />
       );
    }

@@ -43,11 +43,6 @@ export default function Play(): JSX.Element {
    const [showHostFields, setShowHostFields] = useState(false);
    const [showRoomIdField, setShowRoomIdField] = useState(false);
 
-   // TODO: Delete this afer testing new input components
-   useEffect(() => {
-      console.log(`form: `, form);
-   }, [form]);
-
    useEffect(() => {
       setShowRoomIdField(form.joinOrHost === 'join');
       setShowHostFields(MiscHelper.isNotFalsyOrEmpty(data) && form.joinOrHost === 'host');

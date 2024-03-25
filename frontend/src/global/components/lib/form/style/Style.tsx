@@ -32,6 +32,8 @@ export const StyledForm = styled.form<{
    }
 `;
 
+export const InputWrapper = styled.div``;
+
 export const ErrorLabel = styled.div<{ isDarkTheme: boolean }>`
    font-size: 0.75em;
    margin-top: 0.2em;

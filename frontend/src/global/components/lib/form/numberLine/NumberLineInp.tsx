@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Range } from 'react-range';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import type { N_Form } from '../N_Form';
-import { ErrorLabel } from '../style/Style';
+import { ErrorLabel, InputWrapper } from '../style/Style';
 import {
    Label,
    NumberLineInputWrapper,
@@ -58,7 +58,7 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
    }
 
    return (
-      <div>
+      <InputWrapper>
          <NumberLineInputWrapper id={id}>
             <Range
                step={increment}
@@ -126,6 +126,6 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
             </ValueAndRefreshBtnWrapper>
          </NumberLineInputWrapper>
          <ErrorLabel isDarkTheme={isDarkTheme}>{error}</ErrorLabel>
-      </div>
+      </InputWrapper>
    );
 }
