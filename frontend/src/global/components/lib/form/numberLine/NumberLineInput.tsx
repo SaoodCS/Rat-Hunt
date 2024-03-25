@@ -1,30 +1,28 @@
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
-import type { MarkObj } from 'rc-slider/lib/Marks';
+import { Refresh } from '@styled-icons/material-rounded/Refresh';
+import type { CSSProperties } from 'react';
 import { useEffect, useState } from 'react';
+import { Range } from 'react-range';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
-import JSXHelper from '../../../../helpers/dataTypes/jsx/jsxHelper';
-import ConditionalRender from '../../renderModifiers/conditionalRender/ConditionalRender';
 import type { N_Form } from '../N_Form';
-import { ErrorLabel, InputContainer, LabelWrapper } from '../textOrNumber/Style';
 import {
-   InputSliderWrapper,
-   LabelIndicatorLine,
-   LabelIndicatorLineWrapper,
-   NumberLineInputLabel,
-   activeDotStyles,
-   activeLineStyles,
-   dotTouchAreaStyles,
-   inactiveLineStyles,
-   numberLabelStyles,
-   numberLineStyles,
-} from './style/Style';
+   Label,
+   NumberLineInputWrapper,
+   RefreshBtnContainer,
+   RefreshBtnTransitioner,
+   StyledDot,
+   StyledLine,
+   StyledLineWrapper,
+   ValueAndRefreshBtnContainer,
+   ValueAndRefreshBtnWrapper,
+   ValueItem,
+   ValueItemContainer,
+} from './Style';
+import { ErrorLabel } from '../textOrNumber/Style';
 
 export interface INumberLineOptions {
    min: number;
    max: number;
-   displayAllNumbers: boolean;
-   displayLinePointers: boolean;
+   increment: number;
 }
 
 interface INumberLineInput extends N_Form.Inputs.I.CommonInputProps {
@@ -33,125 +31,96 @@ interface INumberLineInput extends N_Form.Inputs.I.CommonInputProps {
 }
 
 export default function NumberLineInput(props: INumberLineInput): JSX.Element {
-   const {
-      label,
-      name,
-      isRequired,
-      value,
-      error,
-      handleChange,
-      id,
-      isDisabled,
-      numberLineOptions,
-   } = props;
-   const { min, max, displayAllNumbers, displayLinePointers } = numberLineOptions;
+   const { label, name, value, error, handleChange, id, isDisabled, numberLineOptions } = props;
+   const { min, max, increment } = numberLineOptions;
    const { isDarkTheme } = useThemeContext();
-   const [isActive, setIsActive] = useState(false);
    const [inputHasValue, setInputHasValue] = useState(value !== '');
    const [hasError, setHasError] = useState(!!error);
-
-   useEffect(() => {
-      if (isActive && !inputHasValue) {
-         handleChange({
-            target: {
-               name,
-               value: min,
-            },
-         });
-      }
-   }, [isActive]);
-
-   useEffect(() => {
-      setInputHasValue(value !== '');
-   }, [value]);
 
    useEffect(() => {
       setHasError(!!error);
    }, [error]);
 
-   function handleFocus(): void {
-      setIsActive(true);
-   }
-
-   function handleBlur(): void {
-      setIsActive(false);
-   }
-
-   function createMarks(): { [key: number]: MarkObj } {
-      const marks: { [key: number]: MarkObj } = {};
-      for (let i = min; i <= max; i++) {
-         if (i === min && !inputHasValue) continue;
-         marks[i] = {
-            style: numberLabelStyles({
-               isLabelCurrentVal: value === i,
-               minValue: min,
-               maxValue: max,
-               label: i,
-               displayAllNumbers: displayAllNumbers,
-               isDarkTheme: isDarkTheme,
-            }),
-            label: i,
-         };
-      }
-      return marks;
-   }
+   useEffect(() => {
+      setInputHasValue(value !== '');
+   }, [value]);
 
    return (
-      <InputContainer style={{ height: '5em' }}>
-         <LabelWrapper htmlFor={id}>
-            <NumberLineInputLabel
-               focusedInput={isActive}
-               isRequired={isRequired}
-               inputHasValue={inputHasValue}
-               isDarkTheme
-               isDisabled={isDisabled}
-               hideLabel={false}
-            >
-               {label}
-            </NumberLineInputLabel>
-         </LabelWrapper>
-         <InputSliderWrapper inputHasValue={inputHasValue}>
-            <Slider
-               onFocus={handleFocus}
-               onBlur={handleBlur}
-               draggableTrack
-               pushable
-               allowCross
-               keyboard
-               step={1}
+      <div>
+         <NumberLineInputWrapper id={id}>
+            <Range
+               step={increment}
                min={min}
                max={max}
-               value={value || min}
-               onChange={(currentVal) => {
+               values={[inputHasValue ? (value as number) : min]}
+               disabled={isDisabled}
+               onChange={(values) => {
                   handleChange({
-                     target: {
-                        name,
-                        value: currentVal as number,
-                     },
+                     target: { name, value: values[0] },
                   });
                }}
-               disabled={isDisabled}
-               marks={createMarks()}
-               styles={{
-                  track: activeLineStyles({ isDarkTheme }),
-                  rail: inactiveLineStyles({ isDarkTheme: isDarkTheme, hasError: hasError }),
-                  handle: activeDotStyles({ hasValue: inputHasValue, isDarkTheme: isDarkTheme }),
+               renderTrack={({ props, children, isDragged }) => {
+                  const defaultStyles: CSSProperties = { ...props.style };
+                  return (
+                     <StyledLineWrapper
+                        onMouseDown={props.onMouseDown}
+                        onTouchStart={props.onTouchStart}
+                        propsStyles={defaultStyles}
+                        isDragged={isDragged}
+                        isDarkTheme={isDarkTheme}
+                        hasError={hasError}
+                     >
+                        <Label isDragged={isDragged} value={value} isDarkTheme={isDarkTheme}>
+                           {label}
+                        </Label>
+                        <StyledLine
+                           ref={props.ref}
+                           inputHasValue={inputHasValue}
+                           isDarkTheme={isDarkTheme}
+                        >
+                           {children}
+                        </StyledLine>
+                     </StyledLineWrapper>
+                  );
                }}
-               dotStyle={dotTouchAreaStyles(min, max)}
-               style={numberLineStyles({ isDarkTheme })}
+               renderThumb={({ props, isDragged }) => {
+                  const defaultStyles: CSSProperties = { ...props.style };
+                  return (
+                     <StyledDot
+                        {...props}
+                        propsStyles={defaultStyles}
+                        isDragged={isDragged}
+                        value={value}
+                        isDarkTheme={isDarkTheme}
+                     />
+                  );
+               }}
             />
-            <ConditionalRender condition={displayLinePointers}>
-               <LabelIndicatorLineWrapper currentValue={value}>
-                  {JSXHelper.repeatJSX(
-                     <LabelIndicatorLine minValue={min} maxValue={max} isDarkTheme={isDarkTheme} />,
-                     9,
-                  )}
-               </LabelIndicatorLineWrapper>
-            </ConditionalRender>
-         </InputSliderWrapper>
-         <ErrorLabel isDarkTheme={isDarkTheme} style={{ marginTop: '1.5em' }}>
-            {error}
-         </ErrorLabel>
-      </InputContainer>
+            <ValueAndRefreshBtnWrapper isDarkTheme={isDarkTheme}>
+               <ValueAndRefreshBtnContainer>
+                  <ValueItemContainer>
+                     <ValueItem inputHasValue={inputHasValue}>{value}</ValueItem>
+                  </ValueItemContainer>
+                  <RefreshBtnContainer>
+                     <RefreshBtnTransitioner
+                        inputHasValue={inputHasValue}
+                        isDarkTheme={isDarkTheme}
+                        style={{ transition: 'all 0.2s ease' }}
+                     >
+                        <Refresh
+                           height="1.4em"
+                           onClick={() => {
+                              handleChange({
+                                 target: { name, value: '' },
+                              });
+                           }}
+                        />
+                     </RefreshBtnTransitioner>
+                  </RefreshBtnContainer>
+               </ValueAndRefreshBtnContainer>
+            </ValueAndRefreshBtnWrapper>
+         </NumberLineInputWrapper>
+         <ErrorLabel isDarkTheme={isDarkTheme}>{error}</ErrorLabel>
+      </div>
    );
 }

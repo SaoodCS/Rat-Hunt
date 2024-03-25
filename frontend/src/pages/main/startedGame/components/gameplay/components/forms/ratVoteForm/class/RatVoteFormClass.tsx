@@ -1,5 +1,5 @@
 import { N_Form } from '../../../../../../../../../global/components/lib/form/N_Form';
-import DropDownInput from '../../../../../../../../../global/components/lib/form/dropDown/DropDownInput';
+import DropDownInput from '../../../../../../../../../global/components/lib/form/dropDown/dropDownInput';
 
 export interface IRatVoteFormClass {
    vote: string;
@@ -15,7 +15,9 @@ export default class RatVoteFormClass {
          type: 'text',
          isRequired: true,
          isDisabled: false,
-         dropDownOptions: [],
+         dropDownOptions: {
+            options: [],
+         },
          validator: (value: string): string | true => {
             if (!value) return 'Please select a player';
             return true;

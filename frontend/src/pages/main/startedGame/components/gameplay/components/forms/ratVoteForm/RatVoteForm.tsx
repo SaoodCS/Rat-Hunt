@@ -1,14 +1,9 @@
 import { Send } from '@styled-icons/ionicons-sharp/Send';
-import { Fragment, useContext, useState } from 'react';
+import { useContext } from 'react';
 import { TextBtn } from '../../../../../../../../global/components/lib/button/textBtn/Style';
-import type { IDropDownOption } from '../../../../../../../../global/components/lib/form/dropDown/DropDownInput';
-import {
-   DropDownArrowAlt,
-   StyledOption,
-   StyledSelectAlt,
-} from '../../../../../../../../global/components/lib/form/dropDown/Style';
+import type { IDropDownOptions } from '../../../../../../../../global/components/lib/form/dropDown/dropDownInput';
+import InputCombination from '../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
 import { StyledForm } from '../../../../../../../../global/components/lib/form/style/Style';
-import { ErrorLabel } from '../../../../../../../../global/components/lib/form/textOrNumber/Style';
 import { GameContext } from '../../../../../../../../global/context/game/GameContext';
 import useThemeContext from '../../../../../../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
@@ -20,7 +15,6 @@ import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect'
 import GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
 import { gameFormStyles } from '../style/Style';
 import RatVoteFormClass from './class/RatVoteFormClass';
-import BoolHelper from '../../../../../../../../global/helpers/dataTypes/bool/BoolHelper';
 
 export default function RatVoteForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -33,15 +27,6 @@ export default function RatVoteForm(): JSX.Element {
    );
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const updateGameStateMutation = DBConnect.FSDB.Set.gameState({}, false);
-   const [isActive, setIsActive] = useState(false);
-
-   function handleFocus(): void {
-      setIsActive(true);
-   }
-
-   function handleBlur(): void {
-      setIsActive(false);
-   }
 
    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
       const { isFormValid } = initHandleSubmit(e);
@@ -70,60 +55,41 @@ export default function RatVoteForm(): JSX.Element {
 
    function dropDownOptions(
       input: (typeof RatVoteFormClass.form.inputs)[0],
-   ): IDropDownOption[] | undefined {
+   ): IDropDownOptions | undefined {
       if (input.dropDownOptions === undefined) return;
       if (!(input.name === 'vote' && MiscHelper.isNotFalsyOrEmpty(roomData))) return;
       const usersArr = roomData.users;
-      const dropDownOptions: IDropDownOption[] = usersArr.map((user) => ({
+      const options: IDropDownOptions['options'] = usersArr.map((user) => ({
          value: user.userId,
          label: user.userId,
       }));
-      return ArrOfObj.sort(dropDownOptions, 'label');
+      return {
+         ...input.dropDownOptions,
+         options: ArrOfObj.sort(options, 'label'),
+      };
    }
 
    return (
       <StyledForm onSubmit={handleSubmit} apiError={apiError} style={gameFormStyles}>
          {RatVoteFormClass.form.inputs.map((input) => (
-            <Fragment key={input.id}>
-               <DropDownArrowAlt
-                  darktheme={'false'}
-                  focusedinput={BoolHelper.boolToStr(isActive)}
-               />
-               <StyledSelectAlt
-                  id={input.id}
-                  name={input.name}
-                  isRequired={input.isRequired || false}
-                  autoComplete={input.autoComplete}
-                  onChange={handleChange}
-                  isDarkTheme
-                  isDisabled={false}
-                  hasError={!!errors[input.name]}
-                  value={form[input.name]}
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
-               >
-                  <StyledOption
-                     isDarkTheme={isDarkTheme}
-                     value=""
-                     hidden={input.isRequired || false}
-                     label={input.label}
-                  />
-                  {dropDownOptions(input)?.map((option) => (
-                     <StyledOption
-                        isDarkTheme={isDarkTheme}
-                        value={option.value}
-                        key={option.value}
-                     >
-                        {option.label}
-                     </StyledOption>
-                  ))}
-               </StyledSelectAlt>
-               <ErrorLabel isDarkTheme={isDarkTheme} style={{ position: 'absolute', bottom: 0 }}>
-                  {errors[input.name]}
-               </ErrorLabel>
-            </Fragment>
+            <InputCombination
+               key={input.name}
+               label={input.label}
+               name={input.name}
+               isRequired={input.isRequired}
+               handleChange={handleChange}
+               error={errors[input.name]}
+               dropDownOptions={dropDownOptions(input)}
+               id={input.id}
+               type={input.type}
+               value={form[input.name]}
+               autoComplete={input.autoComplete}
+               isDisabled={input.isDisabled}
+               hideLabelOnFocus={input.hideLabelOnFocus}
+               numberLineOptions={input.numberLineOptions}
+               Component={input.Component}
+            />
          ))}
-
          <TextBtn isDarkTheme={isDarkTheme} type="submit">
             <Send size="1.5em" color={Color.darkThm.warning} />
          </TextBtn>

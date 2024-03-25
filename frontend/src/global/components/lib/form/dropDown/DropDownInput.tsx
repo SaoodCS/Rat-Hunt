@@ -1,102 +1,73 @@
-import { useEffect, useState } from 'react';
+import Select from 'react-select';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
-import BoolHelper from '../../../../helpers/dataTypes/bool/BoolHelper';
 import type { N_Form } from '../N_Form';
-import { ErrorLabel, InputLabel } from '../textOrNumber/Style';
+import { ErrorLabel } from '../textOrNumber/Style';
 import {
-   DropDownArrow,
-   DropDownInputContainer,
-   DropDownLabelWrapper,
-   StyledOption,
-   StyledSelect,
+   dropDownMenuStyles,
+   dropDownOptionsStyles,
+   iconStyles,
+   inputFieldPlaceholderStyle,
+   inputFieldStyles,
+   inputFieldValueStyles,
+   parentContainerStyles,
 } from './Style';
 
-export interface IDropDownOption {
-   value: string | number;
-   label: string;
+export interface IDropDownOptions {
+   options: {
+      value: string | number;
+      label: string;
+   }[];
+   menu?: {
+      maxHeight?: number;
+      placement?: 'top' | 'bottom';
+   };
 }
 
 interface IDropDownInput extends N_Form.Inputs.I.CommonInputProps {
-   dropDownOptions: IDropDownOption[];
-   hideLabelOnFocus: boolean;
+   dropDownOptions: IDropDownOptions;
    value: string | number;
 }
 
 export default function DropDownInput(props: IDropDownInput): JSX.Element {
-   const {
-      label,
-      name,
-      isRequired,
-      handleChange,
-      error,
-      dropDownOptions,
-      id,
-      value,
-      isDisabled,
-      hideLabelOnFocus,
-   } = props;
    const { isDarkTheme } = useThemeContext();
-   const [isActive, setIsActive] = useState(false);
-   const [inputHasValue, setInputHasValue] = useState(value !== '');
-
-   useEffect(() => {
-      setInputHasValue(value !== '');
-   }, [value]);
-
-   function handleFocus(): void {
-      setIsActive(true);
-   }
-
-   function handleBlur(): void {
-      setIsActive(false);
-   }
+   const { label, name, isRequired, handleChange, error, dropDownOptions, id, value, isDisabled } =
+      props;
+   const { menu, options } = dropDownOptions;
 
    return (
-      <DropDownInputContainer>
-         <DropDownArrow
-            darktheme={BoolHelper.boolToStr(isDarkTheme)}
-            focusedinput={BoolHelper.boolToStr(isActive)}
-         />
-         <DropDownLabelWrapper>
-            <InputLabel
-               focusedInput={isActive}
-               isRequired={isRequired}
-               inputHasValue={inputHasValue}
-               isDarkTheme={isDarkTheme}
-               isDisabled={isDisabled}
-               hideLabel={!(!!isActive || inputHasValue) || !!hideLabelOnFocus}
-            >
-               {label}
-            </InputLabel>
-         </DropDownLabelWrapper>
-         <StyledSelect
+      <>
+         <Select
             name={name.toString()}
-            onChange={handleChange}
             id={id}
-            hasError={!!error}
-            isDarkTheme={isDarkTheme}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            isRequired={isRequired}
-            value={value}
+            placeholder={label}
+            options={options}
+            onChange={(option) =>
+               handleChange({
+                  target: {
+                     name: name,
+                     value: option?.value || '',
+                  },
+               })
+            }
             isDisabled={isDisabled}
-            isActive={isActive}
-            valueExists={!!value}
-         >
-            <StyledOption
-               isDarkTheme={isDarkTheme}
-               label={!(isActive || inputHasValue) ? label : ''}
-               value=""
-               hidden={isRequired}
-               disabled={isRequired} // TODO: NEED TO ALSO GET RID OF THE SELECTED PROP IN THE 3L FRONTEND TEMPALTE PROJ AND THE BAREBONES TEMPLATE
-            />
-            {dropDownOptions.map((option) => (
-               <StyledOption isDarkTheme={isDarkTheme} value={option.value} key={option.value}>
-                  {option.label}
-               </StyledOption>
-            ))}
-         </StyledSelect>
+            required={isRequired}
+            isMulti={false}
+            isClearable={false}
+            isSearchable={false}
+            maxMenuHeight={menu?.maxHeight || 200}
+            menuPlacement={menu?.placement || 'top'}
+            menuShouldScrollIntoView={true}
+            styles={{
+               container: (provided) => parentContainerStyles(isDarkTheme, provided),
+               control: (provided, state) => inputFieldStyles(isDarkTheme, provided, state),
+               singleValue: (provided) => inputFieldValueStyles(isDarkTheme, provided),
+               placeholder: (provided) => inputFieldPlaceholderStyle(isDarkTheme, provided),
+               menu: (provided) => dropDownMenuStyles(isDarkTheme, provided),
+               option: (provided, state) => dropDownOptionsStyles(isDarkTheme, provided, state),
+               dropdownIndicator: (provided, state) => iconStyles(isDarkTheme, provided, state),
+            }}
+         />
          <ErrorLabel isDarkTheme={isDarkTheme}>{error}</ErrorLabel>
-      </DropDownInputContainer>
+      </>
    );
 }

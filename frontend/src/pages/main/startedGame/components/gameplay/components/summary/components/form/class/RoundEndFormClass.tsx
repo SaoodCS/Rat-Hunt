@@ -1,6 +1,6 @@
 import { N_Form } from '../../../../../../../../../../global/components/lib/form/N_Form';
-import DropDownInput from '../../../../../../../../../../global/components/lib/form/dropDown/DropDownInput';
-import NumberLineInput from '../../../../../../../../../../global/components/lib/form/numberLine/NumberLineInput';
+import DropDownInput from '../../../../../../../../../../global/components/lib/form/dropDown/dropDownInput';
+import NumberLineInput from '../../../../../../../../../../global/components/lib/form/numberLine/numberLineInput';
 
 export interface IRoundEndForm {
    newTopic: string;
@@ -17,7 +17,9 @@ export default class RoundEndFormClass {
          type: 'text',
          isRequired: true,
          isDisabled: false,
-         dropDownOptions: [],
+         dropDownOptions: {
+            options: [],
+         },
          validator: (value: string): string | true => {
             if (!value) return 'Please select a topic';
             return true;
@@ -35,8 +37,7 @@ export default class RoundEndFormClass {
          numberLineOptions: {
             min: 1,
             max: 10,
-            displayAllNumbers: false,
-            displayLinePointers: true,
+            increment: 1,
          },
          validator: (value: number): string | true => {
             if (typeof value !== 'number') return 'Please enter the number of rounds';

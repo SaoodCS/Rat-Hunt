@@ -1,11 +1,12 @@
 import { useContext } from 'react';
 import { StaticButton } from '../../../../../../../../../global/components/lib/button/staticButton/Style';
-import type { IDropDownOption } from '../../../../../../../../../global/components/lib/form/dropDown/DropDownInput';
+import type { IDropDownOptions } from '../../../../../../../../../global/components/lib/form/dropDown/dropDownInput';
 import InputCombination from '../../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
 import { StyledForm } from '../../../../../../../../../global/components/lib/form/style/Style';
 import { GameContext } from '../../../../../../../../../global/context/game/GameContext';
 import useApiErrorContext from '../../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import ArrayHelper from '../../../../../../../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
+import ArrOfObj from '../../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../../../../../../../global/hooks/useForm';
 import DBConnect from '../../../../../../../../../global/utils/DBConnect/DBConnect';
@@ -53,17 +54,20 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
 
    function dropDownOptions(
       input: (typeof RoundEndFormClass.form.inputs)[0],
-   ): IDropDownOption[] | undefined {
+   ): IDropDownOptions | undefined {
       if (input.dropDownOptions === undefined) return;
       if (input.name === 'newTopic' && MiscHelper.isNotFalsyOrEmpty(topicsData)) {
          const topics = topicsData.flatMap((topic) => topic.key);
          if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return input.dropDownOptions;
-         const dropDownOptions: IDropDownOption[] = [];
+         const dropDownOptions: IDropDownOptions['options'] = [];
          const topicLabels = ArrayHelper.capFirstLetterOfWords(topics);
          for (let i = 0; i < topics.length; i++) {
             dropDownOptions.push({ value: topics[i], label: topicLabels[i] });
          }
-         return dropDownOptions;
+         return {
+            ...input.dropDownOptions,
+            options: ArrOfObj.sort(dropDownOptions, 'label'),
+         };
       }
       return input.dropDownOptions;
    }

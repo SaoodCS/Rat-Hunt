@@ -2,11 +2,10 @@
 import type { Types } from '../../../helpers/types/Types';
 import CheckboxInput from './checkbox/Checkbox';
 import DatePickerInput from './datePicker/DatePickerInput';
-import type { IDropDownOption } from './dropDown/DropDownInput';
-import DropDownInput from './dropDown/DropDownInput';
-import DropDownInputNew from './dropDownNew/DropDownNew';
-import type { INumberLineOptions } from './numberLine/NumberLineInput';
-import NumberLineInput from './numberLine/NumberLineInput';
+import type { IDropDownOptions } from './dropDown/dropDownInput';
+import DropDownInput from './dropDown/dropDownInput';
+import type { INumberLineOptions } from './numberLine/numberLineInput';
+import NumberLineInput from './numberLine/numberLineInput';
 import TextOrNumFieldInput from './textOrNumber/TextOrNumFieldInput';
 
 export namespace N_Form {
@@ -16,11 +15,10 @@ export namespace N_Form {
          export type Components =
             // -- UPDATE HERE WHEN ADDING NEW INPUT COMPONENTS (after creating its component) -- //
             | typeof DatePickerInput
-            | typeof DropDownInput
-            | typeof NumberLineInput
             | typeof TextOrNumFieldInput
             | typeof CheckboxInput
-            | typeof DropDownInputNew;
+            | typeof DropDownInput
+            | typeof NumberLineInput;
 
          export type HandleChangeEvent =
             | {
@@ -49,7 +47,7 @@ export namespace N_Form {
             value: InputValue;
             type?: 'text' | 'email' | 'password' | 'number';
             autoComplete?: 'current-password' | 'new-password';
-            dropDownOptions?: IDropDownOption[];
+            dropDownOptions?: IDropDownOptions;
             numberLineOptions?: INumberLineOptions;
             hideLabelOnFocus?: boolean;
          };
@@ -82,12 +80,7 @@ export namespace N_Form {
                initialState[input.name] = false;
                continue;
             }
-
             if (input.Component === TextOrNumFieldInput) {
-               initialState[input.name] = '';
-               continue;
-            }
-            if (input.Component === DropDownInputNew) {
                initialState[input.name] = '';
                continue;
             }
@@ -95,7 +88,6 @@ export namespace N_Form {
                initialState[input.name] = '';
                continue;
             }
-
             if (input.Component === NumberLineInput) {
                initialState[input.name] = '';
                continue;

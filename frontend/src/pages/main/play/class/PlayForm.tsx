@@ -1,10 +1,10 @@
 import type { DocumentData, DocumentSnapshot } from 'firebase/firestore';
 import { N_Form } from '../../../../global/components/lib/form/N_Form';
-import NumberLineInput from '../../../../global/components/lib/form/numberLine/NumberLineInput';
+import DropDownInput from '../../../../global/components/lib/form/dropDown/dropDownInput';
 import TextOrNumFieldInput from '../../../../global/components/lib/form/textOrNumber/TextOrNumFieldInput';
 import StringHelper from '../../../../global/helpers/dataTypes/string/StringHelper';
 import type DBConnect from '../../../../global/utils/DBConnect/DBConnect';
-import DropDownInputNew from '../../../../global/components/lib/form/dropDownNew/DropDownNew';
+import NumberLineInput from '../../../../global/components/lib/form/numberLine/numberLineInput';
 
 export interface IPlayFormClass {
    name: string;
@@ -36,17 +36,19 @@ export default class PlayFormClass {
          },
       },
       {
-         Component: DropDownInputNew,
+         Component: DropDownInput,
          name: 'joinOrHost',
          id: 'join-or-host',
          label: 'Join or Host',
          type: 'text',
          isRequired: true,
          isDisabled: false,
-         dropDownOptions: [
-            { value: 'join', label: 'Join' },
-            { value: 'host', label: 'Host' },
-         ],
+         dropDownOptions: {
+            options: [
+               { value: 'join', label: 'Join' },
+               { value: 'host', label: 'Host' },
+            ],
+         },
          validator: (value: string): string | true => {
             if (!value) return 'Please select join or host';
             if (!(value === 'join' || value === 'host')) return 'Please select join or host';
@@ -67,14 +69,19 @@ export default class PlayFormClass {
          },
       },
       {
-         Component: DropDownInputNew,
+         Component: DropDownInput,
          name: 'topic',
          id: 'select-topic',
          label: 'Select Topic',
          type: 'text',
          isRequired: true,
          isDisabled: false,
-         dropDownOptions: [],
+         dropDownOptions: {
+            options: [],
+            menu: {
+               maxHeight: 300,
+            },
+         },
          validator: (value: string): string | true => {
             if (!value) return 'Please select a topic';
             return true;
@@ -89,8 +96,7 @@ export default class PlayFormClass {
          numberLineOptions: {
             min: 1,
             max: 10,
-            displayAllNumbers: false,
-            displayLinePointers: true,
+            increment: 1,
          },
          isRequired: true,
          isDisabled: false,

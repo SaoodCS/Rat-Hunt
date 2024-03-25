@@ -8,7 +8,7 @@ import LogoFader from '../../../global/components/app/logo/LogoFader';
 import { LogoText } from '../../../global/components/app/logo/LogoText';
 import { TextBtn } from '../../../global/components/lib/button/textBtn/Style';
 import OfflineFetch from '../../../global/components/lib/fetch/offlineFetch/offlineFetch';
-import type { IDropDownOption } from '../../../global/components/lib/form/dropDown/DropDownInput';
+import type { IDropDownOptions } from '../../../global/components/lib/form/dropDown/dropDownInput';
 import InputCombination from '../../../global/components/lib/form/inputCombination/InputCombination';
 import { StyledForm } from '../../../global/components/lib/form/style/Style';
 import Loader from '../../../global/components/lib/loader/fullScreen/Loader';
@@ -101,17 +101,20 @@ export default function Play(): JSX.Element {
 
    function dropDownOptions(
       input: (typeof PlayFormClass.form.inputs)[0],
-   ): IDropDownOption[] | undefined {
+   ): IDropDownOptions | undefined {
       if (input.dropDownOptions === undefined) return;
       if (input.name === 'topic' && MiscHelper.isNotFalsyOrEmpty(data)) {
          const topics = data.flatMap((topic) => topic.key);
          if (!MiscHelper.isNotFalsyOrEmpty(data)) return input.dropDownOptions;
-         const dropDownOptions: IDropDownOption[] = [];
+         const options: IDropDownOptions['options'] = [];
          const topicLabels = ArrayHelper.capFirstLetterOfWords(topics);
          for (let i = 0; i < topics.length; i++) {
-            dropDownOptions.push({ value: topics[i], label: topicLabels[i] });
+            options.push({ value: topics[i], label: topicLabels[i] });
          }
-         return ArrOfObj.sort(dropDownOptions, 'label');
+         return {
+            ...input.dropDownOptions,
+            options: ArrOfObj.sort(options, 'label'),
+         };
       }
       return input.dropDownOptions;
    }
