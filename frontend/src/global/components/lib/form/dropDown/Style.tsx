@@ -25,15 +25,19 @@ export const inputFieldStyles = (
       false,
       GroupBase<IDropDownOptions['options'][0]>
    >,
+   hasError: boolean,
 ): CSSObjectWithLabel => {
    const { isFocused } = state;
    const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+   const borderColor = hasError ? Color.darkThm.error : theme.txt;
+   const opacityOne = hasError ? 1 : 0.75;
+   const opacityTwo = hasError ? 1 : 0.3;
    return {
       ...provided,
       border: 0,
       boxShadow: isFocused
-         ? `inset 0 0 0 2px ${Color.setRgbOpacity(theme.txt, 0.75)}`
-         : `inset 0 0 0 2px ${Color.setRgbOpacity(theme.txt, 0.3)}`,
+         ? `inset 0 0 0 2px ${Color.setRgbOpacity(borderColor, opacityOne)}`
+         : `inset 0 0 0 2px ${Color.setRgbOpacity(borderColor, opacityTwo)}`,
       WebkitTapHighlightColor: 'transparent',
       minHeight: '0em',
       cursor: 'pointer',

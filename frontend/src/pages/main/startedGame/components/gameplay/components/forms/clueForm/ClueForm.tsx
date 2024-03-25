@@ -1,11 +1,11 @@
 import { Send } from '@styled-icons/ionicons-sharp/Send';
 import { Fragment, useContext } from 'react';
 import { TextBtn } from '../../../../../../../../global/components/lib/button/textBtn/Style';
-import { StyledForm } from '../../../../../../../../global/components/lib/form/style/Style';
 import {
    ErrorLabel,
-   TextInputAlt,
-} from '../../../../../../../../global/components/lib/form/textOrNumber/Style';
+   StyledForm,
+} from '../../../../../../../../global/components/lib/form/style/Style';
+import { TextInputAlt } from '../../../../../../../../global/components/lib/form/textOrNumber/Style';
 import { GameContext } from '../../../../../../../../global/context/game/GameContext';
 import useThemeContext from '../../../../../../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';

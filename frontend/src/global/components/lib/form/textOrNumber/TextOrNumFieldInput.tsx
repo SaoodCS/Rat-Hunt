@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import type { N_Form } from '../N_Form';
-import { ErrorLabel, InputContainer, InputLabel, LabelWrapper, TextInput } from './Style';
+import { InputContainer, InputLabel, LabelWrapper, TextInput } from './Style';
+import { ErrorLabel } from '../style/Style';
 
 interface IInput extends N_Form.Inputs.I.CommonInputProps {
    type: N_Form.Inputs.I.AllInputPropsAsRequired['type'];

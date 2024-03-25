@@ -17,7 +17,7 @@ import {
    ValueItem,
    ValueItemContainer,
 } from './Style';
-import { ErrorLabel } from '../textOrNumber/Style';
+import { ErrorLabel } from '../style/Style';
 
 export interface INumberLineOptions {
    min: number;
@@ -46,7 +46,7 @@ export default function NumberLineInput(props: INumberLineInput): JSX.Element {
    }, [value]);
 
    return (
-      <div>
+      <div style={{}}>
          <NumberLineInputWrapper id={id}>
             <Range
                step={increment}

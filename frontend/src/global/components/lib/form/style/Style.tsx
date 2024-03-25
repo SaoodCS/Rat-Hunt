@@ -31,3 +31,9 @@ export const StyledForm = styled.form<{
       margin: ${({ fieldsMargin }) => fieldsMargin || '0em'};
    }
 `;
+
+export const ErrorLabel = styled.div<{ isDarkTheme: boolean }>`
+   font-size: 0.75em;
+   margin-top: 0.2em;
+   color: ${({ isDarkTheme }) => (isDarkTheme ? Color.darkThm.error : Color.lightThm.error)};
+`;

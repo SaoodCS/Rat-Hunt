@@ -1,7 +1,6 @@
 import Select from 'react-select';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import type { N_Form } from '../N_Form';
-import { ErrorLabel } from '../textOrNumber/Style';
 import {
    dropDownMenuStyles,
    dropDownOptionsStyles,
@@ -11,6 +10,8 @@ import {
    inputFieldValueStyles,
    parentContainerStyles,
 } from './Style';
+import { ErrorLabel } from '../style/Style';
+import { useEffect, useState } from 'react';
 
 export interface IDropDownOptions {
    options: {
@@ -33,9 +34,14 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
    const { label, name, isRequired, handleChange, error, dropDownOptions, id, value, isDisabled } =
       props;
    const { menu, options } = dropDownOptions;
+   const [hasError, setHasError] = useState(!!error);
+
+   useEffect(() => {
+      setHasError(!!error);
+   }, [error]);
 
    return (
-      <>
+      <div>
          <Select
             name={name.toString()}
             id={id}
@@ -59,7 +65,8 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
             menuShouldScrollIntoView={true}
             styles={{
                container: (provided) => parentContainerStyles(isDarkTheme, provided),
-               control: (provided, state) => inputFieldStyles(isDarkTheme, provided, state),
+               control: (provided, state) =>
+                  inputFieldStyles(isDarkTheme, provided, state, hasError),
                singleValue: (provided) => inputFieldValueStyles(isDarkTheme, provided),
                placeholder: (provided) => inputFieldPlaceholderStyle(isDarkTheme, provided),
                menu: (provided) => dropDownMenuStyles(isDarkTheme, provided),
@@ -68,6 +75,6 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
             }}
          />
          <ErrorLabel isDarkTheme={isDarkTheme}>{error}</ErrorLabel>
-      </>
+      </div>
    );
 }

@@ -82,12 +82,6 @@ export const TextInput = styled.input.attrs<IInputAttr>(({ isRequired, isDisable
    }}
 `;
 
-export const ErrorLabel = styled.div<{ isDarkTheme: boolean }>`
-   font-size: 0.75em;
-   margin-top: 0.2em;
-   color: ${({ isDarkTheme }) => (isDarkTheme ? Color.darkThm.error : Color.lightThm.error)};
-`;
-
 // -- SPECIFIC ALT INPUT FOR THIS APP -- //
 
 export const TextInputAlt = styled.input.attrs<IInputAttr>(({ isRequired, isDisabled }) => ({
