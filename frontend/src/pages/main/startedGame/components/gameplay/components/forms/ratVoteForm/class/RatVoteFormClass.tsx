@@ -17,6 +17,10 @@ export default class RatVoteFormClass {
          isDisabled: false,
          dropDownOptions: {
             options: [],
+            menu: {
+               maxHeight: 150,
+               placement: 'bottom',
+            },
          },
          validator: (value: string): string | true => {
             if (!value) return 'Please select a player';

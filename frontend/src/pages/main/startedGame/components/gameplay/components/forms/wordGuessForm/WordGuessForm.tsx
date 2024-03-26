@@ -1,5 +1,5 @@
 import { Send } from '@styled-icons/ionicons-sharp/Send';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { TextBtn } from '../../../../../../../../global/components/lib/button/textBtn/Style';
 import type { IDropDownOptions } from '../../../../../../../../global/components/lib/form/dropDown/dropDownInput';
 import InputCombination from '../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
@@ -15,15 +15,18 @@ import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect'
 import GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
 import { gameFormStyles, gameInputFieldStyles } from '../style/Style';
 import WordGuessFormClass from './class/WordGuessFormClass';
+import { N_Form } from '../../../../../../../../global/components/lib/form/N_Form';
+import ObjectHelper from '../../../../../../../../global/helpers/dataTypes/objectHelper/ObjectHelper';
 
 // TODO: Add boolean prop to dropdown input "submitOnChange" to submit form when dropdown value changes (which also then passes the handleSubmit func) -> then update the WordGuessForm and RatVoteForm accordingly
 // TODO: come up with a better styling for the gameplay forms (they looked better with a white background and accent border...)
+// TODO: change the room id input field to a number code component input field
 
 export default function WordGuessForm(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
    const { isDarkTheme } = useThemeContext();
    const { apiError } = useApiErrorContext();
-   const { form, errors, handleChange, initHandleSubmit } = useForm(
+   const { form, errors, setErrors, handleChange, initHandleSubmit } = useForm(
       WordGuessFormClass.form.initialState,
       WordGuessFormClass.form.initialErrors,
       WordGuessFormClass.form.validate,
@@ -31,9 +34,7 @@ export default function WordGuessForm(): JSX.Element {
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const updateGameStateMutation = DBConnect.FSDB.Set.gameState({}, false);
 
-   async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
-      const { isFormValid } = initHandleSubmit(e);
-      if (!isFormValid) return;
+   async function submitOnChange(): Promise<void> {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
       const { userStates } = gameState;
@@ -48,6 +49,24 @@ export default function WordGuessForm(): JSX.Element {
          roomId: localDbRoom,
          gameState: GameHelper.SetGameState.userPoints(updatedGameState),
       });
+   }
+
+   useEffect(() => {
+      if (ObjectHelper.allPropValsEmpty(form)) return;
+      const validationErrors = WordGuessFormClass.form.validate(form);
+      if (N_Form.Helper.hasErrors(validationErrors)) {
+         setErrors(validationErrors);
+         return;
+      }
+      submitOnChange().catch((error) => {
+         setErrors({ guess: error.message });
+      });
+   }, [form.guess]);
+
+   async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
+      const { isFormValid } = initHandleSubmit(e);
+      if (!isFormValid) return;
+      await submitOnChange();
    }
 
    function dropDownOptions(

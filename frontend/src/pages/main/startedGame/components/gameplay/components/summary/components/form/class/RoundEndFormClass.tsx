@@ -19,6 +19,10 @@ export default class RoundEndFormClass {
          isDisabled: false,
          dropDownOptions: {
             options: [],
+            menu: {
+               maxHeight: 70,
+               placement: 'bottom',
+            },
          },
          validator: (value: string): string | true => {
             if (!value) return 'Please select a topic';

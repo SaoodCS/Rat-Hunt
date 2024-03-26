@@ -18,7 +18,7 @@ export default class WordGuessFormClass {
          dropDownOptions: {
             options: [],
             menu: {
-               maxHeight: 200,
+               maxHeight: 150,
                placement: 'bottom',
             },
          },

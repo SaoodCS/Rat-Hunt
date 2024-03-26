@@ -12,6 +12,11 @@ export interface IGlobalFieldStyles {
    boxSizing?: 'content-box' | 'border-box';
 }
 
+export interface IFormBtnStyles {
+   margin?: string;
+   padding?: string;
+}
+
 export const InputWrapper = styled.div`
    position: relative;
 `;
@@ -19,14 +24,16 @@ export const InputWrapper = styled.div`
 export const StyledForm = styled.form<{
    apiError?: string;
    padding?: number;
+   margin?: string;
    globalFieldStyles?: IGlobalFieldStyles;
+   btnStyles?: IFormBtnStyles;
 }>`
    ${({ padding }) => MyCSS.LayoutStyle.paddingBorderBox(padding ? `${padding}em` : '0em')};
    border-radius: 0.7em;
    display: flex;
    flex-direction: column;
    width: 100%;
-   margin-top: 1em;
+   margin: ${({ margin }) => margin || '0'};
    border-radius: 0.7em;
    height: fit-content;
    ${({ apiError }) =>
@@ -53,6 +60,15 @@ export const StyledForm = styled.form<{
             backgroundColor: backgroundColor || 'transparent',
             boxSizing: boxSizing || 'border-box',
             borderRadius: borderRadius || '0.25em',
+         });
+      }}
+   }
+   button {
+      ${({ btnStyles }) => {
+         const { margin, padding } = btnStyles || {};
+         return MyCSS.Helper.convertInlineToStyledComp({
+            margin: margin || undefined,
+            padding: padding || undefined,
          });
       }}
    }

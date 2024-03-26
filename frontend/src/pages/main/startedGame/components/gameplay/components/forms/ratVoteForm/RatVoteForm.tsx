@@ -1,5 +1,5 @@
 import { Send } from '@styled-icons/ionicons-sharp/Send';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { TextBtn } from '../../../../../../../../global/components/lib/button/textBtn/Style';
 import type { IDropDownOptions } from '../../../../../../../../global/components/lib/form/dropDown/dropDownInput';
 import InputCombination from '../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
@@ -15,12 +15,14 @@ import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect'
 import GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
 import { gameFormStyles, gameInputFieldStyles } from '../style/Style';
 import RatVoteFormClass from './class/RatVoteFormClass';
+import { N_Form } from '../../../../../../../../global/components/lib/form/N_Form';
+import ObjectHelper from '../../../../../../../../global/helpers/dataTypes/objectHelper/ObjectHelper';
 
 export default function RatVoteForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
    const { isDarkTheme } = useThemeContext();
    const { apiError } = useApiErrorContext();
-   const { form, errors, handleChange, initHandleSubmit } = useForm(
+   const { form, setErrors, errors, handleChange, initHandleSubmit } = useForm(
       RatVoteFormClass.form.initialState,
       RatVoteFormClass.form.initialErrors,
       RatVoteFormClass.form.validate,
@@ -28,9 +30,7 @@ export default function RatVoteForm(): JSX.Element {
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const updateGameStateMutation = DBConnect.FSDB.Set.gameState({}, false);
 
-   async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
-      const { isFormValid } = initHandleSubmit(e);
-      if (!isFormValid) return;
+   async function submitOnChange(): Promise<void> {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
       const { userStates, currentRat } = gameState;
@@ -51,6 +51,24 @@ export default function RatVoteForm(): JSX.Element {
          roomId: localDbRoom,
          gameState: updatedGameState,
       });
+   }
+
+   useEffect(() => {
+      if (ObjectHelper.allPropValsEmpty(form)) return;
+      const validationErrors = RatVoteFormClass.form.validate(form);
+      if (N_Form.Helper.hasErrors(validationErrors)) {
+         setErrors(validationErrors);
+         return;
+      }
+      submitOnChange().catch((error) => {
+         setErrors({ vote: error.message });
+      });
+   }, [form.vote]);
+
+   async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
+      const { isFormValid } = initHandleSubmit(e);
+      if (!isFormValid) return;
+      await submitOnChange();
    }
 
    function dropDownOptions(

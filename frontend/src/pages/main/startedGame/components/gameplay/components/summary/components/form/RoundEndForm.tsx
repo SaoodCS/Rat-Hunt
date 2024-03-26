@@ -73,7 +73,17 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
    }
 
    return (
-      <StyledForm onSubmit={handleSubmit} apiError={apiError} padding={1}>
+      <StyledForm
+         onSubmit={handleSubmit}
+         apiError={apiError}
+         padding={1}
+         globalFieldStyles={{
+            margin: '0.2em 0em 1em 0em',
+         }}
+         btnStyles={{
+            margin: '0em 0em 1em 0em',
+         }}
+      >
          {RoundEndFormClass.form.inputs
             .filter((input) => input.name !== 'noOfRounds' || isLastRound)
             .map((input) => (
