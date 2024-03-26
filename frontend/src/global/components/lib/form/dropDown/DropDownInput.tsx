@@ -14,6 +14,7 @@ import {
    parentContainerStyles,
    valPlaceholderContainerStyles,
 } from './Style';
+import Device from '../../../../helpers/pwa/deviceHelper';
 
 export interface IDropDownOptions {
    options: {
@@ -38,6 +39,7 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
    const [hasError, setHasError] = useState(!!error);
    const [fontSize, setFontSize] = useState<string | undefined>(undefined);
    const inputRef = useRef<HTMLInputElement>(null);
+   const isKeyboardOpen = Device.useIsKeyboardOpen();
 
    useEffect(() => {
       if (inputRef.current) {
@@ -56,19 +58,19 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
             id={id}
             placeholder={label}
             options={options}
-            onChange={(option) =>
+            onChange={(option) => {
                handleChange({
                   target: {
                      name: name,
                      value: option?.value || '',
                   },
-               })
-            }
+               });
+            }}
             isDisabled={isDisabled}
             required={isRequired}
             isMulti={false}
             isClearable={false}
-            isSearchable={false}
+            isSearchable={isKeyboardOpen} // If the keyboard is already open from a diff input, then keep it open when the menu opens by setting isSearchable to true, otherwise the screen freezes on mobile devices
             maxMenuHeight={menu?.maxHeight || 200}
             menuPlacement={menu?.placement || 'top'}
             menuShouldScrollIntoView={true}

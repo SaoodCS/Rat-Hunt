@@ -81,7 +81,7 @@ export default class PlayFormClass {
          dropDownOptions: {
             options: [],
             menu: {
-               maxHeight: 300,
+               maxHeight: 150,
             },
          },
          validator: (value: string): string | true => {

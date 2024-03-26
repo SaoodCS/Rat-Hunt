@@ -1,3 +1,5 @@
+import useDetectKeyboardOpen from 'use-detect-keyboard-open';
+
 export default class Device {
    static isIphone = (): boolean => /iphone|ipod|ipad/i.test(window.navigator.userAgent);
    static isAndroid = (): boolean => /android/i.test(window.navigator.userAgent);
@@ -19,4 +21,7 @@ export default class Device {
       await navigator.share(options);
    };
    static getBaseURL = (): string => window.location.origin;
+   static useIsKeyboardOpen = (): boolean => {
+      return useDetectKeyboardOpen();
+   };
 }
