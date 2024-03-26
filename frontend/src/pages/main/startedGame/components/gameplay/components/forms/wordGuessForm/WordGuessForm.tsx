@@ -17,6 +17,7 @@ import { gameFormStyles, gameInputFieldStyles } from '../style/Style';
 import WordGuessFormClass from './class/WordGuessFormClass';
 
 // TODO: Add boolean prop to dropdown input "submitOnChange" to submit form when dropdown value changes (which also then passes the handleSubmit func) -> then update the WordGuessForm and RatVoteForm accordingly
+// TODO: come up with a better styling for the gameplay forms (they looked better with a white background and accent border...)
 
 export default function WordGuessForm(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
