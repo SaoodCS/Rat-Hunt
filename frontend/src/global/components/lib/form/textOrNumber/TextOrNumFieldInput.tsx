@@ -5,7 +5,7 @@ import { TextInput } from './Style';
 import { ErrorLabel, InputWrapper } from '../style/Style';
 
 export type ITextOrNumInputType = 'text' | 'email' | 'password' | 'number';
-export type IAutoComplete = 'current-password' | 'new-password';
+export type IAutoComplete = 'current-password' | 'new-password' | 'one-time-code' | 'username';
 
 interface IInput extends N_Form.Inputs.I.CommonInputProps {
    type: ITextOrNumInputType;

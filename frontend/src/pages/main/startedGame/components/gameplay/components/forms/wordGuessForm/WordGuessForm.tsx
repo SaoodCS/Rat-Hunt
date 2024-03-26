@@ -14,9 +14,6 @@ import WordGuessFormClass from './class/WordGuessFormClass';
 import { N_Form } from '../../../../../../../../global/components/lib/form/N_Form';
 import ObjectHelper from '../../../../../../../../global/helpers/dataTypes/objectHelper/ObjectHelper';
 
-// TODO: come up with a better styling for the gameplay forms (they looked better with a white background and accent border...)
-// TODO: change the room id input field to a number code component input field
-
 export default function WordGuessForm(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
    const { apiError } = useApiErrorContext();

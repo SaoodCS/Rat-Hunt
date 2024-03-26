@@ -63,6 +63,8 @@ export default class PlayFormClass {
          type: 'text',
          isRequired: true,
          isDisabled: false,
+         // This autofills the input when receiving a msg with the "code" keyword
+         autoComplete: 'one-time-code',
          validator: (value: string): string | true => {
             if (!value) return 'Please enter the room id';
             return true;
