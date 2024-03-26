@@ -11,4 +11,12 @@ export default class Device {
    static hasPushNotifSupport = (): boolean => 'PushManager' in window;
    static isSystemDarkTheme = (): boolean =>
       window.matchMedia(`(prefers-color-scheme: dark)`).matches;
+   static shareContent = async (options: {
+      title: string;
+      text: string;
+      url?: string;
+   }): Promise<void> => {
+      await navigator.share(options);
+   };
+   static getBaseURL = (): string => window.location.origin;
 }

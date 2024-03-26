@@ -1,6 +1,6 @@
 import { PlayCircleFill } from '@styled-icons/bootstrap/PlayCircleFill';
 import { CircleUser } from '@styled-icons/fa-solid/CircleUser';
-import { Copy } from '@styled-icons/fluentui-system-regular/Copy';
+import { SquareShareNodes } from '@styled-icons/fa-solid/SquareShareNodes';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { FlattenSimpleInterpolation } from 'styled-components';
@@ -13,8 +13,10 @@ import { GameContext } from '../../../global/context/game/GameContext';
 import { BannerContext } from '../../../global/context/widget/banner/BannerContext';
 import { ToastContext } from '../../../global/context/widget/toast/ToastContext';
 import MyCSS from '../../../global/css/MyCSS';
+import Color from '../../../global/css/colors';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import StringHelper from '../../../global/helpers/dataTypes/string/StringHelper';
+import Device from '../../../global/helpers/pwa/deviceHelper';
 import DBConnect from '../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../global/utils/GameHelper/GameHelper';
 import {
@@ -80,14 +82,21 @@ export default function WaitingRoom(): JSX.Element {
       });
    }
 
-   async function copyToClipboard(): Promise<void> {
-      await navigator.clipboard.writeText(localDbRoom);
-      setToastMessage('Room ID Copied!');
-      setWidth('200px');
-      setVerticalPos('bottom');
-      setHorizontalPos('center');
-      setToastZIndex(100);
-      toggleToast(true);
+   async function shareRoomCode(): Promise<void> {
+      if (!navigator.share) {
+         await navigator.clipboard.writeText(localDbRoom);
+         toggleToast(true);
+         setToastMessage('Room Code Copied');
+         setWidth('15em');
+         setVerticalPos('bottom');
+         setHorizontalPos('center');
+         setToastZIndex(100);
+         return;
+      }
+      await Device.shareContent({
+         title: 'Play Rat Hunt With Me!',
+         text: `Join my room with the code: ${localDbRoom}`,
+      });
    }
 
    return (
@@ -104,7 +113,16 @@ export default function WaitingRoom(): JSX.Element {
             <RoomIdTopicItemContainer>
                <ItemLabel>Room ID</ItemLabel>
                <ItemValue>{localDbRoom}</ItemValue>
-               <Copy size="1em" onClick={copyToClipboard} style={{ cursor: 'pointer' }} />
+               <SquareShareNodes
+                  size="1.1em"
+                  onClick={shareRoomCode}
+                  style={{
+                     cursor: 'pointer',
+                     color: Color.setRgbOpacity(Color.darkThm.warning, 1),
+                     marginBottom: '0.15em',
+                  }}
+                  color={Color.darkThm.warning}
+               />
             </RoomIdTopicItemContainer>
             <RoomIdTopicItemContainer>
                <ItemLabel>Topic</ItemLabel>

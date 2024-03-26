@@ -3,7 +3,7 @@ import { Help } from '@styled-icons/ionicons-outline/Help';
 import { useQueryClient } from '@tanstack/react-query';
 import type { DatabaseReference } from 'firebase/database';
 import { onDisconnect, ref } from 'firebase/database';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { firebaseRTDB } from '../../../global/config/firebase/config';
 import { GameContext } from '../../../global/context/game/GameContext';
@@ -13,6 +13,9 @@ import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper'
 import DBConnect from '../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../global/utils/GameHelper/GameHelper';
 import HelpGuide from './HelpGuide';
+import { Share } from '@styled-icons/fluentui-system-regular/Share';
+import { ToastContext } from '../../../global/context/widget/toast/ToastContext';
+import Device from '../../../global/helpers/pwa/deviceHelper';
 
 interface IGuideAndLeaveRoom {
    currentPath: string;
@@ -22,7 +25,18 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    const { currentPath } = props;
    const { setModalContent, setModalHeader, setModalZIndex, toggleModal } =
       useContext(ModalContext);
+   const {
+      toggleToast,
+      setToastMessage,
+      setWidth,
+      setVerticalPos,
+      setHorizontalPos,
+      setToastZIndex,
+   } = useContext(ToastContext);
    const { localDbRoom, localDbUser, setLocalDbRoom, setLocalDbUser } = useContext(GameContext);
+   const [isWaitingPage, setIsWaitingPage] = useState(currentPath.includes('waiting'));
+   const [isStartedGamePage, setIsStartedGamePage] = useState(currentPath.includes('started'));
+   const [isPlayPage, setIsPlayPage] = useState(currentPath.includes('play'));
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const { data: topicsData } = DBConnect.FSDB.Get.topics();
    const deleteUserFromFs = DBConnect.FSDB.Delete.user({});
@@ -30,6 +44,12 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    const updateRoomStateMutation = DBConnect.FSDB.Set.room({}, false);
    const navigation = useNavigate();
    const queryClient = useQueryClient();
+
+   useEffect(() => {
+      setIsWaitingPage(currentPath.includes('waiting'));
+      setIsStartedGamePage(currentPath.includes('started'));
+      setIsPlayPage(currentPath.includes('play'));
+   }, [currentPath]);
 
    function handleHelpGuide(): void {
       setModalHeader('How To Play?');
@@ -104,13 +124,28 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
       navigation('/main/play', { replace: true });
    }
 
-   function waitingOrStartedPage(): boolean {
-      return currentPath.includes('waiting') || currentPath.includes('started');
+   async function shareApp(): Promise<void> {
+      if (!navigator.share) {
+         await navigator.clipboard.writeText(Device.getBaseURL());
+         toggleToast(true);
+         setToastMessage('Link Copied');
+         setWidth('15em');
+         setVerticalPos('bottom');
+         setHorizontalPos('center');
+         setToastZIndex(100);
+         return;
+      }
+      await Device.shareContent({
+         title: 'Play Rat Hunt With Me!',
+         text: 'Use the link to play Rat Hunt',
+         url: Device.getBaseURL(),
+      });
    }
 
    return (
       <>
-         {waitingOrStartedPage() && <LogOut onClick={handleLeaveRoom} />}
+         {(isWaitingPage || isStartedGamePage) && <LogOut onClick={handleLeaveRoom} />}
+         {isPlayPage && <Share onClick={shareApp} />}
          <Help onClick={handleHelpGuide} />
       </>
    );

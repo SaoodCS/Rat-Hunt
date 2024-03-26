@@ -39,7 +39,7 @@ export const ItemLabel = styled.div`
 
 export const ItemValue = styled.div`
    color: ${Color.darkThm.success};
-   padding-right: 0.2em;
+   padding-right: 0.4em;
 `;
 
 export const UserListItemContainer = styled.div<{ isThisUser?: boolean }>`
