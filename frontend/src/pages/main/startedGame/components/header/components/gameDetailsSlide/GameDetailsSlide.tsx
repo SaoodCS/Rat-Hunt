@@ -66,16 +66,6 @@ export default function GameDetailsSlide(props: IGameDetailsSlide): JSX.Element 
       localDbUser,
    ]);
 
-   async function copyToClipboard(): Promise<void> {
-      await navigator.clipboard.writeText(localDbRoom);
-      setToastMessage('Room ID Copied!');
-      setWidth('200px');
-      setVerticalPos('bottom');
-      setHorizontalPos('center');
-      setToastZIndex(100);
-      toggleToast(true);
-   }
-
    async function shareRoomCode(): Promise<void> {
       if (!navigator.share) {
          await navigator.clipboard.writeText(localDbRoom);
@@ -101,14 +91,13 @@ export default function GameDetailsSlide(props: IGameDetailsSlide): JSX.Element 
             localStyles={screenStyles()}
          >
             <RoomIDScoreboardWrapper>
-               <RoomIDScoreboardItem onClick={copyToClipboard}>
+               <RoomIDScoreboardItem onClick={shareRoomCode}>
                   Room ID:{HTMLEntities.space}
                   {HTMLEntities.space}
                   {localDbRoom}
                   {HTMLEntities.space}
                   <SquareShareNodes
                      size="1em"
-                     onClick={shareRoomCode}
                      style={{
                         cursor: 'pointer',
                         color: Color.setRgbOpacity(Color.darkThm.warning, 1),
