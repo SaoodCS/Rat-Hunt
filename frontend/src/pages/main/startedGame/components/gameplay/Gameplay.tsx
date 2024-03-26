@@ -13,7 +13,6 @@ import HTMLEntities from '../../../../../global/helpers/dataTypes/htmlEntities/H
 import MiscHelper from '../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import DBConnect from '../../../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../../../global/utils/GameHelper/GameHelper';
-import { ItemLabel } from '../header/style/Style';
 import ClueForm from './components/forms/clueForm/ClueForm';
 import RatVoteForm from './components/forms/ratVoteForm/RatVoteForm';
 import WordGuessForm from './components/forms/wordGuessForm/WordGuessForm';
@@ -137,11 +136,15 @@ export default function Gameplay(): JSX.Element {
                   {gameplayHeadMap.map(({ text, condition, component }, index) => (
                      <ConditionalRender key={index} condition={condition}>
                         <ConditionalRender condition={!!text}>
-                           <FlexRowWrapper width="100%" alignItems="center" fontSize="1.1em">
-                              <ItemLabel color={'yellow'} style={{ width: 'fit-content' }}>
-                                 Current Turn:{HTMLEntities.space}
-                                 {HTMLEntities.space} {text} <AnimatedDots count={3} />
-                              </ItemLabel>
+                           <FlexRowWrapper
+                              width="fit-content"
+                              alignItems="center"
+                              fontSize="0.9em"
+                              padding="0em 0em 0em 1em"
+                              color={'yellow'}
+                           >
+                              Current Turn:{HTMLEntities.space}
+                              {HTMLEntities.space} {text} <AnimatedDots count={3} />
                            </FlexRowWrapper>
                         </ConditionalRender>
                         <ConditionalRender condition={!!component}>
@@ -177,7 +180,7 @@ const screenStyles = (): FlattenSimpleInterpolation => {
    const forDesktop = MyCSS.Media.desktop(css`
       &:first-child {
          & > * {
-            font-size: 1.25em;
+            font-size: 1em;
          }
       }
    `);
@@ -186,11 +189,7 @@ const screenStyles = (): FlattenSimpleInterpolation => {
       @media (min-width: 544px) {
          max-width: 35em;
          margin: 0 auto;
-         &:first-child {
-            & > * {
-               justify-content: center;
-            }
-         }
+         align-items: center;
       }
    `;
    return MyCSS.Helper.concatStyles(forDesktop, forTablet, medium);
