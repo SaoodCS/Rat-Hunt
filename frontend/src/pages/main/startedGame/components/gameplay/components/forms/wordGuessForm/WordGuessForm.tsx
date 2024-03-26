@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import type { IDropDownOptions } from '../../../../../../../../global/components/lib/form/dropDown/dropDownInput';
+import type { IDropDownOptions } from '../../../../../../../../global/components/lib/form/dropDown/DropDownInput';
 import InputCombination from '../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
 import { StyledForm } from '../../../../../../../../global/components/lib/form/style/Style';
 import { GameContext } from '../../../../../../../../global/context/game/GameContext';

@@ -1,6 +1,6 @@
 import type { N_Form } from '../N_Form';
 import CheckboxInput from '../checkbox/Checkbox';
-import DropDownInput from '../dropDown/dropDownInput';
+import DropDownInput from '../dropDown/DropDownInput';
 import NumberLineInput from '../numberLine/NumberLineInp';
 import TextOrNumFieldInput from '../textOrNumber/TextOrNumFieldInput';
 

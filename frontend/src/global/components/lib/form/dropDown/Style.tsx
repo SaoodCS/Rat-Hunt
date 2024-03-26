@@ -4,7 +4,7 @@ import type { DropdownIndicatorProps } from 'react-select/dist/declarations/src/
 import type { CSSObjectWithLabel, GroupBase } from 'react-select/dist/declarations/src/types';
 import Color from '../../../../css/colors';
 import Device from '../../../../helpers/pwa/deviceHelper';
-import type { IDropDownOptions } from './dropDownInput';
+import type { IDropDownOptions } from './DropDownInput';
 
 const ARROWICON_BOX_WIDTH_PERC = 12;
 

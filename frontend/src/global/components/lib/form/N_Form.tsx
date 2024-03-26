@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Types } from '../../../helpers/types/Types';
 import CheckboxInput from './checkbox/Checkbox';
-import type { IDropDownOptions } from './dropDown/dropDownInput';
-import DropDownInput from './dropDown/dropDownInput';
+import type { IDropDownOptions } from './dropDown/DropDownInput';
+import DropDownInput from './dropDown/DropDownInput';
 import type { INumberLineOptions } from './numberLine/NumberLineInp';
 import NumberLineInput from './numberLine/NumberLineInp';
 import type { IAutoComplete, ITextOrNumInputType } from './textOrNumber/TextOrNumFieldInput';

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { StaticButton } from '../../../../../../../../../global/components/lib/button/staticButton/Style';
-import type { IDropDownOptions } from '../../../../../../../../../global/components/lib/form/dropDown/dropDownInput';
+import type { IDropDownOptions } from '../../../../../../../../../global/components/lib/form/dropDown/DropDownInput';
 import InputCombination from '../../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
 import { StyledForm } from '../../../../../../../../../global/components/lib/form/style/Style';
 import { GameContext } from '../../../../../../../../../global/context/game/GameContext';

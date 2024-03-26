@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { css, type FlattenSimpleInterpolation } from 'styled-components';
 import LogoFader from '../../../global/components/app/logo/LogoFader';
 import OfflineFetch from '../../../global/components/lib/fetch/offlineFetch/offlineFetch';
-import type { IDropDownOptions } from '../../../global/components/lib/form/dropDown/dropDownInput';
+import type { IDropDownOptions } from '../../../global/components/lib/form/dropDown/DropDownInput';
 import InputCombination from '../../../global/components/lib/form/inputCombination/InputCombination';
 import { StyledForm } from '../../../global/components/lib/form/style/Style';
 import Loader from '../../../global/components/lib/loader/fullScreen/Loader';
