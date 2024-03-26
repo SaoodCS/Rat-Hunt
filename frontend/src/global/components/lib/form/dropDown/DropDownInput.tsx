@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Select from 'react-select';
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import type { N_Form } from '../N_Form';
@@ -36,13 +36,21 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
    const { label, name, isRequired, handleChange, error, dropDownOptions, id, isDisabled } = props;
    const { menu, options } = dropDownOptions;
    const [hasError, setHasError] = useState(!!error);
+   const [fontSize, setFontSize] = useState<string | undefined>(undefined);
+   const inputRef = useRef<HTMLInputElement>(null);
+
+   useEffect(() => {
+      if (inputRef.current) {
+         setFontSize(window.getComputedStyle(inputRef.current).fontSize);
+      }
+   }, []);
 
    useEffect(() => {
       setHasError(!!error);
    }, [error]);
 
    return (
-      <InputWrapper>
+      <InputWrapper ref={inputRef}>
          <Select
             name={name.toString()}
             id={id}
@@ -64,6 +72,7 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
             maxMenuHeight={menu?.maxHeight || 200}
             menuPlacement={menu?.placement || 'top'}
             menuShouldScrollIntoView={true}
+            menuPortalTarget={document.body}
             styles={{
                container: (provided) => parentContainerStyles(isDarkTheme, provided),
                control: (provided, state) =>
@@ -75,6 +84,7 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
                option: (provided, state) => dropDownOptionsStyles(isDarkTheme, provided, state),
                indicatorSeparator: (provided) => iconBorderSeperator(isDarkTheme, provided),
                dropdownIndicator: (provided, state) => iconStyles(isDarkTheme, provided, state),
+               menuPortal: (provided) => ({ ...provided, zIndex: 9999, fontSize: fontSize }),
             }}
          />
          <ErrorLabel isDarkTheme={isDarkTheme}>{error}</ErrorLabel>

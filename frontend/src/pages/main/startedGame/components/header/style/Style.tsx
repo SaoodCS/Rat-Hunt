@@ -27,7 +27,6 @@ export const ItemValue = styled.div<{ color?: string; ratUser?: boolean }>`
    color: ${({ color, ratUser }) =>
       color && !ratUser ? Color.darkThm.success : Color.darkThm.error};
    width: ${({ ratUser }) => (ratUser ? '100%' : '80%')};
-   /* text-align: ${({ ratUser }) => (ratUser ? 'center' : 'start')}; */
    filter: ${({ ratUser }) => (ratUser ? 'brightness(0.8)' : 'brightness(0.8)')};
 `;
 

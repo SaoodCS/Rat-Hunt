@@ -20,7 +20,7 @@ export default class RoundEndFormClass {
          dropDownOptions: {
             options: [],
             menu: {
-               maxHeight: 70,
+               maxHeight: 200,
                placement: 'bottom',
             },
          },
