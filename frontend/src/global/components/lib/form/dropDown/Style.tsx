@@ -42,7 +42,7 @@ export const inputFieldStyles = (
       minHeight: '0em',
       cursor: 'pointer',
       transition: 'all 0.2s ease',
-      backgroundColor: Color.setRgbOpacity(theme.txt, 0.1),
+      backgroundColor: Color.setRgbOpacity(theme.bg, 0.1),
    };
 };
 
@@ -76,9 +76,9 @@ export const dropDownMenuStyles = (
    return {
       ...provided,
       zIndex: 999,
-      backgroundColor: Color.setRgbOpacity(theme.txt, 0.5),
+      backgroundColor: Color.setRgbOpacity(theme.txt, 0.75),
       margin: 0,
-      backdropFilter: 'blur(5px)',
+      backdropFilter: 'blur(20px)',
       animation: 'fadeIn 0.2s ease-in-out',
       '@keyframes fadeIn': {
          from: {
@@ -109,7 +109,7 @@ export const dropDownOptionsStyles = (
       cursor: 'pointer',
       margin: 0,
       paddingTop: '1em',
-      borderBottom: `1px solid ${Color.setRgbOpacity(theme.bg, 0.2)}`,
+      borderBottom: `1px solid ${Color.setRgbOpacity(theme.bg, 0.1)}`,
       backgroundColor: Color.setRgbOpacity(theme.txt, isSelected ? 1 : 0),
       ...(!Device.isTouchScreen() && {
          '&:hover': {

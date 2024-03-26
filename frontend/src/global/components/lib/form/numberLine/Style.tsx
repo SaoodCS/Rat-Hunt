@@ -23,7 +23,7 @@ export const StyledLineWrapper = styled.div<{
       const opacity = hasError ? 1 : 0.3;
       return css`
          border: 2px solid ${Color.setRgbOpacity(color, opacity)};
-         background-color: ${Color.setRgbOpacity(theme.txt, 0.1)};
+         background-color: ${Color.setRgbOpacity(theme.bg, 0.1)};
       `;
    }};
 

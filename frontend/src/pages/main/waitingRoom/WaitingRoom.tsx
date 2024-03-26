@@ -26,7 +26,7 @@ import {
    WaitingRoomTitle,
 } from './style/Style';
 
-const MIN_PLAYERS = 3;
+const MIN_PLAYERS = 1;
 
 export default function WaitingRoom(): JSX.Element {
    const { allUsers, localDbRoom, localDbUser } = useContext(GameContext);

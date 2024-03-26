@@ -1,32 +1,27 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import { Enter } from '@styled-icons/icomoon/Enter';
 import { doc, getDoc } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { css, type FlattenSimpleInterpolation } from 'styled-components';
 import LogoFader from '../../../global/components/app/logo/LogoFader';
-import { LogoText } from '../../../global/components/app/logo/LogoText';
-import { TextBtn } from '../../../global/components/lib/button/textBtn/Style';
 import OfflineFetch from '../../../global/components/lib/fetch/offlineFetch/offlineFetch';
 import type { IDropDownOptions } from '../../../global/components/lib/form/dropDown/dropDownInput';
 import InputCombination from '../../../global/components/lib/form/inputCombination/InputCombination';
 import { StyledForm } from '../../../global/components/lib/form/style/Style';
 import Loader from '../../../global/components/lib/loader/fullScreen/Loader';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
-import { FlexRowWrapper } from '../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
 import { firestore } from '../../../global/config/firebase/config';
 import { GameContext } from '../../../global/context/game/GameContext';
 import useApiErrorContext from '../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import MyCSS from '../../../global/css/MyCSS';
-import Color from '../../../global/css/colors';
 import ArrayHelper from '../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
 import ArrOfObj from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import HTMLEntities from '../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../global/hooks/useForm';
 import DBConnect from '../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../global/utils/GameHelper/GameHelper';
 import PlayFormClass from './class/PlayForm';
+import { StaticButton } from '../../../global/components/lib/button/staticButton/Style';
 
 export default function Play(): JSX.Element {
    const { apiError } = useApiErrorContext();
@@ -155,34 +150,9 @@ export default function Play(): JSX.Element {
                   />
                ))}
 
-            <FlexRowWrapper justifyContent="center" alignItems="center">
-               <TextBtn
-                  type="submit"
-                  isDarkTheme
-                  style={{
-                     alignItems: 'center',
-                     borderRadius: '0.25em',
-                     border: `2px solid ${Color.setRgbOpacity(Color.darkThm.accent, 1)}`,
-                     background: Color.setRgbOpacity(Color.darkThm.accent, 0.1),
-                     boxShadow: `inset 0.1em 0.1em 0em 0 ${Color.setRgbOpacity(Color.darkThm.bg, 0.7)},
-                     inset -0.1em -0.1em 0.1em 0 ${Color.setRgbOpacity(Color.darkThm.bg, 0.7)}`,
-                  }}
-               >
-                  <LogoText
-                     size={'1.25em'}
-                     color={Color.setRgbOpacity(Color.darkThm.accent, 1)}
-                     style={{ filter: 'brightness(1.2)' }}
-                  >
-                     {HTMLEntities.space}ENTER {HTMLEntities.space}
-                  </LogoText>
-                  <Enter
-                     width={'1.25em'}
-                     color={Color.setRgbOpacity(Color.darkThm.accent, 1)}
-                     style={{ filter: 'brightness(1.2)' }}
-                  />
-                  {HTMLEntities.space}
-               </TextBtn>
-            </FlexRowWrapper>
+            <StaticButton type="submit" isDarkTheme>
+               Enter Room
+            </StaticButton>
          </StyledForm>
       </FlexColumnWrapper>
    );

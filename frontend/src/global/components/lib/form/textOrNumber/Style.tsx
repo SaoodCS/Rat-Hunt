@@ -40,7 +40,7 @@ export const TextInput = styled.input.attrs<IInputAttr>(({ isRequired, isDisable
       const borderOpacity = hasError ? 1 : 0.3;
       return css`
          color: ${Color.setRgbOpacity(colorPropColor, colorPropOpacity)};
-         background-color: ${Color.setRgbOpacity(theme.txt, 0.1)};
+         background-color: ${Color.setRgbOpacity(theme.bg, 0.1)};
          border: 2px solid ${Color.setRgbOpacity(borderColor, borderOpacity)};
          &:focus,
          &:active {
