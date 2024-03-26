@@ -31,9 +31,9 @@ export const inputFieldStyles = (
 ): CSSObjectWithLabel => {
    const { isFocused } = state;
    const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
-   const borderColor = hasError ? Color.darkThm.error : theme.txt;
+   const borderColor = hasError ? Color.darkThm.error : theme.accent;
    const opacityOne = hasError ? 1 : 0.75;
-   const opacityTwo = hasError ? 1 : 0.3;
+   const opacityTwo = hasError ? 1 : 0.5;
    return {
       ...provided,
       border: 0,
@@ -94,7 +94,7 @@ export const dropDownMenuStyles = (
    return {
       ...provided,
       zIndex: 999,
-      backgroundColor: Color.setRgbOpacity(theme.txt, 0.8),
+      backgroundColor: Color.setRgbOpacity(theme.txt, 0.9),
       margin: 0,
       backdropFilter: 'blur(100px)',
       animation: 'fadeIn 0.2s ease-in-out',
@@ -175,7 +175,7 @@ export const iconBorderSeperator = (
    const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
    return {
       ...provided,
-      borderRight: `1px solid ${Color.setRgbOpacity(theme.txt, 0.75)}`,
+      borderRight: `1px solid ${Color.setRgbOpacity(theme.accent, 0.75)}`,
       position: 'absolute',
       boxSizing: 'border-box',
       top: 0,

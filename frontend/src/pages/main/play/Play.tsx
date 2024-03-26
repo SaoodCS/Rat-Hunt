@@ -115,10 +115,12 @@ export default function Play(): JSX.Element {
 
    return (
       <FlexColumnWrapper
-         justifyContent="center"
+         justifyContent="space-evenly"
          alignItems="center"
          height="100%"
          localStyles={screenStyles()}
+         padding="1em 0em 1em 0em"
+         boxSizing="border-box"
       >
          <LogoFader />
          <StyledForm
@@ -165,14 +167,7 @@ const screenStyles = (): FlattenSimpleInterpolation => {
       justify-content: space-evenly;
       & > *:nth-child(2) {
          width: 35em;
-         margin: -2em;
       }
    `);
-
-   const forShort = MyCSS.Media.short(css`
-      & > *:nth-child(1) {
-         font-size: 0.7em;
-      }
-   `);
-   return MyCSS.Helper.concatStyles(forDesktop, forShort);
+   return MyCSS.Helper.concatStyles(forDesktop);
 };

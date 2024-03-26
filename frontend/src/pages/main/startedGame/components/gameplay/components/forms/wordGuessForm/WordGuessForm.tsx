@@ -1,13 +1,9 @@
-import { Send } from '@styled-icons/ionicons-sharp/Send';
 import { useContext, useEffect } from 'react';
-import { TextBtn } from '../../../../../../../../global/components/lib/button/textBtn/Style';
 import type { IDropDownOptions } from '../../../../../../../../global/components/lib/form/dropDown/dropDownInput';
 import InputCombination from '../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
 import { StyledForm } from '../../../../../../../../global/components/lib/form/style/Style';
 import { GameContext } from '../../../../../../../../global/context/game/GameContext';
-import useThemeContext from '../../../../../../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
-import Color from '../../../../../../../../global/css/colors';
 import ArrOfObj from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../../../../../../global/hooks/useForm';
@@ -18,13 +14,11 @@ import WordGuessFormClass from './class/WordGuessFormClass';
 import { N_Form } from '../../../../../../../../global/components/lib/form/N_Form';
 import ObjectHelper from '../../../../../../../../global/helpers/dataTypes/objectHelper/ObjectHelper';
 
-// TODO: Add boolean prop to dropdown input "submitOnChange" to submit form when dropdown value changes (which also then passes the handleSubmit func) -> then update the WordGuessForm and RatVoteForm accordingly
 // TODO: come up with a better styling for the gameplay forms (they looked better with a white background and accent border...)
 // TODO: change the room id input field to a number code component input field
 
 export default function WordGuessForm(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
-   const { isDarkTheme } = useThemeContext();
    const { apiError } = useApiErrorContext();
    const { form, errors, setErrors, handleChange, initHandleSubmit } = useForm(
       WordGuessFormClass.form.initialState,
@@ -107,9 +101,6 @@ export default function WordGuessForm(): JSX.Element {
                Component={input.Component}
             />
          ))}
-         <TextBtn isDarkTheme={isDarkTheme} type="submit">
-            <Send size="1.5em" color={Color.darkThm.warning} />
-         </TextBtn>
       </StyledForm>
    );
 }

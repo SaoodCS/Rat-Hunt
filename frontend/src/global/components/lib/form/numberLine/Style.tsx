@@ -19,8 +19,8 @@ export const StyledLineWrapper = styled.div<{
    ${({ propsStyles }) => MyCSS.Helper.convertInlineToStyledComp(propsStyles)};
    ${({ isDarkTheme, hasError }) => {
       const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
-      const color = hasError ? theme.error : theme.txt;
-      const opacity = hasError ? 1 : 0.3;
+      const color = hasError ? theme.error : theme.accent;
+      const opacity = hasError ? 1 : 0.5;
       return css`
          border: 2px solid ${Color.setRgbOpacity(color, opacity)};
          background-color: ${Color.setRgbOpacity(theme.bg, 0.1)};
@@ -108,7 +108,7 @@ export const ValueAndRefreshBtnWrapper = styled.div<{ isDarkTheme: boolean }>`
    ${({ isDarkTheme }) => {
       const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
       return css`
-         border-left: 1px solid ${Color.setRgbOpacity(theme.txt, 0.75)};
+         border-left: 1px solid ${Color.setRgbOpacity(theme.accent, 0.75)};
       `;
    }}
    right: 0px;

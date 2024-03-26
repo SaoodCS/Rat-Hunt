@@ -1,13 +1,10 @@
-import { Send } from '@styled-icons/ionicons-sharp/Send';
 import { useContext, useEffect } from 'react';
-import { TextBtn } from '../../../../../../../../global/components/lib/button/textBtn/Style';
 import type { IDropDownOptions } from '../../../../../../../../global/components/lib/form/dropDown/dropDownInput';
 import InputCombination from '../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
 import { StyledForm } from '../../../../../../../../global/components/lib/form/style/Style';
 import { GameContext } from '../../../../../../../../global/context/game/GameContext';
 import useThemeContext from '../../../../../../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
-import Color from '../../../../../../../../global/css/colors';
 import ArrOfObj from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import useForm from '../../../../../../../../global/hooks/useForm';
@@ -20,7 +17,6 @@ import ObjectHelper from '../../../../../../../../global/helpers/dataTypes/objec
 
 export default function RatVoteForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
-   const { isDarkTheme } = useThemeContext();
    const { apiError } = useApiErrorContext();
    const { form, setErrors, errors, handleChange, initHandleSubmit } = useForm(
       RatVoteFormClass.form.initialState,
@@ -112,9 +108,6 @@ export default function RatVoteForm(): JSX.Element {
                Component={input.Component}
             />
          ))}
-         <TextBtn isDarkTheme={isDarkTheme} type="submit">
-            <Send size="1.5em" color={Color.darkThm.warning} />
-         </TextBtn>
       </StyledForm>
    );
 }
