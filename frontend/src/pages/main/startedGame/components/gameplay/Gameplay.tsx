@@ -132,7 +132,6 @@ export default function Gameplay(): JSX.Element {
                   justifyContent="center"
                   width="100%"
                   alignItems="start"
-                  style={{ fontSize: '0.8em' }}
                   localStyles={screenStyles()}
                >
                   {gameplayHeadMap.map(({ text, condition, component }, index) => (

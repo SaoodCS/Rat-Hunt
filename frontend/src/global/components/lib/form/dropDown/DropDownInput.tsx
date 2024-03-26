@@ -6,11 +6,13 @@ import { ErrorLabel, InputWrapper } from '../style/Style';
 import {
    dropDownMenuStyles,
    dropDownOptionsStyles,
+   iconBorderSeperator,
    iconStyles,
    inputFieldPlaceholderStyle,
    inputFieldStyles,
    inputFieldValueStyles,
    parentContainerStyles,
+   valPlaceholderContainerStyles,
 } from './Style';
 
 export interface IDropDownOptions {
@@ -66,10 +68,12 @@ export default function DropDownInput(props: IDropDownInput): JSX.Element {
                container: (provided) => parentContainerStyles(isDarkTheme, provided),
                control: (provided, state) =>
                   inputFieldStyles(isDarkTheme, provided, state, hasError),
+               valueContainer: (provided) => valPlaceholderContainerStyles(isDarkTheme, provided),
                singleValue: (provided) => inputFieldValueStyles(isDarkTheme, provided),
                placeholder: (provided) => inputFieldPlaceholderStyle(isDarkTheme, provided),
                menu: (provided) => dropDownMenuStyles(isDarkTheme, provided),
                option: (provided, state) => dropDownOptionsStyles(isDarkTheme, provided, state),
+               indicatorSeparator: (provided) => iconBorderSeperator(isDarkTheme, provided),
                dropdownIndicator: (provided, state) => iconStyles(isDarkTheme, provided, state),
             }}
          />

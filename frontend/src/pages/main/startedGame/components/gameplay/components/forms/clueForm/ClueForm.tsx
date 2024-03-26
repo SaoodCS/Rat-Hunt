@@ -1,11 +1,7 @@
 import { Send } from '@styled-icons/ionicons-sharp/Send';
-import { Fragment, useContext } from 'react';
+import { useContext } from 'react';
 import { TextBtn } from '../../../../../../../../global/components/lib/button/textBtn/Style';
-import {
-   ErrorLabel,
-   StyledForm,
-} from '../../../../../../../../global/components/lib/form/style/Style';
-import { TextInputAlt } from '../../../../../../../../global/components/lib/form/textOrNumber/Style';
+import { StyledForm } from '../../../../../../../../global/components/lib/form/style/Style';
 import { GameContext } from '../../../../../../../../global/context/game/GameContext';
 import useThemeContext from '../../../../../../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
@@ -16,8 +12,9 @@ import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHel
 import useForm from '../../../../../../../../global/hooks/useForm';
 import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
-import { gameFormStyles } from '../style/Style';
+import { gameFormStyles, gameInputFieldStyles } from '../style/Style';
 import ClueFormClass from './class/ClueFormClass';
+import InputCombination from '../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
 
 export default function ClueForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -64,25 +61,29 @@ export default function ClueForm(): JSX.Element {
    }
 
    return (
-      <StyledForm onSubmit={handleSubmit} apiError={apiError} style={gameFormStyles}>
+      <StyledForm
+         onSubmit={handleSubmit}
+         apiError={apiError}
+         style={gameFormStyles}
+         globalFieldStyles={gameInputFieldStyles}
+      >
          {ClueFormClass.form.inputs.map((input) => (
-            <Fragment key={input.id}>
-               <TextInputAlt
-                  name={input.name}
-                  id={input.id}
-                  placeholder={input.label}
-                  type={input.type}
-                  autoComplete={input.autoComplete}
-                  isRequired={input.isRequired || false}
-                  isDisabled={false}
-                  onChange={handleChange}
-                  value={form[input.name]}
-                  hasError={!!errors[input.name]}
-               />
-               <ErrorLabel isDarkTheme={isDarkTheme} style={{ position: 'absolute', bottom: 0 }}>
-                  {errors[input.name]}
-               </ErrorLabel>
-            </Fragment>
+            <InputCombination
+               key={input.name}
+               label={input.label}
+               name={input.name}
+               isRequired={input.isRequired}
+               handleChange={handleChange}
+               error={errors[input.name]}
+               dropDownOptions={input.dropDownOptions}
+               id={input.id}
+               type={input.type}
+               value={form[input.name]}
+               autoComplete={input.autoComplete}
+               isDisabled={input.isDisabled}
+               numberLineOptions={input.numberLineOptions}
+               Component={input.Component}
+            />
          ))}
 
          <TextBtn isDarkTheme={isDarkTheme} type="submit">

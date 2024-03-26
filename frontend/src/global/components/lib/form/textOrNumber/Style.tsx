@@ -17,8 +17,7 @@ export const TextInput = styled.input.attrs<IInputAttr>(({ isRequired, isDisable
    disabled: isDisabled,
 }))<ITextInput>`
    all: unset;
-   height: 2.7em;
-   font-size: 0.8em;
+   height: 100%;
    font-family: inherit;
    width: 100%;
    border: 1px solid red;
@@ -30,7 +29,6 @@ export const TextInput = styled.input.attrs<IInputAttr>(({ isRequired, isDisable
    &::placeholder {
       color: ${Color.setRgbOpacity(Color.darkThm.txt, 0.5)};
    }
-
    ${({ isDarkTheme, hasError, isDisabled }) => {
       const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
       const colorPropColor = isDisabled ? theme.accent : theme.txt;

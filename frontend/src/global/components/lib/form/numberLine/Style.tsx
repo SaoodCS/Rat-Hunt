@@ -7,7 +7,7 @@ import Color from '../../../../css/colors';
 export const NumberLineInputWrapper = styled.div`
    position: relative;
    display: flex;
-   font-size: 0.8em;
+   height: 100%;
 `;
 
 export const StyledLineWrapper = styled.div<{
@@ -29,7 +29,7 @@ export const StyledLineWrapper = styled.div<{
 
    box-sizing: border-box;
    border-radius: 0.25em;
-   height: 3em;
+   height: 100%;
    width: 100%;
    display: flex;
    align-items: center;

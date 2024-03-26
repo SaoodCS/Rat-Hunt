@@ -16,7 +16,6 @@ export const CheckboxAndLabelWrapper = styled(FlexRowWrapper)`
    justify-content: start;
    position: relative;
    height: fit-content;
-   font-size: 0.8em;
 
    & > *:first-child {
       position: absolute;

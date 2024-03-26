@@ -6,6 +6,8 @@ import Color from '../../../../css/colors';
 import Device from '../../../../helpers/pwa/deviceHelper';
 import type { IDropDownOptions } from './dropDownInput';
 
+const ARROWICON_BOX_WIDTH_PERC = 12;
+
 export const parentContainerStyles = (
    isDarkTheme: boolean,
    provided: CSSObjectWithLabel,
@@ -13,7 +15,7 @@ export const parentContainerStyles = (
    const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
    return {
       ...provided,
-      fontSize: '0.8em',
+      height: '100%',
    };
 };
 
@@ -43,6 +45,22 @@ export const inputFieldStyles = (
       cursor: 'pointer',
       transition: 'all 0.2s ease',
       backgroundColor: Color.setRgbOpacity(theme.bg, 0.1),
+      height: '100%',
+      width: '100%',
+   };
+};
+
+export const valPlaceholderContainerStyles = (
+   isDarkTheme: boolean,
+   provided: CSSObjectWithLabel,
+): CSSObjectWithLabel => {
+   const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+   return {
+      ...provided,
+      alignItems: 'center',
+      position: 'absolute',
+      height: '100%',
+      width: `${100 - ARROWICON_BOX_WIDTH_PERC}%`,
    };
 };
 
@@ -76,9 +94,9 @@ export const dropDownMenuStyles = (
    return {
       ...provided,
       zIndex: 999,
-      backgroundColor: Color.setRgbOpacity(theme.txt, 0.75),
+      backgroundColor: Color.setRgbOpacity(theme.txt, 0.8),
       margin: 0,
-      backdropFilter: 'blur(20px)',
+      backdropFilter: 'blur(100px)',
       animation: 'fadeIn 0.2s ease-in-out',
       '@keyframes fadeIn': {
          from: {
@@ -139,5 +157,30 @@ export const iconStyles = (
       transition: 'all 0.2s ease',
       transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
       color: isFocused ? theme.txt : Color.setRgbOpacity(theme.txt, 0.5),
+      boxSizing: 'border-box',
+      position: 'absolute',
+      right: 0,
+      left: `${100 - ARROWICON_BOX_WIDTH_PERC}%`,
+      top: 0,
+      bottom: 0,
+      alignItems: 'center',
+      justifyContent: 'center',
+   };
+};
+
+export const iconBorderSeperator = (
+   isDarkTheme: boolean,
+   provided: CSSObjectWithLabel,
+): CSSObjectWithLabel => {
+   const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+   return {
+      ...provided,
+      borderRight: `1px solid ${Color.setRgbOpacity(theme.txt, 0.75)}`,
+      position: 'absolute',
+      boxSizing: 'border-box',
+      top: 0,
+      bottom: 0,
+      left: `${100 - ARROWICON_BOX_WIDTH_PERC}%`,
+      backgroundColor: 'transparent',
    };
 };

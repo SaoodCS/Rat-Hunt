@@ -17,6 +17,10 @@ export default class WordGuessFormClass {
          isDisabled: false,
          dropDownOptions: {
             options: [],
+            menu: {
+               maxHeight: 200,
+               placement: 'bottom',
+            },
          },
          validator: (value: string): string | true => {
             if (!value) return 'Please select a word to guess';

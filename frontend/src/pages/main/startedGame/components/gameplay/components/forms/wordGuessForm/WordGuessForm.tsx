@@ -13,8 +13,10 @@ import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHel
 import useForm from '../../../../../../../../global/hooks/useForm';
 import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
-import { gameFormStyles } from '../style/Style';
+import { gameFormStyles, gameInputFieldStyles } from '../style/Style';
 import WordGuessFormClass from './class/WordGuessFormClass';
+
+// TODO: Add boolean prop to dropdown input "submitOnChange" to submit form when dropdown value changes (which also then passes the handleSubmit func) -> then update the WordGuessForm and RatVoteForm accordingly
 
 export default function WordGuessForm(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
@@ -61,7 +63,12 @@ export default function WordGuessForm(): JSX.Element {
    }
 
    return (
-      <StyledForm onSubmit={handleSubmit} apiError={apiError} style={gameFormStyles}>
+      <StyledForm
+         onSubmit={handleSubmit}
+         apiError={apiError}
+         style={gameFormStyles}
+         globalFieldStyles={gameInputFieldStyles}
+      >
          {WordGuessFormClass.form.inputs.map((input) => (
             <InputCombination
                key={input.name}

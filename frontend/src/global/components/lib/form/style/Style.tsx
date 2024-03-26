@@ -2,10 +2,24 @@ import styled from 'styled-components';
 import MyCSS from '../../../../css/MyCSS';
 import Color from '../../../../css/colors';
 
+export interface IGlobalFieldStyles {
+   width?: string;
+   fontSize?: string;
+   height?: string;
+   margin?: string;
+   backgroundColor?: string;
+   borderRadius?: string;
+   boxSizing?: 'content-box' | 'border-box';
+}
+
+export const InputWrapper = styled.div`
+   position: relative;
+`;
+
 export const StyledForm = styled.form<{
    apiError?: string;
    padding?: number;
-   fieldsMargin?: string;
+   globalFieldStyles?: IGlobalFieldStyles;
 }>`
    ${({ padding }) => MyCSS.LayoutStyle.paddingBorderBox(padding ? `${padding}em` : '0em')};
    border-radius: 0.7em;
@@ -27,12 +41,22 @@ export const StyledForm = styled.form<{
             width: '90%',
          },
       }}
-   & > * {
-      margin: ${({ fieldsMargin }) => fieldsMargin || '0em'};
+   ${InputWrapper} {
+      ${({ globalFieldStyles }) => {
+         const { width, fontSize, height, margin, backgroundColor, boxSizing, borderRadius } =
+            globalFieldStyles || {};
+         return MyCSS.Helper.convertInlineToStyledComp({
+            width: width || '100%',
+            fontSize: fontSize || '0.8em',
+            height: height || '3em',
+            margin: margin || 0,
+            backgroundColor: backgroundColor || 'transparent',
+            boxSizing: boxSizing || 'border-box',
+            borderRadius: borderRadius || '0.25em',
+         });
+      }}
    }
 `;
-
-export const InputWrapper = styled.div``;
 
 export const ErrorLabel = styled.div<{ isDarkTheme: boolean }>`
    font-size: 0.75em;

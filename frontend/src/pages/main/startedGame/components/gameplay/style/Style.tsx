@@ -18,6 +18,7 @@ export const FormContainer = styled.div`
    height: 100%;
    width: 100%;
    color: ${Color.darkThm.accentDarkerShade};
+   z-index: 1;
 `;
 
 export const CurrentTurnAndFormWrapper = styled.div`
@@ -28,4 +29,5 @@ export const CurrentTurnAndFormWrapper = styled.div`
    display: flex;
    flex-direction: column;
    justify-content: center;
+   z-index: -1;
 `;

@@ -125,7 +125,9 @@ export default function Play(): JSX.Element {
             onSubmit={handleSubmit}
             apiError={apiError}
             padding={1}
-            fieldsMargin="0em 0em 1em 0em"
+            globalFieldStyles={{
+               margin: '0em 0em 1em 0em',
+            }}
          >
             {PlayFormClass.form.inputs
                .filter((input) => input.name !== 'roomId' || showRoomIdField)

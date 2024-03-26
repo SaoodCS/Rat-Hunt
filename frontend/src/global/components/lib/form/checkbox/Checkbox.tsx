@@ -12,7 +12,7 @@ export default function CheckboxInput(props: ICheckboxInput): JSX.Element {
    const { label, name, isRequired, handleChange, value, error, id, isDisabled } = props;
    const { isDarkTheme } = useThemeContext();
    return (
-      <InputWrapper>
+      <InputWrapper style={{ height: 'fit-content' }}>
          <CheckboxAndLabelWrapper>
             <CheckboxContainer>
                <StyledCheckbox

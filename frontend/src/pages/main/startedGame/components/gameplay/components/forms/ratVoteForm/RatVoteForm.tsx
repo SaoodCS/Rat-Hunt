@@ -13,7 +13,7 @@ import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHel
 import useForm from '../../../../../../../../global/hooks/useForm';
 import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
-import { gameFormStyles } from '../style/Style';
+import { gameFormStyles, gameInputFieldStyles } from '../style/Style';
 import RatVoteFormClass from './class/RatVoteFormClass';
 
 export default function RatVoteForm(): JSX.Element {
@@ -70,7 +70,12 @@ export default function RatVoteForm(): JSX.Element {
    }
 
    return (
-      <StyledForm onSubmit={handleSubmit} apiError={apiError} style={gameFormStyles}>
+      <StyledForm
+         onSubmit={handleSubmit}
+         apiError={apiError}
+         style={gameFormStyles}
+         globalFieldStyles={gameInputFieldStyles}
+      >
          {RatVoteFormClass.form.inputs.map((input) => (
             <InputCombination
                key={input.name}
