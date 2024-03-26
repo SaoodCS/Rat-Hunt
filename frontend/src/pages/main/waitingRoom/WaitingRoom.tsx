@@ -95,7 +95,7 @@ export default function WaitingRoom(): JSX.Element {
       }
       await Device.shareContent({
          title: 'Play Rat Hunt With Me!',
-         text: `Join my room with the code: ${localDbRoom}`,
+         text: `Play Rat Hunt with me! Room code: ${localDbRoom}`,
       });
    }
 
