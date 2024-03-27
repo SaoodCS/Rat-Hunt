@@ -1,6 +1,5 @@
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import styled, { css, keyframes } from 'styled-components';
-import MyCSS from '../../../../../../../../global/css/MyCSS';
 import Color from '../../../../../../../../global/css/colors';
 import type GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
 
