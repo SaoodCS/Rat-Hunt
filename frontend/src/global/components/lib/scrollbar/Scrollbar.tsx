@@ -1,69 +1,47 @@
 import type { ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { ChildrenContainer, RelativePositioner, ScrollbarContainer, ScrollbarThumb } from './Style';
-import useScrollFader from '../../../hooks/useScrollFader';
+
+const FADING_GRADIENT = 'linear-gradient(to bottom, black calc(100% - 48px), transparent 100%)';
 
 interface IScrollBarIOSProps {
    children: ReactNode;
    scrollbarWidth?: number;
    withFader?: boolean;
+   offset?: number;
+   dependencies?: unknown[]; // Any dynamic data from an api call should be passed through into the dependency array as e.g. [data]
 }
 
 export default function Scrollbar(props: IScrollBarIOSProps): JSX.Element {
-   const { children, scrollbarWidth = 10, withFader = false } = props;
+   const { children, scrollbarWidth = 10, withFader = false, offset = 1, dependencies } = props;
    const [divHeight, setDivHeight] = useState<number>(0);
    const [scrollHeight, setScrollHeight] = useState<number>(0);
    const [scrollPosition, setScrollPosition] = useState<number>(0);
    const [showScrollbar, setShowScrollbar] = useState<boolean>(false);
-   const [thumbHeight, setThumbHeight] = useState<number>(
-      divHeight > scrollHeight ? divHeight : (divHeight / scrollHeight) * divHeight,
-   );
+   const [thumbHeight, setThumbHeight] = useState<number>(0);
    const scrollRef = useRef<HTMLDivElement>(null);
-   const { faderElRef, handleScroll } = useScrollFader([], 1);
-
-   useEffect(() => {
-      console.log(`scroll height: ${scrollHeight}`);
-      console.log(`div height: ${divHeight}`);
-      console.log(`scroll position: ${scrollPosition}`);
-   }, [divHeight, scrollHeight, scrollPosition]);
-
    useEffect(() => {
       setThumbHeight(divHeight > scrollHeight ? divHeight : (divHeight / scrollHeight) * divHeight);
    }, [divHeight, scrollHeight]);
 
    useEffect(() => {
-      setShowScrollbar(divHeight < scrollHeight);
-   }, [scrollHeight, divHeight]);
-
-   useEffect(() => {
-      const elRef = withFader ? faderElRef : scrollRef;
-      const handleResize = (): void => {
-         if (!elRef.current) return;
-         const { clientHeight, scrollHeight } = elRef.current;
-         setDivHeight(clientHeight);
-         setScrollHeight(scrollHeight);
-      };
-      const handleScroll = (): void => {
-         if (!elRef.current) return;
-         const { scrollTop, scrollHeight } = elRef.current;
-         setScrollPosition(scrollTop);
-         setScrollHeight(scrollHeight);
-      };
-      handleResize();
-      handleScroll();
-      if (elRef.current) {
-         elRef.current.addEventListener('scroll', handleScroll);
-         elRef.current.addEventListener('resize', handleResize);
-         window.addEventListener('resize', handleResize);
+      const resizeObserver = new ResizeObserver((entries) => {
+         const element = entries[0].target as HTMLDivElement;
+         const isScrollable = element.scrollHeight > element.clientHeight + offset;
+         setDivHeight(element.clientHeight);
+         setScrollHeight(element.scrollHeight);
+         setShowScrollbar(isScrollable);
+         if (!withFader) return;
+         const maskImage = !isScrollable ? 'none' : FADING_GRADIENT;
+         element.style.maskImage = maskImage;
+      });
+      if (scrollRef.current) {
+         resizeObserver.observe(scrollRef.current);
       }
       return (): void => {
-         if (elRef.current) {
-            elRef.current.removeEventListener('scroll', handleScroll);
-            elRef.current.removeEventListener('resize', handleResize);
-            window.removeEventListener('resize', handleResize);
-         }
+         resizeObserver.disconnect();
       };
-   }, []);
+   }, [...(dependencies || []), scrollRef.current]);
 
    function onThumbPress(
       e: React.MouseEvent<HTMLDivElement, MouseEvent> | React.TouchEvent<HTMLDivElement>,
@@ -74,10 +52,10 @@ export default function Scrollbar(props: IScrollBarIOSProps): JSX.Element {
       const handleMove = (e: MouseEvent | TouchEvent): void => {
          const diff = ('touches' in e ? e.touches[0].clientY : e.clientY) - startY;
          const scrollDiff = (diff / divHeight) * scrollHeight;
-         const elRef = withFader ? faderElRef : scrollRef;
-         if (!elRef.current) return;
-         elRef.current.scrollTop = startScrollPosition + scrollDiff;
+         if (!scrollRef.current) return;
+         scrollRef.current.scrollTop = startScrollPosition + scrollDiff;
       };
+
       const moveEventType = 'touches' in e ? 'touchmove' : 'mousemove';
       const upEventType = 'touches' in e ? 'touchend' : 'mouseup';
       const handleUp = (): void => {
@@ -88,11 +66,21 @@ export default function Scrollbar(props: IScrollBarIOSProps): JSX.Element {
       window.addEventListener(upEventType, handleUp);
    }
 
+   function handleScroll(e: React.UIEvent<HTMLDivElement, UIEvent>): void {
+      e.preventDefault();
+      const target = e.target as HTMLDivElement;
+      setScrollPosition(target.scrollTop);
+      if (!withFader) return;
+      const { scrollTop, clientHeight } = target;
+      const reachedBottom = scrollTop + clientHeight >= target.scrollHeight - offset;
+      target.style.maskImage = reachedBottom ? 'none' : FADING_GRADIENT;
+   }
+
    return (
       <RelativePositioner>
          <ChildrenContainer
-            ref={withFader ? faderElRef : scrollRef}
-            onScroll={withFader ? handleScroll : undefined}
+            ref={scrollRef}
+            onScroll={handleScroll}
             scrollbarWidth={scrollbarWidth}
             showScrollbar={showScrollbar}
          >

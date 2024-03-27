@@ -11,17 +11,6 @@ export default function useScrollFader<T extends unknown[] = unknown[]>(
 ): IuseScrollFader {
    const faderElRef = useRef<HTMLDivElement>(null);
 
-   function handleScroll(e: React.UIEvent<HTMLDivElement, UIEvent>): void {
-      const faderElement = e.target as HTMLDivElement;
-      const scrollTop = faderElement.scrollTop;
-      if (scrollTop + faderElement.clientHeight >= faderElement.scrollHeight - (offset || 1)) {
-         faderElement.style.maskImage = 'none';
-      } else {
-         faderElement.style.maskImage =
-            'linear-gradient(to bottom, black calc(100% - 48px), transparent 100%)';
-      }
-   }
-
    useEffect(() => {
       const resizeObserver = new ResizeObserver((entries) => {
          const faderElement = entries[0].target as HTMLDivElement;
@@ -38,6 +27,17 @@ export default function useScrollFader<T extends unknown[] = unknown[]>(
          resizeObserver.disconnect();
       };
    }, [...(dependencies || []), faderElRef.current]);
+
+   function handleScroll(e: React.UIEvent<HTMLDivElement, UIEvent>): void {
+      const faderElement = e.target as HTMLDivElement;
+      const scrollTop = faderElement.scrollTop;
+      if (scrollTop + faderElement.clientHeight >= faderElement.scrollHeight - (offset || 1)) {
+         faderElement.style.maskImage = 'none';
+      } else {
+         faderElement.style.maskImage =
+            'linear-gradient(to bottom, black calc(100% - 48px), transparent 100%)';
+      }
+   }
 
    return { faderElRef, handleScroll };
 }

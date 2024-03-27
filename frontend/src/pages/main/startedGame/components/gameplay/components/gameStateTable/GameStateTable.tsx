@@ -4,16 +4,15 @@ import { css } from 'styled-components';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import MyCSS from '../../../../../../../global/css/MyCSS';
 import MiscHelper from '../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import useScrollFader from '../../../../../../../global/hooks/useScrollFader';
 import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../../../../../global/utils/GameHelper/GameHelper';
 import { TableBody, TableCell, TableContainer, TableHead, TableRow } from './style/Style';
+import Scrollbar from '../../../../../../../global/components/lib/scrollbar/Scrollbar';
 
 export default function GameStateTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [sortedUserStates, setSortedUserStates] = useState<DBConnect.FSDB.I.UserState[]>();
-   const { faderElRef, handleScroll } = useScrollFader([roomData], 1);
    const [disconnectedUsers, setDisconnectedUsers] = useState<string[]>([]);
    const [gamePhase, setGamePhase] = useState<ReturnType<typeof GameHelper.Get.gamePhase>>();
 
@@ -39,21 +38,27 @@ export default function GameStateTable(): JSX.Element {
             <TableCell>Clue</TableCell>
             <TableCell>Voted For</TableCell>
          </TableHead>
-         <TableBody ref={faderElRef} onScroll={(e) => handleScroll(e)}>
-            {sortedUserStates?.map((user) => (
-               <TableRow
-                  key={user.userId}
-                  thisUser={localDbUser === user.userId}
-                  currentTurn={(roomData?.gameState.currentTurn || '') === user.userId}
-                  disconnected={disconnectedUsers.includes(user.userId)}
-                  spectating={user.spectate}
-                  gamePhase={gamePhase}
-               >
-                  <TableCell>{user.userId}</TableCell>
-                  <TableCell>{user.clue}</TableCell>
-                  <TableCell>{user.votedFor}</TableCell>
-               </TableRow>
-            ))}
+         <TableBody>
+            <Scrollbar
+               withFader
+               scrollbarWidth={10}
+               dependencies={[roomData?.gameState?.userStates]}
+            >
+               {sortedUserStates?.map((user) => (
+                  <TableRow
+                     key={user.userId}
+                     thisUser={localDbUser === user.userId}
+                     currentTurn={(roomData?.gameState.currentTurn || '') === user.userId}
+                     disconnected={disconnectedUsers.includes(user.userId)}
+                     spectating={user.spectate}
+                     gamePhase={gamePhase}
+                  >
+                     <TableCell>{user.userId}</TableCell>
+                     <TableCell>{user.clue}</TableCell>
+                     <TableCell>{user.votedFor}</TableCell>
+                  </TableRow>
+               ))}
+            </Scrollbar>
          </TableBody>
       </TableContainer>
    );
