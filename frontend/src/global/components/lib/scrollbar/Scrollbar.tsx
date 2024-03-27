@@ -1,14 +1,16 @@
 import type { ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { ChildrenContainer, RelativePositioner, ScrollbarContainer, ScrollbarThumb } from './Style';
+import useScrollFader from '../../../hooks/useScrollFader';
 
 interface IScrollBarIOSProps {
    children: ReactNode;
    scrollbarWidth?: number;
+   withFader?: boolean;
 }
 
 export default function Scrollbar(props: IScrollBarIOSProps): JSX.Element {
-   const { children, scrollbarWidth } = props;
+   const { children, scrollbarWidth = 10, withFader = false } = props;
    const [divHeight, setDivHeight] = useState<number>(0);
    const [scrollHeight, setScrollHeight] = useState<number>(0);
    const [scrollPosition, setScrollPosition] = useState<number>(0);
@@ -17,6 +19,7 @@ export default function Scrollbar(props: IScrollBarIOSProps): JSX.Element {
       divHeight > scrollHeight ? divHeight : (divHeight / scrollHeight) * divHeight,
    );
    const scrollRef = useRef<HTMLDivElement>(null);
+   const { faderElRef, handleScroll } = useScrollFader([], 1);
 
    useEffect(() => {
       console.log(`scroll height: ${scrollHeight}`);
@@ -33,29 +36,30 @@ export default function Scrollbar(props: IScrollBarIOSProps): JSX.Element {
    }, [scrollHeight, divHeight]);
 
    useEffect(() => {
+      const elRef = withFader ? faderElRef : scrollRef;
       const handleResize = (): void => {
-         if (!scrollRef.current) return;
-         const { clientHeight, scrollHeight } = scrollRef.current;
+         if (!elRef.current) return;
+         const { clientHeight, scrollHeight } = elRef.current;
          setDivHeight(clientHeight);
          setScrollHeight(scrollHeight);
       };
       const handleScroll = (): void => {
-         if (!scrollRef.current) return;
-         const { scrollTop, scrollHeight } = scrollRef.current;
+         if (!elRef.current) return;
+         const { scrollTop, scrollHeight } = elRef.current;
          setScrollPosition(scrollTop);
          setScrollHeight(scrollHeight);
       };
       handleResize();
       handleScroll();
-      if (scrollRef.current) {
-         scrollRef.current.addEventListener('scroll', handleScroll);
-         scrollRef.current.addEventListener('resize', handleResize);
+      if (elRef.current) {
+         elRef.current.addEventListener('scroll', handleScroll);
+         elRef.current.addEventListener('resize', handleResize);
          window.addEventListener('resize', handleResize);
       }
       return (): void => {
-         if (scrollRef.current) {
-            scrollRef.current.removeEventListener('scroll', handleScroll);
-            scrollRef.current.removeEventListener('resize', handleResize);
+         if (elRef.current) {
+            elRef.current.removeEventListener('scroll', handleScroll);
+            elRef.current.removeEventListener('resize', handleResize);
             window.removeEventListener('resize', handleResize);
          }
       };
@@ -70,7 +74,9 @@ export default function Scrollbar(props: IScrollBarIOSProps): JSX.Element {
       const handleMove = (e: MouseEvent | TouchEvent): void => {
          const diff = ('touches' in e ? e.touches[0].clientY : e.clientY) - startY;
          const scrollDiff = (diff / divHeight) * scrollHeight;
-         scrollRef.current!.scrollTop = startScrollPosition + scrollDiff;
+         const elRef = withFader ? faderElRef : scrollRef;
+         if (!elRef.current) return;
+         elRef.current.scrollTop = startScrollPosition + scrollDiff;
       };
       const moveEventType = 'touches' in e ? 'touchmove' : 'mousemove';
       const upEventType = 'touches' in e ? 'touchend' : 'mouseup';
@@ -85,19 +91,20 @@ export default function Scrollbar(props: IScrollBarIOSProps): JSX.Element {
    return (
       <RelativePositioner>
          <ChildrenContainer
-            ref={scrollRef}
-            scrollbarWidth={scrollbarWidth || 10}
+            ref={withFader ? faderElRef : scrollRef}
+            onScroll={withFader ? handleScroll : undefined}
+            scrollbarWidth={scrollbarWidth}
             showScrollbar={showScrollbar}
          >
             {children}
          </ChildrenContainer>
-         <ScrollbarContainer scrollbarWidth={scrollbarWidth || 10} showScrollbar={showScrollbar} />
+         <ScrollbarContainer scrollbarWidth={scrollbarWidth} showScrollbar={showScrollbar} />
          <ScrollbarThumb
             divHeight={divHeight}
             scrollHeight={scrollHeight}
             scrollPosition={scrollPosition}
             thumbHeight={thumbHeight}
-            scrollbarWidth={scrollbarWidth || 10}
+            scrollbarWidth={scrollbarWidth}
             showScrollbar={showScrollbar}
             onMouseDown={onThumbPress}
             onTouchStart={onThumbPress}
