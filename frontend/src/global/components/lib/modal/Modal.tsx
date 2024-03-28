@@ -6,7 +6,7 @@ import Expander from '../animation/expander/Expander';
 import { DimOverlay } from '../overlay/dimOverlay/DimOverlay';
 import { CenterWrapper } from '../positionModifiers/centerers/CenterWrapper';
 import ConditionalRender from '../renderModifiers/conditionalRender/ConditionalRender';
-import Scrollbar from '../scrollbar/Scrollbar';
+import Scroller from '../scroller/Scroller';
 import {
    ModalBody,
    ModalCloseButton,
@@ -57,9 +57,9 @@ export default function Modal(props: IModal): JSX.Element {
                      <ModalCloseButton onClick={onClose} />
                   </ModalHeaderContainer>
                   <ModalBody>
-                     <Scrollbar scrollbarWidth={8} withFader={true} dependencies={[renderModal]}>
+                     <Scroller scrollbarWidth={8} withFader={true} dependencies={[renderModal]}>
                         {children}
-                     </Scrollbar>
+                     </Scroller>
                   </ModalBody>
                </ModalContainer>
             </Expander>

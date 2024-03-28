@@ -47,7 +47,7 @@ export const UserListItemContainer = styled.div<{ isThisUser?: boolean }>`
    display: flex;
    align-items: center;
    background-color: ${Color.setRgbOpacity(Color.darkThm.accentDarkerShade, 0.6)};
-   margin: 3em 0em 0em 0em;
+   margin: 1.3em 0em 0em 0em;
    border-radius: 1em;
    border-top: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.25)};
    color: ${({ isThisUser }) =>

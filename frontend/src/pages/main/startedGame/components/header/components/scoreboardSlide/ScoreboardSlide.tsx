@@ -6,7 +6,7 @@ import { FlexCenterer } from '../../../../../../../global/components/lib/positio
 import type { IProgressBarChartData } from '../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
 import ProgressBarChart from '../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
 import ConditionalRender from '../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
-import Scrollbar from '../../../../../../../global/components/lib/scrollbar/Scrollbar';
+import Scroller from '../../../../../../../global/components/lib/scroller/Scroller';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import useThemeContext from '../../../../../../../global/context/theme/hooks/useThemeContext';
 import MyCSS from '../../../../../../../global/css/MyCSS';
@@ -48,13 +48,13 @@ export default function ScoreboardSlide(props: IScoreboardSlide): JSX.Element {
    return (
       <>
          <ScoreboardContainer localStyles={screenStyles()}>
-            <Scrollbar scrollbarWidth={5} withFader dependencies={[chartData]}>
+            <Scroller scrollbarWidth={5} withFader dependencies={[chartData]}>
                <ProgressBarChart
                   data={ArrOfObj.sort(chartData, 'completedAmnt', true)}
                   barHeight="1em"
                   barWidth="95%"
                />
-            </Scrollbar>
+            </Scroller>
          </ScoreboardContainer>
          <ConditionalRender condition={!isPortableDevice}>
             <FlexCenterer

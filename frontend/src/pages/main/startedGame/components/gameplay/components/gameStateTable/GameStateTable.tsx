@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
-import Scrollbar from '../../../../../../../global/components/lib/scrollbar/Scrollbar';
+import Scroller from '../../../../../../../global/components/lib/scroller/Scroller';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import MyCSS from '../../../../../../../global/css/MyCSS';
 import MiscHelper from '../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
@@ -39,11 +39,7 @@ export default function GameStateTable(): JSX.Element {
             <TableCell>Voted For</TableCell>
          </TableHead>
          <TableBody>
-            <Scrollbar
-               withFader
-               scrollbarWidth={8}
-               dependencies={[roomData?.gameState?.userStates]}
-            >
+            <Scroller withFader scrollbarWidth={8} dependencies={[roomData?.gameState?.userStates]}>
                {sortedUserStates?.map((user) => (
                   <TableRow
                      key={user.userId}
@@ -58,7 +54,7 @@ export default function GameStateTable(): JSX.Element {
                      <TableCell>{user.votedFor}</TableCell>
                   </TableRow>
                ))}
-            </Scrollbar>
+            </Scroller>
          </TableBody>
       </TableContainer>
    );
