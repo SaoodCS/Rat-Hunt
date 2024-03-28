@@ -3,5 +3,5 @@ dist/*
 dev-dist/*
 public/*
 src/global/firebase/sw
-src/global/config/script
+src/global/scripts
 pwa-assets.config.ts
