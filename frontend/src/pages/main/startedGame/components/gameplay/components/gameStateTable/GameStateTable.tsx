@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
+import Scrollbar from '../../../../../../../global/components/lib/scrollbar/Scrollbar';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import MyCSS from '../../../../../../../global/css/MyCSS';
 import MiscHelper from '../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
 import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../../../../../global/utils/GameHelper/GameHelper';
 import { TableBody, TableCell, TableContainer, TableHead, TableRow } from './style/Style';
-import Scrollbar from '../../../../../../../global/components/lib/scrollbar/Scrollbar';
 
 export default function GameStateTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -41,7 +41,7 @@ export default function GameStateTable(): JSX.Element {
          <TableBody>
             <Scrollbar
                withFader
-               scrollbarWidth={10}
+               scrollbarWidth={8}
                dependencies={[roomData?.gameState?.userStates]}
             >
                {sortedUserStates?.map((user) => (

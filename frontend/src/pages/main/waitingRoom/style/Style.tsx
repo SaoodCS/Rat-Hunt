@@ -26,6 +26,7 @@ export const RoomIdTopicItemContainer = styled.div`
    padding: 0.5em;
    border-bottom: 1px solid ${Color.setRgbOpacity(Color.darkThm.accentDarkerShade, 1)};
    border-radius: 0.5em;
+   flex: 1;
    filter: brightness(0.9);
    & > svg {
       color: ${Color.darkThm.success};
@@ -46,7 +47,7 @@ export const UserListItemContainer = styled.div<{ isThisUser?: boolean }>`
    display: flex;
    align-items: center;
    background-color: ${Color.setRgbOpacity(Color.darkThm.accentDarkerShade, 0.6)};
-   margin: 1em 0em 0em 0em;
+   margin: 3em 0em 0em 0em;
    border-radius: 1em;
    border-top: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.25)};
    color: ${({ isThisUser }) =>

@@ -30,7 +30,7 @@ export const ScrollbarContainer = styled.div<{
    bottom: 0;
    z-index: -1;
    display: ${({ showScrollbar }) => !showScrollbar && 'none'};
-   background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5));
+   background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
 `;
 
@@ -42,6 +42,9 @@ export const ScrollbarThumb = styled.div<{
    scrollbarWidth: number;
    showScrollbar: boolean;
 }>`
+   ${MyCSS.Clickables.removeDefaultEffects};
+   ${MyCSS.Clickables.desktop.changeBrightnessOnHover(2)};
+   ${MyCSS.Clickables.portable.changeBrightnessOnClick(1.5, 'revert')};
    position: absolute;
    width: ${({ scrollbarWidth }) => `${scrollbarWidth}px`};
    right: 0;
@@ -53,14 +56,8 @@ export const ScrollbarThumb = styled.div<{
       return thumbPosition;
    }}px;
    display: ${({ showScrollbar }) => !showScrollbar && 'none'};
-   background: rgba(0, 0, 0, 0.5);
+   background: rgba(255, 255, 255, 0.1);
    border-radius: 5px;
    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
    cursor: pointer;
-   &:hover {
-      background: rgba(0, 0, 0, 0.6);
-   }
-   &:active {
-      background: rgba(0, 0, 0, 0.8);
-   }
 `;

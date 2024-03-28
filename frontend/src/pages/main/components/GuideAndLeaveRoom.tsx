@@ -1,21 +1,21 @@
 import { LogOut } from '@styled-icons/boxicons-regular/LogOut';
+import { Share } from '@styled-icons/fluentui-system-regular/Share';
 import { Help } from '@styled-icons/ionicons-outline/Help';
 import { useQueryClient } from '@tanstack/react-query';
 import type { DatabaseReference } from 'firebase/database';
 import { onDisconnect, ref } from 'firebase/database';
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { firebaseRTDB } from '../../../global/config/firebase/config';
 import { GameContext } from '../../../global/context/game/GameContext';
 import { ModalContext } from '../../../global/context/widget/modal/ModalContext';
+import { ToastContext } from '../../../global/context/widget/toast/ToastContext';
 import ArrOfObj from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
+import Device from '../../../global/helpers/pwa/deviceHelper';
 import DBConnect from '../../../global/utils/DBConnect/DBConnect';
 import GameHelper from '../../../global/utils/GameHelper/GameHelper';
 import HelpGuide from './HelpGuide';
-import { Share } from '@styled-icons/fluentui-system-regular/Share';
-import { ToastContext } from '../../../global/context/widget/toast/ToastContext';
-import Device from '../../../global/helpers/pwa/deviceHelper';
 
 interface IGuideAndLeaveRoom {
    currentPath: string;
@@ -44,6 +44,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    const updateRoomStateMutation = DBConnect.FSDB.Set.room({}, false);
    const navigation = useNavigate();
    const queryClient = useQueryClient();
+   const location = useLocation();
 
    useEffect(() => {
       setIsWaitingPage(currentPath.includes('waiting'));
@@ -58,70 +59,94 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
       toggleModal(true);
    }
 
-   async function handleLeaveRoom(): Promise<void> {
-      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
-      if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
-      const isLastUser = roomData.users.length === 1;
+   async function clearAppState(): Promise<void> {
       const userStatusRef: DatabaseReference = ref(
          firebaseRTDB,
          `/rooms/${localDbRoom}/${localDbUser}`,
       );
-      if (isLastUser) {
-         await deleteRoomMutation.mutateAsync({ roomId: localDbRoom });
-         await DBConnect.RTDB.Delete.room(localDbRoom);
-      } else {
-         const { gameState, users } = roomData;
-         const { currentTurn, userStates, currentRat, activeTopic } = gameState;
-         const gamePhase = GameHelper.Get.gamePhase(gameState);
-         if (currentRat === localDbUser) {
-            if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
-            const updatedGameState = GameHelper.SetGameState.newRound({
-               gameState,
-               topicsData,
-               newTopic: activeTopic,
-               resetCurrentRound: true,
-               idOfUserToDelFromUserStates: localDbUser,
-               cancelGameStateUpdate: gamePhase === 'roundSummary',
-            });
-            const updatedUsers = ArrOfObj.filterOut(users, 'userId', localDbUser);
-            const updatedRoomState = GameHelper.SetRoomState.keysVals(roomData, [
-               { key: 'users', value: updatedUsers },
-               { key: 'gameState', value: updatedGameState },
-            ]);
-            await updateRoomStateMutation.mutateAsync(updatedRoomState);
-         } else if (GameHelper.Get.currentTurnUserId(currentTurn) === localDbUser) {
-            const nextUser = GameHelper.Get.nextTurnUserId(
-               gameState,
-               localDbUser,
-               'leaveRoom',
-               currentRat,
-            );
-            const updatedUserStates = ArrOfObj.filterOut(userStates, 'userId', localDbUser);
-            const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
-               { key: 'currentTurn', value: nextUser },
-               { key: 'userStates', value: updatedUserStates },
-            ]);
-            const updatedUsers = ArrOfObj.filterOut(users, 'userId', localDbUser);
-
-            const updatedRoomState = GameHelper.SetRoomState.keysVals(roomData, [
-               { key: 'users', value: updatedUsers },
-               { key: 'gameState', value: updatedGameState },
-            ]);
-            await updateRoomStateMutation.mutateAsync(updatedRoomState);
-            await DBConnect.RTDB.Delete.user(localDbUser, localDbRoom);
-         } else {
-            await deleteUserFromFs.mutateAsync({
-               roomData: roomData,
-               userId: localDbUser,
-            });
-            await DBConnect.RTDB.Delete.user(localDbUser, localDbRoom);
-         }
-      }
       await onDisconnect(userStatusRef).cancel();
       setLocalDbRoom('');
       setLocalDbUser('');
       queryClient.removeQueries();
       navigation('/main/play', { replace: true });
+   }
+
+   async function changeRatAndDeleteUser(): Promise<void> {
+      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
+      if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
+      const { gameState, users } = roomData;
+      const { activeTopic } = gameState;
+      const gamePhase = GameHelper.Get.gamePhase(gameState);
+      const updatedGameState = GameHelper.SetGameState.newRound({
+         gameState,
+         topicsData,
+         newTopic: activeTopic,
+         resetCurrentRound: true,
+         idOfUserToDelFromUserStates: localDbUser,
+         cancelGameStateUpdate: gamePhase === 'roundSummary',
+      });
+      const updatedUsers = ArrOfObj.filterOut(users, 'userId', localDbUser);
+      const updatedRoomState = GameHelper.SetRoomState.keysVals(roomData, [
+         { key: 'users', value: updatedUsers },
+         { key: 'gameState', value: updatedGameState },
+      ]);
+      await updateRoomStateMutation.mutateAsync(updatedRoomState);
+      await DBConnect.RTDB.Delete.user(localDbUser, localDbRoom);
+      await clearAppState();
+   }
+
+   async function changeTurnAndDeleteUser(): Promise<void> {
+      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
+      const { gameState, users } = roomData;
+      const { userStates, currentRat } = gameState;
+      const nextUser = GameHelper.Get.nextTurnUserId(
+         gameState,
+         localDbUser,
+         'leaveRoom',
+         currentRat,
+      );
+      const updatedUserStates = ArrOfObj.filterOut(userStates, 'userId', localDbUser);
+      const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
+         { key: 'currentTurn', value: nextUser },
+         { key: 'userStates', value: updatedUserStates },
+      ]);
+      const updatedUsers = ArrOfObj.filterOut(users, 'userId', localDbUser);
+      const updatedRoomState = GameHelper.SetRoomState.keysVals(roomData, [
+         { key: 'users', value: updatedUsers },
+         { key: 'gameState', value: updatedGameState },
+      ]);
+      await updateRoomStateMutation.mutateAsync(updatedRoomState);
+      await DBConnect.RTDB.Delete.user(localDbUser, localDbRoom);
+      await clearAppState();
+   }
+
+   async function handleLeaveRoom(): Promise<void> {
+      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
+      if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
+      const isLastUser = roomData.users.length === 1;
+      if (isLastUser) {
+         await deleteRoomMutation.mutateAsync({ roomId: localDbRoom });
+         await DBConnect.RTDB.Delete.room(localDbRoom);
+         await clearAppState();
+         return;
+      }
+      const { gameState } = roomData;
+      const { currentTurn, currentRat } = gameState;
+      if (!location.pathname.includes('waiting')) {
+         if (currentRat === localDbUser) {
+            await changeRatAndDeleteUser();
+            return;
+         } else if (GameHelper.Get.currentTurnUserId(currentTurn) === localDbUser) {
+            await changeTurnAndDeleteUser();
+            return;
+         }
+      }
+      await deleteUserFromFs.mutateAsync({
+         roomData: roomData,
+         userId: localDbUser,
+      });
+      await DBConnect.RTDB.Delete.user(localDbUser, localDbRoom);
+      await clearAppState();
    }
 
    async function shareApp(): Promise<void> {

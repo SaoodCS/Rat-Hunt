@@ -10,16 +10,37 @@ interface IScrollBarIOSProps {
    withFader?: boolean;
    offset?: number;
    dependencies?: unknown[]; // Any dynamic data from an api call should be passed through into the dependency array as e.g. [data]
+   hideScrollbar?: boolean;
 }
 
 export default function Scrollbar(props: IScrollBarIOSProps): JSX.Element {
-   const { children, scrollbarWidth = 10, withFader = false, offset = 1, dependencies } = props;
+   const {
+      children,
+      scrollbarWidth = 8,
+      withFader = false,
+      offset = 1,
+      dependencies,
+      hideScrollbar = false,
+   } = props;
    const [divHeight, setDivHeight] = useState<number>(0);
    const [scrollHeight, setScrollHeight] = useState<number>(0);
    const [scrollPosition, setScrollPosition] = useState<number>(0);
-   const [showScrollbar, setShowScrollbar] = useState<boolean>(false);
+   const [showScrollbar, setShowScrollbar] = useState<boolean>(!hideScrollbar);
    const [thumbHeight, setThumbHeight] = useState<number>(0);
    const scrollRef = useRef<HTMLDivElement>(null);
+   const wrapperRef = useRef<HTMLDivElement>(null);
+   const [parentHeight, setParentHeight] = useState<number | undefined>(undefined);
+
+   useEffect(() => {
+      setShowScrollbar(!hideScrollbar);
+   }, [hideScrollbar]);
+
+   useEffect(() => {
+      const el = wrapperRef.current;
+      const parent = el?.parentElement;
+      if (parent) setParentHeight(parent.clientHeight);
+   }, [...(dependencies || []), parentHeight]);
+
    useEffect(() => {
       setThumbHeight(divHeight > scrollHeight ? divHeight : (divHeight / scrollHeight) * divHeight);
    }, [divHeight, scrollHeight]);
@@ -30,7 +51,7 @@ export default function Scrollbar(props: IScrollBarIOSProps): JSX.Element {
          const isScrollable = element.scrollHeight > element.clientHeight + offset;
          setDivHeight(element.clientHeight);
          setScrollHeight(element.scrollHeight);
-         setShowScrollbar(isScrollable);
+         setShowScrollbar(isScrollable && !hideScrollbar);
          if (!withFader) return;
          const maskImage = !isScrollable ? 'none' : FADING_GRADIENT;
          element.style.maskImage = maskImage;
@@ -46,7 +67,6 @@ export default function Scrollbar(props: IScrollBarIOSProps): JSX.Element {
    function onThumbPress(
       e: React.MouseEvent<HTMLDivElement, MouseEvent> | React.TouchEvent<HTMLDivElement>,
    ): void {
-      e.preventDefault();
       const startY = 'touches' in e ? e.touches[0].clientY : e.clientY;
       const startScrollPosition = scrollPosition;
       const handleMove = (e: MouseEvent | TouchEvent): void => {
@@ -77,7 +97,7 @@ export default function Scrollbar(props: IScrollBarIOSProps): JSX.Element {
    }
 
    return (
-      <RelativePositioner>
+      <RelativePositioner style={{ height: parentHeight }} ref={wrapperRef}>
          <ChildrenContainer
             ref={scrollRef}
             onScroll={handleScroll}

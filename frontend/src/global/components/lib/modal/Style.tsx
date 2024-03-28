@@ -9,13 +9,14 @@ export const ModalHeader = styled.span<{ isDarkTheme: boolean }>`
 `;
 
 export const ModalBody = styled.div`
-   padding: 1em;
+   box-sizing: border-box;
    max-height: 25em;
-   overflow-x: hidden;
-   overflow-y: auto;
-   ${MyCSS.Scrollbar.gradientStyle};
    font-size: 0.85em;
    word-spacing: 0.1em;
+   //overflow-x: hidden;
+   //overflow-y: auto;
+   //${MyCSS.Scrollbar.gradientStyle};
+   //padding: 1em;
 `;
 
 export const ModalHeaderContainer = styled.div<{ isDarkTheme: boolean }>`

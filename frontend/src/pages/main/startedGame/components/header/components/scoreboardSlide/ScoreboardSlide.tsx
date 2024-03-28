@@ -6,11 +6,11 @@ import { FlexCenterer } from '../../../../../../../global/components/lib/positio
 import type { IProgressBarChartData } from '../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
 import ProgressBarChart from '../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
 import ConditionalRender from '../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
+import Scrollbar from '../../../../../../../global/components/lib/scrollbar/Scrollbar';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import useThemeContext from '../../../../../../../global/context/theme/hooks/useThemeContext';
 import MyCSS from '../../../../../../../global/css/MyCSS';
 import ArrOfObj from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import useScrollFader from '../../../../../../../global/hooks/useScrollFader';
 import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
 import { ScoreboardContainer } from '../../style/Style';
 
@@ -23,7 +23,6 @@ export default function ScoreboardSlide(props: IScoreboardSlide): JSX.Element {
    const { localDbRoom } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [chartData, setChartData] = useState<IProgressBarChartData[]>([]);
-   const { handleScroll, faderElRef } = useScrollFader([roomData], 1);
    const { isPortableDevice } = useThemeContext();
 
    useEffect(() => {
@@ -48,12 +47,14 @@ export default function ScoreboardSlide(props: IScoreboardSlide): JSX.Element {
 
    return (
       <>
-         <ScoreboardContainer localStyles={screenStyles()} ref={faderElRef} onScroll={handleScroll}>
-            <ProgressBarChart
-               data={ArrOfObj.sort(chartData, 'completedAmnt', true)}
-               barHeight="1em"
-               barWidth="95%"
-            />
+         <ScoreboardContainer localStyles={screenStyles()}>
+            <Scrollbar scrollbarWidth={5} withFader dependencies={[chartData]}>
+               <ProgressBarChart
+                  data={ArrOfObj.sort(chartData, 'completedAmnt', true)}
+                  barHeight="1em"
+                  barWidth="95%"
+               />
+            </Scrollbar>
          </ScoreboardContainer>
          <ConditionalRender condition={!isPortableDevice}>
             <FlexCenterer

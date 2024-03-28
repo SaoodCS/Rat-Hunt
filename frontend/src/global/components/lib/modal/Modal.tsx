@@ -1,13 +1,12 @@
 import type { ReactNode } from 'react';
 import { useContext, useEffect, useState } from 'react';
 import { ThemeContext } from '../../../context/theme/ThemeContext';
+import Color from '../../../css/colors';
 import Expander from '../animation/expander/Expander';
 import { DimOverlay } from '../overlay/dimOverlay/DimOverlay';
 import { CenterWrapper } from '../positionModifiers/centerers/CenterWrapper';
 import ConditionalRender from '../renderModifiers/conditionalRender/ConditionalRender';
-
-import Color from '../../../css/colors';
-import useScrollFader from '../../../hooks/useScrollFader';
+import Scrollbar from '../scrollbar/Scrollbar';
 import {
    ModalBody,
    ModalCloseButton,
@@ -28,7 +27,6 @@ export default function Modal(props: IModal): JSX.Element {
    const { isOpen, onClose, header, children, zIndex } = props;
    const { isDarkTheme } = useContext(ThemeContext);
    const [renderModal, setRenderModal] = useState(false);
-   const { faderElRef, handleScroll } = useScrollFader([renderModal], 1);
 
    useEffect(() => {
       let timeoutId: NodeJS.Timeout | undefined = undefined;
@@ -58,8 +56,10 @@ export default function Modal(props: IModal): JSX.Element {
                      <ModalHeader isDarkTheme={isDarkTheme}>{header}</ModalHeader>
                      <ModalCloseButton onClick={onClose} />
                   </ModalHeaderContainer>
-                  <ModalBody ref={faderElRef} onScroll={(e) => handleScroll(e)}>
-                     {children}
+                  <ModalBody>
+                     <Scrollbar scrollbarWidth={8} withFader={true} dependencies={[renderModal]}>
+                        {children}
+                     </Scrollbar>
                   </ModalBody>
                </ModalContainer>
             </Expander>

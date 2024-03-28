@@ -63,7 +63,7 @@ export const TableBody = styled.div`
    left: 0px;
    right: 0px;
    ${TableRow} {
-      padding: 0.5em;
+      padding: 0.75em;
    }
 `;
 

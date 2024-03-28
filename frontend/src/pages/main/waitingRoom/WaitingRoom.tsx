@@ -9,6 +9,8 @@ import AnimatedDots from '../../../global/components/lib/font/animatedDots/Anima
 import { TextColourizer } from '../../../global/components/lib/font/textColorizer/TextColourizer';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { FlexRowWrapper } from '../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
+import { Wrapper } from '../../../global/components/lib/positionModifiers/wrapper/Style';
+import Scrollbar from '../../../global/components/lib/scrollbar/Scrollbar';
 import { GameContext } from '../../../global/context/game/GameContext';
 import { BannerContext } from '../../../global/context/widget/banner/BannerContext';
 import { ToastContext } from '../../../global/context/widget/toast/ToastContext';
@@ -100,44 +102,51 @@ export default function WaitingRoom(): JSX.Element {
    }
 
    return (
-      <>
-         <FlexColumnWrapper padding="2em" localStyles={screenStyles()}>
-            <FlexRowWrapper position="relative" alignItems="center" padding="0em 0em 1em 0em">
-               <WaitingRoomTitle>
-                  Waiting Room <AnimatedDots count={3} />
-               </WaitingRoomTitle>
-               <PlayBtnContainer onClick={() => handleStartGame()} disablePlay={disablePlay}>
-                  <PlayCircleFill size="2.5em" />
-               </PlayBtnContainer>
-            </FlexRowWrapper>
-            <RoomIdTopicItemContainer>
-               <ItemLabel>Room ID</ItemLabel>
-               <ItemValue>{localDbRoom}</ItemValue>
-               <SquareShareNodes
-                  size="1.1em"
-                  onClick={shareRoomCode}
-                  style={{
-                     cursor: 'pointer',
-                     color: Color.setRgbOpacity(Color.darkThm.warning, 1),
-                     marginBottom: '0.15em',
-                  }}
-                  color={Color.darkThm.warning}
-               />
-            </RoomIdTopicItemContainer>
-            <RoomIdTopicItemContainer>
-               <ItemLabel>Topic</ItemLabel>
-               <ItemValue>
-                  {StringHelper.firstLetterToUpper(roomData?.gameState?.activeTopic ?? '')}
-               </ItemValue>
-            </RoomIdTopicItemContainer>
-            {allUsers.map((user, index) => (
-               <UserListItemContainer key={index} isThisUser={user === localDbUser}>
-                  <CircleUser size="1.75em" />
-                  <TextColourizer padding="0em 0em 0em 1em">{user}</TextColourizer>
-               </UserListItemContainer>
-            ))}
-         </FlexColumnWrapper>
-      </>
+      <FlexColumnWrapper
+         padding="2em"
+         localStyles={screenStyles()}
+         boxSizing="border-box"
+         height="100%"
+      >
+         <FlexRowWrapper position="relative" alignItems="center" padding="0em 0em 1em 0em" flex={1}>
+            <WaitingRoomTitle>
+               Waiting Room <AnimatedDots count={3} />
+            </WaitingRoomTitle>
+            <PlayBtnContainer onClick={() => handleStartGame()} disablePlay={disablePlay}>
+               <PlayCircleFill size="2.5em" />
+            </PlayBtnContainer>
+         </FlexRowWrapper>
+         <RoomIdTopicItemContainer>
+            <ItemLabel>Room ID</ItemLabel>
+            <ItemValue>{localDbRoom}</ItemValue>
+            <SquareShareNodes
+               size="1.1em"
+               onClick={shareRoomCode}
+               style={{
+                  cursor: 'pointer',
+                  color: Color.setRgbOpacity(Color.darkThm.warning, 1),
+                  marginBottom: '0.15em',
+               }}
+               color={Color.darkThm.warning}
+            />
+         </RoomIdTopicItemContainer>
+         <RoomIdTopicItemContainer>
+            <ItemLabel>Topic</ItemLabel>
+            <ItemValue>
+               {StringHelper.firstLetterToUpper(roomData?.gameState?.activeTopic ?? '')}
+            </ItemValue>
+         </RoomIdTopicItemContainer>
+         <Wrapper overflow="hidden" flex={120}>
+            <Scrollbar scrollbarWidth={8} withFader dependencies={[allUsers]} hideScrollbar>
+               {allUsers.map((user, index) => (
+                  <UserListItemContainer key={index} isThisUser={user === localDbUser}>
+                     <CircleUser size="1.75em" />
+                     <TextColourizer padding="0em 0em 0em 1em">{user}</TextColourizer>
+                  </UserListItemContainer>
+               ))}
+            </Scrollbar>
+         </Wrapper>
+      </FlexColumnWrapper>
    );
 }
 

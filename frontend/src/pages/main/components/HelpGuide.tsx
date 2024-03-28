@@ -48,7 +48,7 @@ export default function HelpGuide(): JSX.Element {
 
    return (
       <>
-         <FlexColumnWrapper padding="0em 0em 0em 1em">
+         <FlexColumnWrapper padding="1em 1em 1em 2em">
             <OrderedList
                bulletType="decimal"
                padding="0"

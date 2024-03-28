@@ -15,6 +15,7 @@ import {
    TopicBoardWrapper,
 } from './style/Style';
 import RatOrPlayerSplash from './components/ratOrPlayerSplash/RatOrPlayerSplash';
+import { Wrapper } from '../../../global/components/lib/positionModifiers/wrapper/Style';
 
 export default function StartedGame(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -33,7 +34,11 @@ export default function StartedGame(): JSX.Element {
       if (!MiscHelper.isNotFalsyOrEmpty(thisUserState)) return;
       if (thisUserState?.spectate === true) {
          setModalHeader('Spectator Mode');
-         setModalContent(<>You are spectating the current round as it has already started.</>);
+         setModalContent(
+            <Wrapper padding="1.5em">
+               You are spectating the current round as it has already started.
+            </Wrapper>,
+         );
          setModalZIndex(100);
          toggleModal(true);
          return;
