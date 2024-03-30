@@ -12,9 +12,9 @@ export namespace GameHelper {
    }
 
    export namespace New {
-      export function topic(activeTopic: string, topicData: DBConnect.FSDB.I.Topic[]): string {
-         const newTopic = ArrOfObj.getRandItem(topicData).key;
-         return newTopic === activeTopic ? topic(activeTopic, topicData) : newTopic;
+      export function word(topicsData: DBConnect.FSDB.I.Topic[], activeTopic: string): string {
+         const words = ArrOfObj.findObj(topicsData, 'key', activeTopic).values;
+         return ArrOfObj.getRandItem(words);
       }
 
       export function roomUID(existingRoomUIDs: string[]): string {
@@ -296,46 +296,29 @@ export namespace GameHelper {
          gameState: DBConnect.FSDB.I.GameState,
       ): DBConnect.FSDB.I.GameState {
          const { userStates, currentRat, activeWord } = gameState;
-         const { findObj, filterIn, filterOut, getArrOfValuesFromKey } = ArrOfObj;
-         const rat = findObj(userStates, 'userId', currentRat);
-         const correctGuess = rat.guess === activeWord;
-         const ratVoters = filterIn(userStates, 'votedFor', currentRat);
-         const correctVotes = ratVoters.length > userStates.length / 2;
-         const ratGets2Points = correctGuess && !correctVotes;
-         const ratGets1Point = (correctGuess && correctVotes) || (!correctGuess && !correctVotes);
-         const othersGet1Point = correctVotes;
-         const ratVotersWithoutRat = filterOut(ratVoters, 'userId', currentRat);
-         const ratVotersIds = getArrOfValuesFromKey(ratVotersWithoutRat, 'userId');
-         const updatedRatUserState: DBConnect.FSDB.I.UserState = {
-            ...rat,
-            totalScore: rat.totalScore + (ratGets2Points ? 2 : ratGets1Point ? 1 : 0),
-            roundScores: [...rat.roundScores, ratGets2Points ? 2 : ratGets1Point ? 1 : 0],
-         };
-         const userStatesWithoutRat: DBConnect.FSDB.I.UserState[] = filterOut(
-            userStates,
-            'userId',
-            currentRat,
-         );
-         const updatedUserStates: DBConnect.FSDB.I.UserState[] = userStatesWithoutRat.map(
-            (userState) => {
-               const othersGetAnotherPoint = ratVotersIds.includes(userState.userId);
-               return {
-                  ...userState,
-                  totalScore:
-                     userState.totalScore +
-                     (othersGet1Point ? 1 : 0) +
-                     (othersGetAnotherPoint ? 1 : 0),
-                  roundScores: [
-                     ...userState.roundScores,
-                     (othersGet1Point ? 1 : 0) + (othersGetAnotherPoint ? 1 : 0),
-                  ],
-               };
-            },
-         );
+         const rat = ArrOfObj.findObj(userStates, 'userId', currentRat);
+         const ratVoters = ArrOfObj.filterIn(userStates, 'votedFor', currentRat);
 
+         const ratGuessedCorrectly = rat.guess === activeWord;
+         const ratGotMostVotes = ratVoters.length > userStates.length / 2;
+         const updatedUserStates: DBConnect.FSDB.I.UserState[] = userStates.map((userState) => {
+            let userPoints: number = 0;
+            if (userState.userId === currentRat) {
+               if (ratGuessedCorrectly) userPoints = userPoints + 1;
+               if (!ratGotMostVotes) userPoints = userPoints + 1;
+            } else {
+               if (ratGotMostVotes) userPoints = userPoints + 1;
+               if (userState.votedFor === currentRat) userPoints = userPoints + 1;
+            }
+            return {
+               ...userState,
+               totalScore: userState.totalScore + userPoints,
+               roundScores: [...userState.roundScores, userPoints],
+            };
+         });
          const updatedGameState: DBConnect.FSDB.I.GameState = {
             ...gameState,
-            userStates: [...updatedUserStates, updatedRatUserState],
+            userStates: updatedUserStates,
          };
          return updatedGameState;
       }
@@ -364,11 +347,6 @@ export namespace GameHelper {
          } = options;
          const { userStates } = gameState;
          if (cancelGameStateUpdate === true) return gameState;
-         const resetRoundToOneIsTrue = resetRoundToOne === true;
-         const resetScoresIsTrue = resetScores === true;
-         const newNoOfRoundsExists = newNoOfRounds !== undefined;
-         const resetCurrentRoundIsTrue = resetCurrentRound === true;
-
          const userStatesWithoutDelUser = ArrOfObj.filterOut(
             userStates,
             'userId',
@@ -376,11 +354,10 @@ export namespace GameHelper {
          );
          const newRat = ArrOfObj.getRandItem(userStatesWithoutDelUser).userId;
          const { currentRound, numberOfRoundsSet } = gameState;
-         const newWords = Get.topicWordsAndCells(topicsData, newTopic);
-         const newWord = newWords[Math.floor(Math.random() * newWords.length)].word;
+         const newWord = GameHelper.New.word(topicsData, newTopic);
          const updatedUserStates = ArrOfObj.setAllValuesOfKeys(
             userStatesWithoutDelUser,
-            resetScoresIsTrue
+            resetScores
                ? [
                     { key: 'clue', value: '' },
                     { key: 'guess', value: '' },
@@ -396,24 +373,20 @@ export namespace GameHelper {
                     { key: 'spectate', value: false },
                  ],
          );
-         const newCurrentRound = resetRoundToOneIsTrue
-            ? 1
-            : resetCurrentRoundIsTrue
-              ? currentRound
-              : currentRound + 1;
-         const updatedCurrentTurn = GameHelper.Get.firstUser(
-            newCurrentRound,
-            userStatesWithoutDelUser,
-         );
+         let newRoundNo: number;
+         if (resetRoundToOne) newRoundNo = 1;
+         else if (resetCurrentRound) newRoundNo = currentRound;
+         else newRoundNo = currentRound + 1;
+         const updatedCurrentTurn = GameHelper.Get.firstUser(newRoundNo, userStatesWithoutDelUser);
          const updatedGameState: DBConnect.FSDB.I.GameState = {
             ...gameState,
             activeTopic: newTopic,
             activeWord: newWord,
             currentRat: newRat,
-            currentRound: newCurrentRound,
+            currentRound: newRoundNo,
             currentTurn: updatedCurrentTurn,
             userStates: updatedUserStates,
-            numberOfRoundsSet: newNoOfRoundsExists ? newNoOfRounds : numberOfRoundsSet,
+            numberOfRoundsSet: newNoOfRounds || numberOfRoundsSet,
          };
          return updatedGameState;
       }

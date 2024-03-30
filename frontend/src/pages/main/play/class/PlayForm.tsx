@@ -142,7 +142,7 @@ export default class PlayFormClass {
       if (usernameTaken) {
          return { name: 'Username already taken' };
       }
-      const MAX_USERS = 10;
+      const MAX_USERS = 30;
       const roomIsFull = users.length >= MAX_USERS;
       if (roomIsFull) {
          return { roomId: 'Room is full' };
