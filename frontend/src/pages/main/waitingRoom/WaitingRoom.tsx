@@ -72,11 +72,11 @@ export default function WaitingRoom(): JSX.Element {
       if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
       const { gameState } = roomData;
       const { activeTopic } = gameState;
-      const initialRoundGameState = GameHelper.SetGameState.newRound({
+      const initialRoundGameState = GameHelper.SetGameState.nextRound(
          gameState,
          topicsData,
-         newTopic: activeTopic,
-      });
+         activeTopic,
+      );
       await setRoomData.mutateAsync({
          ...roomData,
          gameState: initialRoundGameState,

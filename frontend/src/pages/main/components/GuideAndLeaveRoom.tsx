@@ -74,20 +74,14 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    async function changeRatAndDeleteUser(): Promise<void> {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
-      const { gameState, users } = roomData;
-      const { activeTopic } = gameState;
+      const roomDataWithoutUser = GameHelper.SetRoomState.removeUser(roomData, localDbUser);
+      const { gameState } = roomDataWithoutUser;
       const gamePhase = GameHelper.Get.gamePhase(gameState);
-      const updatedGameState = GameHelper.SetGameState.newRound({
-         gameState,
-         topicsData,
-         newTopic: activeTopic,
-         resetCurrentRound: true,
-         idOfUserToDelFromUserStates: localDbUser,
-         cancelGameStateUpdate: gamePhase === 'roundSummary',
-      });
-      const updatedUsers = ArrOfObj.filterOut(users, 'userId', localDbUser);
+      let updatedGameState: typeof gameState;
+      if (gamePhase !== 'roundSummary') {
+         updatedGameState = GameHelper.SetGameState.resetCurrentRound(gameState, topicsData);
+      } else updatedGameState = gameState;
       const updatedRoomState = GameHelper.SetRoomState.keysVals(roomData, [
-         { key: 'users', value: updatedUsers },
          { key: 'gameState', value: updatedGameState },
       ]);
       await updateRoomStateMutation.mutateAsync(updatedRoomState);

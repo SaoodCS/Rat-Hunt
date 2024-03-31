@@ -289,6 +289,21 @@ export namespace GameHelper {
          const updatedGameState = { ...gameState, userStates: updatedUserStates };
          return { ...roomData, users: updatedUsers, gameState: updatedGameState };
       }
+
+      export function removeUser(
+         roomData: DBConnect.FSDB.I.Room,
+         userId: string,
+      ): DBConnect.FSDB.I.Room {
+         const { gameState, users } = roomData;
+         const { userStates } = gameState;
+         const gameStateWithoutUser = GameHelper.SetGameState.keysVals(gameState, [
+            { key: 'userStates', value: ArrOfObj.filterOut(userStates, 'userId', userId) },
+         ]);
+         return GameHelper.SetRoomState.keysVals(roomData, [
+            { key: 'users', value: ArrOfObj.filterOut(users, 'userId', userId) },
+            { key: 'gameState', value: gameStateWithoutUser },
+         ]);
+      }
    }
 
    export namespace SetGameState {
@@ -298,7 +313,6 @@ export namespace GameHelper {
          const { userStates, currentRat, activeWord } = gameState;
          const rat = ArrOfObj.findObj(userStates, 'userId', currentRat);
          const ratVoters = ArrOfObj.filterIn(userStates, 'votedFor', currentRat);
-
          const ratGuessedCorrectly = rat.guess === activeWord;
          const ratGotMostVotes = ratVoters.length > userStates.length / 2;
          const updatedUserStates: DBConnect.FSDB.I.UserState[] = userStates.map((userState) => {
@@ -323,61 +337,78 @@ export namespace GameHelper {
          return updatedGameState;
       }
 
-      export function newRound(options: {
-         gameState: DBConnect.FSDB.I.GameState;
-         topicsData: DBConnect.FSDB.I.Topic[];
-         newTopic: string;
-         resetRoundToOne?: boolean;
-         resetScores?: boolean;
-         newNoOfRounds?: number;
-         resetCurrentRound?: boolean;
-         idOfUserToDelFromUserStates?: string;
-         cancelGameStateUpdate?: boolean;
-      }): DBConnect.FSDB.I.GameState {
-         const {
-            gameState,
-            topicsData,
-            newTopic,
-            resetRoundToOne,
-            resetScores,
-            newNoOfRounds,
-            resetCurrentRound,
-            idOfUserToDelFromUserStates,
-            cancelGameStateUpdate,
-         } = options;
+      export function resetGame(
+         gameState: DBConnect.FSDB.I.GameState,
+         noOfRounds: number,
+         topicsData: DBConnect.FSDB.I.Topic[],
+         topic: string,
+      ): DBConnect.FSDB.I.GameState {
          const { userStates } = gameState;
-         if (cancelGameStateUpdate === true) return gameState;
-         const userStatesWithoutDelUser = ArrOfObj.filterOut(
-            userStates,
-            'userId',
-            idOfUserToDelFromUserStates || '',
-         );
-         const newRat = ArrOfObj.getRandItem(userStatesWithoutDelUser).userId;
-         const { currentRound, numberOfRoundsSet } = gameState;
+         const newRat = ArrOfObj.getRandItem(userStates).userId;
+         const newWord = GameHelper.New.word(topicsData, topic);
+         const updatedUserStates = ArrOfObj.setAllValuesOfKeys(userStates, [
+            { key: 'clue', value: '' },
+            { key: 'guess', value: '' },
+            { key: 'votedFor', value: '' },
+            { key: 'roundScores', value: [] },
+            { key: 'totalScore', value: 0 },
+            { key: 'spectate', value: false },
+         ]);
+         const updatedCurrentTurn = GameHelper.Get.firstUser(1, userStates);
+         const updatedGameState: DBConnect.FSDB.I.GameState = {
+            ...gameState,
+            activeTopic: topic,
+            activeWord: newWord,
+            currentRat: newRat,
+            currentRound: 1,
+            currentTurn: updatedCurrentTurn,
+            userStates: updatedUserStates,
+            numberOfRoundsSet: noOfRounds,
+         };
+         return updatedGameState;
+      }
+
+      export function resetCurrentRound(
+         gameState: DBConnect.FSDB.I.GameState,
+         topicsData: DBConnect.FSDB.I.Topic[],
+      ): DBConnect.FSDB.I.GameState {
+         const { userStates, activeTopic, currentRound } = gameState;
+         const newRat = ArrOfObj.getRandItem(userStates).userId;
+         const newWord = GameHelper.New.word(topicsData, activeTopic);
+         const updatedUserStates = ArrOfObj.setAllValuesOfKeys(userStates, [
+            { key: 'clue', value: '' },
+            { key: 'guess', value: '' },
+            { key: 'votedFor', value: '' },
+            { key: 'spectate', value: false },
+         ]);
+         const updatedCurrentTurn = GameHelper.Get.firstUser(currentRound, userStates);
+         const updatedGameState: DBConnect.FSDB.I.GameState = {
+            ...gameState,
+            activeWord: newWord,
+            currentRat: newRat,
+            currentTurn: updatedCurrentTurn,
+            userStates: updatedUserStates,
+         };
+         return updatedGameState;
+      }
+
+      export function nextRound(
+         gameState: DBConnect.FSDB.I.GameState,
+         topicsData: DBConnect.FSDB.I.Topic[],
+         newTopic: string,
+      ): DBConnect.FSDB.I.GameState {
+         const { userStates } = gameState;
+         const newRat = ArrOfObj.getRandItem(userStates).userId;
+         const { currentRound } = gameState;
          const newWord = GameHelper.New.word(topicsData, newTopic);
-         const updatedUserStates = ArrOfObj.setAllValuesOfKeys(
-            userStatesWithoutDelUser,
-            resetScores
-               ? [
-                    { key: 'clue', value: '' },
-                    { key: 'guess', value: '' },
-                    { key: 'votedFor', value: '' },
-                    { key: 'roundScores', value: [] },
-                    { key: 'totalScore', value: 0 },
-                    { key: 'spectate', value: false },
-                 ]
-               : [
-                    { key: 'clue', value: '' },
-                    { key: 'guess', value: '' },
-                    { key: 'votedFor', value: '' },
-                    { key: 'spectate', value: false },
-                 ],
-         );
-         let newRoundNo: number;
-         if (resetRoundToOne) newRoundNo = 1;
-         else if (resetCurrentRound) newRoundNo = currentRound;
-         else newRoundNo = currentRound + 1;
-         const updatedCurrentTurn = GameHelper.Get.firstUser(newRoundNo, userStatesWithoutDelUser);
+         const updatedUserStates = ArrOfObj.setAllValuesOfKeys(userStates, [
+            { key: 'clue', value: '' },
+            { key: 'guess', value: '' },
+            { key: 'votedFor', value: '' },
+            { key: 'spectate', value: false },
+         ]);
+         const newRoundNo = currentRound + 1;
+         const updatedCurrentTurn = GameHelper.Get.firstUser(newRoundNo, userStates);
          const updatedGameState: DBConnect.FSDB.I.GameState = {
             ...gameState,
             activeTopic: newTopic,
@@ -386,7 +417,6 @@ export namespace GameHelper {
             currentRound: newRoundNo,
             currentTurn: updatedCurrentTurn,
             userStates: updatedUserStates,
-            numberOfRoundsSet: newNoOfRounds || numberOfRoundsSet,
          };
          return updatedGameState;
       }

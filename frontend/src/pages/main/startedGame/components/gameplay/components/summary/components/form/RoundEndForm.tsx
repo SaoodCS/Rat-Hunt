@@ -38,14 +38,17 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
       if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
       const { gameState } = roomData;
       const { newTopic, noOfRounds } = form;
-      const updatedGameState = GameHelper.SetGameState.newRound({
-         gameState,
-         topicsData,
-         newTopic,
-         resetRoundToOne: isLastRound ? true : undefined,
-         resetScores: isLastRound ? true : undefined,
-         newNoOfRounds: isLastRound ? noOfRounds : undefined,
-      });
+      let updatedGameState: DBConnect.FSDB.I.GameState;
+      if (isLastRound) {
+         updatedGameState = GameHelper.SetGameState.resetGame(
+            gameState,
+            noOfRounds,
+            topicsData,
+            newTopic,
+         );
+      } else {
+         updatedGameState = GameHelper.SetGameState.nextRound(gameState, topicsData, newTopic);
+      }
       await setRoomData.mutateAsync({
          ...roomData,
          gameState: updatedGameState,
