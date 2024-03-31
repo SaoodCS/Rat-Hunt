@@ -173,38 +173,6 @@ export namespace DBConnect {
             );
          }
 
-         interface ISetUser {
-            roomId: string;
-            // userObjForUsers: I.User;
-            userObjForUserState: I.UserState;
-            gameStateObj: I.GameState;
-         }
-         export function user(
-            options: UseMutationOptions<void, unknown, ISetUser>,
-         ): UseMutationResult<void, unknown, ISetUser, void> {
-            return useCustomMutation(
-               async (params: ISetUser) => {
-                  try {
-                     const { roomId, userObjForUserState, gameStateObj } = params;
-                     const docRef = doc(
-                        firestore,
-                        CONSTS.GAME_COLLECTION,
-                        `${CONSTS.ROOM_DOC_PREFIX}${roomId}`,
-                     );
-                     await updateDoc(docRef, {
-                        gameState: {
-                           ...gameStateObj,
-                           userStates: [...gameStateObj.userStates, userObjForUserState],
-                        },
-                     });
-                  } catch (e) {
-                     throw new APIHelper.ErrorThrower(APIHelper.handleError(e));
-                  }
-               },
-               { ...options },
-            );
-         }
-
          interface ISetGameState {
             gameState: I.GameState;
             roomId: string;

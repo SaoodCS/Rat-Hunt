@@ -81,7 +81,6 @@ export class FBHelp {
                const changedPath = path ? `${path}/${key}` : key;
                const roomId = changedPath.split('/')[1];
                const userId = changedPath.split('/')[2];
-
                return {
                   fullPath: changedPath,
                   roomId,
@@ -134,23 +133,6 @@ export class FBHelp {
       const roomRefRT = admin.database().ref(`/rooms/${roomId}`);
       const userRefRT = admin.database().ref(`/rooms/${roomId}/${userId}`);
       return { roomRefRT, userRefRT, roomRefFS };
-   }
-
-   public static getUserState(
-      userStatesArr: IUserStates[],
-      userId: string,
-   ):
-      | {
-           userIndex: number;
-           user: IUserStates;
-        }
-      | undefined {
-      const userIndex = userStatesArr.findIndex((user) => user.userId === userId);
-      if (userIndex === -1) return undefined;
-      return {
-         userIndex,
-         user: userStatesArr[userIndex],
-      };
    }
 
    static sortedUserQueue(roundNo: number, userStates: IUserStates[]): string[] {

@@ -43,31 +43,6 @@ export class ArrayHelp {
       }) as T;
    }
 
-   static sortObjects<T>(arr: T[], key: keyof T, descending?: boolean): T[] {
-      const deepCopy: T[] = JSON.parse(JSON.stringify(arr));
-      if (descending) {
-         return deepCopy.sort((a, b) => {
-            if (a[key] > b[key]) {
-               return -1;
-            }
-            if (a[key] < b[key]) {
-               return 1;
-            }
-            return 0;
-         });
-      }
-
-      return deepCopy.sort((a, b) => {
-         if (a[key] < b[key]) {
-            return -1;
-         }
-         if (a[key] > b[key]) {
-            return 1;
-         }
-         return 0;
-      });
-   }
-
    static setAllValuesOfKeys<T>(arr: T[], keyValues: { key: keyof T; value: T[keyof T] }[]): T[] {
       const deepCopy: T[] = JSON.parse(JSON.stringify(arr));
       for (let i = 0; i < deepCopy.length; i++) {
