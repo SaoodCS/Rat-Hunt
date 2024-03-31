@@ -49,7 +49,7 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
             const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
             const isUserInRoom = GameHelper.Check.isUserInRoom(
                localDbUser,
-               roomData?.gameState.userStates || [],
+               roomData?.gameState?.userStates || [],
             );
             if (docExists && roomDataExists && isUserInRoom) {
                queryClient.setQueryData([DBConnect.FSDB.CONSTS.QUERY_KEYS.GET_ROOM], roomData);
@@ -88,7 +88,7 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
          const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
          const localDbUserInRoom = GameHelper.Check.isUserInRoom(
             localDbUser,
-            roomData?.gameState.userStates || [],
+            roomData?.gameState?.userStates || [],
          );
          if (roomDataExists) {
             if (localDbUserInRoom) {

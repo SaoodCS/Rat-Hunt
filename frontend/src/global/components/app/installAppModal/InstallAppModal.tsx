@@ -1,6 +1,7 @@
 import Device from '../../../helpers/pwa/deviceHelper';
 import useLocalStorage from '../../../hooks/useLocalStorage';
 import Modal from '../../lib/modal/Modal';
+import { FlexColumnWrapper } from '../../lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { VerticalSeperator } from '../../lib/positionModifiers/verticalSeperator/VerticalSeperator';
 import InstallAppSteps from './InstallAppSteps';
 
@@ -21,9 +22,11 @@ export default function InstallAppModal(): JSX.Element {
             onClose={() => toggleClose()}
             header="Installation"
          >
-            {'Install this app to your home screen for a better experience!'}
-            <VerticalSeperator />
-            <InstallAppSteps />
+            <FlexColumnWrapper padding="1em 1em 0em 1em">
+               {'Install this app to your home screen for a better experience!'}
+               <VerticalSeperator />
+               <InstallAppSteps />
+            </FlexColumnWrapper>
          </Modal>
       </>
    );
