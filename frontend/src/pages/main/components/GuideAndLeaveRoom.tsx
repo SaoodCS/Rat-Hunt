@@ -91,7 +91,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
 
    async function changeTurnAndDeleteUser(): Promise<void> {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
-      const { gameState, users } = roomData;
+      const { gameState } = roomData;
       const { userStates, currentRat } = gameState;
       const nextUser = GameHelper.Get.nextTurnUserId(
          gameState,
@@ -104,9 +104,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
          { key: 'currentTurn', value: nextUser },
          { key: 'userStates', value: updatedUserStates },
       ]);
-      const updatedUsers = ArrOfObj.filterOut(users, 'userId', localDbUser);
       const updatedRoomState = GameHelper.SetRoomState.keysVals(roomData, [
-         { key: 'users', value: updatedUsers },
          { key: 'gameState', value: updatedGameState },
       ]);
       await updateRoomStateMutation.mutateAsync(updatedRoomState);
@@ -117,7 +115,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    async function handleLeaveRoom(): Promise<void> {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
-      const isLastUser = roomData.users.length === 1;
+      const isLastUser = roomData.gameState.userStates.length === 1;
       if (isLastUser) {
          await deleteRoomMutation.mutateAsync({ roomId: localDbRoom });
          await DBConnect.RTDB.Delete.room(localDbRoom);

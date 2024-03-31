@@ -7,17 +7,7 @@ import type {
 import { useQuery } from '@tanstack/react-query';
 import type { DatabaseReference } from 'firebase/database';
 import { onDisconnect, ref, remove, set } from 'firebase/database';
-import {
-   arrayRemove,
-   arrayUnion,
-   collection,
-   deleteDoc,
-   doc,
-   getDoc,
-   getDocs,
-   setDoc,
-   updateDoc,
-} from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
 import { firebaseRTDB, firestore } from '../../config/firebase/config';
 import ArrOfObj from '../../helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import { useCustomMutation } from '../../hooks/useCustomMutation';
@@ -48,11 +38,6 @@ export namespace DBConnect {
          export interface Room {
             gameStarted: boolean;
             roomId: string;
-            users: {
-               userStatus: 'connected' | 'disconnected';
-               statusUpdatedAt: string;
-               userId: string;
-            }[];
             gameState: {
                activeTopic: string;
                activeWord: string;
@@ -68,10 +53,11 @@ export namespace DBConnect {
                   guess: string;
                   votedFor: string;
                   spectate: boolean;
+                  userStatus: 'connected' | 'disconnected';
+                  statusUpdatedAt: string;
                }[];
             };
          }
-         export type User = Room['users'][0];
          export type UserState = Room['gameState']['userStates'][0];
          export type GameState = Room['gameState'];
       }
@@ -189,7 +175,7 @@ export namespace DBConnect {
 
          interface ISetUser {
             roomId: string;
-            userObjForUsers: I.User;
+            // userObjForUsers: I.User;
             userObjForUserState: I.UserState;
             gameStateObj: I.GameState;
          }
@@ -199,14 +185,13 @@ export namespace DBConnect {
             return useCustomMutation(
                async (params: ISetUser) => {
                   try {
-                     const { roomId, userObjForUsers, userObjForUserState, gameStateObj } = params;
+                     const { roomId, userObjForUserState, gameStateObj } = params;
                      const docRef = doc(
                         firestore,
                         CONSTS.GAME_COLLECTION,
                         `${CONSTS.ROOM_DOC_PREFIX}${roomId}`,
                      );
                      await updateDoc(docRef, {
-                        users: arrayUnion(userObjForUsers),
                         gameState: {
                            ...gameStateObj,
                            userStates: [...gameStateObj.userStates, userObjForUserState],
@@ -266,7 +251,6 @@ export namespace DBConnect {
                         `${CONSTS.ROOM_DOC_PREFIX}${roomData.roomId}`,
                      );
                      if (!userId) return;
-                     const userInUsers = ArrOfObj.findObj(roomData.users, 'userId', userId);
                      const updatedUserStates = ArrOfObj.filterOut(
                         roomData.gameState.userStates,
                         'userId',
@@ -274,7 +258,6 @@ export namespace DBConnect {
                      );
 
                      await updateDoc(docRef, {
-                        users: arrayRemove(userInUsers),
                         gameState: {
                            ...roomData.gameState,
                            userStates: updatedUserStates,

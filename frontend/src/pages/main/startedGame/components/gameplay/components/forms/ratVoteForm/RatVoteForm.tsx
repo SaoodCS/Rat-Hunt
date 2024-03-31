@@ -71,7 +71,7 @@ export default function RatVoteForm(): JSX.Element {
    ): IDropDownOptions | undefined {
       if (input.dropDownOptions === undefined) return;
       if (!(input.name === 'vote' && MiscHelper.isNotFalsyOrEmpty(roomData))) return;
-      const usersArr = roomData.users;
+      const usersArr = roomData.gameState.userStates;
       const options: IDropDownOptions['options'] = usersArr.map((user) => ({
          value: user.userId,
          label: user.userId,

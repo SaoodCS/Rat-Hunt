@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import GuideAndLeaveRoom from '../../../pages/main/components/GuideAndLeaveRoom';
 import { firestore } from '../../config/firebase/config';
-import ArrOfObj from '../../helpers/dataTypes/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../helpers/dataTypes/miscHelper/MiscHelper';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import DBConnect from '../../utils/DBConnect/DBConnect';
@@ -20,7 +19,6 @@ interface IGameContextProvider {
 
 export default function GameContextProvider(props: IGameContextProvider): JSX.Element {
    const { children } = props;
-   const [allUsers, setAllUsers] = useState<string[]>([]);
    const [activeTopicWords, setActiveTopicWords] = useState<GameHelper.I.WordCell[]>([]);
    const [localDbUser, setLocalDbUser] = useLocalStorage(DBConnect.Local.STORAGE_KEYS.USER, '');
    const [localDbRoom, setLocalDbRoom] = useLocalStorage(DBConnect.Local.STORAGE_KEYS.ROOM, '');
@@ -49,10 +47,11 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
             const docExists = doc.exists();
             const roomData = doc?.data() as DBConnect.FSDB.I.Room | undefined;
             const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
-            const users = roomData?.users;
-            const usersExists = MiscHelper.isNotFalsyOrEmpty(users);
-            const isUserInRoom = GameHelper.Check.isUserInRoom(localDbUser, users ?? []);
-            if (docExists && roomDataExists && usersExists && isUserInRoom) {
+            const isUserInRoom = GameHelper.Check.isUserInRoom(
+               localDbUser,
+               roomData?.gameState.userStates || [],
+            );
+            if (docExists && roomDataExists && isUserInRoom) {
                queryClient.setQueryData([DBConnect.FSDB.CONSTS.QUERY_KEYS.GET_ROOM], roomData);
                return;
             }
@@ -71,13 +70,6 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
    }, [localDbRoom]);
 
    useEffect(() => {
-      if (MiscHelper.isNotFalsyOrEmpty(roomData)) {
-         const allUsers = ArrOfObj.getArrOfValuesFromKey(roomData.users, 'userId');
-         setAllUsers(allUsers);
-      }
-   }, [roomData?.users]);
-
-   useEffect(() => {
       const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
       const topicsDataExists = MiscHelper.isNotFalsyOrEmpty(topicsData);
       if (roomDataExists && topicsDataExists) {
@@ -94,18 +86,22 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
       if (!isLoading && initialRender) {
          setInitialRender(false);
          const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
-         const localDbUserInRoom = roomData?.users?.some((user) => user.userId === localDbUser);
-         if (roomDataExists && localDbUserInRoom) {
-            navigation(roomData.gameStarted ? '/main/startedgame' : '/main/waitingroom', {
-               replace: true,
-            });
-            DBConnect.RTDB.Set.userStatus(localDbUser, roomData.roomId);
-            return;
+         const localDbUserInRoom = GameHelper.Check.isUserInRoom(
+            localDbUser,
+            roomData?.gameState.userStates || [],
+         );
+         if (roomDataExists) {
+            if (localDbUserInRoom) {
+               navigation(roomData.gameStarted ? '/main/startedgame' : '/main/waitingroom', {
+                  replace: true,
+               });
+               DBConnect.RTDB.Set.userStatus(localDbUser, roomData.roomId);
+               return;
+            }
+            alert('You have been removed from the room!');
          }
-         if (roomDataExists && !localDbUserInRoom) alert('You have been removed from the room!');
          setLocalDbRoom('');
          setLocalDbUser('');
-         // queryClient below added without testing so if there are bugs, delete it
          queryClient.clear();
          queryClient.invalidateQueries();
          navigation('/main/play', { replace: true });
@@ -115,8 +111,6 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
    return (
       <GameContext.Provider
          value={{
-            allUsers,
-            setAllUsers,
             localDbRoom,
             setLocalDbRoom,
             localDbUser,

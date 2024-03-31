@@ -48,8 +48,11 @@ export namespace GameHelper {
          return mostRepeatedItems.length === 1 && mostRepeatedItems.includes(currentRat);
       }
 
-      export function isUserInRoom(userId: string, users: DBConnect.FSDB.I.Room['users']): boolean {
-         return ArrOfObj.hasKeyVal(users, 'userId', userId);
+      export function isUserInRoom(
+         userId: string,
+         userStates: DBConnect.FSDB.I.UserState[],
+      ): boolean {
+         return ArrOfObj.hasKeyVal(userStates, 'userId', userId);
       }
    }
 
@@ -162,13 +165,17 @@ export namespace GameHelper {
          return updatedCurrentTurn;
       }
 
-      export function disconnectedUserIds(users: DBConnect.FSDB.I.User[]): string[] {
-         const disconnectedUsers = ArrOfObj.filterOut(users, 'userStatus', 'connected');
+      export function allUserIds(userStates: DBConnect.FSDB.I.UserState[]): string[] {
+         return ArrOfObj.getArrOfValuesFromKey(userStates, 'userId');
+      }
+
+      export function disconnectedUserIds(userStates: DBConnect.FSDB.I.UserState[]): string[] {
+         const disconnectedUsers = ArrOfObj.filterOut(userStates, 'userStatus', 'connected');
          return ArrOfObj.getArrOfValuesFromKey(disconnectedUsers, 'userId');
       }
 
-      export function connectedUserIds(users: DBConnect.FSDB.I.User[]): string[] {
-         const connectedUsers = ArrOfObj.filterOut(users, 'userStatus', 'disconnected');
+      export function connectedUserIds(userStates: DBConnect.FSDB.I.UserState[]): string[] {
+         const connectedUsers = ArrOfObj.filterOut(userStates, 'userStatus', 'disconnected');
          return ArrOfObj.getArrOfValuesFromKey(connectedUsers, 'userId');
       }
 
@@ -235,13 +242,6 @@ export namespace GameHelper {
          return {
             gameStarted: false,
             roomId: generatedRoomId,
-            users: [
-               {
-                  userStatus: 'connected',
-                  statusUpdatedAt: new Date().toUTCString(),
-                  userId: hostUserId,
-               },
-            ],
             gameState: {
                activeTopic: topic,
                activeWord: '',
@@ -258,6 +258,8 @@ export namespace GameHelper {
                      guess: '',
                      votedFor: '',
                      spectate: false,
+                     userStatus: 'connected',
+                     statusUpdatedAt: new Date().toUTCString(),
                   },
                ],
             },
@@ -268,13 +270,8 @@ export namespace GameHelper {
          roomData: DBConnect.FSDB.I.Room,
          userId: string,
       ): DBConnect.FSDB.I.Room {
-         const { gameStarted, gameState, users } = roomData;
+         const { gameStarted, gameState } = roomData;
          const { userStates } = gameState;
-         const newUser: DBConnect.FSDB.I.User = {
-            userStatus: 'connected',
-            statusUpdatedAt: new Date().toUTCString(),
-            userId,
-         };
          const newUserState: DBConnect.FSDB.I.UserState = {
             userId,
             totalScore: 0,
@@ -283,24 +280,24 @@ export namespace GameHelper {
             guess: '',
             votedFor: gameStarted ? 'SKIP' : '',
             spectate: gameStarted,
+            userStatus: 'connected',
+            statusUpdatedAt: new Date().toUTCString(),
          };
-         const updatedUsers = [...users, newUser];
          const updatedUserStates = [...userStates, newUserState];
          const updatedGameState = { ...gameState, userStates: updatedUserStates };
-         return { ...roomData, users: updatedUsers, gameState: updatedGameState };
+         return { ...roomData, gameState: updatedGameState };
       }
 
       export function removeUser(
          roomData: DBConnect.FSDB.I.Room,
          userId: string,
       ): DBConnect.FSDB.I.Room {
-         const { gameState, users } = roomData;
+         const { gameState } = roomData;
          const { userStates } = gameState;
          const gameStateWithoutUser = GameHelper.SetGameState.keysVals(gameState, [
             { key: 'userStates', value: ArrOfObj.filterOut(userStates, 'userId', userId) },
          ]);
          return GameHelper.SetRoomState.keysVals(roomData, [
-            { key: 'users', value: ArrOfObj.filterOut(users, 'userId', userId) },
             { key: 'gameState', value: gameStateWithoutUser },
          ]);
       }

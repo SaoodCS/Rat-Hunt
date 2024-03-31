@@ -54,8 +54,9 @@ export default function Play(): JSX.Element {
    }
 
    async function handleJoinGame(): Promise<void> {
+      // TODO: make the mobile keypad force uppercase
       const roomId = form.roomId.toUpperCase();
-      const formName = form.name.trim();
+      const formName = form.name.trim().toUpperCase();
       const docRef = doc(
          firestore,
          DBConnect.FSDB.CONSTS.GAME_COLLECTION,
@@ -80,7 +81,7 @@ export default function Play(): JSX.Element {
    async function handleHostGame(): Promise<void> {
       const generatedRoomId = GameHelper.New.roomUID(allRoomIds ?? ['']);
       const { name, topic, noOfRounds } = form;
-      const formName = name.trim();
+      const formName = name.trim().toUpperCase();
       const room = GameHelper.SetRoomState.newRoom(generatedRoomId, formName, topic, noOfRounds);
       await setRoomData.mutateAsync(room);
       setLocalDbRoom(generatedRoomId);

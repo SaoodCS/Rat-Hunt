@@ -33,11 +33,11 @@ export default function Gameplay(): JSX.Element {
 
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
-      const { gameState, users } = roomData;
-      const connectedUsers = GameHelper.Get.connectedUserIds(roomData.users);
+      const { gameState } = roomData;
+      const connectedUsers = GameHelper.Get.connectedUserIds(roomData.gameState.userStates);
       if (localDbUser !== connectedUsers[0]) return;
       const { currentTurn, userStates, currentRat } = gameState;
-      const disconnectedUsers = GameHelper.Get.disconnectedUserIds(users);
+      const disconnectedUsers = GameHelper.Get.disconnectedUserIds(roomData.gameState.userStates);
       const spectatingUsers = GameHelper.Get.spectatingUserIds(userStates);
       const currentTurnUserIsDisconnected = disconnectedUsers.includes(currentTurn);
       const currentTurnUserIsSpectating = spectatingUsers.includes(currentTurn);
@@ -64,7 +64,7 @@ export default function Gameplay(): JSX.Element {
                ? GameHelper.SetGameState.userPoints(updatedGameState)
                : updatedGameState,
       });
-   }, [roomData?.gameState?.currentTurn, localDbUser, roomData?.users]);
+   }, [roomData?.gameState?.currentTurn, localDbUser, roomData?.gameState.userStates]);
 
    useEffect(() => {
       // This useEffect is responsble for updating the UI when the currentTurn changes

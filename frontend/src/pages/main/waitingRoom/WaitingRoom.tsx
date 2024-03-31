@@ -33,7 +33,7 @@ import {
 const MIN_PLAYERS = 1;
 
 export default function WaitingRoom(): JSX.Element {
-   const { allUsers, localDbRoom, localDbUser } = useContext(GameContext);
+   const { localDbRoom, localDbUser } = useContext(GameContext);
    const navigation = useNavigate();
    const {
       toggleToast,
@@ -49,6 +49,12 @@ export default function WaitingRoom(): JSX.Element {
       useContext(BannerContext);
    const { data: topicsData } = DBConnect.FSDB.Get.topics();
    const setRoomData = DBConnect.FSDB.Set.room({});
+   const [allUsers, setAllUsers] = useState<string[]>([]);
+
+   useEffect(() => {
+      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
+      setAllUsers(GameHelper.Get.allUserIds(roomData.gameState.userStates));
+   }, [roomData?.gameState?.userStates]);
 
    useEffect(() => {
       setDisablePlay(allUsers.length < MIN_PLAYERS ? true : false);

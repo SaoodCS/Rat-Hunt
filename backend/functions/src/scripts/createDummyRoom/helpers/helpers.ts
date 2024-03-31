@@ -1,6 +1,6 @@
-import type { IFullUser, IRoom, IUser, IUserStates } from '../../../helpers/FirebaseHelp';
+import type { IRoom, IUserStates } from '../../../helpers/FirebaseHelp';
 
-export const baseDummyUser: IFullUser = {
+export const baseDummyUser: IUserStates = {
    userStatus: 'connected',
    statusUpdatedAt: new Date().toISOString(),
    userId: 'dummyUser1',
@@ -13,24 +13,24 @@ export const baseDummyUser: IFullUser = {
 };
 
 export function createCopyOfDummyUser(
-   dummyUser: IFullUser,
-   changedFields: Partial<IFullUser>,
-): IFullUser {
+   dummyUser: IUserStates,
+   changedFields: Partial<IUserStates>,
+): IUserStates {
    const clone = JSON.parse(JSON.stringify(dummyUser));
    return Object.assign(clone, changedFields);
 }
 
 export function generateDummyUsers(
-   baseDummyUser: IFullUser,
-   usersWithChangedFields: Partial<IFullUser>[],
-): IFullUser[] {
+   baseDummyUser: IUserStates,
+   usersWithChangedFields: Partial<IUserStates>[],
+): IUserStates[] {
    const dummyUsersWithoutBase = usersWithChangedFields.map((changedFields) =>
       createCopyOfDummyUser(baseDummyUser, changedFields),
    );
    return [baseDummyUser, ...dummyUsersWithoutBase];
 }
 
-export function addDummyUsersToRoom(room: IRoom, dummyUsers: IFullUser[]): IRoom {
+export function addDummyUsersToRoom(room: IRoom, dummyUsers: IUserStates[]): IRoom {
    const userStatesFields: IUserStates[] = dummyUsers.map((user) => ({
       userId: user.userId,
       totalScore: user.totalScore,
@@ -39,14 +39,10 @@ export function addDummyUsersToRoom(room: IRoom, dummyUsers: IFullUser[]): IRoom
       guess: user.guess,
       votedFor: user.votedFor,
       spectate: user.spectate,
-   }));
-   const userFields: IUser[] = dummyUsers.map((user) => ({
       userStatus: user.userStatus,
       statusUpdatedAt: user.statusUpdatedAt,
-      userId: user.userId,
    }));
    const roomClone = JSON.parse(JSON.stringify(room));
-   roomClone.users = userFields;
    roomClone.gameState.userStates = userStatesFields;
    return roomClone;
 }

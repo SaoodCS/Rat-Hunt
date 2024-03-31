@@ -1,10 +1,10 @@
 import type { DocumentData, DocumentSnapshot } from 'firebase/firestore';
 import { N_Form } from '../../../../global/components/lib/form/N_Form';
+import DropDownInput from '../../../../global/components/lib/form/dropDown/DropDownInput';
 import NumberLineInput from '../../../../global/components/lib/form/numberLine/NumberLineInp';
 import TextOrNumFieldInput from '../../../../global/components/lib/form/textOrNumber/TextOrNumFieldInput';
 import StringHelper from '../../../../global/helpers/dataTypes/string/StringHelper';
 import type DBConnect from '../../../../global/utils/DBConnect/DBConnect';
-import DropDownInput from '../../../../global/components/lib/form/dropDown/DropDownInput';
 
 export interface IPlayFormClass {
    name: string;
@@ -135,15 +135,14 @@ export default class PlayFormClass {
          return { roomId: 'Room does not exist' };
       }
       const roomData = roomDocSnap.data() as DBConnect.FSDB.I.Room;
-      const { users } = roomData;
-      const usernameTaken = users.some(
+      const usernameTaken = roomData.gameState.userStates.some(
          (user) => user.userId.trim().toUpperCase() === form.name.trim().toUpperCase(),
       );
       if (usernameTaken) {
          return { name: 'Username already taken' };
       }
       const MAX_USERS = 30;
-      const roomIsFull = users.length >= MAX_USERS;
+      const roomIsFull = roomData.gameState.userStates.length >= MAX_USERS;
       if (roomIsFull) {
          return { roomId: 'Room is full' };
       }

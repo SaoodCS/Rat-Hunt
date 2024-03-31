@@ -3,6 +3,10 @@ export class ArrayHelp {
       return arr.find((obj) => obj[key] === value) as T;
    }
 
+   public static isKeyInAllObjsNotValuedAs<T>(arr: T[], key: keyof T, value: T[keyof T]): boolean {
+      return arr.every((obj) => obj[key] !== value);
+   }
+
    public static filterOut<T>(arr: T[], key: keyof T, value: T[keyof T]): T[] {
       return arr.filter((obj) => obj[key] !== value);
    }
@@ -12,9 +16,6 @@ export class ArrayHelp {
 
    public static getArrOfValuesFromKey<T, K extends keyof T>(arr: T[], key: K): T[K][] {
       return arr.map((obj) => obj[key]);
-   }
-   public static getObjWithKeyValuePair<T>(arr: T[], key: keyof T, value: T[keyof T]): T {
-      return arr.find((obj) => obj[key] === value) as T;
    }
 
    public static sort<T extends string[] | number[]>(arr: T, descending?: boolean): T {

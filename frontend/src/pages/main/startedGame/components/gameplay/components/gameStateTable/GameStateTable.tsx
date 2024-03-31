@@ -18,10 +18,9 @@ export default function GameStateTable(): JSX.Element {
 
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
-      const { users } = roomData;
-      const disconnectedUsers = GameHelper.Get.disconnectedUserIds(users);
+      const disconnectedUsers = GameHelper.Get.disconnectedUserIds(roomData?.gameState?.userStates);
       setDisconnectedUsers(disconnectedUsers);
-   }, [roomData?.users]);
+   }, [roomData?.gameState?.userStates]);
 
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
