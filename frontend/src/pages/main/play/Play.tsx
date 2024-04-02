@@ -99,7 +99,7 @@ export default function Play(): JSX.Element {
          const topics = data.flatMap((topic) => topic.key);
          if (!MiscHelper.isNotFalsyOrEmpty(data)) return input.dropDownOptions;
          const options: IDropDownOptions['options'] = [];
-         const topicLabels = ArrayHelper.capFirstLetterOfWords(topics);
+         const topicLabels = ArrayHelper.toTitleCase(topics);
          for (let i = 0; i < topics.length; i++) {
             options.push({ value: topics[i], label: topicLabels[i] });
          }

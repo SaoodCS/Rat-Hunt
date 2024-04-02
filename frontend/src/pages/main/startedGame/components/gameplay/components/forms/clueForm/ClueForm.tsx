@@ -36,7 +36,7 @@ export default function ClueForm(): JSX.Element {
       const { gameState } = roomData;
       const { userStates, currentRat } = gameState;
       const submittedClues = ArrOfObj.getArrOfValuesFromKey(userStates, 'clue');
-      if (ArrayHelper.toUpperCase(submittedClues).includes(userClue.toUpperCase())) {
+      if (ArrayHelper.toCapitalize(submittedClues).includes(userClue.toUpperCase())) {
          setErrors((prev) => ({ ...prev, clue: 'Another user has already submitted this clue.' }));
          return;
       }

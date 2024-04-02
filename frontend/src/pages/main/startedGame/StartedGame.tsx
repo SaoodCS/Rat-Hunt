@@ -30,7 +30,7 @@ export default function StartedGame(): JSX.Element {
       if (!MiscHelper.isNotFalsyOrEmpty(gameState)) return;
       const { userStates } = gameState;
       if (!MiscHelper.isNotFalsyOrEmpty(userStates)) return;
-      const thisUserState = ArrOfObj.findObj(userStates, 'userId', localDbUser);
+      const thisUserState = ArrOfObj.getObj(userStates, 'userId', localDbUser);
       if (!MiscHelper.isNotFalsyOrEmpty(thisUserState)) return;
       if (thisUserState?.spectate === true) {
          setModalHeader('Spectator Mode');

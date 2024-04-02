@@ -13,7 +13,7 @@ export namespace GameHelper {
 
    export namespace New {
       export function word(topicsData: AppTypes.Topic[], activeTopic: string): string {
-         const words = ArrOfObj.findObj(topicsData, 'key', activeTopic).values;
+         const words = ArrOfObj.getObj(topicsData, 'key', activeTopic).values;
          return ArrOfObj.getRandItem(words);
       }
 
@@ -22,7 +22,7 @@ export namespace GameHelper {
          let idExists = true;
          while (idExists) {
             newId = Math.random().toString(36).substring(2, 7).toUpperCase();
-            idExists = ArrayHelper.toUpperCase(existingRoomUIDs).includes(newId);
+            idExists = ArrayHelper.toCapitalize(existingRoomUIDs).includes(newId);
          }
          return newId;
       }
@@ -31,20 +31,20 @@ export namespace GameHelper {
    export namespace Check {
       export function hasRatGuessed(gameState: AppTypes.GameState): boolean {
          const { currentRat, userStates } = gameState;
-         const ratUserState = ArrOfObj.findObj(userStates, 'userId', currentRat);
+         const ratUserState = ArrOfObj.getObj(userStates, 'userId', currentRat);
          return ratUserState.guess !== '';
       }
 
       export function isRatGuessCorrect(gameState: AppTypes.GameState): boolean {
          const { activeWord, currentRat, userStates } = gameState;
-         const ratUserState = ArrOfObj.findObj(userStates, 'userId', currentRat);
+         const ratUserState = ArrOfObj.getObj(userStates, 'userId', currentRat);
          return ratUserState.guess === activeWord;
       }
 
       export function ratGotCaught(gameState: AppTypes.GameState): boolean {
          const { userStates, currentRat } = gameState;
          const userVotes: string[] = ArrOfObj.getArrOfValuesFromKey(userStates, 'votedFor');
-         const mostRepeatedItems = ArrayHelper.findMostRepeatedItems(userVotes);
+         const mostRepeatedItems = ArrayHelper.mostRepeated(userVotes);
          return mostRepeatedItems.length === 1 && mostRepeatedItems.includes(currentRat);
       }
 
@@ -58,7 +58,7 @@ export namespace GameHelper {
          topics: AppTypes.Topic[],
          activeTopic: string,
       ): GameHelper.I.WordCell[] {
-         const topicObj = ArrOfObj.findObj(topics, 'key', activeTopic);
+         const topicObj = ArrOfObj.getObj(topics, 'key', activeTopic);
          const words = topicObj.values;
          const sortedWords = ArrayHelper.sort(words);
          const words16 = sortedWords.slice(0, 16);
@@ -118,16 +118,8 @@ export namespace GameHelper {
             'userId',
             currentTurnUser,
          );
-         const finalVoteSubmission = ArrOfObj.isKeyInAllObjsNotValuedAs(
-            userStatesWithoutThisUser,
-            'votedFor',
-            '',
-         );
-         const finalClueSubmission = ArrOfObj.isKeyInAllObjsNotValuedAs(
-            userStatesWithoutThisUser,
-            'clue',
-            '',
-         );
+         const finalVoteSubmission = !ArrOfObj.hasKeyVal(userStatesWithoutThisUser, 'votedFor', '');
+         const finalClueSubmission = !ArrOfObj.hasKeyVal(userStatesWithoutThisUser, 'clue', '');
          if (type === 'votedFor') {
             const nextUser = sortedUserQueue[thisUserIndex + 1] || currentRat;
             const updatedCurrentTurn = finalVoteSubmission ? `${currentRat}.wordGuess` : nextUser;
@@ -146,7 +138,7 @@ export namespace GameHelper {
          const allVotesSubmitted = finalVoteSubmission;
          const allCluesSubmitted = finalClueSubmission;
          const thisUserIsRat = currentRat === currentTurnUser;
-         const ratUserState = ArrOfObj.findObj(userStates, 'userId', currentRat);
+         const ratUserState = ArrOfObj.getObj(userStates, 'userId', currentRat);
          const ratSubmittedGuess = ratUserState.guess !== '';
          if (ratSubmittedGuess) return '';
          if (thisUserIsRat) return sortedUserQueue[0];
@@ -184,19 +176,15 @@ export namespace GameHelper {
          const { currentTurn, userStates } = gameState;
          if (currentTurn === '') return 'roundSummary';
          const currentTurnUserId = GameHelper.Get.currentTurnUserId(currentTurn);
-         const currentTurnUserState = ArrOfObj.findObj(userStates, 'userId', currentTurnUserId);
+         const currentTurnUserState = ArrOfObj.getObj(userStates, 'userId', currentTurnUserId);
          if (!MiscHelper.isNotFalsyOrEmpty(currentTurnUserState)) {
             throw new Error('Current turn is set to a user that does not exist in userStates.');
          }
          const hasRatGuessed = GameHelper.Check.hasRatGuessed(gameState);
          if (currentTurnUserState.spectate) {
             // Spectating user's clue and votedFor values are already set to 'SKIP' for the round
-            const allCluesExist = ArrOfObj.isKeyInAllObjsNotValuedAs(userStates, 'clue', '');
-            const allVotedForValuesExist = ArrOfObj.isKeyInAllObjsNotValuedAs(
-               userStates,
-               'votedFor',
-               '',
-            );
+            const allCluesExist = !ArrOfObj.hasKeyVal(userStates, 'clue', '');
+            const allVotedForValuesExist = !ArrOfObj.hasKeyVal(userStates, 'votedFor', '');
             if (hasRatGuessed) return 'roundSummary';
             if (allCluesExist && allVotedForValuesExist) return 'guess';
             if (allCluesExist) return 'votedFor';
@@ -210,7 +198,7 @@ export namespace GameHelper {
 
       export function ratGuess(gameState: AppTypes.GameState): string {
          const { currentRat, userStates } = gameState;
-         const ratUserState = ArrOfObj.findObj(userStates, 'userId', currentRat);
+         const ratUserState = ArrOfObj.getObj(userStates, 'userId', currentRat);
          return ratUserState.guess;
       }
    }
@@ -294,7 +282,7 @@ export namespace GameHelper {
    export namespace SetGameState {
       export function userPoints(gameState: AppTypes.GameState): AppTypes.GameState {
          const { userStates, currentRat, activeWord } = gameState;
-         const rat = ArrOfObj.findObj(userStates, 'userId', currentRat);
+         const rat = ArrOfObj.getObj(userStates, 'userId', currentRat);
          const ratVoters = ArrOfObj.filterIn(userStates, 'votedFor', currentRat);
          const ratGuessedCorrectly = rat.guess === activeWord;
          const ratGotMostVotes = ratVoters.length > userStates.length / 2;
@@ -329,7 +317,7 @@ export namespace GameHelper {
          const { userStates } = gameState;
          const newRat = ArrOfObj.getRandItem(userStates).userId;
          const newWord = GameHelper.New.word(topicsData, topic);
-         const updatedUserStates = ArrOfObj.setAllValuesOfKeys(userStates, [
+         const updatedUserStates = ArrOfObj.setKeyValsInAllObjects(userStates, [
             { key: 'clue', value: '' },
             { key: 'guess', value: '' },
             { key: 'votedFor', value: '' },
@@ -358,7 +346,7 @@ export namespace GameHelper {
          const { userStates, activeTopic, currentRound } = gameState;
          const newRat = ArrOfObj.getRandItem(userStates).userId;
          const newWord = GameHelper.New.word(topicsData, activeTopic);
-         const updatedUserStates = ArrOfObj.setAllValuesOfKeys(userStates, [
+         const updatedUserStates = ArrOfObj.setKeyValsInAllObjects(userStates, [
             { key: 'clue', value: '' },
             { key: 'guess', value: '' },
             { key: 'votedFor', value: '' },
@@ -384,7 +372,7 @@ export namespace GameHelper {
          const newRat = ArrOfObj.getRandItem(userStates).userId;
          const { currentRound } = gameState;
          const newWord = GameHelper.New.word(topicsData, newTopic);
-         const updatedUserStates = ArrOfObj.setAllValuesOfKeys(userStates, [
+         const updatedUserStates = ArrOfObj.setKeyValsInAllObjects(userStates, [
             { key: 'clue', value: '' },
             { key: 'guess', value: '' },
             { key: 'votedFor', value: '' },
@@ -422,7 +410,7 @@ export namespace GameHelper {
          userId: string,
          keyVals: { key: T; value: AppTypes.UserState[T] }[],
       ): AppTypes.UserState[] {
-         const userState = ArrOfObj.findObj(userStates, 'userId', userId);
+         const userState = ArrOfObj.getObj(userStates, 'userId', userId);
          const userStatesWithoutUser = ArrOfObj.filterOut(userStates, 'userId', userId);
          const updatedUserState: typeof userState = JSON.parse(JSON.stringify(userState));
          keyVals.forEach((keyVal) => {

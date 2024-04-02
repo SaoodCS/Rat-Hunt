@@ -64,7 +64,7 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
          const topics = topicsData.flatMap((topic) => topic.key);
          if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return input.dropDownOptions;
          const dropDownOptions: IDropDownOptions['options'] = [];
-         const topicLabels = ArrayHelper.capFirstLetterOfWords(topics);
+         const topicLabels = ArrayHelper.toTitleCase(topics);
          for (let i = 0; i < topics.length; i++) {
             dropDownOptions.push({ value: topics[i], label: topicLabels[i] });
          }

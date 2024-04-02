@@ -38,7 +38,7 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
       if (!MiscHelper.isNotFalsyOrEmpty(roomDataFS)) return;
       const { gameState: gameStateFS } = roomDataFS;
       const { userStates: userStatesFS, currentRat: currentRatFS } = gameStateFS;
-      const thisUserInFS = ArrOfObj.findObj(userStatesFS, 'userId', userId);
+      const thisUserInFS = ArrOfObj.getObj(userStatesFS, 'userId', userId);
       if (!MiscHelper.isNotFalsyOrEmpty(thisUserInFS)) return;
       const { statusUpdatedAt, userStatus: currentUserStatus } = thisUserInFS;
       if (statusUpdatedAt !== functionExecutedAt) return;

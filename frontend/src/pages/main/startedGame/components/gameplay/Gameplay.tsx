@@ -71,11 +71,11 @@ export default function Gameplay(): JSX.Element {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
       const { userStates, currentRat, currentTurn } = gameState;
-      const ratUserState = ArrOfObj.findObj(userStates, 'userId', currentRat);
+      const ratUserState = ArrOfObj.getObj(userStates, 'userId', currentRat);
       if (!MiscHelper.isNotFalsyOrEmpty(ratUserState)) return;
       const isPlayerRat = currentRat === localDbUser;
-      const allCluesExist = ArrOfObj.isKeyInAllObjsNotValuedAs(userStates, 'clue', '');
-      const allVotesExist = ArrOfObj.isKeyInAllObjsNotValuedAs(userStates, 'votedFor', '');
+      const allCluesExist = !ArrOfObj.hasKeyVal(userStates, 'clue', '');
+      const allVotesExist = !ArrOfObj.hasKeyVal(userStates, 'votedFor', '');
       const ratHasGuessedWord = MiscHelper.isNotFalsyOrEmpty(ratUserState.guess);
       const currentTurnUserId = GameHelper.Get.currentTurnUserId(currentTurn);
       const isYourTurn = currentTurnUserId === localDbUser;
