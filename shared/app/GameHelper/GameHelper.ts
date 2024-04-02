@@ -13,7 +13,11 @@ export namespace GameHelper {
 
    export namespace New {
       export function word(topicsData: AppTypes.Topic[], activeTopic: string): string {
-         const words = ArrOfObj.getObj(topicsData, 'key', activeTopic).values;
+         const topic = Get.topic(activeTopic, topicsData);
+         if (!MiscHelper.isNotFalsyOrEmpty(topic)) {
+            throw new Error('Topic does not exist in topicsData.');
+         }
+         const words = topic.values;
          return ArrOfObj.getRandItem(words);
       }
 
@@ -31,13 +35,13 @@ export namespace GameHelper {
    export namespace Check {
       export function hasRatGuessed(gameState: AppTypes.GameState): boolean {
          const { currentRat, userStates } = gameState;
-         const ratUserState = ArrOfObj.getObj(userStates, 'userId', currentRat);
+         const ratUserState = Get.userState(currentRat, userStates);
          return ratUserState.guess !== '';
       }
 
       export function isRatGuessCorrect(gameState: AppTypes.GameState): boolean {
          const { activeWord, currentRat, userStates } = gameState;
-         const ratUserState = ArrOfObj.getObj(userStates, 'userId', currentRat);
+         const ratUserState = Get.userState(currentRat, userStates);
          return ratUserState.guess === activeWord;
       }
 
@@ -54,11 +58,19 @@ export namespace GameHelper {
    }
 
    export namespace Get {
+      export function topic(topicKey: string, topicsData: AppTypes.Topic[]): AppTypes.Topic {
+         const topic = ArrOfObj.getObj(topicsData, 'key', topicKey);
+         if (!MiscHelper.isNotFalsyOrEmpty(topic)) {
+            throw new Error('Topic does not exist in topicsData.');
+         }
+         return topic;
+      }
+
       export function topicWordsAndCells(
          topics: AppTypes.Topic[],
          activeTopic: string,
       ): GameHelper.I.WordCell[] {
-         const topicObj = ArrOfObj.getObj(topics, 'key', activeTopic);
+         const topicObj = Get.topic(activeTopic, topics);
          const words = topicObj.values;
          const sortedWords = ArrayHelper.sort(words);
          const words16 = sortedWords.slice(0, 16);
@@ -100,6 +112,17 @@ export namespace GameHelper {
          return sortedUsers[0];
       }
 
+      export function userState(
+         userId: string,
+         userStates: AppTypes.UserState[],
+      ): AppTypes.UserState {
+         const userState = ArrOfObj.getObj(userStates, 'userId', userId);
+         if (!MiscHelper.isNotFalsyOrEmpty(userState)) {
+            throw new Error('User does not exist in userStates.');
+         }
+         return userState;
+      }
+
       export function currentTurnUserId(currentTurn: string): string {
          return currentTurn.replace('.wordGuess', '');
       }
@@ -138,7 +161,7 @@ export namespace GameHelper {
          const allVotesSubmitted = finalVoteSubmission;
          const allCluesSubmitted = finalClueSubmission;
          const thisUserIsRat = currentRat === currentTurnUser;
-         const ratUserState = ArrOfObj.getObj(userStates, 'userId', currentRat);
+         const ratUserState = Get.userState(currentRat, userStates);
          const ratSubmittedGuess = ratUserState.guess !== '';
          if (ratSubmittedGuess) return '';
          if (thisUserIsRat) return sortedUserQueue[0];
@@ -176,10 +199,7 @@ export namespace GameHelper {
          const { currentTurn, userStates } = gameState;
          if (currentTurn === '') return 'roundSummary';
          const currentTurnUserId = GameHelper.Get.currentTurnUserId(currentTurn);
-         const currentTurnUserState = ArrOfObj.getObj(userStates, 'userId', currentTurnUserId);
-         if (!MiscHelper.isNotFalsyOrEmpty(currentTurnUserState)) {
-            throw new Error('Current turn is set to a user that does not exist in userStates.');
-         }
+         const currentTurnUserState = Get.userState(currentTurnUserId, userStates);
          const hasRatGuessed = GameHelper.Check.hasRatGuessed(gameState);
          if (currentTurnUserState.spectate) {
             // Spectating user's clue and votedFor values are already set to 'SKIP' for the round
@@ -198,7 +218,7 @@ export namespace GameHelper {
 
       export function ratGuess(gameState: AppTypes.GameState): string {
          const { currentRat, userStates } = gameState;
-         const ratUserState = ArrOfObj.getObj(userStates, 'userId', currentRat);
+         const ratUserState = Get.userState(currentRat, userStates);
          return ratUserState.guess;
       }
    }
@@ -282,8 +302,8 @@ export namespace GameHelper {
    export namespace SetGameState {
       export function userPoints(gameState: AppTypes.GameState): AppTypes.GameState {
          const { userStates, currentRat, activeWord } = gameState;
-         const rat = ArrOfObj.getObj(userStates, 'userId', currentRat);
-         const ratVoters = ArrOfObj.filterIn(userStates, 'votedFor', currentRat);
+         const rat = Get.userState(currentRat, userStates);
+         const ratVoters = ArrOfObj.getObjects(userStates, 'votedFor', currentRat);
          const ratGuessedCorrectly = rat.guess === activeWord;
          const ratGotMostVotes = ratVoters.length > userStates.length / 2;
          const updatedUserStates: AppTypes.UserState[] = userStates.map((userState) => {
@@ -410,7 +430,7 @@ export namespace GameHelper {
          userId: string,
          keyVals: { key: T; value: AppTypes.UserState[T] }[],
       ): AppTypes.UserState[] {
-         const userState = ArrOfObj.getObj(userStates, 'userId', userId);
+         const userState = Get.userState(userId, userStates);
          const userStatesWithoutUser = ArrOfObj.filterOut(userStates, 'userId', userId);
          const updatedUserState: typeof userState = JSON.parse(JSON.stringify(userState));
          keyVals.forEach((keyVal) => {

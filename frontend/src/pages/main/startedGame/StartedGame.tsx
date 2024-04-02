@@ -27,9 +27,7 @@ export default function StartedGame(): JSX.Element {
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
-      if (!MiscHelper.isNotFalsyOrEmpty(gameState)) return;
       const { userStates } = gameState;
-      if (!MiscHelper.isNotFalsyOrEmpty(userStates)) return;
       const thisUserState = ArrOfObj.getObj(userStates, 'userId', localDbUser);
       if (!MiscHelper.isNotFalsyOrEmpty(thisUserState)) return;
       if (thisUserState?.spectate === true) {
