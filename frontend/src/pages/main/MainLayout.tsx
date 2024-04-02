@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom';
+import BoolHelper from '../../../../shared/helpers/bool/BoolHelper';
 import { Body } from '../../global/components/app/layout/body/Body';
 import {
    Header,
@@ -11,7 +12,6 @@ import GameContextProvider from '../../global/context/game/GameContextProvider';
 import useThemeContext from '../../global/context/theme/hooks/useThemeContext';
 import HeaderHooks from '../../global/context/widget/header/hooks/HeaderHooks';
 import useHeaderContext from '../../global/context/widget/header/hooks/useHeaderContext';
-import BoolHelper from '../../global/helpers/dataTypes/bool/BoolHelper';
 
 export default function MainLayout(): JSX.Element {
    const { isDarkTheme } = useThemeContext();

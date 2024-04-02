@@ -1,8 +1,8 @@
 import * as admin from 'firebase-admin';
+import type AppTypes from '../../../../../shared/app/types/AppTypes';
 import * as serviceAccount from '../../../env/service-account-key.json';
-import type { IUserStates } from '../../helpers/FirebaseHelp';
-import { FBHelp, type IRoom } from '../../helpers/FirebaseHelp';
 import { addDummyUsersToRoom, baseDummyUser, generateDummyUsers } from './helpers/helpers';
+import FBConnect from '../../helpers/FirebaseConnect';
 
 if (!admin.apps.length) {
    admin.initializeApp({
@@ -11,16 +11,16 @@ if (!admin.apps.length) {
 }
 
 async function createDummyRoom(): Promise<void> {
-   const topics = await FBHelp.getTopics();
+   const topics = await FBConnect.getTopics();
    if (!topics) throw new Error('No topics found');
    const selectedTopic = topics[0].key;
    const selectedWord = topics[0].values[0];
-   const dummyUsers: IUserStates[] = generateDummyUsers(baseDummyUser, [
+   const dummyUsers: AppTypes.UserState[] = generateDummyUsers(baseDummyUser, [
       { userId: 'dummyUser2' },
       { userId: 'dummyUser3' },
       { userId: 'dummyUser4', spectate: true },
    ]);
-   const dummyRoom: IRoom = {
+   const dummyRoom: AppTypes.Room = {
       gameStarted: false,
       roomId: 'DUMMY',
       gameState: {

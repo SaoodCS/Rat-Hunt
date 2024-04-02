@@ -1,6 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
+import GameHelper from '../../../../../../../shared/GameHelper/GameHelper';
+import ArrOfObj from '../../../../../../../shared/helpers/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../../../../../../shared/helpers/miscHelper/MiscHelper';
 import Fader from '../../../../../global/components/lib/animation/fader/Fader';
 import AnimatedDots from '../../../../../global/components/lib/font/animatedDots/AnimatedDots';
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
@@ -8,11 +11,8 @@ import { FlexRowWrapper } from '../../../../../global/components/lib/positionMod
 import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../global/context/game/GameContext';
 import MyCSS from '../../../../../global/css/MyCSS';
-import ArrOfObj from '../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import DBConnect from '../../../../../global/database/DBConnect/DBConnect';
 import HTMLEntities from '../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
-import MiscHelper from '../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import DBConnect from '../../../../../global/utils/DBConnect/DBConnect';
-import GameHelper from '../../../../../global/utils/GameHelper/GameHelper';
 import ClueForm from './components/forms/clueForm/ClueForm';
 import RatVoteForm from './components/forms/ratVoteForm/RatVoteForm';
 import WordGuessForm from './components/forms/wordGuessForm/WordGuessForm';

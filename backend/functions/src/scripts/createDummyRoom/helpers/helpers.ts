@@ -1,6 +1,6 @@
-import type { IRoom, IUserStates } from '../../../helpers/FirebaseHelp';
+import type AppTypes from '../../../../../../shared/app/types/AppTypes';
 
-export const baseDummyUser: IUserStates = {
+export const baseDummyUser: AppTypes.UserState = {
    userStatus: 'connected',
    statusUpdatedAt: new Date().toISOString(),
    userId: 'dummyUser1',
@@ -13,25 +13,28 @@ export const baseDummyUser: IUserStates = {
 };
 
 export function createCopyOfDummyUser(
-   dummyUser: IUserStates,
-   changedFields: Partial<IUserStates>,
-): IUserStates {
+   dummyUser: AppTypes.UserState,
+   changedFields: Partial<AppTypes.UserState>,
+): AppTypes.UserState {
    const clone = JSON.parse(JSON.stringify(dummyUser));
    return Object.assign(clone, changedFields);
 }
 
 export function generateDummyUsers(
-   baseDummyUser: IUserStates,
-   usersWithChangedFields: Partial<IUserStates>[],
-): IUserStates[] {
+   baseDummyUser: AppTypes.UserState,
+   usersWithChangedFields: Partial<AppTypes.UserState>[],
+): AppTypes.UserState[] {
    const dummyUsersWithoutBase = usersWithChangedFields.map((changedFields) =>
       createCopyOfDummyUser(baseDummyUser, changedFields),
    );
    return [baseDummyUser, ...dummyUsersWithoutBase];
 }
 
-export function addDummyUsersToRoom(room: IRoom, dummyUsers: IUserStates[]): IRoom {
-   const userStatesFields: IUserStates[] = dummyUsers.map((user) => ({
+export function addDummyUsersToRoom(
+   room: AppTypes.Room,
+   dummyUsers: AppTypes.UserState[],
+): AppTypes.Room {
+   const userStatesFields: AppTypes.UserState[] = dummyUsers.map((user) => ({
       userId: user.userId,
       totalScore: user.totalScore,
       roundScores: user.roundScores,

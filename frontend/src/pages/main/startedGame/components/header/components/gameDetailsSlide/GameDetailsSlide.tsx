@@ -1,3 +1,4 @@
+import { SquareShareNodes } from '@styled-icons/fa-solid/SquareShareNodes';
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
@@ -6,10 +7,10 @@ import { GameContext } from '../../../../../../../global/context/game/GameContex
 import { ToastContext } from '../../../../../../../global/context/widget/toast/ToastContext';
 import MyCSS from '../../../../../../../global/css/MyCSS';
 import Color from '../../../../../../../global/css/colors';
+import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
 import HTMLEntities from '../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
+import Device from '../../../../../../../global/helpers/pwa/deviceHelper';
 import useScrollFader from '../../../../../../../global/hooks/useScrollFader';
-import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
-import { SquareShareNodes } from '@styled-icons/fa-solid/SquareShareNodes';
 import {
    GameDetailsContainer,
    GameDetailsItemWrapper,
@@ -18,7 +19,6 @@ import {
    RoomIDScoreboardItem,
    RoomIDScoreboardWrapper,
 } from '../../style/Style';
-import Device from '../../../../../../../global/helpers/pwa/deviceHelper';
 
 interface IGameHeaderDetails {
    label: string;

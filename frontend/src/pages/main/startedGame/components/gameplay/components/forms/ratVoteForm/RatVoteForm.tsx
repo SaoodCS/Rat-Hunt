@@ -1,18 +1,18 @@
 import { useContext, useEffect } from 'react';
+import GameHelper from '../../../../../../../../../../shared/GameHelper/GameHelper';
+import ArrOfObj from '../../../../../../../../../../shared/helpers/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../../../../../../../../../shared/helpers/miscHelper/MiscHelper';
+import ObjectHelper from '../../../../../../../../../../shared/helpers/objectHelper/ObjectHelper';
+import { N_Form } from '../../../../../../../../global/components/lib/form/N_Form';
 import type { IDropDownOptions } from '../../../../../../../../global/components/lib/form/dropDown/DropDownInput';
 import InputCombination from '../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
 import { StyledForm } from '../../../../../../../../global/components/lib/form/style/Style';
 import { GameContext } from '../../../../../../../../global/context/game/GameContext';
 import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
-import ArrOfObj from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
+import DBConnect from '../../../../../../../../global/database/DBConnect/DBConnect';
 import useForm from '../../../../../../../../global/hooks/useForm';
-import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect';
-import GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
 import { gameFormStyles, gameInputFieldStyles } from '../style/Style';
 import RatVoteFormClass from './class/RatVoteFormClass';
-import { N_Form } from '../../../../../../../../global/components/lib/form/N_Form';
-import ObjectHelper from '../../../../../../../../global/helpers/dataTypes/objectHelper/ObjectHelper';
 
 export default function RatVoteForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);

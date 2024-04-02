@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
+import ArrOfObj from '../../../../../../../../../shared/helpers/arrayOfObjects/arrayOfObjects';
 import { ArrowCircleLeftIcon } from '../../../../../../../global/components/lib/icons/arrows/ArrowCircleLeft';
 import { FlexCenterer } from '../../../../../../../global/components/lib/positionModifiers/centerers/FlexCenterer';
 import type { IProgressBarChartData } from '../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
@@ -10,8 +11,7 @@ import Scroller from '../../../../../../../global/components/lib/scroller/Scroll
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import useThemeContext from '../../../../../../../global/context/theme/hooks/useThemeContext';
 import MyCSS from '../../../../../../../global/css/MyCSS';
-import ArrOfObj from '../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
+import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
 import { ScoreboardContainer } from '../../style/Style';
 
 interface IScoreboardSlide {

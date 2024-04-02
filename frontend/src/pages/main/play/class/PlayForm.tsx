@@ -1,10 +1,10 @@
 import type { DocumentData, DocumentSnapshot } from 'firebase/firestore';
+import StringHelper from '../../../../../../shared/helpers/string/StringHelper';
 import { N_Form } from '../../../../global/components/lib/form/N_Form';
 import DropDownInput from '../../../../global/components/lib/form/dropDown/DropDownInput';
 import NumberLineInput from '../../../../global/components/lib/form/numberLine/NumberLineInp';
 import TextOrNumFieldInput from '../../../../global/components/lib/form/textOrNumber/TextOrNumFieldInput';
-import StringHelper from '../../../../global/helpers/dataTypes/string/StringHelper';
-import type DBConnect from '../../../../global/utils/DBConnect/DBConnect';
+import type AppTypes from '../../../../../../shared/app/types/AppTypes';
 
 export interface IPlayFormClass {
    name: string;
@@ -134,7 +134,7 @@ export default class PlayFormClass {
       if (!roomDocSnap.exists()) {
          return { roomId: 'Room does not exist' };
       }
-      const roomData = roomDocSnap.data() as DBConnect.FSDB.I.Room;
+      const roomData = roomDocSnap.data() as AppTypes.Room;
       const usernameTaken = roomData.gameState.userStates.some(
          (user) => user.userId.trim().toUpperCase() === form.name.trim().toUpperCase(),
       );

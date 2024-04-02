@@ -1,7 +1,7 @@
-import ArrayHelper from '../../helpers/dataTypes/arrayHelper/ArrayHelper';
-import ArrOfObj from '../../helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import MiscHelper from '../../helpers/dataTypes/miscHelper/MiscHelper';
-import type DBConnect from '../DBConnect/DBConnect';
+import type AppTypes from '../app/types/AppTypes';
+import ArrayHelper from '../helpers/arrayHelper/ArrayHelper';
+import ArrOfObj from '../helpers/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../helpers/miscHelper/MiscHelper';
 
 export namespace GameHelper {
    export namespace I {
@@ -12,7 +12,7 @@ export namespace GameHelper {
    }
 
    export namespace New {
-      export function word(topicsData: DBConnect.FSDB.I.Topic[], activeTopic: string): string {
+      export function word(topicsData: AppTypes.Topic[], activeTopic: string): string {
          const words = ArrOfObj.findObj(topicsData, 'key', activeTopic).values;
          return ArrOfObj.getRandItem(words);
       }
@@ -29,36 +29,33 @@ export namespace GameHelper {
    }
 
    export namespace Check {
-      export function hasRatGuessed(gameState: DBConnect.FSDB.I.GameState): boolean {
+      export function hasRatGuessed(gameState: AppTypes.GameState): boolean {
          const { currentRat, userStates } = gameState;
          const ratUserState = ArrOfObj.findObj(userStates, 'userId', currentRat);
          return ratUserState.guess !== '';
       }
 
-      export function isRatGuessCorrect(gameState: DBConnect.FSDB.I.GameState): boolean {
+      export function isRatGuessCorrect(gameState: AppTypes.GameState): boolean {
          const { activeWord, currentRat, userStates } = gameState;
          const ratUserState = ArrOfObj.findObj(userStates, 'userId', currentRat);
          return ratUserState.guess === activeWord;
       }
 
-      export function ratGotCaught(gameState: DBConnect.FSDB.I.GameState): boolean {
+      export function ratGotCaught(gameState: AppTypes.GameState): boolean {
          const { userStates, currentRat } = gameState;
          const userVotes: string[] = ArrOfObj.getArrOfValuesFromKey(userStates, 'votedFor');
          const mostRepeatedItems = ArrayHelper.findMostRepeatedItems(userVotes);
          return mostRepeatedItems.length === 1 && mostRepeatedItems.includes(currentRat);
       }
 
-      export function isUserInRoom(
-         userId: string,
-         userStates: DBConnect.FSDB.I.UserState[],
-      ): boolean {
+      export function isUserInRoom(userId: string, userStates: AppTypes.UserState[]): boolean {
          return ArrOfObj.hasKeyVal(userStates, 'userId', userId);
       }
    }
 
    export namespace Get {
       export function topicWordsAndCells(
-         topics: DBConnect.FSDB.I.Topic[],
+         topics: AppTypes.Topic[],
          activeTopic: string,
       ): GameHelper.I.WordCell[] {
          const topicObj = ArrOfObj.findObj(topics, 'key', activeTopic);
@@ -78,10 +75,7 @@ export namespace GameHelper {
          return wordsWithCellIds;
       }
 
-      export function sortedUserQueue(
-         roundNo: number,
-         userStates: DBConnect.FSDB.I.UserState[],
-      ): string[] {
+      export function sortedUserQueue(roundNo: number, userStates: AppTypes.UserState[]): string[] {
          const usersQueued: string[] = [];
          const usersLength = userStates.length;
          const users = ArrOfObj.getArrOfValuesFromKey(userStates, 'userId');
@@ -95,13 +89,13 @@ export namespace GameHelper {
 
       export function sortedUserStates(
          roundNo: number,
-         userStates: DBConnect.FSDB.I.UserState[],
-      ): DBConnect.FSDB.I.UserState[] {
+         userStates: AppTypes.UserState[],
+      ): AppTypes.UserState[] {
          const sortedUserIdQueue = Get.sortedUserQueue(roundNo, userStates);
          return ArrOfObj.orderByArrOfVals(userStates, 'userId', sortedUserIdQueue);
       }
 
-      export function firstUser(roundNo: number, userStates: DBConnect.FSDB.I.UserState[]): string {
+      export function firstUser(roundNo: number, userStates: AppTypes.UserState[]): string {
          const sortedUsers = Get.sortedUserQueue(roundNo, userStates);
          return sortedUsers[0];
       }
@@ -111,7 +105,7 @@ export namespace GameHelper {
       }
 
       export function nextTurnUserId(
-         gameState: DBConnect.FSDB.I.GameState,
+         gameState: AppTypes.GameState,
          currentTurnUser: string,
          type: 'votedFor' | 'clue' | 'guess' | 'leaveRoom',
          currentRat: string,
@@ -165,27 +159,27 @@ export namespace GameHelper {
          return updatedCurrentTurn;
       }
 
-      export function allUserIds(userStates: DBConnect.FSDB.I.UserState[]): string[] {
+      export function allUserIds(userStates: AppTypes.UserState[]): string[] {
          return ArrOfObj.getArrOfValuesFromKey(userStates, 'userId');
       }
 
-      export function disconnectedUserIds(userStates: DBConnect.FSDB.I.UserState[]): string[] {
+      export function disconnectedUserIds(userStates: AppTypes.UserState[]): string[] {
          const disconnectedUsers = ArrOfObj.filterOut(userStates, 'userStatus', 'connected');
          return ArrOfObj.getArrOfValuesFromKey(disconnectedUsers, 'userId');
       }
 
-      export function connectedUserIds(userStates: DBConnect.FSDB.I.UserState[]): string[] {
+      export function connectedUserIds(userStates: AppTypes.UserState[]): string[] {
          const connectedUsers = ArrOfObj.filterOut(userStates, 'userStatus', 'disconnected');
          return ArrOfObj.getArrOfValuesFromKey(connectedUsers, 'userId');
       }
 
-      export function spectatingUserIds(userStates: DBConnect.FSDB.I.UserState[]): string[] {
+      export function spectatingUserIds(userStates: AppTypes.UserState[]): string[] {
          const spectatingUsers = ArrOfObj.filterOut(userStates, 'spectate', false);
          return ArrOfObj.getArrOfValuesFromKey(spectatingUsers, 'userId');
       }
 
       export function gamePhase(
-         gameState: DBConnect.FSDB.I.GameState,
+         gameState: AppTypes.GameState,
       ): 'votedFor' | 'clue' | 'guess' | 'roundSummary' {
          const { currentTurn, userStates } = gameState;
          if (currentTurn === '') return 'roundSummary';
@@ -214,7 +208,7 @@ export namespace GameHelper {
          return 'guess';
       }
 
-      export function ratGuess(gameState: DBConnect.FSDB.I.GameState): string {
+      export function ratGuess(gameState: AppTypes.GameState): string {
          const { currentRat, userStates } = gameState;
          const ratUserState = ArrOfObj.findObj(userStates, 'userId', currentRat);
          return ratUserState.guess;
@@ -222,10 +216,10 @@ export namespace GameHelper {
    }
 
    export namespace SetRoomState {
-      export function keysVals<T extends keyof DBConnect.FSDB.I.Room>(
-         roomData: DBConnect.FSDB.I.Room,
-         keyVals: { key: T; value: DBConnect.FSDB.I.Room[T] }[],
-      ): DBConnect.FSDB.I.Room {
+      export function keysVals<T extends keyof AppTypes.Room>(
+         roomData: AppTypes.Room,
+         keyVals: { key: T; value: AppTypes.Room[T] }[],
+      ): AppTypes.Room {
          const updatedRoomData: typeof roomData = JSON.parse(JSON.stringify(roomData));
          keyVals.forEach((keyVal) => {
             updatedRoomData[keyVal.key] = keyVal.value;
@@ -238,7 +232,7 @@ export namespace GameHelper {
          hostUserId: string,
          topic: string,
          noOfRounds: number,
-      ): DBConnect.FSDB.I.Room {
+      ): AppTypes.Room {
          return {
             gameStarted: false,
             roomId: generatedRoomId,
@@ -266,13 +260,10 @@ export namespace GameHelper {
          };
       }
 
-      export function newUser(
-         roomData: DBConnect.FSDB.I.Room,
-         userId: string,
-      ): DBConnect.FSDB.I.Room {
+      export function newUser(roomData: AppTypes.Room, userId: string): AppTypes.Room {
          const { gameStarted, gameState } = roomData;
          const { userStates } = gameState;
-         const newUserState: DBConnect.FSDB.I.UserState = {
+         const newUserState: AppTypes.UserState = {
             userId,
             totalScore: 0,
             roundScores: [],
@@ -288,10 +279,7 @@ export namespace GameHelper {
          return { ...roomData, gameState: updatedGameState };
       }
 
-      export function removeUser(
-         roomData: DBConnect.FSDB.I.Room,
-         userId: string,
-      ): DBConnect.FSDB.I.Room {
+      export function removeUser(roomData: AppTypes.Room, userId: string): AppTypes.Room {
          const { gameState } = roomData;
          const { userStates } = gameState;
          const gameStateWithoutUser = GameHelper.SetGameState.keysVals(gameState, [
@@ -304,15 +292,13 @@ export namespace GameHelper {
    }
 
    export namespace SetGameState {
-      export function userPoints(
-         gameState: DBConnect.FSDB.I.GameState,
-      ): DBConnect.FSDB.I.GameState {
+      export function userPoints(gameState: AppTypes.GameState): AppTypes.GameState {
          const { userStates, currentRat, activeWord } = gameState;
          const rat = ArrOfObj.findObj(userStates, 'userId', currentRat);
          const ratVoters = ArrOfObj.filterIn(userStates, 'votedFor', currentRat);
          const ratGuessedCorrectly = rat.guess === activeWord;
          const ratGotMostVotes = ratVoters.length > userStates.length / 2;
-         const updatedUserStates: DBConnect.FSDB.I.UserState[] = userStates.map((userState) => {
+         const updatedUserStates: AppTypes.UserState[] = userStates.map((userState) => {
             let userPoints: number = 0;
             if (userState.userId === currentRat) {
                if (ratGuessedCorrectly) userPoints = userPoints + 1;
@@ -327,7 +313,7 @@ export namespace GameHelper {
                roundScores: [...userState.roundScores, userPoints],
             };
          });
-         const updatedGameState: DBConnect.FSDB.I.GameState = {
+         const updatedGameState: AppTypes.GameState = {
             ...gameState,
             userStates: updatedUserStates,
          };
@@ -335,11 +321,11 @@ export namespace GameHelper {
       }
 
       export function resetGame(
-         gameState: DBConnect.FSDB.I.GameState,
+         gameState: AppTypes.GameState,
          noOfRounds: number,
-         topicsData: DBConnect.FSDB.I.Topic[],
+         topicsData: AppTypes.Topic[],
          topic: string,
-      ): DBConnect.FSDB.I.GameState {
+      ): AppTypes.GameState {
          const { userStates } = gameState;
          const newRat = ArrOfObj.getRandItem(userStates).userId;
          const newWord = GameHelper.New.word(topicsData, topic);
@@ -352,7 +338,7 @@ export namespace GameHelper {
             { key: 'spectate', value: false },
          ]);
          const updatedCurrentTurn = GameHelper.Get.firstUser(1, userStates);
-         const updatedGameState: DBConnect.FSDB.I.GameState = {
+         const updatedGameState: AppTypes.GameState = {
             ...gameState,
             activeTopic: topic,
             activeWord: newWord,
@@ -366,9 +352,9 @@ export namespace GameHelper {
       }
 
       export function resetCurrentRound(
-         gameState: DBConnect.FSDB.I.GameState,
-         topicsData: DBConnect.FSDB.I.Topic[],
-      ): DBConnect.FSDB.I.GameState {
+         gameState: AppTypes.GameState,
+         topicsData: AppTypes.Topic[],
+      ): AppTypes.GameState {
          const { userStates, activeTopic, currentRound } = gameState;
          const newRat = ArrOfObj.getRandItem(userStates).userId;
          const newWord = GameHelper.New.word(topicsData, activeTopic);
@@ -379,7 +365,7 @@ export namespace GameHelper {
             { key: 'spectate', value: false },
          ]);
          const updatedCurrentTurn = GameHelper.Get.firstUser(currentRound, userStates);
-         const updatedGameState: DBConnect.FSDB.I.GameState = {
+         const updatedGameState: AppTypes.GameState = {
             ...gameState,
             activeWord: newWord,
             currentRat: newRat,
@@ -390,10 +376,10 @@ export namespace GameHelper {
       }
 
       export function nextRound(
-         gameState: DBConnect.FSDB.I.GameState,
-         topicsData: DBConnect.FSDB.I.Topic[],
+         gameState: AppTypes.GameState,
+         topicsData: AppTypes.Topic[],
          newTopic: string,
-      ): DBConnect.FSDB.I.GameState {
+      ): AppTypes.GameState {
          const { userStates } = gameState;
          const newRat = ArrOfObj.getRandItem(userStates).userId;
          const { currentRound } = gameState;
@@ -406,7 +392,7 @@ export namespace GameHelper {
          ]);
          const newRoundNo = currentRound + 1;
          const updatedCurrentTurn = GameHelper.Get.firstUser(newRoundNo, userStates);
-         const updatedGameState: DBConnect.FSDB.I.GameState = {
+         const updatedGameState: AppTypes.GameState = {
             ...gameState,
             activeTopic: newTopic,
             activeWord: newWord,
@@ -418,10 +404,10 @@ export namespace GameHelper {
          return updatedGameState;
       }
 
-      export function keysVals<T extends keyof DBConnect.FSDB.I.GameState>(
-         gameState: DBConnect.FSDB.I.GameState,
-         keyVals: { key: T; value: DBConnect.FSDB.I.GameState[T] }[],
-      ): DBConnect.FSDB.I.GameState {
+      export function keysVals<T extends keyof AppTypes.GameState>(
+         gameState: AppTypes.GameState,
+         keyVals: { key: T; value: AppTypes.GameState[T] }[],
+      ): AppTypes.GameState {
          const updatedGameState: typeof gameState = JSON.parse(JSON.stringify(gameState));
          keyVals.forEach((keyVal) => {
             updatedGameState[keyVal.key] = keyVal.value;
@@ -431,11 +417,11 @@ export namespace GameHelper {
    }
 
    export namespace SetUserStates {
-      export function updateUser<T extends keyof DBConnect.FSDB.I.UserState>(
-         userStates: DBConnect.FSDB.I.UserState[],
+      export function updateUser<T extends keyof AppTypes.UserState>(
+         userStates: AppTypes.UserState[],
          userId: string,
-         keyVals: { key: T; value: DBConnect.FSDB.I.UserState[T] }[],
-      ): DBConnect.FSDB.I.UserState[] {
+         keyVals: { key: T; value: AppTypes.UserState[T] }[],
+      ): AppTypes.UserState[] {
          const userState = ArrOfObj.findObj(userStates, 'userId', userId);
          const userStatesWithoutUser = ArrOfObj.filterOut(userStates, 'userId', userId);
          const updatedUserState: typeof userState = JSON.parse(JSON.stringify(userState));

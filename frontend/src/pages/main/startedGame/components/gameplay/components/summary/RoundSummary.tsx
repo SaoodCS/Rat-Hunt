@@ -1,13 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
+import MiscHelper from '../../../../../../../../../shared/helpers/miscHelper/MiscHelper';
 import { FlexColumnWrapper } from '../../../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import ConditionalRender from '../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import { ModalContext } from '../../../../../../../global/context/widget/modal/ModalContext';
 import MyCSS from '../../../../../../../global/css/MyCSS';
-import MiscHelper from '../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import DBConnect from '../../../../../../../global/utils/DBConnect/DBConnect';
+import Color from '../../../../../../../global/css/colors';
+import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
 import RoundEndForm from './components/form/RoundEndForm';
 import SummaryMarquee from './components/summaryMarquee/SummaryMarquee';
 import SummaryTable from './components/summaryTable/SummaryTable';
@@ -19,7 +20,6 @@ import {
    RoundSummaryTitle,
    SummaryTableWrapper,
 } from './style/Style';
-import Color from '../../../../../../../global/css/colors';
 
 export default function RoundSummary(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);

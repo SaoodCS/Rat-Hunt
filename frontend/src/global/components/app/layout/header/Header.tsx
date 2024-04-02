@@ -1,8 +1,8 @@
 import { ArrowIosBack } from '@styled-icons/evaicons-solid/ArrowIosBack';
 import styled from 'styled-components';
+import BoolHelper from '../../../../../../../shared/helpers/bool/BoolHelper';
 import MyCSS from '../../../../css/MyCSS';
 import Color from '../../../../css/colors';
-import BoolHelper from '../../../../helpers/dataTypes/bool/BoolHelper';
 
 export const Header = styled.div<{ isDarkTheme: boolean }>`
    position: fixed;

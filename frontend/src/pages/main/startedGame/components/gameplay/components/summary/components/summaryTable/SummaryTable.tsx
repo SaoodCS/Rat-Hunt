@@ -1,6 +1,15 @@
 import { useContext, useEffect, useState } from 'react';
+import type { FlattenSimpleInterpolation } from 'styled-components';
+import { css } from 'styled-components';
+import type AppTypes from '../../../../../../../../../../../shared/app/types/AppTypes';
+import ArrOfObj from '../../../../../../../../../../../shared/helpers/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../../../../../../../../../../shared/helpers/miscHelper/MiscHelper';
 import { TextColourizer } from '../../../../../../../../../global/components/lib/font/textColorizer/TextColourizer';
+import { GameContext } from '../../../../../../../../../global/context/game/GameContext';
+import MyCSS from '../../../../../../../../../global/css/MyCSS';
+import DBConnect from '../../../../../../../../../global/database/DBConnect/DBConnect';
 import HTMLEntities from '../../../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
+import useScrollFader from '../../../../../../../../../global/hooks/useScrollFader';
 import {
    TableBody,
    TableCell,
@@ -8,20 +17,12 @@ import {
    TableHead,
    TableRow,
 } from '../../../gameStateTable/style/Style';
-import { GameContext } from '../../../../../../../../../global/context/game/GameContext';
-import useScrollFader from '../../../../../../../../../global/hooks/useScrollFader';
-import DBConnect from '../../../../../../../../../global/utils/DBConnect/DBConnect';
-import MiscHelper from '../../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import ArrOfObj from '../../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import type { FlattenSimpleInterpolation } from 'styled-components';
-import { css } from 'styled-components';
-import MyCSS from '../../../../../../../../../global/css/MyCSS';
 
 export default function SummaryTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const { faderElRef, handleScroll } = useScrollFader([roomData], 1);
-   const [sortedUserStates, setSortedUserStates] = useState<DBConnect.FSDB.I.UserState[]>();
+   const [sortedUserStates, setSortedUserStates] = useState<AppTypes.UserState[]>();
 
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;

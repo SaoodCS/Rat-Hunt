@@ -1,8 +1,8 @@
 import { ArrowCircleRightOutline } from '@styled-icons/evaicons-outline/ArrowCircleRightOutline';
 import styled from 'styled-components';
+import BoolHelper from '../../../../../../../shared/helpers/bool/BoolHelper';
 import MyCSS from '../../../../css/MyCSS';
 import Color from '../../../../css/colors';
-import BoolHelper from '../../../../helpers/dataTypes/bool/BoolHelper';
 
 export const ArrowCircleRightIcon = styled(ArrowCircleRightOutline)<{
    darktheme: 'true' | 'false';

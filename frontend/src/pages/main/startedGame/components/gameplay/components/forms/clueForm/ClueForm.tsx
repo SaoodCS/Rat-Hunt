@@ -1,20 +1,20 @@
 import { Send } from '@styled-icons/ionicons-sharp/Send';
 import { useContext } from 'react';
+import GameHelper from '../../../../../../../../../../shared/GameHelper/GameHelper';
+import ArrayHelper from '../../../../../../../../../../shared/helpers/arrayHelper/ArrayHelper';
+import ArrOfObj from '../../../../../../../../../../shared/helpers/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../../../../../../../../../shared/helpers/miscHelper/MiscHelper';
 import { TextBtn } from '../../../../../../../../global/components/lib/button/textBtn/Style';
+import InputCombination from '../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
 import { StyledForm } from '../../../../../../../../global/components/lib/form/style/Style';
 import { GameContext } from '../../../../../../../../global/context/game/GameContext';
 import useThemeContext from '../../../../../../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import Color from '../../../../../../../../global/css/colors';
-import ArrayHelper from '../../../../../../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
-import ArrOfObj from '../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import MiscHelper from '../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
+import DBConnect from '../../../../../../../../global/database/DBConnect/DBConnect';
 import useForm from '../../../../../../../../global/hooks/useForm';
-import DBConnect from '../../../../../../../../global/utils/DBConnect/DBConnect';
-import GameHelper from '../../../../../../../../global/utils/GameHelper/GameHelper';
 import { gameFormStyles, gameInputFieldStyles } from '../style/Style';
 import ClueFormClass from './class/ClueFormClass';
-import InputCombination from '../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
 
 export default function ClueForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);

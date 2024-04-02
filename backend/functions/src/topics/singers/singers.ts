@@ -1,6 +1,6 @@
-import type ITopic from '../../helpers/FirebaseHelp';
+import type AppTypes from '../../../../../shared/app/types/AppTypes';
 
-export const singers: ITopic = {
+export const singers: AppTypes.Topic = {
    key: 'singers',
    values: [
       'Adele',

@@ -8,7 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useContext } from 'react';
 import useApiErrorContext from '../context/widget/apiError/hooks/useApiErrorContext';
 import { LoaderContext } from '../context/widget/loader/LoaderContext';
-import APIHelper from '../utils/ApiHelper/NApiHelper';
+import APIHelper from '../database/ApiHelper/NApiHelper';
 
 export function useCustomMutation<TData, TVariables>(
    mutationFn: MutationFunction<TData, TVariables>,

@@ -1,6 +1,6 @@
-import type ITopic from '../../helpers/FirebaseHelp';
+import type AppTypes from '../../../../../shared/app/types/AppTypes';
 
-export const countries: ITopic = {
+export const countries: AppTypes.Topic = {
    key: 'countries',
    values: [
       'Australia',

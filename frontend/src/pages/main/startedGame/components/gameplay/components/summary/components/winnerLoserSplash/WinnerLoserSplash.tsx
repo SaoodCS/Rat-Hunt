@@ -1,19 +1,19 @@
+import { ThumbsDown } from '@styled-icons/fa-regular/ThumbsDown';
+import { ThumbsUp } from '@styled-icons/fa-regular/ThumbsUp';
+import { UserSecret } from '@styled-icons/fa-solid/UserSecret';
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
+import type { StyledIcon } from 'styled-icons/types';
+import GameHelper from '../../../../../../../../../../../shared/GameHelper/GameHelper';
+import MiscHelper from '../../../../../../../../../../../shared/helpers/miscHelper/MiscHelper';
+import { TextColourizer } from '../../../../../../../../../global/components/lib/font/textColorizer/TextColourizer';
 import { FlexColumnWrapper } from '../../../../../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import ConditionalRender from '../../../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../../../../../global/context/game/GameContext';
 import MyCSS from '../../../../../../../../../global/css/MyCSS';
 import Color from '../../../../../../../../../global/css/colors';
-import MiscHelper from '../../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import DBConnect from '../../../../../../../../../global/utils/DBConnect/DBConnect';
-import GameHelper from '../../../../../../../../../global/utils/GameHelper/GameHelper';
-import { ThumbsUp } from '@styled-icons/fa-regular/ThumbsUp';
-import { ThumbsDown } from '@styled-icons/fa-regular/ThumbsDown';
-import type { StyledIcon } from 'styled-icons/types';
-import { UserSecret } from '@styled-icons/fa-solid/UserSecret';
-import { TextColourizer } from '../../../../../../../../../global/components/lib/font/textColorizer/TextColourizer';
+import DBConnect from '../../../../../../../../../global/database/DBConnect/DBConnect';
 
 export default function WinnerLoserSplash(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);

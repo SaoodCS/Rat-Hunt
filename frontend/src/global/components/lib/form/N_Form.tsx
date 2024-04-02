@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { Types } from '../../../helpers/types/Types';
+import type { Types } from '../../../../../../shared/types/Types';
 import CheckboxInput from './checkbox/Checkbox';
 import type { IDropDownOptions } from './dropDown/DropDownInput';
 import DropDownInput from './dropDown/DropDownInput';

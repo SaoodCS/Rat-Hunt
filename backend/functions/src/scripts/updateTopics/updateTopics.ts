@@ -1,6 +1,5 @@
 import * as admin from 'firebase-admin';
 import * as serviceAccount from '../../../env/service-account-key.json';
-import type ITopic from '../../helpers/FirebaseHelp';
 import { animals } from '../../topics/animals/animals';
 import { countries } from '../../topics/countries/countries';
 import { food } from '../../topics/food/food';
@@ -9,6 +8,7 @@ import { sports } from '../../topics/sports/sports';
 import { music } from '../../topics/musicGenres/musicGenres';
 import { singers } from '../../topics/singers/singers';
 import { clothing } from '../../topics/itemOfClothing/itemOfClothing';
+import type AppTypes from '../../../../../shared/app/types/AppTypes';
 
 if (!admin.apps.length) {
    admin.initializeApp({
@@ -16,7 +16,16 @@ if (!admin.apps.length) {
    });
 }
 
-const topics: ITopic[] = [animals, countries, movies, sports, food, music, clothing, singers];
+const topics: AppTypes.Topic[] = [
+   animals,
+   countries,
+   movies,
+   sports,
+   food,
+   music,
+   clothing,
+   singers,
+];
 
 async function updateTopics(): Promise<void> {
    const topicsRef = admin.firestore().collection('topics').doc('topics');

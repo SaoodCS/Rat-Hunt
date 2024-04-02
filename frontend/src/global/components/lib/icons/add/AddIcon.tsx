@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { Add } from 'styled-icons/fluentui-system-filled';
+import BoolHelper from '../../../../../../../shared/helpers/bool/BoolHelper';
 import MyCSS from '../../../../css/MyCSS';
 import Color from '../../../../css/colors';
-import BoolHelper from '../../../../helpers/dataTypes/bool/BoolHelper';
 
 export const AddIcon = styled(Add)<{ darktheme: 'true' | 'false' }>`
    ${MyCSS.Clickables.removeDefaultEffects};

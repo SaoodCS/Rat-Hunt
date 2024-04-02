@@ -1,8 +1,8 @@
 import { useContext } from 'react';
+import NumberHelper from '../../../../../../shared/helpers/number/NumberHelper';
 import { GameContext } from '../../../context/game/GameContext';
 import useThemeContext from '../../../context/theme/hooks/useThemeContext';
 import Color from '../../../css/colors';
-import NumberHelper from '../../../helpers/dataTypes/number/NumberHelper';
 import { LogoText } from '../../app/logo/LogoText';
 import type { ITooltipPositioning } from '../tooltip/Tooltip';
 import { BarAndInfoWrapper, BarAndPercentageWrapper, BarBackground, CompletedBar } from './Style';

@@ -1,8 +1,9 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { ArrayHelp } from './helpers/ArrayHelp';
-import { FBHelp } from './helpers/FirebaseHelp';
-import { MiscHelp } from './helpers/MiscHelp';
+import GameHelper from '../../../shared/GameHelper/GameHelper';
+import ArrOfObj from '../../../shared/helpers/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../../shared/helpers/miscHelper/MiscHelper';
+import FBConnect from './helpers/FirebaseConnect';
 
 const test = false;
 const thirtySeconds = 30000;
@@ -16,15 +17,15 @@ if (!admin.apps.length) {
 
 export const onDataChange = functions.database.ref('/').onWrite(async (change) => {
    const { before, after } = change;
-   const changedStatus = FBHelp.getChangedStatus(before.val(), after.val());
-   if (!MiscHelp.isNotFalsyOrEmpty(changedStatus)) return;
+   const changedStatus = FBConnect.getChangedStatus(before.val(), after.val());
+   if (!MiscHelper.isNotFalsyOrEmpty(changedStatus)) return;
    const { roomId, userId, userStatus } = changedStatus;
-   const { roomRefFS, roomRefRT, userRefRT } = FBHelp.getRefs(roomId, userId);
-   const roomData = await FBHelp.getRoomFromFS(roomRefFS);
-   if (!MiscHelp.isNotFalsyOrEmpty(roomData)) return;
+   const { roomRefFS, roomRefRT, userRefRT } = FBConnect.getRefs(roomId, userId);
+   const roomData = await FBConnect.getRoomFromFS(roomRefFS);
+   if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
    const userStates = roomData.gameState.userStates;
    const functionExecutedAt = new Date().toUTCString();
-   const updatedUserStates = FBHelp.updateUser(userStates, userId, [
+   const updatedUserStates = GameHelper.SetUserStates.updateUser(userStates, userId, [
       { key: 'userStatus', value: userStatus },
       { key: 'statusUpdatedAt', value: functionExecutedAt },
    ]);
@@ -33,33 +34,31 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
    // if userStatus is disconnected then set a timeout which will remove the user if it remains disconnected for 5 minutes
    if (userStatus !== 'disconnected') return;
    setTimeout(async () => {
-      const roomDataFS = await FBHelp.getRoomFromFS(roomRefFS);
-      if (!MiscHelp.isNotFalsyOrEmpty(roomDataFS)) return;
-      const thisUserInFS = ArrayHelp.getObj(roomDataFS.gameState.userStates, 'userId', userId);
-      if (!MiscHelp.isNotFalsyOrEmpty(thisUserInFS)) return;
+      const roomDataFS = await FBConnect.getRoomFromFS(roomRefFS);
+      if (!MiscHelper.isNotFalsyOrEmpty(roomDataFS)) return;
+      const { gameState: gameStateFS } = roomDataFS;
+      const { userStates: userStatesFS, currentRat: currentRatFS } = gameStateFS;
+      const thisUserInFS = ArrOfObj.findObj(userStatesFS, 'userId', userId);
+      if (!MiscHelper.isNotFalsyOrEmpty(thisUserInFS)) return;
       const { statusUpdatedAt, userStatus: currentUserStatus } = thisUserInFS;
       if (statusUpdatedAt !== functionExecutedAt) return;
       if (currentUserStatus !== 'disconnected') return;
-      if (roomDataFS.gameState.userStates.length <= 1) {
+      if (userStatesFS.length <= 1) {
          await roomRefFS.delete();
          await roomRefRT.remove();
          return;
       }
-      const userStatesFS = roomDataFS.gameState.userStates;
-      const userStatesWithoutLeavingUser = ArrayHelp.filterOut(userStatesFS, 'userId', userId);
-      const { currentRat } = roomDataFS.gameState;
-      const topics = await FBHelp.getTopics();
-      const isRat = currentRat === userId;
-      const isRoundSummaryPhase = FBHelp.gamePhase(roomDataFS.gameState) === 'roundSummary';
-      let updatedGameState: typeof roomDataFS.gameState;
+      const gameStateWithoutUser = GameHelper.SetGameState.keysVals(gameStateFS, [
+         { key: 'userStates', value: ArrOfObj.filterOut(userStatesFS, 'userId', userId) },
+      ]);
+      const isRat = currentRatFS === userId;
+      const isRoundSummaryPhase = GameHelper.Get.gamePhase(gameStateFS) === 'roundSummary';
+      let updatedGameState: typeof gameStateFS;
       if (isRat && !isRoundSummaryPhase) {
-         updatedGameState = FBHelp.resetRoundGameState(
-            roomDataFS.gameState,
-            userStatesWithoutLeavingUser,
-            topics,
-         );
+         const topics = await FBConnect.getTopics();
+         updatedGameState = GameHelper.SetGameState.resetCurrentRound(gameStateWithoutUser, topics);
       } else {
-         updatedGameState = { ...roomDataFS.gameState, userStates: userStatesWithoutLeavingUser };
+         updatedGameState = gameStateWithoutUser;
       }
       await roomRefFS.update({ gameState: updatedGameState });
       await userRefRT.remove();

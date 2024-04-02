@@ -5,6 +5,9 @@ import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
+import GameHelper from '../../../../../shared/GameHelper/GameHelper';
+import MiscHelper from '../../../../../shared/helpers/miscHelper/MiscHelper';
+import StringHelper from '../../../../../shared/helpers/string/StringHelper';
 import AnimatedDots from '../../../global/components/lib/font/animatedDots/AnimatedDots';
 import { TextColourizer } from '../../../global/components/lib/font/textColorizer/TextColourizer';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
@@ -16,11 +19,8 @@ import { BannerContext } from '../../../global/context/widget/banner/BannerConte
 import { ToastContext } from '../../../global/context/widget/toast/ToastContext';
 import MyCSS from '../../../global/css/MyCSS';
 import Color from '../../../global/css/colors';
-import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import StringHelper from '../../../global/helpers/dataTypes/string/StringHelper';
+import DBConnect from '../../../global/database/DBConnect/DBConnect';
 import Device from '../../../global/helpers/pwa/deviceHelper';
-import DBConnect from '../../../global/utils/DBConnect/DBConnect';
-import GameHelper from '../../../global/utils/GameHelper/GameHelper';
 import {
    ItemLabel,
    ItemValue,

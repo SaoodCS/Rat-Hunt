@@ -4,14 +4,15 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import type AppTypes from '../../../../../shared/app/types/AppTypes';
+import MiscHelper from '../../../../../shared/helpers/miscHelper/MiscHelper';
 import GuideAndLeaveRoom from '../../../pages/main/components/GuideAndLeaveRoom';
-import { firestore } from '../../config/firebase/config';
-import MiscHelper from '../../helpers/dataTypes/miscHelper/MiscHelper';
+import { firestore } from '../../database/config/config';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import DBConnect from '../../utils/DBConnect/DBConnect';
-import GameHelper from '../../utils/GameHelper/GameHelper';
+import DBConnect from '../../database/DBConnect/DBConnect';
 import useHeaderContext from '../widget/header/hooks/useHeaderContext';
 import { GameContext } from './GameContext';
+import GameHelper from '../../../../../shared/GameHelper/GameHelper';
 
 interface IGameContextProvider {
    children: ReactNode;
@@ -45,7 +46,7 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
          );
          const unsubscribe = onSnapshot(docRef, (doc) => {
             const docExists = doc.exists();
-            const roomData = doc?.data() as DBConnect.FSDB.I.Room | undefined;
+            const roomData = doc?.data() as AppTypes.Room | undefined;
             const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
             const isUserInRoom = GameHelper.Check.isUserInRoom(
                localDbUser,

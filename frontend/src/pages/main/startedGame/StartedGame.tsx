@@ -1,12 +1,14 @@
 import { useContext, useEffect } from 'react';
+import ArrOfObj from '../../../../../shared/helpers/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../../../../shared/helpers/miscHelper/MiscHelper';
+import { Wrapper } from '../../../global/components/lib/positionModifiers/wrapper/Style';
 import { GameContext } from '../../../global/context/game/GameContext';
 import { ModalContext } from '../../../global/context/widget/modal/ModalContext';
 import { SplashScreenContext } from '../../../global/context/widget/splashScreen/SplashScreenContext';
-import ArrOfObj from '../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import MiscHelper from '../../../global/helpers/dataTypes/miscHelper/MiscHelper';
-import DBConnect from '../../../global/utils/DBConnect/DBConnect';
+import DBConnect from '../../../global/database/DBConnect/DBConnect';
 import Gameplay from './components/gameplay/Gameplay';
 import GameHeader from './components/header/GameHeader';
+import RatOrPlayerSplash from './components/ratOrPlayerSplash/RatOrPlayerSplash';
 import TopicBoard from './components/topicBoard/TopicBoard';
 import {
    GameHeaderWrapper,
@@ -14,8 +16,6 @@ import {
    GameplayWrapper,
    TopicBoardWrapper,
 } from './style/Style';
-import RatOrPlayerSplash from './components/ratOrPlayerSplash/RatOrPlayerSplash';
-import { Wrapper } from '../../../global/components/lib/positionModifiers/wrapper/Style';
 
 export default function StartedGame(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);

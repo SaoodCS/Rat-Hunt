@@ -1,16 +1,17 @@
 import { useContext } from 'react';
+import GameHelper from '../../../../../../../../../../../shared/GameHelper/GameHelper';
+import type AppTypes from '../../../../../../../../../../../shared/app/types/AppTypes';
+import ArrayHelper from '../../../../../../../../../../../shared/helpers/arrayHelper/ArrayHelper';
+import ArrOfObj from '../../../../../../../../../../../shared/helpers/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../../../../../../../../../../shared/helpers/miscHelper/MiscHelper';
 import { StaticButton } from '../../../../../../../../../global/components/lib/button/staticButton/Style';
 import type { IDropDownOptions } from '../../../../../../../../../global/components/lib/form/dropDown/DropDownInput';
 import InputCombination from '../../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
 import { StyledForm } from '../../../../../../../../../global/components/lib/form/style/Style';
 import { GameContext } from '../../../../../../../../../global/context/game/GameContext';
 import useApiErrorContext from '../../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
-import ArrayHelper from '../../../../../../../../../global/helpers/dataTypes/arrayHelper/ArrayHelper';
-import ArrOfObj from '../../../../../../../../../global/helpers/dataTypes/arrayOfObjects/arrayOfObjects';
-import MiscHelper from '../../../../../../../../../global/helpers/dataTypes/miscHelper/MiscHelper';
+import DBConnect from '../../../../../../../../../global/database/DBConnect/DBConnect';
 import useForm from '../../../../../../../../../global/hooks/useForm';
-import DBConnect from '../../../../../../../../../global/utils/DBConnect/DBConnect';
-import GameHelper from '../../../../../../../../../global/utils/GameHelper/GameHelper';
 import RoundEndFormClass from './class/RoundEndFormClass';
 
 interface IRoundEndForm {
@@ -38,7 +39,7 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
       if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
       const { gameState } = roomData;
       const { newTopic, noOfRounds } = form;
-      let updatedGameState: DBConnect.FSDB.I.GameState;
+      let updatedGameState: AppTypes.GameState;
       if (isLastRound) {
          updatedGameState = GameHelper.SetGameState.resetGame(
             gameState,

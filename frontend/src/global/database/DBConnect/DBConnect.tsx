@@ -8,60 +8,15 @@ import { useQuery } from '@tanstack/react-query';
 import type { DatabaseReference } from 'firebase/database';
 import { onDisconnect, ref, remove, set } from 'firebase/database';
 import { collection, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
-import { firebaseRTDB, firestore } from '../../config/firebase/config';
-import ArrOfObj from '../../helpers/dataTypes/arrayOfObjects/arrayOfObjects';
+import type AppTypes from '../../../../../shared/app/types/AppTypes';
+import ArrOfObj from '../../../../../shared/helpers/arrayOfObjects/arrayOfObjects';
 import { useCustomMutation } from '../../hooks/useCustomMutation';
 import APIHelper from '../ApiHelper/NApiHelper';
+import { firebaseRTDB, firestore } from '../config/config';
 
 export namespace DBConnect {
    /* -- FIRESTORE DB -- */
    export namespace FSDB {
-      // -- INTERFACES -- //
-      export namespace I {
-         export interface Topic {
-            key: string;
-            values: [
-               string,
-               string,
-               string,
-               string,
-               string,
-               string,
-               string,
-               string,
-               string,
-               string,
-               string,
-               string,
-            ];
-         }
-         export interface Room {
-            gameStarted: boolean;
-            roomId: string;
-            gameState: {
-               activeTopic: string;
-               activeWord: string;
-               currentRat: string;
-               currentRound: number;
-               currentTurn: string;
-               numberOfRoundsSet: number;
-               userStates: {
-                  userId: string;
-                  totalScore: number;
-                  roundScores: number[];
-                  clue: string;
-                  guess: string;
-                  votedFor: string;
-                  spectate: boolean;
-                  userStatus: 'connected' | 'disconnected';
-                  statusUpdatedAt: string;
-               }[];
-            };
-         }
-         export type UserState = Room['gameState']['userStates'][0];
-         export type GameState = Room['gameState'];
-      }
-
       // -- CONSTANTS -- //
       export const CONSTS = {
          ROOM_DOC_PREFIX: 'room-',
@@ -78,13 +33,13 @@ export namespace DBConnect {
       export namespace Get {
          export function room(
             roomId: string,
-            options: UseQueryOptions<I.Room> = {},
-         ): UseQueryResult<I.Room, unknown> {
+            options: UseQueryOptions<AppTypes.Room> = {},
+         ): UseQueryResult<AppTypes.Room, unknown> {
             return useQuery({
                queryKey: [CONSTS.QUERY_KEYS.GET_ROOM],
-               queryFn: async (): Promise<I.Room> => {
+               queryFn: async (): Promise<AppTypes.Room> => {
                   try {
-                     if (roomId === '') return {} as I.Room;
+                     if (roomId === '') return {} as AppTypes.Room;
                      const docRef = doc(
                         firestore,
                         CONSTS.GAME_COLLECTION,
@@ -92,7 +47,7 @@ export namespace DBConnect {
                      );
                      const docSnap = await getDoc(docRef);
                      if (docSnap.exists()) {
-                        return docSnap.data() as I.Room;
+                        return docSnap.data() as AppTypes.Room;
                      }
                      throw new APIHelper.ErrorThrower('Error: Document Does Not Exist');
                   } catch (e) {
@@ -104,11 +59,11 @@ export namespace DBConnect {
          }
 
          export function topics(
-            options: UseQueryOptions<I.Topic[]> = {},
-         ): UseQueryResult<I.Topic[], unknown> {
+            options: UseQueryOptions<AppTypes.Topic[]> = {},
+         ): UseQueryResult<AppTypes.Topic[], unknown> {
             return useQuery({
                queryKey: [CONSTS.QUERY_KEYS.GET_TOPICS],
-               queryFn: async (): Promise<I.Topic[]> => {
+               queryFn: async (): Promise<AppTypes.Topic[]> => {
                   try {
                      const docRef = doc(firestore, CONSTS.TOPICS_COLLECTION, CONSTS.TOPICS_DOC);
                      const docSnap = await getDoc(docRef);
@@ -151,12 +106,12 @@ export namespace DBConnect {
       // -- SET MUTATIONS -- //
       export namespace Set {
          export function room(
-            options: UseMutationOptions<void, unknown, I.Room>,
+            options: UseMutationOptions<void, unknown, AppTypes.Room>,
             showLoader = true,
-         ): UseMutationResult<void, unknown, I.Room, void> {
+         ): UseMutationResult<void, unknown, AppTypes.Room, void> {
             // NOTE: I got rid of the updateDoc version of this and just replaced it's calls with this one (when debugging, check if this causes any issues)
             return useCustomMutation(
-               async (roomData: I.Room) => {
+               async (roomData: AppTypes.Room) => {
                   try {
                      const docRef = doc(
                         firestore,
@@ -174,7 +129,7 @@ export namespace DBConnect {
          }
 
          interface ISetGameState {
-            gameState: I.GameState;
+            gameState: AppTypes.GameState;
             roomId: string;
          }
          export function gameState(
@@ -203,7 +158,7 @@ export namespace DBConnect {
 
       export namespace Delete {
          interface IDeleteUser {
-            roomData: I.Room;
+            roomData: AppTypes.Room;
             userId: string;
          }
          export function user(

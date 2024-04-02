@@ -1,0 +1,13 @@
+{
+   "compilerOptions": {
+      "module": "commonjs",
+      "outDir": "lib",
+      "sourceMap": true,
+      "strict": true,
+      "target": "es2017",
+      "resolveJsonModule": true
+   },
+   "compileOnSave": true,
+   // include everything from the root directory:
+   "include": ["**/*"],
+}

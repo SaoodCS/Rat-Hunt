@@ -1,6 +1,6 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import NumberHelper from '../../helpers/dataTypes/number/NumberHelper';
+import NumberHelper from '../../../../shared/helpers/number/NumberHelper';
 
 export default class GlobalConfig {
    static queryClient = new QueryClient({

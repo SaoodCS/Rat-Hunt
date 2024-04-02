@@ -1,8 +1,8 @@
 import { DotsHorizontalRounded } from '@styled-icons/boxicons-regular/DotsHorizontalRounded';
 import styled from 'styled-components';
+import BoolHelper from '../../../../../../../shared/helpers/bool/BoolHelper';
 import MyCSS from '../../../../css/MyCSS';
 import Color from '../../../../css/colors';
-import BoolHelper from '../../../../helpers/dataTypes/bool/BoolHelper';
 
 export const HorizontalMenuDots = styled(DotsHorizontalRounded)<{ darktheme: 'true' | 'false' }>`
    ${MyCSS.Clickables.removeDefaultEffects};
