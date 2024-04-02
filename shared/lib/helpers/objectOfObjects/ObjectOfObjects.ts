@@ -1,4 +1,3 @@
-/* eslint-disable no-plusplus */
 export default class ObjectOfObjects {
    // When using this function, pass through the type/interface of the object you expect to be returned in the angular brackets
    public static findObjFromUniqueVal<T>(

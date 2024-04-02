@@ -1,7 +1,7 @@
-import type AppTypes from '../app/types/AppTypes';
-import ArrayHelper from '../helpers/arrayHelper/ArrayHelper';
-import ArrOfObj from '../helpers/arrayOfObjects/arrayOfObjects';
-import MiscHelper from '../helpers/miscHelper/MiscHelper';
+import ArrayHelper from '../../lib/helpers/arrayHelper/ArrayHelper';
+import ArrOfObj from '../../lib/helpers/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../lib/helpers/miscHelper/MiscHelper';
+import type AppTypes from '../types/AppTypes';
 
 export namespace GameHelper {
    export namespace I {

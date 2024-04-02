@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
-import GameHelper from '../../../../../../../../../shared/GameHelper/GameHelper';
 import type AppTypes from '../../../../../../../../../shared/app/types/AppTypes';
-import MiscHelper from '../../../../../../../../../shared/helpers/miscHelper/MiscHelper';
 import Scroller from '../../../../../../../global/components/lib/scroller/Scroller';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import MyCSS from '../../../../../../../global/css/MyCSS';
 import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
 import { TableBody, TableCell, TableContainer, TableHead, TableRow } from './style/Style';
+import MiscHelper from '../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
+import GameHelper from '../../../../../../../../../shared/app/GameHelper/GameHelper';
 
 export default function GameStateTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);

@@ -1,8 +1,8 @@
 import { RefreshCircle } from '@styled-icons/ionicons-outline/RefreshCircle';
 import styled from 'styled-components';
-import BoolHelper from '../../../../../../../shared/helpers/bool/BoolHelper';
 import MyCSS from '../../../../css/MyCSS';
 import Color from '../../../../css/colors';
+import BoolHelper from '../../../../../../../shared/lib/helpers/bool/BoolHelper';
 
 export const RefreshCircleIcon = styled(RefreshCircle)<{ darktheme: 'true' | 'false' }>`
    ${MyCSS.Clickables.removeDefaultEffects};

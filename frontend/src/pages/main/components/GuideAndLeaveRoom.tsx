@@ -6,8 +6,6 @@ import type { DatabaseReference } from 'firebase/database';
 import { onDisconnect, ref } from 'firebase/database';
 import { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import ArrOfObj from '../../../../../shared/helpers/arrayOfObjects/arrayOfObjects';
-import MiscHelper from '../../../../../shared/helpers/miscHelper/MiscHelper';
 import { firebaseRTDB } from '../../../global/database/config/config';
 import { GameContext } from '../../../global/context/game/GameContext';
 import { ModalContext } from '../../../global/context/widget/modal/ModalContext';
@@ -15,7 +13,9 @@ import { ToastContext } from '../../../global/context/widget/toast/ToastContext'
 import Device from '../../../global/helpers/pwa/deviceHelper';
 import DBConnect from '../../../global/database/DBConnect/DBConnect';
 import HelpGuide from './HelpGuide';
-import GameHelper from '../../../../../shared/GameHelper/GameHelper';
+import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
+import ArrOfObj from '../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
+import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
 
 interface IGuideAndLeaveRoom {
    currentPath: string;

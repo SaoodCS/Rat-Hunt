@@ -8,6 +8,5 @@
       "resolveJsonModule": true
    },
    "compileOnSave": true,
-   // include everything from the root directory:
-   "include": ["**/*"],
+   "include": ["../**/*"],
 }

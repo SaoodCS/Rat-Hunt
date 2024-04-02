@@ -2,8 +2,6 @@ import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
 import type AppTypes from '../../../../../../../../../../../shared/app/types/AppTypes';
-import ArrOfObj from '../../../../../../../../../../../shared/helpers/arrayOfObjects/arrayOfObjects';
-import MiscHelper from '../../../../../../../../../../../shared/helpers/miscHelper/MiscHelper';
 import { TextColourizer } from '../../../../../../../../../global/components/lib/font/textColorizer/TextColourizer';
 import { GameContext } from '../../../../../../../../../global/context/game/GameContext';
 import MyCSS from '../../../../../../../../../global/css/MyCSS';
@@ -17,6 +15,8 @@ import {
    TableHead,
    TableRow,
 } from '../../../gameStateTable/style/Style';
+import ArrOfObj from '../../../../../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 
 export default function SummaryTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);

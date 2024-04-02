@@ -1,7 +1,7 @@
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import styled, { css, keyframes } from 'styled-components';
 import Color from '../../../../../../../../global/css/colors';
-import type GameHelper from '../../../../../../../../../../shared/GameHelper/GameHelper';
+import type GameHelper from '../../../../../../../../../../shared/app/GameHelper/GameHelper';
 
 const flash = keyframes`
    0% {

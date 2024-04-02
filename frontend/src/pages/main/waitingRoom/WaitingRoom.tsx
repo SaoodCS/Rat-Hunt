@@ -5,9 +5,6 @@ import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
-import GameHelper from '../../../../../shared/GameHelper/GameHelper';
-import MiscHelper from '../../../../../shared/helpers/miscHelper/MiscHelper';
-import StringHelper from '../../../../../shared/helpers/string/StringHelper';
 import AnimatedDots from '../../../global/components/lib/font/animatedDots/AnimatedDots';
 import { TextColourizer } from '../../../global/components/lib/font/textColorizer/TextColourizer';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
@@ -29,6 +26,9 @@ import {
    UserListItemContainer,
    WaitingRoomTitle,
 } from './style/Style';
+import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
+import StringHelper from '../../../../../shared/lib/helpers/string/StringHelper';
+import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
 
 const MIN_PLAYERS = 1;
 

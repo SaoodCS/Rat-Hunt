@@ -1,8 +1,4 @@
 import { useContext, useEffect } from 'react';
-import GameHelper from '../../../../../../../../../../shared/GameHelper/GameHelper';
-import ArrOfObj from '../../../../../../../../../../shared/helpers/arrayOfObjects/arrayOfObjects';
-import MiscHelper from '../../../../../../../../../../shared/helpers/miscHelper/MiscHelper';
-import ObjectHelper from '../../../../../../../../../../shared/helpers/objectHelper/ObjectHelper';
 import { N_Form } from '../../../../../../../../global/components/lib/form/N_Form';
 import type { IDropDownOptions } from '../../../../../../../../global/components/lib/form/dropDown/DropDownInput';
 import InputCombination from '../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
@@ -13,6 +9,10 @@ import DBConnect from '../../../../../../../../global/database/DBConnect/DBConne
 import useForm from '../../../../../../../../global/hooks/useForm';
 import { gameFormStyles, gameInputFieldStyles } from '../style/Style';
 import WordGuessFormClass from './class/WordGuessFormClass';
+import ArrOfObj from '../../../../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
+import ObjectHelper from '../../../../../../../../../../shared/lib/helpers/objectHelper/ObjectHelper';
+import GameHelper from '../../../../../../../../../../shared/app/GameHelper/GameHelper';
 
 export default function WordGuessForm(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);

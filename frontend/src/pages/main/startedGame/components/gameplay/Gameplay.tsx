@@ -1,9 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
-import GameHelper from '../../../../../../../shared/GameHelper/GameHelper';
-import ArrOfObj from '../../../../../../../shared/helpers/arrayOfObjects/arrayOfObjects';
-import MiscHelper from '../../../../../../../shared/helpers/miscHelper/MiscHelper';
 import Fader from '../../../../../global/components/lib/animation/fader/Fader';
 import AnimatedDots from '../../../../../global/components/lib/font/animatedDots/AnimatedDots';
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
@@ -19,6 +16,9 @@ import WordGuessForm from './components/forms/wordGuessForm/WordGuessForm';
 import GameStateTable from './components/gameStateTable/GameStateTable';
 import RoundSummary from './components/summary/RoundSummary';
 import { CurrentTurnAndFormWrapper, FormContainer, GameStateTableWrapper } from './style/Style';
+import MiscHelper from '../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
+import ArrOfObj from '../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
+import GameHelper from '../../../../../../../shared/app/GameHelper/GameHelper';
 
 export default function Gameplay(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);

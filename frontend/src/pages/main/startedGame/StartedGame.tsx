@@ -1,6 +1,4 @@
 import { useContext, useEffect } from 'react';
-import ArrOfObj from '../../../../../shared/helpers/arrayOfObjects/arrayOfObjects';
-import MiscHelper from '../../../../../shared/helpers/miscHelper/MiscHelper';
 import { Wrapper } from '../../../global/components/lib/positionModifiers/wrapper/Style';
 import { GameContext } from '../../../global/context/game/GameContext';
 import { ModalContext } from '../../../global/context/widget/modal/ModalContext';
@@ -16,6 +14,8 @@ import {
    GameplayWrapper,
    TopicBoardWrapper,
 } from './style/Style';
+import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
+import ArrOfObj from '../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 
 export default function StartedGame(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);

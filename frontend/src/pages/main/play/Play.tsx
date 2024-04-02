@@ -3,9 +3,6 @@ import { doc, getDoc } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { css, type FlattenSimpleInterpolation } from 'styled-components';
-import ArrayHelper from '../../../../../shared/helpers/arrayHelper/ArrayHelper';
-import ArrOfObj from '../../../../../shared/helpers/arrayOfObjects/arrayOfObjects';
-import MiscHelper from '../../../../../shared/helpers/miscHelper/MiscHelper';
 import LogoFader from '../../../global/components/app/logo/LogoFader';
 import { StaticButton } from '../../../global/components/lib/button/staticButton/Style';
 import OfflineFetch from '../../../global/components/lib/fetch/offlineFetch/offlineFetch';
@@ -22,7 +19,10 @@ import useForm from '../../../global/hooks/useForm';
 import DBConnect from '../../../global/database/DBConnect/DBConnect';
 import PlayFormClass from './class/PlayForm';
 import type AppTypes from '../../../../../shared/app/types/AppTypes';
-import GameHelper from '../../../../../shared/GameHelper/GameHelper';
+import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
+import ArrayHelper from '../../../../../shared/lib/helpers/arrayHelper/ArrayHelper';
+import ArrOfObj from '../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
+import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
 
 export default function Play(): JSX.Element {
    const { apiError } = useApiErrorContext();

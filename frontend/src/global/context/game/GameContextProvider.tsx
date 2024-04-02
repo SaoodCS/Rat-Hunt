@@ -5,14 +5,14 @@ import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import type AppTypes from '../../../../../shared/app/types/AppTypes';
-import MiscHelper from '../../../../../shared/helpers/miscHelper/MiscHelper';
 import GuideAndLeaveRoom from '../../../pages/main/components/GuideAndLeaveRoom';
 import { firestore } from '../../database/config/config';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import DBConnect from '../../database/DBConnect/DBConnect';
 import useHeaderContext from '../widget/header/hooks/useHeaderContext';
 import { GameContext } from './GameContext';
-import GameHelper from '../../../../../shared/GameHelper/GameHelper';
+import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
+import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
 
 interface IGameContextProvider {
    children: ReactNode;

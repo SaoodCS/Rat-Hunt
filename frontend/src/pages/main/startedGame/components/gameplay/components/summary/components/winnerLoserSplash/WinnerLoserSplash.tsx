@@ -5,8 +5,6 @@ import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
 import type { StyledIcon } from 'styled-icons/types';
-import GameHelper from '../../../../../../../../../../../shared/GameHelper/GameHelper';
-import MiscHelper from '../../../../../../../../../../../shared/helpers/miscHelper/MiscHelper';
 import { TextColourizer } from '../../../../../../../../../global/components/lib/font/textColorizer/TextColourizer';
 import { FlexColumnWrapper } from '../../../../../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import ConditionalRender from '../../../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
@@ -14,6 +12,8 @@ import { GameContext } from '../../../../../../../../../global/context/game/Game
 import MyCSS from '../../../../../../../../../global/css/MyCSS';
 import Color from '../../../../../../../../../global/css/colors';
 import DBConnect from '../../../../../../../../../global/database/DBConnect/DBConnect';
+import MiscHelper from '../../../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
+import GameHelper from '../../../../../../../../../../../shared/app/GameHelper/GameHelper';
 
 export default function WinnerLoserSplash(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);

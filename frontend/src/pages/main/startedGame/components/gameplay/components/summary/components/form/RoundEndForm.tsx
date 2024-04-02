@@ -1,9 +1,5 @@
 import { useContext } from 'react';
-import GameHelper from '../../../../../../../../../../../shared/GameHelper/GameHelper';
 import type AppTypes from '../../../../../../../../../../../shared/app/types/AppTypes';
-import ArrayHelper from '../../../../../../../../../../../shared/helpers/arrayHelper/ArrayHelper';
-import ArrOfObj from '../../../../../../../../../../../shared/helpers/arrayOfObjects/arrayOfObjects';
-import MiscHelper from '../../../../../../../../../../../shared/helpers/miscHelper/MiscHelper';
 import { StaticButton } from '../../../../../../../../../global/components/lib/button/staticButton/Style';
 import type { IDropDownOptions } from '../../../../../../../../../global/components/lib/form/dropDown/DropDownInput';
 import InputCombination from '../../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
@@ -13,6 +9,10 @@ import useApiErrorContext from '../../../../../../../../../global/context/widget
 import DBConnect from '../../../../../../../../../global/database/DBConnect/DBConnect';
 import useForm from '../../../../../../../../../global/hooks/useForm';
 import RoundEndFormClass from './class/RoundEndFormClass';
+import MiscHelper from '../../../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
+import ArrayHelper from '../../../../../../../../../../../shared/lib/helpers/arrayHelper/ArrayHelper';
+import ArrOfObj from '../../../../../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
+import GameHelper from '../../../../../../../../../../../shared/app/GameHelper/GameHelper';
 
 interface IRoundEndForm {
    isLastRound: boolean;

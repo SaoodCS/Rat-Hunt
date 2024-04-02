@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { createContext } from 'react';
 import type { SetValue } from '../../hooks/useLocalStorage';
-import type GameHelper from '../../../../../shared/GameHelper/GameHelper';
+import type GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
 
 export interface IGameContext {
    localDbRoom: string;

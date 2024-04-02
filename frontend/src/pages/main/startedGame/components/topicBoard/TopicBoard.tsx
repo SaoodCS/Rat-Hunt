@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
-import type GameHelper from '../../../../../../../shared/GameHelper/GameHelper';
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { GameContext } from '../../../../../global/context/game/GameContext';
 import MyCSS from '../../../../../global/css/MyCSS';
 import DBConnect from '../../../../../global/database/DBConnect/DBConnect';
 import { BoardCell, BoardContainer, BoardRow, CellValue } from './style/Style';
+import type GameHelper from '../../../../../../../shared/app/GameHelper/GameHelper';
 
 export default function TopicBoard(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);

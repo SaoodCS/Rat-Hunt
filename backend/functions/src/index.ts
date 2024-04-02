@@ -1,9 +1,9 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import GameHelper from '../../../shared/GameHelper/GameHelper';
-import ArrOfObj from '../../../shared/helpers/arrayOfObjects/arrayOfObjects';
-import MiscHelper from '../../../shared/helpers/miscHelper/MiscHelper';
 import FBConnect from './helpers/FirebaseConnect';
+import MiscHelper from '../../../shared/lib/helpers/miscHelper/MiscHelper';
+import ArrOfObj from '../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
+import GameHelper from '../../../shared/app/GameHelper/GameHelper';
 
 const test = false;
 const thirtySeconds = 30000;

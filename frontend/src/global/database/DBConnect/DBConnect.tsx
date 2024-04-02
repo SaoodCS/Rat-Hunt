@@ -9,10 +9,10 @@ import type { DatabaseReference } from 'firebase/database';
 import { onDisconnect, ref, remove, set } from 'firebase/database';
 import { collection, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
 import type AppTypes from '../../../../../shared/app/types/AppTypes';
-import ArrOfObj from '../../../../../shared/helpers/arrayOfObjects/arrayOfObjects';
 import { useCustomMutation } from '../../hooks/useCustomMutation';
 import APIHelper from '../ApiHelper/NApiHelper';
 import { firebaseRTDB, firestore } from '../config/config';
+import ArrOfObj from '../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 
 export namespace DBConnect {
    /* -- FIRESTORE DB -- */

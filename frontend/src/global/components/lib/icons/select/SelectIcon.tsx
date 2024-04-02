@@ -1,8 +1,8 @@
 import { MultiSelect } from '@styled-icons/octicons/MultiSelect';
 import styled from 'styled-components';
-import BoolHelper from '../../../../../../../shared/helpers/bool/BoolHelper';
 import MyCSS from '../../../../css/MyCSS';
 import Color from '../../../../css/colors';
+import BoolHelper from '../../../../../../../shared/lib/helpers/bool/BoolHelper';
 
 export const SelectIcon = styled(MultiSelect)<{
    darktheme: 'true' | 'false';
