@@ -1,4 +1,4 @@
-export default class ObjectOfObjects {
+export default class ObjOfObjects {
    // When using this function, pass through the type/interface of the object you expect to be returned in the angular brackets
    public static findObjFromUniqueVal<T>(
       obj: { [key: string]: T | Record<string, unknown> },
