@@ -2,6 +2,7 @@ import * as admin from 'firebase-admin';
 import type { Reference } from 'firebase-admin/database';
 import type { DocumentReference } from 'firebase-admin/firestore';
 import type AppTypes from '../../../../shared/app/types/AppTypes';
+import * as functions from 'firebase-functions';
 
 interface IChangeDetails {
    fullPath: string;
@@ -20,10 +21,14 @@ export namespace FBConnect {
       originalValue: T,
       newValue: T,
       path = '',
-   ): IChangeDetails {
+   ): IChangeDetails | null {
+      log('BEFORE: ', originalValue);
+      log('AFTER: ', newValue);
+
       for (const key in newValue) {
          if (typeof newValue[key] === 'object') {
             const currentPath = path ? `${path}/${key}` : key;
+            if (!originalValue[key]) return null;
             const result = FBConnect.getChangedStatus(
                originalValue[key],
                newValue[key],
@@ -44,7 +49,7 @@ export namespace FBConnect {
             }
          }
       }
-      return null as unknown as IChangeDetails;
+      return null;
    }
 
    export function getRefs(
@@ -71,6 +76,11 @@ export namespace FBConnect {
    export async function getTopics(): Promise<AppTypes.Topic[]> {
       const topicsSnapshot = await admin.firestore().collection('topics').doc('topics').get();
       return topicsSnapshot.data()?.topics as AppTypes.Topic[];
+   }
+
+   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   export function log(...args: any[]): void {
+      functions.logger.log(...args);
    }
 }
 

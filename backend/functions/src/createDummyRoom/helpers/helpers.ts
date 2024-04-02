@@ -1,4 +1,4 @@
-import type AppTypes from '../../../../../../shared/app/types/AppTypes';
+import type AppTypes from '../../../../../shared/app/types/AppTypes';
 
 export const baseDummyUser: AppTypes.UserState = {
    userStatus: 'connected',

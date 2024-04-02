@@ -5,7 +5,7 @@ import MiscHelper from '../../../shared/lib/helpers/miscHelper/MiscHelper';
 import ArrOfObj from '../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 import GameHelper from '../../../shared/app/GameHelper/GameHelper';
 
-const test = false;
+const test = true;
 const thirtySeconds = 30000;
 const fiveMinutes = 300000;
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -40,8 +40,8 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
       const { userStates: userStatesFS, currentRat: currentRatFS } = gameStateFS;
       const thisUserInFS = ArrOfObj.getObj(userStatesFS, 'userId', userId);
       if (!MiscHelper.isNotFalsyOrEmpty(thisUserInFS)) return;
-      const { statusUpdatedAt, userStatus: currentUserStatus } = thisUserInFS;
-      if (statusUpdatedAt !== functionExecutedAt) return;
+      const { statusUpdatedAt: statusUpdatedAtFS, userStatus: currentUserStatus } = thisUserInFS;
+      if (statusUpdatedAtFS !== functionExecutedAt) return;
       if (currentUserStatus !== 'disconnected') return;
       if (userStatesFS.length <= 1) {
          await roomRefFS.delete();

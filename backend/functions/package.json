@@ -6,7 +6,8 @@
       "serve": "npm run build && firebase emulators:start --only functions",
       "shell": "npm run build && firebase functions:shell",
       "start": "npm run shell",
-      "deploy": "firebase deploy --only functions --project rat-hunt",
+      "del-lib-old": "node src/global/scripts/delOldLib.mjs",
+      "deploy": "npm run del-lib-old && firebase deploy --only functions --project rat-hunt",
       "logs": "firebase functions:log",
       "ts-errors": "tsc --noEmit --pretty",
       "lint": "eslint . --ignore-pattern functions/lib",
@@ -17,13 +18,13 @@
    "engines": {
       "node": "16"
    },
-   "main": "lib/src/index.js",
+   "main": "lib/backend/functions/src/index.js",
    "dependencies": {
       "firebase-admin": "^11.5.0",
       "firebase-functions": "^4.2.0"
    },
    "devDependencies": {
-      "typescript": "^4.9.0",
+      "@types/fs-extra": "^11.0.4",
       "@typescript-eslint/eslint-plugin": "^6.2.1",
       "@typescript-eslint/parser": "^6.2.1",
       "eslint": "^8.47.0",
@@ -33,7 +34,9 @@
       "eslint-plugin-prettier": "^5.0.0",
       "eslint-plugin-security": "^1.7.1",
       "eslint-plugin-unused-imports": "^3.0.0",
-      "firebase-functions-test": "^3.0.0"
+      "firebase-functions-test": "^3.0.0",
+      "fs-extra": "^11.2.0",
+      "typescript": "^4.9.0"
    },
    "private": true
 }

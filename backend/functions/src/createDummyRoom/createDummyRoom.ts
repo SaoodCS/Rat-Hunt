@@ -1,8 +1,8 @@
 import * as admin from 'firebase-admin';
-import type AppTypes from '../../../../../shared/app/types/AppTypes';
-import * as serviceAccount from '../../../env/service-account-key.json';
 import { addDummyUsersToRoom, baseDummyUser, generateDummyUsers } from './helpers/helpers';
-import FBConnect from '../../helpers/FirebaseConnect';
+import FBConnect from '../helpers/FirebaseConnect';
+import type AppTypes from '../../../../shared/app/types/AppTypes';
+import * as serviceAccount from '../../env/service-account-key.json';
 
 if (!admin.apps.length) {
    admin.initializeApp({

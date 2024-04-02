@@ -12,7 +12,7 @@
     "shared-lint": "cd shared && npm run lint",
     "app-lint": "concurrently \"npm run f-lint\" \"npm run b-lint\" \"npm run shared-lint\" --success all --prefix-colors \"bgRed.bold,bgGreen.bold,bgYellow.bold\" --group --names \"FRONTEND,BACKEND,SHARED\"",
     "f-deploy": "cd frontend && npm run deploy",
-    "b-deploy": "cd backend && firebase deploy",
+    "b-deploy": "cd backend/functions && npm run deploy",
     "app-deploy": "npm run f-deploy && npm run b-deploy",
     "git-prune-remote": "git remote update origin --prune",
     "git-prune-local": "npx git-removed-branches --prune --force",
