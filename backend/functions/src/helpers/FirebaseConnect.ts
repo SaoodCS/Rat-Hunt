@@ -1,55 +1,76 @@
 import * as admin from 'firebase-admin';
 import type { Reference } from 'firebase-admin/database';
 import type { DocumentReference } from 'firebase-admin/firestore';
-import type AppTypes from '../../../../shared/app/types/AppTypes';
 import * as functions from 'firebase-functions';
+import type AppTypes from '../../../../shared/app/types/AppTypes';
+import MiscHelper from '../../../../shared/lib/helpers/miscHelper/MiscHelper';
 
-interface IChangeDetails {
+export interface IChangeDetails {
    fullPath: string;
    roomId: AppTypes.Room['roomId'];
    userId: AppTypes.UserState['userId'];
    userStatus: AppTypes.UserState['userStatus'];
 }
 
-interface NestedObject {
-   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   [key: string]: NestedObject | any;
+interface PathAndChangedVal {
+   path: string;
+   changedVal: string;
 }
 
-export namespace FBConnect {
-   export function getChangedStatus<T extends NestedObject>(
-      originalValue: T,
-      newValue: T,
-      path = '',
-   ): IChangeDetails | null {
-      log('BEFORE: ', originalValue);
-      log('AFTER: ', newValue);
+type Obj = { [key: string]: Obj | string };
 
-      for (const key in newValue) {
-         if (typeof newValue[key] === 'object') {
-            const currentPath = path ? `${path}/${key}` : key;
-            if (!originalValue[key]) return null;
-            const result = FBConnect.getChangedStatus(
-               originalValue[key],
-               newValue[key],
-               currentPath,
-            );
-            if (result) return result;
-         } else {
-            if (originalValue[key] !== newValue[key]) {
-               const changedPath = path ? `${path}/${key}` : key;
-               const roomId = changedPath.split('/')[1];
-               const userId = changedPath.split('/')[2];
-               return {
-                  fullPath: changedPath,
-                  roomId,
-                  userId,
-                  userStatus: newValue[key],
-               };
+export namespace FBConnect {
+   // eslint-disable-next-line unused-imports/no-unused-vars
+   export function compare(
+      beforeObj: Obj | null | undefined,
+      afterObj: Obj | null | undefined,
+   ): PathAndChangedVal[] | null {
+      log('BEFORE: ', beforeObj);
+      log('AFTER: ', afterObj);
+      const beforeObjCopy = !MiscHelper.isNotFalsyOrEmpty(beforeObj) ? {} : beforeObj;
+      if (!MiscHelper.isNotFalsyOrEmpty(afterObj)) return null;
+      const changes: PathAndChangedVal[] = [];
+      function findChanges(before: Obj, after: Obj, path: string): void {
+         for (const key in after) {
+            if (typeof after[key] === 'object' && after[key] !== null) {
+               const nextPath = path ? `${path}.${key}` : key;
+               if (!(key in before)) {
+                  findChanges({}, after[key] as Obj, nextPath);
+               } else if (typeof before[key] === 'object' && before[key] !== null) {
+                  findChanges(before[key] as Obj, after[key] as Obj, nextPath);
+               } else if (before[key] !== after[key]) {
+                  changes.push({
+                     path: nextPath.replace(/\./g, '/'),
+                     changedVal: after[key] as string,
+                  });
+               }
+            } else if (!(key in before) || before[key] !== after[key]) {
+               const nextPath = path ? `${path}.${key}` : key;
+               changes.push({
+                  path: nextPath.replace(/\./g, '/'),
+                  changedVal: after[key] as string,
+               });
             }
          }
       }
-      return null;
+      findChanges(beforeObjCopy, afterObj, '');
+      const isChangesEmpty = !MiscHelper.isNotFalsyOrEmpty(changes);
+      log('CHANGES: ', isChangesEmpty ? null : changes);
+      return isChangesEmpty ? null : changes;
+   }
+
+   export function getChangeDetails(changes: PathAndChangedVal): IChangeDetails {
+      const path = changes.path.split('/');
+      const roomId = path[1];
+      const userId = path[2];
+      const changeDetails = {
+         fullPath: changes.path,
+         roomId,
+         userId,
+         userStatus: changes.changedVal as AppTypes.UserState['userStatus'],
+      };
+      log('CHANGE DETAILS: ', changeDetails);
+      return changeDetails;
    }
 
    export function getRefs(

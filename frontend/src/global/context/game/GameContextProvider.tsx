@@ -2,17 +2,18 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { doc, onSnapshot } from 'firebase/firestore';
 import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
 import type AppTypes from '../../../../../shared/app/types/AppTypes';
+import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import GuideAndLeaveRoom from '../../../pages/main/components/GuideAndLeaveRoom';
+import DBConnect from '../../database/DBConnect/DBConnect';
 import { firestore } from '../../database/config/config';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import DBConnect from '../../database/DBConnect/DBConnect';
+import { DeviceContext } from '../device/DeviceContext';
 import useHeaderContext from '../widget/header/hooks/useHeaderContext';
 import { GameContext } from './GameContext';
-import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
-import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
 
 interface IGameContextProvider {
    children: ReactNode;
@@ -23,8 +24,9 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
    const [activeTopicWords, setActiveTopicWords] = useState<GameHelper.I.WordCell[]>([]);
    const [localDbUser, setLocalDbUser] = useLocalStorage(DBConnect.Local.STORAGE_KEYS.USER, '');
    const [localDbRoom, setLocalDbRoom] = useLocalStorage(DBConnect.Local.STORAGE_KEYS.ROOM, '');
-   const { data: roomData, isLoading } = DBConnect.FSDB.Get.room(localDbRoom);
+   const { data: roomData, isLoading, refetch } = DBConnect.FSDB.Get.room(localDbRoom);
    const { data: topicsData } = DBConnect.FSDB.Get.topics();
+   const { isInForeground } = useContext(DeviceContext);
    const [initialRender, setInitialRender] = useState(true);
    const { setHeaderRightElement } = useHeaderContext();
    const navigation = useNavigate();
@@ -81,6 +83,22 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
          setActiveTopicWords(activeTopicWords);
       }
    }, [roomData?.gameState?.activeWord, topicsData]);
+
+   // TODO add on the front-end that on refocusing the window, set the userStatus back to 'connected' in realtime db
+   // useEffect(() => {
+   // This useEffect sets the userStatus back to "connected" when the user re-focuses the pwa after being in the background
+   // TODO: need to test if this updates and deletes correctly in realtime db I NEED TO DO THIS TOMORROW
+   // TODO: NEED TO FIX THIS FOREGROUNDING TOMORROW - AT THE MOMENT THE PROBLEM IS THAT THE ONDISCONNECT FOREGROUND LISTENER ISNT CANCELLED SO IT RE-ADDS THE USER IF THEY RE-OPEN THE APP AND THE ROOM NO LONGER EXISTS
+   //    if (isInForeground && !isLoading && !initialRender) {
+   //       const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
+   //       const localDbUserInRoom = GameHelper.Check.isUserInRoom(
+   //          localDbUser,
+   //          roomData?.gameState?.userStates || [],
+   //       );
+   //       if (!(roomDataExists && localDbUserInRoom)) return;
+   //       DBConnect.RTDB.Set.userStatus(localDbUser, roomData.roomId);
+   //    }
+   // }, [isInForeground, roomData]);
 
    useEffect(() => {
       // This useEffect runs only once after the app finishes it's first attempt to fetch the roomData from firestore
