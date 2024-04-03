@@ -24,7 +24,7 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
    const [activeTopicWords, setActiveTopicWords] = useState<GameHelper.I.WordCell[]>([]);
    const [localDbUser, setLocalDbUser] = useLocalStorage(DBConnect.Local.STORAGE_KEYS.USER, '');
    const [localDbRoom, setLocalDbRoom] = useLocalStorage(DBConnect.Local.STORAGE_KEYS.ROOM, '');
-   const { data: roomData, isLoading } = DBConnect.FSDB.Get.room(localDbRoom);
+   const { data: roomData, isLoading, refetch } = DBConnect.FSDB.Get.room(localDbRoom);
    const { data: topicsData } = DBConnect.FSDB.Get.topics({ retry: 3 });
    const { isInForeground } = useContext(DeviceContext);
    const [initialRender, setInitialRender] = useState(true);
@@ -69,7 +69,7 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
             unsubscribe();
          };
       }
-   }, [localDbRoom]);
+   }, [localDbRoom, isInForeground]);
 
    useEffect(() => {
       const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
@@ -109,6 +109,18 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
          navigation('/main/play', { replace: true });
       }
    }, [isLoading]);
+
+   useEffect(() => {
+      if (isInForeground) {
+         if (MiscHelper.isNotFalsyOrEmpty(roomData) && MiscHelper.isNotFalsyOrEmpty(localDbUser)) {
+            DBConnect.RTDB.Get.userStatus(localDbUser, localDbRoom).then((userStatus): void => {
+               if (userStatus === 'disconnected') {
+                  DBConnect.RTDB.Set.userStatus(localDbUser, localDbRoom);
+               }
+            });
+         }
+      }
+   }, [isInForeground]);
 
    return (
       <GameContext.Provider

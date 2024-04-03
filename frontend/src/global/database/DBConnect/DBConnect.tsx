@@ -6,13 +6,13 @@ import type {
 } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
 import type { DatabaseReference } from 'firebase/database';
-import { onDisconnect, ref, remove, set } from 'firebase/database';
+import { get, onDisconnect, ref, remove, set } from 'firebase/database';
 import { collection, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
 import type AppTypes from '../../../../../shared/app/types/AppTypes';
+import ArrOfObj from '../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 import { useCustomMutation } from '../../hooks/useCustomMutation';
 import APIHelper from '../ApiHelper/NApiHelper';
 import { firebaseRTDB, firestore } from '../config/config';
-import ArrOfObj from '../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 
 export namespace DBConnect {
    /* -- FIRESTORE DB -- */
@@ -237,6 +237,26 @@ export namespace DBConnect {
             await onDisconnect(userStatusRef).set({
                userStatus: 'disconnected',
             });
+         }
+      }
+
+      export namespace Get {
+         export async function userStatus(userId: string, roomId: string): Promise<string> {
+            if (!userId || !roomId) {
+               console.error('User ID or Room not available.');
+               return '';
+            }
+            const userStatusRef: DatabaseReference = ref(
+               firebaseRTDB,
+               `/rooms/${roomId}/${userId}`,
+            );
+            const userSnap = await get(userStatusRef);
+            if (!userSnap.exists()) {
+               console.error('User does not exist in the room.');
+               return '';
+            }
+            const userData = userSnap.val() as { userStatus: string };
+            return userData.userStatus;
          }
       }
 
