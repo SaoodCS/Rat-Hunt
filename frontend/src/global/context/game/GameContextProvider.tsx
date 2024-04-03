@@ -69,7 +69,7 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
             unsubscribe();
          };
       }
-   }, [localDbRoom, isInForeground]);
+   }, [localDbRoom, isInForeground]); // these dependency arrays run the cleanup function when the localDbRoom changes or the app goes to the foreground before a new event listener is created
 
    useEffect(() => {
       const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
