@@ -15,6 +15,11 @@ export default defineConfig(({ mode }) => {
    }
 
    return {
+      server: {
+         fs: {
+            allow: ['..'],
+         },
+      },
       esbuild: buildOptions(),
       plugins: [
          react(),

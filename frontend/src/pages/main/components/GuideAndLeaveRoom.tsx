@@ -6,16 +6,16 @@ import type { DatabaseReference } from 'firebase/database';
 import { onDisconnect, ref } from 'firebase/database';
 import { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { firebaseRTDB } from '../../../global/database/config/config';
+import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
+import ArrOfObj from '../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import { GameContext } from '../../../global/context/game/GameContext';
 import { ModalContext } from '../../../global/context/widget/modal/ModalContext';
 import { ToastContext } from '../../../global/context/widget/toast/ToastContext';
-import Device from '../../../global/helpers/pwa/deviceHelper';
 import DBConnect from '../../../global/database/DBConnect/DBConnect';
+import { firebaseRTDB } from '../../../global/database/config/config';
+import Device from '../../../global/helpers/pwa/deviceHelper';
 import HelpGuide from './HelpGuide';
-import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
-import ArrOfObj from '../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
-import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
 
 interface IGuideAndLeaveRoom {
    currentPath: string;
@@ -75,12 +75,16 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
       const roomDataWithoutUser = GameHelper.SetRoomState.removeUser(roomData, localDbUser);
-      const { gameState } = roomDataWithoutUser;
-      const gamePhase = GameHelper.Get.gamePhase(gameState);
-      let updatedGameState: typeof gameState;
+      const { gameState: gameStateWithUser } = roomData;
+      const { gameState: gameStateWithoutUser } = roomDataWithoutUser;
+      const gamePhase = GameHelper.Get.gamePhase(gameStateWithUser);
+      let updatedGameState: typeof gameStateWithoutUser;
       if (gamePhase !== 'roundSummary') {
-         updatedGameState = GameHelper.SetGameState.resetCurrentRound(gameState, topicsData);
-      } else updatedGameState = gameState;
+         updatedGameState = GameHelper.SetGameState.resetCurrentRound(
+            gameStateWithoutUser,
+            topicsData,
+         );
+      } else updatedGameState = gameStateWithoutUser;
       const updatedRoomState = GameHelper.SetRoomState.keysVals(roomData, [
          { key: 'gameState', value: updatedGameState },
       ]);

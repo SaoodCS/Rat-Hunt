@@ -34,15 +34,14 @@ export namespace GameHelper {
 
    export namespace Check {
       export function hasRatGuessed(gameState: AppTypes.GameState): boolean {
-         const { currentRat, userStates } = gameState;
-         const ratUserState = Get.userState(currentRat, userStates);
-         return ratUserState.guess !== '';
+         const ratsGuess = Get.ratGuess(gameState);
+         return ratsGuess !== '';
       }
 
       export function isRatGuessCorrect(gameState: AppTypes.GameState): boolean {
-         const { activeWord, currentRat, userStates } = gameState;
-         const ratUserState = Get.userState(currentRat, userStates);
-         return ratUserState.guess === activeWord;
+         const { activeWord } = gameState;
+         const ratGuess = Get.ratGuess(gameState);
+         return ratGuess === activeWord;
       }
 
       export function ratGotCaught(gameState: AppTypes.GameState): boolean {
@@ -117,6 +116,7 @@ export namespace GameHelper {
          userStates: AppTypes.UserState[],
       ): AppTypes.UserState {
          const userState = ArrOfObj.getObj(userStates, 'userId', userId);
+         console.log(userState);
          if (!MiscHelper.isNotFalsyOrEmpty(userState)) {
             throw new Error('User does not exist in userStates.');
          }
@@ -161,8 +161,7 @@ export namespace GameHelper {
          const allVotesSubmitted = finalVoteSubmission;
          const allCluesSubmitted = finalClueSubmission;
          const thisUserIsRat = currentRat === currentTurnUser;
-         const ratUserState = Get.userState(currentRat, userStates);
-         const ratSubmittedGuess = ratUserState.guess !== '';
+         const ratSubmittedGuess = Check.hasRatGuessed(gameState);
          if (ratSubmittedGuess) return '';
          if (thisUserIsRat) return sortedUserQueue[0];
          if (allVotesSubmitted) return `${currentRat}.wordGuess`;
