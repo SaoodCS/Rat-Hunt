@@ -116,7 +116,6 @@ export namespace GameHelper {
          userStates: AppTypes.UserState[],
       ): AppTypes.UserState {
          const userState = ArrOfObj.getObj(userStates, 'userId', userId);
-         console.log(userState);
          if (!MiscHelper.isNotFalsyOrEmpty(userState)) {
             throw new Error('User does not exist in userStates.');
          }
