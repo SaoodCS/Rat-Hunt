@@ -23,6 +23,8 @@ export default function CurrentTurnCountdown(): JSX.Element {
          const timeRemaining = Math.floor((countdownExpiry - Date.now()) / 1000);
          if (timeRemaining <= 0) {
             // TODO: some of the logic here is similar to the first useEffect in Gameplay.tsx. May be worth refactoring to avoid duplication...
+            // TODO: after that is done, clean up the file / folder structure of the front-end project (esp in the pages folder) so that it's neatly organized
+            // TODO: then, improve the UI of the gameplay (the form and current turn part where the countdown is) for different screen sizes
             if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
             const connectedUsers = GameHelper.Get.connectedUserIds(roomData.gameState.userStates);
             const sortedConnectedUsers = ArrayHelper.sort(connectedUsers);
