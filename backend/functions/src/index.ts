@@ -18,6 +18,7 @@ if (!admin.apps.length) {
 }
 
 export const onDataChange = functions.database.ref('/').onWrite(async (change) => {
+   FBConnect.log('New Instance of onDataChange Executed...');
    const { before, after } = change;
    const allChanges = FBConnect.compare(before.val(), after.val());
    if (!MiscHelper.isNotFalsyOrEmpty(allChanges)) return;

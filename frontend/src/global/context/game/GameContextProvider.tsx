@@ -24,8 +24,8 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
    const [activeTopicWords, setActiveTopicWords] = useState<GameHelper.I.WordCell[]>([]);
    const [localDbUser, setLocalDbUser] = useLocalStorage(DBConnect.Local.STORAGE_KEYS.USER, '');
    const [localDbRoom, setLocalDbRoom] = useLocalStorage(DBConnect.Local.STORAGE_KEYS.ROOM, '');
-   const { data: roomData, isLoading, refetch } = DBConnect.FSDB.Get.room(localDbRoom);
-   const { data: topicsData } = DBConnect.FSDB.Get.topics();
+   const { data: roomData, isLoading } = DBConnect.FSDB.Get.room(localDbRoom);
+   const { data: topicsData } = DBConnect.FSDB.Get.topics({ retry: 3 });
    const { isInForeground } = useContext(DeviceContext);
    const [initialRender, setInitialRender] = useState(true);
    const { setHeaderRightElement } = useHeaderContext();
@@ -58,7 +58,6 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
                queryClient.setQueryData([DBConnect.FSDB.CONSTS.QUERY_KEYS.GET_ROOM], roomData);
                return;
             }
-            // alert('Room does not exist or you have been removed from the room!'); <-- commented out because alert also shows when user intentionally leaves the room -->
             setLocalDbRoom('');
             setLocalDbUser('');
             queryClient.clear();
@@ -83,22 +82,6 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
          setActiveTopicWords(activeTopicWords);
       }
    }, [roomData?.gameState?.activeWord, topicsData]);
-
-   // TODO add on the front-end that on refocusing the window, set the userStatus back to 'connected' in realtime db
-   // useEffect(() => {
-   // This useEffect sets the userStatus back to "connected" when the user re-focuses the pwa after being in the background
-   // TODO: need to test if this updates and deletes correctly in realtime db I NEED TO DO THIS TOMORROW
-   // TODO: NEED TO FIX THIS FOREGROUNDING TOMORROW - AT THE MOMENT THE PROBLEM IS THAT THE ONDISCONNECT FOREGROUND LISTENER ISNT CANCELLED SO IT RE-ADDS THE USER IF THEY RE-OPEN THE APP AND THE ROOM NO LONGER EXISTS
-   //    if (isInForeground && !isLoading && !initialRender) {
-   //       const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
-   //       const localDbUserInRoom = GameHelper.Check.isUserInRoom(
-   //          localDbUser,
-   //          roomData?.gameState?.userStates || [],
-   //       );
-   //       if (!(roomDataExists && localDbUserInRoom)) return;
-   //       DBConnect.RTDB.Set.userStatus(localDbUser, roomData.roomId);
-   //    }
-   // }, [isInForeground, roomData]);
 
    useEffect(() => {
       // This useEffect runs only once after the app finishes it's first attempt to fetch the roomData from firestore
