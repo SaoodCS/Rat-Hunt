@@ -1,24 +1,24 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
+import GameHelper from '../../../../../../../shared/app/GameHelper/GameHelper';
+import ArrayHelper from '../../../../../../../shared/lib/helpers/arrayHelper/ArrayHelper';
+import ArrOfObj from '../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import Fader from '../../../../../global/components/lib/animation/fader/Fader';
-import AnimatedDots from '../../../../../global/components/lib/font/animatedDots/AnimatedDots';
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { FlexRowWrapper } from '../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
 import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../global/context/game/GameContext';
 import MyCSS from '../../../../../global/css/MyCSS';
 import DBConnect from '../../../../../global/database/DBConnect/DBConnect';
-import HTMLEntities from '../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
+import CurrentTurnCountdown from './components/currentTurnCountdown/CurrentTurnCountdown';
 import ClueForm from './components/forms/clueForm/ClueForm';
 import RatVoteForm from './components/forms/ratVoteForm/RatVoteForm';
 import WordGuessForm from './components/forms/wordGuessForm/WordGuessForm';
 import GameStateTable from './components/gameStateTable/GameStateTable';
 import RoundSummary from './components/summary/RoundSummary';
 import { CurrentTurnAndFormWrapper, FormContainer, GameStateTableWrapper } from './style/Style';
-import MiscHelper from '../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
-import ArrOfObj from '../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
-import GameHelper from '../../../../../../../shared/app/GameHelper/GameHelper';
 
 export default function Gameplay(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -35,34 +35,40 @@ export default function Gameplay(): JSX.Element {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
       const connectedUsers = GameHelper.Get.connectedUserIds(roomData.gameState.userStates);
-      if (localDbUser !== connectedUsers[0]) return;
+      const sortedConnectedUsers = ArrayHelper.sort(connectedUsers);
+      if (localDbUser !== sortedConnectedUsers[0]) return;
       const { currentTurn, userStates, currentRat } = gameState;
+      const currentTurnUserId = GameHelper.Get.currentTurnUserId(currentTurn);
       const disconnectedUsers = GameHelper.Get.disconnectedUserIds(roomData.gameState.userStates);
       const spectatingUsers = GameHelper.Get.spectatingUserIds(userStates);
-      const currentTurnUserIsDisconnected = disconnectedUsers.includes(currentTurn);
-      const currentTurnUserIsSpectating = spectatingUsers.includes(currentTurn);
+      const currentTurnUserIsDisconnected = disconnectedUsers.includes(currentTurnUserId);
+      const currentTurnUserIsSpectating = spectatingUsers.includes(currentTurnUserId);
       if (!(currentTurnUserIsDisconnected || currentTurnUserIsSpectating)) return;
-      const gamePhase = GameHelper.Get.gamePhase(gameState);
-      if (gamePhase === 'roundSummary') return;
+      const currentGamePhase = GameHelper.Get.gamePhase(gameState);
+      if (currentGamePhase === 'roundSummary') return;
+      const isNextPhaseRoundSummary = currentGamePhase === 'guess';
       const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(
          gameState,
-         currentTurn,
-         gamePhase,
+         currentTurnUserId,
+         currentGamePhase,
          currentRat,
       );
-      const updatedUserStates = GameHelper.SetUserStates.updateUser(userStates, currentTurn, [
-         { key: gamePhase, value: 'SKIP' },
+      const updatedUserStates = GameHelper.SetUserStates.updateUser(userStates, currentTurnUserId, [
+         { key: currentGamePhase, value: 'SKIP' },
       ]);
       const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
          { key: 'currentTurn', value: updatedCurrentTurn },
+         {
+            key: 'currentTurnChangedAt',
+            value: isNextPhaseRoundSummary ? '' : new Date().getTime(),
+         },
          { key: 'userStates', value: updatedUserStates },
       ]);
       updateGameStateMutation.mutate({
          roomId: localDbRoom,
-         gameState:
-            gamePhase === 'guess'
-               ? GameHelper.SetGameState.userPoints(updatedGameState)
-               : updatedGameState,
+         gameState: isNextPhaseRoundSummary
+            ? GameHelper.SetGameState.userPoints(updatedGameState)
+            : updatedGameState,
       });
    }, [roomData?.gameState?.currentTurn, localDbUser, roomData?.gameState.userStates]);
 
@@ -113,7 +119,8 @@ export default function Gameplay(): JSX.Element {
          condition: showRoundSummary,
       },
       {
-         text: `${roomData?.gameState?.currentTurn}`,
+         // eslint-disable-next-line no-irregular-whitespace
+         text: `Current Turn  :  ${roomData?.gameState?.currentTurn}`,
          condition: showCurrentTurnMsg,
       },
       {
@@ -137,14 +144,16 @@ export default function Gameplay(): JSX.Element {
                      <ConditionalRender key={index} condition={condition}>
                         <ConditionalRender condition={!!text}>
                            <FlexRowWrapper
-                              width="fit-content"
+                              width="100%"
                               alignItems="center"
+                              justifyContent="space-between"
                               fontSize="0.9em"
-                              padding="0em 0em 0em 1em"
+                              padding="0em 1em 0em 1em"
                               color={'yellow'}
+                              style={{ boxSizing: 'border-box' }}
                            >
-                              Current Turn:{HTMLEntities.space}
-                              {HTMLEntities.space} {text} <AnimatedDots count={3} />
+                              {text}
+                              <CurrentTurnCountdown />
                            </FlexRowWrapper>
                         </ConditionalRender>
                         <ConditionalRender condition={!!component}>
@@ -154,8 +163,16 @@ export default function Gameplay(): JSX.Element {
                               height="100%"
                               width="100%"
                            >
-                              <FlexRowWrapper width="100%" height="100%" alignItems="center">
-                                 <FormContainer>{component}</FormContainer>
+                              <FlexRowWrapper
+                                 width="100%"
+                                 height="100%"
+                                 alignItems="center"
+                                 justifyContent="space-between"
+                                 style={{ boxSizing: 'border-box' }}
+                                 padding="0em 1em 0em 0em"
+                              >
+                                 <FormContainer style={{ width: '85%' }}>{component}</FormContainer>
+                                 <CurrentTurnCountdown />
                               </FlexRowWrapper>
                            </Fader>
                         </ConditionalRender>

@@ -34,6 +34,7 @@ export default function WordGuessForm(): JSX.Element {
       ]);
       const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
          { key: 'userStates', value: updatedUserStates },
+         { key: 'currentTurnChangedAt', value: '' },
          { key: 'currentTurn', value: '' },
       ]);
       await updateGameStateMutation.mutateAsync({

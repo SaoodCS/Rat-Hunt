@@ -29,6 +29,7 @@ async function createDummyRoom(): Promise<void> {
          currentRat: dummyUsers[0].userId,
          currentRound: 0,
          currentTurn: dummyUsers[0].userId,
+         currentTurnChangedAt: '',
          numberOfRoundsSet: 4,
          userStates: [],
       },

@@ -33,4 +33,12 @@ export default class NumberHelper {
       if (completedAsPerc >= 100 && capAt100) return 100;
       return completedAsPerc;
    }
+
+   static asSecondsStr(seconds: number, gapsBetween?: boolean): string {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
+      const time = `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+      // if gaps between, then add whitespace between every character:
+      return gapsBetween ? time.split('').join(' ') : time;
+   }
 }

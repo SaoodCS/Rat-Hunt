@@ -40,6 +40,7 @@ export default function RatVoteForm(): JSX.Element {
       );
       const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
          { key: 'currentTurn', value: updatedCurrentTurn },
+         { key: 'currentTurnChangedAt', value: new Date().getTime() },
          { key: 'userStates', value: updatedUserStates },
       ]);
       await updateGameStateMutation.mutateAsync({

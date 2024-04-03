@@ -249,6 +249,7 @@ export namespace GameHelper {
                currentRound: 0,
                numberOfRoundsSet: noOfRounds,
                currentTurn: '',
+               currentTurnChangedAt: '',
                userStates: [
                   {
                      userId: hostUserId,
@@ -351,6 +352,7 @@ export namespace GameHelper {
             currentRat: newRat,
             currentRound: 1,
             currentTurn: updatedCurrentTurn,
+            currentTurnChangedAt: new Date().getTime() + 3000, // 3 seconds as this is how long the user role splash screen is displayed,
             userStates: updatedUserStates,
             numberOfRoundsSet: noOfRounds,
          };
@@ -376,6 +378,7 @@ export namespace GameHelper {
             activeWord: newWord,
             currentRat: newRat,
             currentTurn: updatedCurrentTurn,
+            currentTurnChangedAt: new Date().getTime(),
             userStates: updatedUserStates,
          };
          return updatedGameState;
@@ -405,6 +408,7 @@ export namespace GameHelper {
             currentRat: newRat,
             currentRound: newRoundNo,
             currentTurn: updatedCurrentTurn,
+            currentTurnChangedAt: new Date().getTime() + 3000, // 3 seconds as this is how long the user role splash screen is displayed
             userStates: updatedUserStates,
          };
          return updatedGameState;

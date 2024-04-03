@@ -31,6 +31,7 @@ export namespace AppTypes {
          currentRat: string;
          currentRound: number;
          currentTurn: string;
+         currentTurnChangedAt: number | '';
          numberOfRoundsSet: number;
          userStates: {
             userId: string;

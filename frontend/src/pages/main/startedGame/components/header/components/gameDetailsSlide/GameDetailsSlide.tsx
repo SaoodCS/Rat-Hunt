@@ -31,7 +31,7 @@ interface IGameDetailsSlide {
 
 export default function GameDetailsSlide(props: IGameDetailsSlide): JSX.Element {
    const { scrollToSlide } = props;
-   const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
+   const { localDbRoom } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [gameHeaderDetails, setGameHeaderDetails] = useState<IGameHeaderDetails[]>([]);
    const { handleScroll, faderElRef } = useScrollFader([roomData], 3);
@@ -60,10 +60,6 @@ export default function GameDetailsSlide(props: IGameDetailsSlide): JSX.Element 
       roomData?.gameState?.currentRound,
       roomData?.gameState?.numberOfRoundsSet,
       roomData?.gameState?.activeTopic,
-      roomData?.gameState?.currentRat,
-      roomData?.gameState?.activeWord,
-      activeTopicWords,
-      localDbUser,
    ]);
 
    async function shareRoomCode(): Promise<void> {
