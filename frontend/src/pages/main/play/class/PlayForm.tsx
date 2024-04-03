@@ -1,10 +1,10 @@
 import type { DocumentData, DocumentSnapshot } from 'firebase/firestore';
+import type AppTypes from '../../../../../../shared/app/types/AppTypes';
+import StringHelper from '../../../../../../shared/lib/helpers/string/StringHelper';
 import { N_Form } from '../../../../global/components/lib/form/N_Form';
 import DropDownInput from '../../../../global/components/lib/form/dropDown/DropDownInput';
 import NumberLineInput from '../../../../global/components/lib/form/numberLine/NumberLineInp';
 import TextOrNumFieldInput from '../../../../global/components/lib/form/textOrNumber/TextOrNumFieldInput';
-import type AppTypes from '../../../../../../shared/app/types/AppTypes';
-import StringHelper from '../../../../../../shared/lib/helpers/string/StringHelper';
 
 export interface IPlayFormClass {
    name: string;
@@ -24,6 +24,7 @@ export default class PlayFormClass {
          type: 'text',
          isRequired: true,
          isDisabled: false,
+         capitalize: 'characters',
          validator: (value: string): string | true => {
             if (!value) return 'Please enter your name';
             if (value.trim() === '') return 'Name cannot be empty';
@@ -65,6 +66,7 @@ export default class PlayFormClass {
          isDisabled: false,
          // This autofills the input when receiving a msg with the "code" keyword
          autoComplete: 'one-time-code',
+         capitalize: 'characters',
          validator: (value: string): string | true => {
             if (!value) return 'Please enter the room id';
             return true;

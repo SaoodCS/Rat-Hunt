@@ -3,6 +3,11 @@ import { doc, getDoc } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { css, type FlattenSimpleInterpolation } from 'styled-components';
+import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
+import type AppTypes from '../../../../../shared/app/types/AppTypes';
+import ArrayHelper from '../../../../../shared/lib/helpers/arrayHelper/ArrayHelper';
+import ArrOfObj from '../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
+import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import LogoFader from '../../../global/components/app/logo/LogoFader';
 import { StaticButton } from '../../../global/components/lib/button/staticButton/Style';
 import OfflineFetch from '../../../global/components/lib/fetch/offlineFetch/offlineFetch';
@@ -11,18 +16,13 @@ import InputCombination from '../../../global/components/lib/form/inputCombinati
 import { StyledForm } from '../../../global/components/lib/form/style/Style';
 import Loader from '../../../global/components/lib/loader/fullScreen/Loader';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
-import { firestore } from '../../../global/database/config/config';
 import { GameContext } from '../../../global/context/game/GameContext';
 import useApiErrorContext from '../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import MyCSS from '../../../global/css/MyCSS';
-import useForm from '../../../global/hooks/useForm';
 import DBConnect from '../../../global/database/DBConnect/DBConnect';
+import { firestore } from '../../../global/database/config/config';
+import useForm from '../../../global/hooks/useForm';
 import PlayFormClass from './class/PlayForm';
-import type AppTypes from '../../../../../shared/app/types/AppTypes';
-import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
-import ArrayHelper from '../../../../../shared/lib/helpers/arrayHelper/ArrayHelper';
-import ArrOfObj from '../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
-import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
 
 export default function Play(): JSX.Element {
    const { apiError } = useApiErrorContext();
@@ -55,9 +55,8 @@ export default function Play(): JSX.Element {
    }
 
    async function handleJoinGame(): Promise<void> {
-      // TODO: make the mobile keypad force uppercase
-      const roomId = form.roomId.toUpperCase();
-      const formName = form.name.trim().toUpperCase();
+      const roomId = form.roomId;
+      const formName = form.name;
       const docRef = doc(
          firestore,
          DBConnect.FSDB.CONSTS.GAME_COLLECTION,
@@ -82,7 +81,7 @@ export default function Play(): JSX.Element {
    async function handleHostGame(): Promise<void> {
       const generatedRoomId = GameHelper.New.roomUID(allRoomIds ?? ['']);
       const { name, topic, noOfRounds } = form;
-      const formName = name.trim().toUpperCase();
+      const formName = name;
       const room = GameHelper.SetRoomState.newRoom(generatedRoomId, formName, topic, noOfRounds);
       await setRoomData.mutateAsync(room);
       setLocalDbRoom(generatedRoomId);
@@ -146,6 +145,7 @@ export default function Play(): JSX.Element {
                      label={input.label}
                      type={input.type}
                      autoComplete={input.autoComplete}
+                     capitalize={input.capitalize}
                      dropDownOptions={dropDownOptions(input)}
                      numberLineOptions={input.numberLineOptions}
                      isRequired={input.isRequired}

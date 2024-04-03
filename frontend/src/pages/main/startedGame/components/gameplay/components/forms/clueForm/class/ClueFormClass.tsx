@@ -13,6 +13,7 @@ export default class ClueFormClass {
          id: 'clue',
          label: 'Please enter a clue',
          type: 'text',
+         capitalize: 'characters',
          isRequired: true,
          isDisabled: false,
          validator: (value: string): string | true => {

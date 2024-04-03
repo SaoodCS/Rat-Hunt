@@ -100,6 +100,7 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
                   type={input.type}
                   autoComplete={input.autoComplete}
                   dropDownOptions={dropDownOptions(input)}
+                  capitalize={input.capitalize}
                   numberLineOptions={input.numberLineOptions}
                   isRequired={input.isRequired}
                   isDisabled={input.isDisabled}

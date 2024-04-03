@@ -7,6 +7,7 @@ import TextOrNumFieldInput from '../textOrNumber/TextOrNumFieldInput';
 export default function InputCombination(
    props: N_Form.Inputs.I.AllInputPropsAsRequired,
 ): JSX.Element {
+   // -- UPDATE HERE WHEN ADDING NEW INPUT COMPONENT PROPS -- //
    const {
       label,
       name,
@@ -20,6 +21,7 @@ export default function InputCombination(
       autoComplete,
       isDisabled,
       numberLineOptions,
+      capitalize,
       Component,
    } = props;
 
@@ -100,6 +102,7 @@ export default function InputCombination(
          name={name}
          isRequired={isRequired || false}
          autoComplete={autoComplete}
+         capitalize={capitalize}
          handleChange={handleChange}
          value={value}
          error={error}

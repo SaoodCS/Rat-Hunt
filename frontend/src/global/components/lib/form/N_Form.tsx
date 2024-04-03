@@ -5,7 +5,11 @@ import type { IDropDownOptions } from './dropDown/DropDownInput';
 import DropDownInput from './dropDown/DropDownInput';
 import type { INumberLineOptions } from './numberLine/NumberLineInp';
 import NumberLineInput from './numberLine/NumberLineInp';
-import type { IAutoComplete, ITextOrNumInputType } from './textOrNumber/TextOrNumFieldInput';
+import type {
+   IAutoComplete,
+   ICapitalize,
+   ITextOrNumInputType,
+} from './textOrNumber/TextOrNumFieldInput';
 import TextOrNumFieldInput from './textOrNumber/TextOrNumFieldInput';
 
 export namespace N_Form {
@@ -41,11 +45,13 @@ export namespace N_Form {
          };
 
          export type AllInputProps = CommonInputProps & {
+            // -- UPDATE HERE WHEN ADDING NEW PROPS TO EXISTING INPUT COMPONENTS -- //
             // -- UPDATE HERE WHEN ADDING NEW INPUT COMPONENTS (if it takes any additional props, add it as an optional) -- //
             Component: Inputs.I.Components;
             value: InputValue;
             type?: ITextOrNumInputType;
             autoComplete?: IAutoComplete;
+            capitalize?: ICapitalize;
             dropDownOptions?: IDropDownOptions;
             numberLineOptions?: INumberLineOptions;
          };

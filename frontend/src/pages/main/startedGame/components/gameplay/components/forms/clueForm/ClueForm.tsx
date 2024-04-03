@@ -80,6 +80,7 @@ export default function ClueForm(): JSX.Element {
                type={input.type}
                value={form[input.name]}
                autoComplete={input.autoComplete}
+               capitalize={input.capitalize}
                isDisabled={input.isDisabled}
                numberLineOptions={input.numberLineOptions}
                Component={input.Component}
