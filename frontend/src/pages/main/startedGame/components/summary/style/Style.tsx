@@ -12,6 +12,10 @@ export const RoundSummaryTitle = styled.div`
    border-bottom: 2px solid ${Color.darkThm.accentDarkerShade};
    color: ${Color.setRgbOpacity(Color.darkThm.dialogBright, 1)};
    filter: brightness(2);
+   background-color: ${Color.setRgbOpacity(Color.darkThm.accentDarkerShade, 0.175)};
+   border-top-left-radius: 1em;
+   border-top-right-radius: 1em;
+   letter-spacing: 0.1em;
 `;
 
 export const NextPlayAgainBtnContainer = styled.div`
