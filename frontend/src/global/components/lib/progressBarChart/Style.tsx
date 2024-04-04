@@ -26,7 +26,7 @@ export const BarTitle = styled.div`
 `;
 
 export const BarAndInfoWrapper = styled.div`
-   margin-bottom: 0.5em;
+   margin-bottom: 0.6em;
 `;
 
 export const CompletedBar = styled.div<{
@@ -36,8 +36,8 @@ export const CompletedBar = styled.div<{
 }>`
    position: absolute;
    height: 100%;
-   background-image: ${({ completedPercentage }) =>
-      `linear-gradient(90deg, ${'rgba(0,0,0,0)'} -50%, ${Color.darkThm.success} ${
+   background-image: ${({ completedPercentage, color }) =>
+      `linear-gradient(90deg, ${'rgba(0,0,0,0)'} -50%, ${color} ${
          200 - completedPercentage + 200
       }%)`};
    filter: brightness(0.5);

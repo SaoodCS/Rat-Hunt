@@ -2,10 +2,10 @@ import { useContext } from 'react';
 import { GameContext } from '../../../context/game/GameContext';
 import useThemeContext from '../../../context/theme/hooks/useThemeContext';
 import Color from '../../../css/colors';
-import { LogoText } from '../../app/logo/LogoText';
 import type { ITooltipPositioning } from '../tooltip/Tooltip';
 import { BarAndInfoWrapper, BarAndPercentageWrapper, BarBackground, CompletedBar } from './Style';
 import NumberHelper from '../../../../../../shared/lib/helpers/number/NumberHelper';
+import { FlexCenterer } from '../positionModifiers/centerers/FlexCenterer';
 
 export interface IProgressBarChartData {
    label: string;
@@ -38,6 +38,13 @@ export default function ProgressBarChart(props: IProgressBarChart): JSX.Element 
       return NumberHelper.calcPercentage(completedAmnt, target, true);
    }
 
+   function textColor(itemLabel: string): string {
+      return Color.setRgbOpacity(
+         isLocalDbUser(itemLabel) ? Color.darkThm.error : Color.darkThm.success,
+         1,
+      );
+   }
+
    return (
       <>
          {data.map((item) => (
@@ -48,55 +55,29 @@ export default function ProgressBarChart(props: IProgressBarChart): JSX.Element 
                      barHeight={barHeight || '2em'}
                      isDarkTheme={isDarkTheme}
                   >
-                     <LogoText
-                        color={Color.setRgbOpacity(
-                           isLocalDbUser(item.label) ? Color.darkThm.error : Color.darkThm.success,
-                           1,
-                        )}
-                        size="0.8em"
-                        style={{
-                           padding: '0.1em 0em 0em 0.5em',
-                           height: '100%',
-                           display: 'flex',
-                           alignItems: 'center',
-                           filter: 'brightness(0.9)',
-                        }}
+                     <FlexCenterer
+                        padding="0.1em 0em 0em 0.5em"
+                        height="100%"
+                        color={textColor(item.label)}
                      >
                         {item.label}
-                     </LogoText>
-                     <LogoText
-                        color={Color.setRgbOpacity(
-                           isLocalDbUser(item.label) ? Color.darkThm.error : Color.darkThm.success,
-                           1,
-                        )}
-                        size="0.8em"
-                        style={{
-                           padding: '0.1em 0.75em 0em 0em',
-                           position: 'absolute',
-                           right: '0em',
-                           zIndex: 999,
-                           height: '100%',
-                           display: 'flex',
-                           alignItems: 'center',
-                           filter: 'brightness(0.9)',
-                        }}
+                     </FlexCenterer>
+                     <FlexCenterer
+                        padding="0.1em 0.75em 0em 0em"
+                        height="100%"
+                        position="absolute"
+                        right="0em"
+                        color={textColor(item.label)}
                      >
                         {item.completedAmnt}
-                     </LogoText>
-
+                     </FlexCenterer>
                      <CompletedBar
                         completedPercentage={getCompletedPercentage(
                            item.completedAmnt,
                            item.target,
                         )}
                         isDarkTheme={isDarkTheme}
-                        style={{
-                           background: isLocalDbUser(item.label)
-                              ? Color.setRgbOpacity(Color.darkThm.error, 0.25)
-                              : '',
-                           position: 'absolute',
-                           left: '0em',
-                        }}
+                        color={textColor(item.label)}
                      />
                   </BarBackground>
                </BarAndPercentageWrapper>

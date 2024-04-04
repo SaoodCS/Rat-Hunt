@@ -48,10 +48,11 @@ export const GameDetailsItemWrapper = styled.div`
    box-sizing: border-box;
 `;
 
-export const RoomIDScoreboardItem = styled.div`
+export const RoomIDBtn = styled.div`
    ${MyCSS.Clickables.removeDefaultEffects};
    ${MyCSS.Clickables.desktop.changeBrightnessOnHover(0.5)};
    ${MyCSS.Clickables.portable.changeBrightnessOnClick(0.5, 'revert')};
+   cursor: pointer;
    border-bottom: 1px solid ${Color.darkThm.accent};
    width: 50%;
    box-sizing: border-box;
@@ -65,7 +66,7 @@ export const RoomIDScoreboardItem = styled.div`
    max-width: 20em;
 `;
 
-export const RoomIDScoreboardWrapper = styled.div`
+export const RoomIDBtnWrapper = styled.div`
    width: 100%;
    display: flex;
    align-items: center;

@@ -38,7 +38,7 @@ export const NextRoundPlayAgainBtn = styled(TextColourizer)`
    ${MyCSS.Clickables.portable.changeBrightnessOnClick(0.8, 'persist')};
 `;
 
-export const SummaryTableWrapper = styled.div`
+export const ScoreboardContainer = styled.div`
    position: absolute;
    top: 5.5em;
    bottom: 0px;

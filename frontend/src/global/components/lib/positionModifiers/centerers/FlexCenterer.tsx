@@ -9,6 +9,7 @@ export const FlexCenterer = styled.div<{
    right?: string;
    padding?: string;
    localStyles?: FlattenSimpleInterpolation;
+   color?: string;
 }>`
    display: flex;
    justify-content: center;
@@ -19,5 +20,6 @@ export const FlexCenterer = styled.div<{
    left: ${({ left }) => left || 'auto'};
    right: ${({ right }) => right || 'auto'};
    padding: ${({ padding }) => padding};
-   ${({ localStyles }) => localStyles}
+   color: ${({ color }) => color};
+   ${({ localStyles }) => localStyles};
 `;

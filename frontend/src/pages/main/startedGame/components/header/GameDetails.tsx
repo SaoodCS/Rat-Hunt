@@ -1,36 +1,31 @@
-import { SquareShareNodes } from '@styled-icons/fa-solid/SquareShareNodes';
 import { useContext, useEffect, useState } from 'react';
-import type { FlattenSimpleInterpolation } from 'styled-components';
-import { css } from 'styled-components';
-import ConditionalRender from '../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
-import { GameContext } from '../../../../../../../global/context/game/GameContext';
-import { ToastContext } from '../../../../../../../global/context/widget/toast/ToastContext';
-import MyCSS from '../../../../../../../global/css/MyCSS';
-import Color from '../../../../../../../global/css/colors';
-import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
-import HTMLEntities from '../../../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
-import Device from '../../../../../../../global/helpers/pwa/deviceHelper';
-import useScrollFader from '../../../../../../../global/hooks/useScrollFader';
+import DBConnect from '../../../../../global/database/DBConnect/DBConnect';
+import { GameContext } from '../../../../../global/context/game/GameContext';
+import useScrollFader from '../../../../../global/hooks/useScrollFader';
+import { ToastContext } from '../../../../../global/context/widget/toast/ToastContext';
+import Device from '../../../../../global/helpers/pwa/deviceHelper';
 import {
    GameDetailsContainer,
    GameDetailsItemWrapper,
    ItemLabel,
    ItemValue,
-   RoomIDScoreboardItem,
-   RoomIDScoreboardWrapper,
-} from '../../style/Style';
+   RoomIDBtn,
+   RoomIDBtnWrapper,
+} from './style/Style';
+import HTMLEntities from '../../../../../global/helpers/dataTypes/htmlEntities/HTMLEntities';
+import Color from '../../../../../global/css/colors';
+import { SquareShareNodes } from '@styled-icons/fa-solid/SquareShareNodes';
+import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
+import type { FlattenSimpleInterpolation } from 'styled-components';
+import { css } from 'styled-components';
+import MyCSS from '../../../../../global/css/MyCSS';
 
 interface IGameHeaderDetails {
    label: string;
    value: string;
 }
 
-interface IGameDetailsSlide {
-   scrollToSlide: (slideNumber: number) => void;
-}
-
-export default function GameDetailsSlide(props: IGameDetailsSlide): JSX.Element {
-   const { scrollToSlide } = props;
+export default function GameDetails(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [gameHeaderDetails, setGameHeaderDetails] = useState<IGameHeaderDetails[]>([]);
@@ -86,27 +81,16 @@ export default function GameDetailsSlide(props: IGameDetailsSlide): JSX.Element 
             onScroll={handleScroll}
             localStyles={screenStyles()}
          >
-            <RoomIDScoreboardWrapper>
-               <RoomIDScoreboardItem onClick={shareRoomCode}>
+            <RoomIDBtnWrapper>
+               <RoomIDBtn onClick={shareRoomCode}>
                   Room ID:{HTMLEntities.space}
                   {HTMLEntities.space}
                   {localDbRoom}
                   {HTMLEntities.space}
-                  <SquareShareNodes
-                     size="1em"
-                     style={{
-                        cursor: 'pointer',
-                        color: Color.setRgbOpacity(Color.darkThm.warning, 1),
-                        marginBottom: '0.175em',
-                        marginLeft: '0.2em',
-                     }}
-                     color={Color.darkThm.warning}
-                  />
-               </RoomIDScoreboardItem>
-               <RoomIDScoreboardItem onClick={() => scrollToSlide(2)}>
-                  Scoreboard
-               </RoomIDScoreboardItem>
-            </RoomIDScoreboardWrapper>
+                  {HTMLEntities.space}
+                  <SquareShareNodes size="1em" color={Color.darkThm.warning} />
+               </RoomIDBtn>
+            </RoomIDBtnWrapper>
             {gameHeaderDetails.map(({ label, value }, index) => (
                <GameDetailsItemWrapper key={index}>
                   <ConditionalRender condition={!!value && !value.includes('THE RAT')}>

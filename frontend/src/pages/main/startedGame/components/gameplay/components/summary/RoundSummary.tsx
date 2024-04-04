@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
+import MiscHelper from '../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import { FlexColumnWrapper } from '../../../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import ConditionalRender from '../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
@@ -10,16 +11,15 @@ import Color from '../../../../../../../global/css/colors';
 import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
 import RoundEndForm from './components/form/RoundEndForm';
 import SummaryMarquee from './components/summaryMarquee/SummaryMarquee';
-import SummaryTable from './components/summaryTable/SummaryTable';
 import WinnerLoserSplash from './components/winnerLoserSplash/WinnerLoserSplash';
+import ScoreboardSlide from './scoreboardSlide/ScoreboardSlide';
 import {
    MarqueeContainer,
    NextPlayAgainBtnContainer,
    NextRoundPlayAgainBtn,
    RoundSummaryTitle,
-   SummaryTableWrapper,
+   ScoreboardContainer,
 } from './style/Style';
-import MiscHelper from '../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 
 export default function RoundSummary(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);
@@ -72,9 +72,9 @@ export default function RoundSummary(): JSX.Element {
                <MarqueeContainer>
                   <SummaryMarquee />
                </MarqueeContainer>
-               <SummaryTableWrapper>
-                  <SummaryTable />
-               </SummaryTableWrapper>
+               <ScoreboardContainer>
+                  <ScoreboardSlide />
+               </ScoreboardContainer>
             </ConditionalRender>
          </FlexColumnWrapper>
       </>

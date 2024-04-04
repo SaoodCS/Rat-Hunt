@@ -5,7 +5,6 @@ import { ModalContext } from '../../../global/context/widget/modal/ModalContext'
 import { SplashScreenContext } from '../../../global/context/widget/splashScreen/SplashScreenContext';
 import DBConnect from '../../../global/database/DBConnect/DBConnect';
 import Gameplay from './components/gameplay/Gameplay';
-import GameHeader from './components/header/GameHeader';
 import RatOrPlayerSplash from './components/ratOrPlayerSplash/RatOrPlayerSplash';
 import TopicBoard from './components/topicBoard/TopicBoard';
 import {
@@ -16,6 +15,7 @@ import {
 } from './style/Style';
 import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import ArrOfObj from '../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
+import GameDetails from './components/header/GameDetails';
 
 export default function StartedGame(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -49,7 +49,7 @@ export default function StartedGame(): JSX.Element {
    return (
       <GamePageWrapper>
          <GameHeaderWrapper>
-            <GameHeader />
+            <GameDetails />
          </GameHeaderWrapper>
          <GameplayWrapper>
             <Gameplay />
