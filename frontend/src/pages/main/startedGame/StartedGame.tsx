@@ -21,12 +21,26 @@ import {
 } from './style/Style';
 
 export default function StartedGame(): JSX.Element {
-   const { localDbRoom, localDbUser } = useContext(GameContext);
+   const { localDbRoom, localDbUser, setActiveTopicWords } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
+   const { data: topicsData } = DBConnect.FSDB.Get.topics();
    const { toggleModal, setModalContent, setModalHeader } = useContext(ModalContext);
    const { toggleSplashScreen, setSplashScreenContent, isSplashScreenDisplayed } =
       useContext(SplashScreenContext);
    const [showRoundSummary, setShowRoundSummary] = useState(false);
+
+   useEffect(() => {
+      // this useEffect is responsible for updating the activeTopicWords when the activeTopic changes
+      const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
+      const topicsDataExists = MiscHelper.isNotFalsyOrEmpty(topicsData);
+      if (roomDataExists && topicsDataExists) {
+         const activeTopicWords = GameHelper.Get.topicWordsAndCells(
+            topicsData,
+            roomData.gameState.activeTopic,
+         );
+         setActiveTopicWords(activeTopicWords);
+      }
+   }, [roomData?.gameState?.activeWord, topicsData]);
 
    useEffect(() => {
       // This useEffect handles the UI for when the currentRound changes.

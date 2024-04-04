@@ -2,8 +2,8 @@ import { useContext, useEffect } from 'react';
 import type { IHeaderContext } from '../HeaderContext';
 import { HeaderContext } from '../HeaderContext';
 
-export default class HeaderHooks {
-   static useHeaderContext(): IHeaderContext {
+export namespace HeaderHooks {
+   export function useHeaderContext(): IHeaderContext {
       const {
          headerTitle,
          setHeaderTitle,
@@ -28,43 +28,72 @@ export default class HeaderHooks {
       };
    }
 
-   static useOnMount = {
-      setHeaderTitle: (title: string) => {
+   export namespace useOnMount {
+      export function setHeaderTitle(title: string): void {
          const { setHeaderTitle } = HeaderHooks.useHeaderContext();
          useEffect(() => {
             setHeaderTitle(title);
          }, []);
-      },
-      hideAndResetBackBtn: () => {
+      }
+      export function hideAndResetBackBtn(): void {
          const { hideAndResetBackBtn } = HeaderHooks.useHeaderContext();
          useEffect(() => {
             hideAndResetBackBtn();
          }, []);
-      },
-      resetHeaderRightEl: () => {
+      }
+      export function resetHeaderRightEl(): void {
          const { setHeaderRightElement } = HeaderHooks.useHeaderContext();
          useEffect(() => {
             setHeaderRightElement(null);
          }, []);
-      },
-   };
+      }
+   }
 
-   static useOnUnMount = {
-      hideAndResetBackBtn: () => {
+   export namespace useOnUnMount {
+      export function hideAndResetBackBtn(): void {
          const { hideAndResetBackBtn } = HeaderHooks.useHeaderContext();
          useEffect(() => {
             return () => {
                hideAndResetBackBtn();
             };
          }, []);
-      },
-      resetHeaderRightEl: () => {
+      }
+      export function resetHeaderRightEl(): void {
          const { setHeaderRightElement } = HeaderHooks.useHeaderContext();
          useEffect(() => {
             return () => {
                setHeaderRightElement(null);
             };
          }, []);
-      },
-   };
+      }
+   }
+
+   export namespace useOnDepChange {
+      export function setHeaderTitle(title: string, deps: React.DependencyList): void {
+         const { setHeaderTitle } = HeaderHooks.useHeaderContext();
+         useEffect(() => {
+            setHeaderTitle(title);
+         }, [...deps]);
+      }
+      export function hideAndResetBackBtn(deps: React.DependencyList): void {
+         const { hideAndResetBackBtn } = HeaderHooks.useHeaderContext();
+         useEffect(() => {
+            hideAndResetBackBtn();
+         }, [...deps]);
+      }
+      export function resetHeaderRightEl(deps: React.DependencyList): void {
+         const { setHeaderRightElement } = HeaderHooks.useHeaderContext();
+         useEffect(() => {
+            setHeaderRightElement(null);
+         }, [...deps]);
+      }
+      export function setHeaderRightEl(el: JSX.Element, deps: React.DependencyList): void {
+         const { setHeaderRightElement } = HeaderHooks.useHeaderContext();
+         useEffect(() => {
+            setHeaderRightElement(el);
+         }, [...deps]);
+      }
+   }
 }
+
+export default HeaderHooks;

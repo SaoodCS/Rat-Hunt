@@ -1,4 +1,5 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
+import BoolHelper from '../../../../shared/lib/helpers/bool/BoolHelper';
 import { Body } from '../../global/components/app/layout/body/Body';
 import {
    Header,
@@ -11,12 +12,17 @@ import GameContextProvider from '../../global/context/game/GameContextProvider';
 import useThemeContext from '../../global/context/theme/hooks/useThemeContext';
 import HeaderHooks from '../../global/context/widget/header/hooks/HeaderHooks';
 import useHeaderContext from '../../global/context/widget/header/hooks/useHeaderContext';
-import BoolHelper from '../../../../shared/lib/helpers/bool/BoolHelper';
+import GuideAndLeaveRoom from './components/GuideAndLeaveRoom';
 
 export default function MainLayout(): JSX.Element {
    const { isDarkTheme } = useThemeContext();
    const { headerTitle, showBackBtn, handleBackBtnClick, headerRightElement } = useHeaderContext();
+   const location = useLocation();
    HeaderHooks.useOnMount.setHeaderTitle('Rat Hunt');
+   HeaderHooks.useOnDepChange.setHeaderRightEl(
+      <GuideAndLeaveRoom currentPath={location.pathname} />,
+      [location.pathname],
+   );
    return (
       <>
          <GameContextProvider>
