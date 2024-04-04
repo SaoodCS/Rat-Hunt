@@ -1,18 +1,18 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
-import ArrOfObj from '../../../../../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
-import { ArrowCircleLeftIcon } from '../../../../../../../../../global/components/lib/icons/arrows/ArrowCircleLeft';
-import { FlexCenterer } from '../../../../../../../../../global/components/lib/positionModifiers/centerers/FlexCenterer';
-import type { IProgressBarChartData } from '../../../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
-import ProgressBarChart from '../../../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
-import ConditionalRender from '../../../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
-import Scroller from '../../../../../../../../../global/components/lib/scroller/Scroller';
-import { GameContext } from '../../../../../../../../../global/context/game/GameContext';
-import useThemeContext from '../../../../../../../../../global/context/theme/hooks/useThemeContext';
-import MyCSS from '../../../../../../../../../global/css/MyCSS';
-import DBConnect from '../../../../../../../../../global/database/DBConnect/DBConnect';
 import { ScoreboardWrapper } from './style/Style';
+import { GameContext } from '../../../../../../../global/context/game/GameContext';
+import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
+import type { IProgressBarChartData } from '../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
+import useThemeContext from '../../../../../../../global/context/theme/hooks/useThemeContext';
+import ArrOfObj from '../../../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
+import Scroller from '../../../../../../../global/components/lib/scroller/Scroller';
+import ProgressBarChart from '../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
+import { FlexCenterer } from '../../../../../../../global/components/lib/positionModifiers/centerers/FlexCenterer';
+import ConditionalRender from '../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
+import { ArrowCircleLeftIcon } from '../../../../../../../global/components/lib/icons/arrows/ArrowCircleLeft';
+import MyCSS from '../../../../../../../global/css/MyCSS';
 
 export default function ScoreboardSlide(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);

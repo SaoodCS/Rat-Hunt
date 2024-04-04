@@ -1,6 +1,6 @@
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import styled from 'styled-components';
-import MyCSS from '../../../../../../../../../../global/css/MyCSS';
+import MyCSS from '../../../../../../../../global/css/MyCSS';
 
 export const ScoreboardWrapper = styled.div<{ localStyles?: FlattenSimpleInterpolation }>`
    position: absolute;

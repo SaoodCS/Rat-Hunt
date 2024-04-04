@@ -18,7 +18,6 @@ import ClueForm from './components/forms/clueForm/ClueForm';
 import RatVoteForm from './components/forms/ratVoteForm/RatVoteForm';
 import WordGuessForm from './components/forms/wordGuessForm/WordGuessForm';
 import GameStateTable from './components/gameStateTable/GameStateTable';
-import RoundSummary from './components/summary/RoundSummary';
 import { CurrentTurnAndFormWrapper, FormContainer, GameStateTableWrapper } from './style/Style';
 
 export default function Gameplay(): JSX.Element {
@@ -27,7 +26,6 @@ export default function Gameplay(): JSX.Element {
    const [showClueForm, setShowClueForm] = useState(false);
    const [showRatVoteForm, setShowRatVoteForm] = useState(false);
    const [showWordGuessForm, setShowWordGuessForm] = useState(false);
-   const [showRoundSummary, setShowRoundSummary] = useState(false);
    const [showRatGuessingMsg, setShowRatGuessingMsg] = useState(false);
    const [showCurrentTurnMsg, setShowCurrentTurnMsg] = useState(false);
    const updateGameStateMutation = DBConnect.FSDB.Set.gameState({}, false);
@@ -46,7 +44,7 @@ export default function Gameplay(): JSX.Element {
          roomId: localDbRoom,
          gameState: updatedGameState,
       });
-   }, [roomData?.gameState?.currentTurn, localDbUser, roomData?.gameState.userStates]);
+   }, [roomData?.gameState?.currentTurn, localDbUser, roomData?.gameState?.userStates]);
 
    useEffect(() => {
       // This useEffect is responsble for updating the UI when the currentTurn changes
@@ -68,10 +66,8 @@ export default function Gameplay(): JSX.Element {
          setShowClueForm(false);
          setShowRatVoteForm(false);
          setShowWordGuessForm(false);
-         setShowRoundSummary(true);
          return;
       }
-      setShowRoundSummary(false);
       setShowWordGuessForm(isYourTurn && allCluesExist && allVotesExist && isPlayerRat);
       setShowRatVoteForm(isYourTurn && allCluesExist && !allVotesExist);
       setShowClueForm(isYourTurn && !allCluesExist);
@@ -91,10 +87,6 @@ export default function Gameplay(): JSX.Element {
          condition: showWordGuessForm,
       },
       {
-         component: <RoundSummary />,
-         condition: showRoundSummary,
-      },
-      {
          // eslint-disable-next-line no-irregular-whitespace
          text: `Current Turn  :  ${roomData?.gameState?.currentTurn}`,
          condition: showCurrentTurnMsg,
@@ -107,59 +99,52 @@ export default function Gameplay(): JSX.Element {
 
    return (
       <>
-         <ConditionalRender condition={!showRoundSummary}>
-            <CurrentTurnAndFormWrapper>
-               <FlexColumnWrapper
-                  height="100%"
-                  justifyContent="center"
-                  width="100%"
-                  alignItems="start"
-                  localStyles={screenStyles()}
-               >
-                  {gameplayHeadMap.map(({ text, condition, component }, index) => (
-                     <ConditionalRender key={index} condition={condition}>
-                        <Fader
-                           fadeInCondition={condition}
-                           transitionDuration={0.5}
-                           height="100%"
+         <CurrentTurnAndFormWrapper>
+            <FlexColumnWrapper
+               height="100%"
+               justifyContent="center"
+               width="100%"
+               alignItems="start"
+               localStyles={screenStyles()}
+            >
+               {gameplayHeadMap.map(({ text, condition, component }, index) => (
+                  <ConditionalRender key={index} condition={condition}>
+                     <Fader
+                        fadeInCondition={condition}
+                        transitionDuration={0.5}
+                        height="100%"
+                        width="100%"
+                     >
+                        <FlexRowWrapper
                            width="100%"
+                           alignItems="center"
+                           fontSize="0.9em"
+                           padding="0em 1em 0em 1em"
+                           position="relative"
+                           color={'yellow'}
+                           height="100%"
+                           boxSizing="border-box"
+                           justifyContent="center"
                         >
-                           <FlexRowWrapper
-                              width="100%"
-                              alignItems="center"
-                              fontSize="0.9em"
-                              padding="0em 1em 0em 1em"
-                              position="relative"
-                              color={'yellow'}
-                              height="100%"
-                              boxSizing="border-box"
-                              justifyContent="center"
-                           >
-                              <ConditionalRender condition={!!text}>
-                                 <TextColourizer color={'yellow'} textAlign="center">
-                                    {text}
-                                 </TextColourizer>
-                                 <CurrentTurnCountdown />
-                              </ConditionalRender>
-                              <ConditionalRender condition={!!component}>
-                                 <FormContainer>{component}</FormContainer>
-                                 <CurrentTurnCountdown />
-                              </ConditionalRender>
-                           </FlexRowWrapper>
-                        </Fader>
-                     </ConditionalRender>
-                  ))}
-               </FlexColumnWrapper>
-            </CurrentTurnAndFormWrapper>
-            <GameStateTableWrapper>
-               <GameStateTable />
-            </GameStateTableWrapper>
-         </ConditionalRender>
-         <ConditionalRender condition={showRoundSummary}>
-            <Fader fadeInCondition={showRoundSummary} transitionDuration={2} height={'100%'}>
-               <RoundSummary />
-            </Fader>
-         </ConditionalRender>
+                           <ConditionalRender condition={!!text}>
+                              <TextColourizer color={'yellow'} textAlign="center">
+                                 {text}
+                              </TextColourizer>
+                              <CurrentTurnCountdown />
+                           </ConditionalRender>
+                           <ConditionalRender condition={!!component}>
+                              <FormContainer>{component}</FormContainer>
+                              <CurrentTurnCountdown />
+                           </ConditionalRender>
+                        </FlexRowWrapper>
+                     </Fader>
+                  </ConditionalRender>
+               ))}
+            </FlexColumnWrapper>
+         </CurrentTurnAndFormWrapper>
+         <GameStateTableWrapper>
+            <GameStateTable />
+         </GameStateTableWrapper>
       </>
    );
 }

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import Color from '../../../../../../../../global/css/colors';
-import { TextColourizer } from '../../../../../../../../global/components/lib/font/textColorizer/TextColourizer';
-import MyCSS from '../../../../../../../../global/css/MyCSS';
+import Color from '../../../../../../global/css/colors';
+import { TextColourizer } from '../../../../../../global/components/lib/font/textColorizer/TextColourizer';
+import MyCSS from '../../../../../../global/css/MyCSS';
 
 export const RoundSummaryTitle = styled.div`
    height: 2.5em;

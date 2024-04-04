@@ -1,18 +1,18 @@
 import { useContext } from 'react';
-import type AppTypes from '../../../../../../../../../../../shared/app/types/AppTypes';
-import { StaticButton } from '../../../../../../../../../global/components/lib/button/staticButton/Style';
-import type { IDropDownOptions } from '../../../../../../../../../global/components/lib/form/dropDown/DropDownInput';
-import InputCombination from '../../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
-import { StyledForm } from '../../../../../../../../../global/components/lib/form/style/Style';
-import { GameContext } from '../../../../../../../../../global/context/game/GameContext';
-import useApiErrorContext from '../../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
-import DBConnect from '../../../../../../../../../global/database/DBConnect/DBConnect';
-import useForm from '../../../../../../../../../global/hooks/useForm';
 import RoundEndFormClass from './class/RoundEndFormClass';
-import MiscHelper from '../../../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
-import ArrayHelper from '../../../../../../../../../../../shared/lib/helpers/arrayHelper/ArrayHelper';
-import ArrOfObj from '../../../../../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
-import GameHelper from '../../../../../../../../../../../shared/app/GameHelper/GameHelper';
+import useApiErrorContext from '../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
+import useForm from '../../../../../../../global/hooks/useForm';
+import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
+import { GameContext } from '../../../../../../../global/context/game/GameContext';
+import MiscHelper from '../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
+import GameHelper from '../../../../../../../../../shared/app/GameHelper/GameHelper';
+import type { IDropDownOptions } from '../../../../../../../global/components/lib/form/dropDown/DropDownInput';
+import ArrayHelper from '../../../../../../../../../shared/lib/helpers/arrayHelper/ArrayHelper';
+import ArrOfObj from '../../../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
+import { StyledForm } from '../../../../../../../global/components/lib/form/style/Style';
+import InputCombination from '../../../../../../../global/components/lib/form/inputCombination/InputCombination';
+import { StaticButton } from '../../../../../../../global/components/lib/button/staticButton/Style';
+import type AppTypes from '../../../../../../../../../shared/app/types/AppTypes';
 
 interface IRoundEndForm {
    isLastRound: boolean;

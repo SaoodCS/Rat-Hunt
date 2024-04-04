@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
 import Marquee from 'react-fast-marquee';
-import { TextColourizer } from '../../../../../../../../../global/components/lib/font/textColorizer/TextColourizer';
-import { GameContext } from '../../../../../../../../../global/context/game/GameContext';
-import Color from '../../../../../../../../../global/css/colors';
-import DBConnect from '../../../../../../../../../global/database/DBConnect/DBConnect';
+import { GameContext } from '../../../../../../../global/context/game/GameContext';
+import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
+import MiscHelper from '../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
+import GameHelper from '../../../../../../../../../shared/app/GameHelper/GameHelper';
 import { MarqueeItem } from './style/Style';
-import MiscHelper from '../../../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
-import GameHelper from '../../../../../../../../../../../shared/app/GameHelper/GameHelper';
+import { TextColourizer } from '../../../../../../../global/components/lib/font/textColorizer/TextColourizer';
+import Color from '../../../../../../../global/css/colors';
 
 export default function SummaryMarquee(): JSX.Element {
    type IRoundSummaryMap = {
