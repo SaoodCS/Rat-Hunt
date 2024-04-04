@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
 import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
-import ArrOfObj from '../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import { Wrapper } from '../../../global/components/lib/positionModifiers/wrapper/Style';
 import ConditionalRender from '../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
@@ -11,15 +10,15 @@ import DBConnect from '../../../global/database/DBConnect/DBConnect';
 import Gameplay from './components/gameplay/Gameplay';
 import GameDetails from './components/header/GameDetails';
 import RatOrPlayerSplash from './components/ratOrPlayerSplash/RatOrPlayerSplash';
+import RoundSummary from './components/summary/RoundSummary';
 import TopicBoard from './components/topicBoard/TopicBoard';
 import WinnerLoserSplash from './components/winnerLoserSplash/WinnerLoserSplash';
 import {
    GameHeaderWrapper,
    GamePageWrapper,
-   GameplayWrapper,
+   GameStateWrapper,
    TopicBoardWrapper,
 } from './style/Style';
-import RoundSummary from './components/summary/RoundSummary';
 
 export default function StartedGame(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -50,17 +49,14 @@ export default function StartedGame(): JSX.Element {
       // This useEffect is responsble for updating the UI when the currentTurn changes
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
-      const { userStates } = gameState;
-      const allCluesExist = !ArrOfObj.hasKeyVal(userStates, 'clue', '');
-      const allVotesExist = !ArrOfObj.hasKeyVal(userStates, 'votedFor', '');
-      const ratHasGuessedWord = GameHelper.Check.hasRatGuessed(gameState);
-      if (allCluesExist && allVotesExist && ratHasGuessedWord) {
-         setSplashScreenContent(<WinnerLoserSplash />);
-         toggleSplashScreen(true);
-         setShowRoundSummary(true);
+      const gamePhase = GameHelper.Get.gamePhase(gameState);
+      if (gamePhase !== 'roundSummary') {
+         setShowRoundSummary(false);
          return;
       }
-      setShowRoundSummary(false);
+      setSplashScreenContent(<WinnerLoserSplash />);
+      toggleSplashScreen(true);
+      setShowRoundSummary(true);
    }, [roomData?.gameState?.currentTurn]);
 
    return (
@@ -69,7 +65,9 @@ export default function StartedGame(): JSX.Element {
             <GameHeaderWrapper>
                <GameDetails />
             </GameHeaderWrapper>
-            <GameplayWrapper>{showRoundSummary ? <RoundSummary /> : <Gameplay />}</GameplayWrapper>
+            <GameStateWrapper>
+               {showRoundSummary ? <RoundSummary /> : <Gameplay />}
+            </GameStateWrapper>
             <TopicBoardWrapper>
                <TopicBoard />
             </TopicBoardWrapper>

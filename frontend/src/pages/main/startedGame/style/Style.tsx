@@ -26,7 +26,7 @@ export const GameHeaderWrapper = styled.div`
    filter: brightness(1.25);
 `;
 
-export const GameplayWrapper = styled.div`
+export const GameStateWrapper = styled.div`
    position: absolute;
    width: 100%;
    top: ${headerHeightAsPercentage}%;

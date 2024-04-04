@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { FlexRowWrapper } from '../../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
 import Color from '../../../../../../global/css/colors';
 
 export const GameStateTableWrapper = styled.div`
@@ -28,4 +29,16 @@ export const CurrentTurnAndFormWrapper = styled.div`
    flex-direction: column;
    justify-content: center;
    z-index: -1;
+`;
+
+export const CurrentTurnAndFormItem = styled(FlexRowWrapper)`
+   width: 100%;
+   align-items: center;
+   font-size: 0.9em;
+   padding: 0em 1em 0em 1em;
+   position: relative;
+   color: yellow;
+   height: 100%;
+   box-sizing: border-box;
+   justify-content: center;
 `;

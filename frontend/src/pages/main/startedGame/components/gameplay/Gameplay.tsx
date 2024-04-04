@@ -1,14 +1,13 @@
+/* eslint-disable no-irregular-whitespace */
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
 import GameHelper from '../../../../../../../shared/app/GameHelper/GameHelper';
 import ArrayHelper from '../../../../../../../shared/lib/helpers/arrayHelper/ArrayHelper';
-import ArrOfObj from '../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import Fader from '../../../../../global/components/lib/animation/fader/Fader';
 import { TextColourizer } from '../../../../../global/components/lib/font/textColorizer/TextColourizer';
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
-import { FlexRowWrapper } from '../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
 import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../global/context/game/GameContext';
 import MyCSS from '../../../../../global/css/MyCSS';
@@ -18,7 +17,12 @@ import ClueForm from './components/forms/clueForm/ClueForm';
 import RatVoteForm from './components/forms/ratVoteForm/RatVoteForm';
 import WordGuessForm from './components/forms/wordGuessForm/WordGuessForm';
 import GameStateTable from './components/gameStateTable/GameStateTable';
-import { CurrentTurnAndFormWrapper, FormContainer, GameStateTableWrapper } from './style/Style';
+import {
+   CurrentTurnAndFormItem,
+   CurrentTurnAndFormWrapper,
+   FormContainer,
+   GameStateTableWrapper,
+} from './style/Style';
 
 export default function Gameplay(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -50,51 +54,26 @@ export default function Gameplay(): JSX.Element {
       // This useEffect is responsble for updating the UI when the currentTurn changes
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
-      const { userStates, currentRat, currentTurn } = gameState;
-      const ratUserState = ArrOfObj.getObj(userStates, 'userId', currentRat);
-      if (!MiscHelper.isNotFalsyOrEmpty(ratUserState)) return;
-      const isPlayerRat = currentRat === localDbUser;
-      const allCluesExist = !ArrOfObj.hasKeyVal(userStates, 'clue', '');
-      const allVotesExist = !ArrOfObj.hasKeyVal(userStates, 'votedFor', '');
-      const ratHasGuessedWord = MiscHelper.isNotFalsyOrEmpty(ratUserState.guess);
+      const { currentTurn } = gameState;
       const currentTurnUserId = GameHelper.Get.currentTurnUserId(currentTurn);
       const isYourTurn = currentTurnUserId === localDbUser;
-      const ratIsGuessingWord = currentTurn.includes('.wordGuess');
-      setShowRatGuessingMsg(!isYourTurn && ratIsGuessingWord);
-      setShowCurrentTurnMsg(!isYourTurn && !ratIsGuessingWord);
-      if (allCluesExist && allVotesExist && ratHasGuessedWord) {
-         setShowClueForm(false);
-         setShowRatVoteForm(false);
-         setShowWordGuessForm(false);
-         return;
-      }
-      setShowWordGuessForm(isYourTurn && allCluesExist && allVotesExist && isPlayerRat);
-      setShowRatVoteForm(isYourTurn && allCluesExist && !allVotesExist);
-      setShowClueForm(isYourTurn && !allCluesExist);
+      const gamePhase = GameHelper.Get.gamePhase(gameState);
+      setShowRatGuessingMsg(!isYourTurn && gamePhase === 'guess');
+      setShowCurrentTurnMsg(!isYourTurn && gamePhase !== 'guess');
+      setShowWordGuessForm(isYourTurn && gamePhase === 'guess');
+      setShowRatVoteForm(isYourTurn && gamePhase === 'votedFor');
+      setShowClueForm(isYourTurn && gamePhase === 'clue');
    }, [roomData?.gameState?.currentTurn, localDbUser]);
 
    const gameplayHeadMap = [
+      { component: <ClueForm />, condition: showClueForm },
+      { component: <RatVoteForm />, condition: showRatVoteForm },
+      { component: <WordGuessForm />, condition: showWordGuessForm },
       {
-         component: <ClueForm />,
-         condition: showClueForm,
-      },
-      {
-         component: <RatVoteForm />,
-         condition: showRatVoteForm,
-      },
-      {
-         component: <WordGuessForm />,
-         condition: showWordGuessForm,
-      },
-      {
-         // eslint-disable-next-line no-irregular-whitespace
          text: `Current Turn  :  ${roomData?.gameState?.currentTurn}`,
          condition: showCurrentTurnMsg,
       },
-      {
-         text: 'The Rat is guessing the word',
-         condition: showRatGuessingMsg,
-      },
+      { text: 'The Rat is guessing the word', condition: showRatGuessingMsg },
    ];
 
    return (
@@ -115,17 +94,7 @@ export default function Gameplay(): JSX.Element {
                         height="100%"
                         width="100%"
                      >
-                        <FlexRowWrapper
-                           width="100%"
-                           alignItems="center"
-                           fontSize="0.9em"
-                           padding="0em 1em 0em 1em"
-                           position="relative"
-                           color={'yellow'}
-                           height="100%"
-                           boxSizing="border-box"
-                           justifyContent="center"
-                        >
+                        <CurrentTurnAndFormItem>
                            <ConditionalRender condition={!!text}>
                               <TextColourizer color={'yellow'} textAlign="center">
                                  {text}
@@ -136,7 +105,7 @@ export default function Gameplay(): JSX.Element {
                               <FormContainer>{component}</FormContainer>
                               <CurrentTurnCountdown />
                            </ConditionalRender>
-                        </FlexRowWrapper>
+                        </CurrentTurnAndFormItem>
                      </Fader>
                   </ConditionalRender>
                ))}
