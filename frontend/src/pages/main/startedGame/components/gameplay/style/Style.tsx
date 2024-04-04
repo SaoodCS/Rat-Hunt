@@ -12,8 +12,6 @@ export const GameStateTableWrapper = styled.div`
 
 export const FormContainer = styled.div`
    box-sizing: border-box;
-   padding-left: 1em;
-   padding-right: 1em;
    filter: brightness(0.8);
    height: 100%;
    width: 100%;

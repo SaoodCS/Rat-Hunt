@@ -6,6 +6,7 @@ import ArrayHelper from '../../../../../../../shared/lib/helpers/arrayHelper/Arr
 import ArrOfObj from '../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import Fader from '../../../../../global/components/lib/animation/fader/Fader';
+import { TextColourizer } from '../../../../../global/components/lib/font/textColorizer/TextColourizer';
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { FlexRowWrapper } from '../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
 import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
@@ -117,40 +118,35 @@ export default function Gameplay(): JSX.Element {
                >
                   {gameplayHeadMap.map(({ text, condition, component }, index) => (
                      <ConditionalRender key={index} condition={condition}>
-                        <ConditionalRender condition={!!text}>
+                        <Fader
+                           fadeInCondition={condition}
+                           transitionDuration={0.5}
+                           height="100%"
+                           width="100%"
+                        >
                            <FlexRowWrapper
                               width="100%"
                               alignItems="center"
-                              justifyContent="space-between"
                               fontSize="0.9em"
                               padding="0em 1em 0em 1em"
+                              position="relative"
                               color={'yellow'}
-                              style={{ boxSizing: 'border-box' }}
-                           >
-                              {text}
-                              <CurrentTurnCountdown />
-                           </FlexRowWrapper>
-                        </ConditionalRender>
-                        <ConditionalRender condition={!!component}>
-                           <Fader
-                              fadeInCondition={condition}
-                              transitionDuration={0.5}
                               height="100%"
-                              width="100%"
+                              boxSizing="border-box"
+                              justifyContent="center"
                            >
-                              <FlexRowWrapper
-                                 width="100%"
-                                 height="100%"
-                                 alignItems="center"
-                                 justifyContent="space-between"
-                                 style={{ boxSizing: 'border-box' }}
-                                 padding="0em 1em 0em 0em"
-                              >
-                                 <FormContainer style={{ width: '85%' }}>{component}</FormContainer>
+                              <ConditionalRender condition={!!text}>
+                                 <TextColourizer color={'yellow'} textAlign="center">
+                                    {text}
+                                 </TextColourizer>
                                  <CurrentTurnCountdown />
-                              </FlexRowWrapper>
-                           </Fader>
-                        </ConditionalRender>
+                              </ConditionalRender>
+                              <ConditionalRender condition={!!component}>
+                                 <FormContainer>{component}</FormContainer>
+                                 <CurrentTurnCountdown />
+                              </ConditionalRender>
+                           </FlexRowWrapper>
+                        </Fader>
                      </ConditionalRender>
                   ))}
                </FlexColumnWrapper>
@@ -172,7 +168,7 @@ const screenStyles = (): FlattenSimpleInterpolation => {
    const forDesktop = MyCSS.Media.desktop(css`
       &:first-child {
          & > * {
-            font-size: 1em;
+            font-size: 1.1em;
          }
       }
    `);

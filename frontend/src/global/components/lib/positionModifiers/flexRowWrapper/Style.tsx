@@ -20,6 +20,7 @@ export const FlexRowWrapper = styled.div<{
    filter?: string;
    fontSize?: string;
    flex?: number;
+   boxSizing?: 'border-box' | 'content-box';
 }>`
    display: flex;
    flex-direction: row;
@@ -42,4 +43,5 @@ export const FlexRowWrapper = styled.div<{
    ${({ localStyles }) => localStyles};
    font-size: ${({ fontSize }) => fontSize};
    flex: ${({ flex }) => flex};
+   box-sizing: ${({ boxSizing }) => boxSizing};
 `;
