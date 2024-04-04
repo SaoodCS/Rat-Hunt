@@ -4,25 +4,39 @@ import { Body } from '../../global/components/app/layout/body/Body';
 import {
    Header,
    HeaderRightElWrapper,
+   HeaderSubtitleWrapper,
    StyledBackArr,
 } from '../../global/components/app/layout/header/Header';
-import { LogoText } from '../../global/components/app/logo/LogoText';
+import { TextColourizer } from '../../global/components/lib/font/textColorizer/TextColourizer';
 import ConditionalRender from '../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import GameContextProvider from '../../global/context/game/GameContextProvider';
 import useThemeContext from '../../global/context/theme/hooks/useThemeContext';
 import HeaderHooks from '../../global/context/widget/header/hooks/HeaderHooks';
 import useHeaderContext from '../../global/context/widget/header/hooks/useHeaderContext';
+import Color from '../../global/css/colors';
 import GuideAndLeaveRoom from './components/GuideAndLeaveRoom';
+import RoomIdBtn from './startedGame/components/roomIdBtn/RoomIdBtn';
 
 export default function MainLayout(): JSX.Element {
-   const { isDarkTheme } = useThemeContext();
-   const { headerTitle, showBackBtn, handleBackBtnClick, headerRightElement } = useHeaderContext();
+   const { isDarkTheme, isPortableDevice } = useThemeContext();
+   const {
+      headerTitle,
+      showBackBtn,
+      handleBackBtnClick,
+      headerRightElement,
+      headerSubtitleElement,
+   } = useHeaderContext();
    const location = useLocation();
    HeaderHooks.useOnMount.setHeaderTitle('Rat Hunt');
    HeaderHooks.useOnDepChange.setHeaderRightEl(
       <GuideAndLeaveRoom currentPath={location.pathname} />,
       [location.pathname],
    );
+   HeaderHooks.useOnDepChange.setHeaderSubtitleEl(
+      location.pathname.includes('started') ? <RoomIdBtn /> : null,
+      [location.pathname],
+   );
+
    return (
       <>
          <GameContextProvider>
@@ -33,7 +47,13 @@ export default function MainLayout(): JSX.Element {
                      darktheme={BoolHelper.boolToStr(isDarkTheme)}
                   />
                </ConditionalRender>
-               <LogoText size={'2em'}>{headerTitle}</LogoText>
+               <TextColourizer
+                  color={Color.darkThm.accent}
+                  fontSize={isPortableDevice ? '1.8em' : '4rem'}
+               >
+                  {headerTitle}
+               </TextColourizer>
+               <HeaderSubtitleWrapper>{headerSubtitleElement}</HeaderSubtitleWrapper>
                <HeaderRightElWrapper isDarkTheme={isDarkTheme}>
                   {headerRightElement}
                </HeaderRightElWrapper>

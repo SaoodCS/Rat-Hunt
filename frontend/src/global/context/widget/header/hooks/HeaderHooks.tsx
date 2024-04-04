@@ -14,6 +14,8 @@ export namespace HeaderHooks {
          hideAndResetBackBtn,
          headerRightElement,
          setHeaderRightElement,
+         headerSubtitleElement,
+         setHeaderSubtitleElement,
       } = useContext(HeaderContext);
       return {
          headerTitle,
@@ -25,6 +27,8 @@ export namespace HeaderHooks {
          hideAndResetBackBtn,
          headerRightElement,
          setHeaderRightElement,
+         headerSubtitleElement,
+         setHeaderSubtitleElement,
       };
    }
 
@@ -66,6 +70,15 @@ export namespace HeaderHooks {
             };
          }, []);
       }
+
+      export function resetHeaderSubtitleEl(): void {
+         const { setHeaderSubtitleElement } = HeaderHooks.useHeaderContext();
+         useEffect(() => {
+            return () => {
+               setHeaderSubtitleElement(null);
+            };
+         }, []);
+      }
    }
 
    export namespace useOnDepChange {
@@ -91,6 +104,16 @@ export namespace HeaderHooks {
          const { setHeaderRightElement } = HeaderHooks.useHeaderContext();
          useEffect(() => {
             setHeaderRightElement(el);
+         }, [...deps]);
+      }
+
+      export function setHeaderSubtitleEl(
+         el: JSX.Element | null,
+         deps: React.DependencyList,
+      ): void {
+         const { setHeaderSubtitleElement } = HeaderHooks.useHeaderContext();
+         useEffect(() => {
+            setHeaderSubtitleElement(el);
          }, [...deps]);
       }
    }

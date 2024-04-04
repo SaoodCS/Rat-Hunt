@@ -1,17 +1,11 @@
 import styled from 'styled-components';
 import Color from '../../../../global/css/colors';
 
-const headerHeightAsPercentage = 15;
-const gameplayHeightAsPercentage = 40;
+const headerHeightAsPercentage = 12;
+const gameplayHeightAsPercentage = 43;
 
 export const GamePageWrapper = styled.div`
    height: 100%;
-   background: linear-gradient(
-      to bottom,
-      ${Color.setRgbOpacity(Color.darkThm.accent, 0)},
-      ${Color.setRgbOpacity(Color.darkThm.accent, 0.02)},
-      ${Color.setRgbOpacity(Color.darkThm.accent, 0.1)}
-   );
 `;
 
 export const GameHeaderWrapper = styled.div`

@@ -13,6 +13,8 @@ export default function useHeaderContext(): IHeaderContext {
       hideAndResetBackBtn,
       headerRightElement,
       setHeaderRightElement,
+      setHeaderSubtitleElement,
+      headerSubtitleElement,
    } = useContext(HeaderContext);
    return {
       headerTitle,
@@ -24,5 +26,7 @@ export default function useHeaderContext(): IHeaderContext {
       hideAndResetBackBtn,
       headerRightElement,
       setHeaderRightElement,
+      setHeaderSubtitleElement,
+      headerSubtitleElement,
    };
 }

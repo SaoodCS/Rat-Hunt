@@ -11,6 +11,8 @@ export interface IHeaderContext {
    hideAndResetBackBtn: () => void;
    headerRightElement: JSX.Element | null;
    setHeaderRightElement: Dispatch<SetStateAction<JSX.Element | null>>;
+   headerSubtitleElement: JSX.Element | null;
+   setHeaderSubtitleElement: Dispatch<SetStateAction<JSX.Element | null>>;
 }
 
 export const HeaderContext = createContext<IHeaderContext>({
@@ -23,4 +25,6 @@ export const HeaderContext = createContext<IHeaderContext>({
    hideAndResetBackBtn: () => {},
    headerRightElement: null,
    setHeaderRightElement: () => {},
+   headerSubtitleElement: null,
+   setHeaderSubtitleElement: () => {},
 });

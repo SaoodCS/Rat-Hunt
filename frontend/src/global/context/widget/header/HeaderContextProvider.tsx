@@ -13,6 +13,7 @@ export default function HeaderContextProvider(props: IHeaderContextProvider): JS
    const [handleBackBtnClick, setHandleBackBtnClick] = useFuncState(() => null);
    const [showBackBtn, setShowBackBtn] = useState<boolean>(false);
    const [headerRightElement, setHeaderRightElement] = useState<JSX.Element | null>(null);
+   const [headerSubtitleElement, setHeaderSubtitleElement] = useState<JSX.Element | null>(null);
 
    function hideAndResetBackBtn(): void {
       setShowBackBtn(false);
@@ -36,6 +37,8 @@ export default function HeaderContextProvider(props: IHeaderContextProvider): JS
             hideAndResetBackBtn,
             headerRightElement,
             setHeaderRightElement,
+            headerSubtitleElement,
+            setHeaderSubtitleElement,
          }}
       >
          {children}

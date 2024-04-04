@@ -1,5 +1,5 @@
 import { ArrowIosBack } from '@styled-icons/evaicons-solid/ArrowIosBack';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import MyCSS from '../../../../css/MyCSS';
 import Color from '../../../../css/colors';
 import BoolHelper from '../../../../../../../shared/lib/helpers/bool/BoolHelper';
@@ -15,7 +15,6 @@ export const Header = styled.div<{ isDarkTheme: boolean }>`
    display: flex;
    justify-content: space-evenly;
    align-items: center;
-   font-size: 1.1em;
    @media (min-width: ${MyCSS.PortableBp.asPx}) {
       height: calc(10% + 20px);
       font-size: 3em;
@@ -24,6 +23,17 @@ export const Header = styled.div<{ isDarkTheme: boolean }>`
       border-bottom: none;
    }
    z-index: 1;
+`;
+
+export const HeaderSubtitleWrapper = styled.div`
+   position: absolute;
+   bottom: 5px;
+   ${MyCSS.Media.mobile(css`
+      font-size: 0.8rem;
+   `)};
+   ${MyCSS.Media.desktop(css`
+      font-size: 1rem;
+   `)};
 `;
 
 export const StyledBackArr = styled(ArrowIosBack)<{ darktheme: 'true' | 'false' }>`

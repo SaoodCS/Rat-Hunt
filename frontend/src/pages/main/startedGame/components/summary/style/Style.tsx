@@ -45,6 +45,8 @@ export const ScoreboardContainer = styled.div`
    left: 0px;
    right: 0px;
    box-sizing: border-box;
+   display: flex;
+   justify-content: center;
 `;
 
 export const MarqueeContainer = styled.div`

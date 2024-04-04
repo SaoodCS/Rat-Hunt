@@ -4,7 +4,7 @@ import MyCSS from '../../../../../../../../global/css/MyCSS';
 
 export const ScoreboardWrapper = styled.div<{ localStyles?: FlattenSimpleInterpolation }>`
    position: absolute;
-   top: 0.5em;
+   top: 1em;
    bottom: 0.5em;
    width: 100%;
    overflow: scroll;

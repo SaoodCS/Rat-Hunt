@@ -9,9 +9,6 @@ import useThemeContext from '../../../../../../../global/context/theme/hooks/use
 import ArrOfObj from '../../../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 import Scroller from '../../../../../../../global/components/lib/scroller/Scroller';
 import ProgressBarChart from '../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
-import { FlexCenterer } from '../../../../../../../global/components/lib/positionModifiers/centerers/FlexCenterer';
-import ConditionalRender from '../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
-import { ArrowCircleLeftIcon } from '../../../../../../../global/components/lib/icons/arrows/ArrowCircleLeft';
 import MyCSS from '../../../../../../../global/css/MyCSS';
 
 export default function ScoreboardSlide(): JSX.Element {
@@ -41,60 +38,25 @@ export default function ScoreboardSlide(): JSX.Element {
    }, [roomData?.gameState?.userStates, roomData?.gameState?.numberOfRoundsSet]);
 
    return (
-      <>
-         <ScoreboardWrapper localStyles={screenStyles()}>
-            <Scroller scrollbarWidth={5} withFader dependencies={[chartData]}>
-               <ProgressBarChart
-                  data={ArrOfObj.sort(chartData, 'completedAmnt', true)}
-                  barHeight="1.6em"
-                  barWidth="95%"
-               />
-            </Scroller>
-         </ScoreboardWrapper>
-         <ConditionalRender condition={!isPortableDevice}>
-            <FlexCenterer
-               position="absolute"
-               left="95%"
-               right="0"
-               height="100%"
-               padding="0em 0.3em 0em 0.3em"
-               localStyles={flexCentererStyles()}
-            >
-               <ArrowCircleLeftIcon darktheme="true" />
-            </FlexCenterer>
-         </ConditionalRender>
-      </>
+      <ScoreboardWrapper localStyles={screenStyles()}>
+         <Scroller scrollbarWidth={5} withFader dependencies={[chartData]}>
+            <ProgressBarChart
+               data={ArrOfObj.sort(chartData, 'completedAmnt', true)}
+               barHeight="1.5em"
+               barWidth="98%"
+            />
+         </Scroller>
+      </ScoreboardWrapper>
    );
 }
 
-const flexCentererStyles = (): FlattenSimpleInterpolation => {
-   return css`
-      @media (min-width: ${MyCSS.PortableBp.asPx}) {
-         padding: 0.3em 0.3em 0em 0.3em;
-         align-items: start;
-      }
-      @media (min-width: 1000px) {
-         padding: 0.3em 0.3em 0em 0.3em;
-         //align-items: center;
-      }
-      @media (min-width: 1200px) {
-         padding: 0em 0.5em 0em 0.5em;
-         align-items: center;
-      }
-      @media (min-width: 1700px) {
-         padding: 0em 0.75em 0em 0.75em;
-         align-items: center;
-      }
-      @media (min-width: 1800px) {
-         padding: 0em 1em 0em 1em;
-         align-items: center;
+const screenStyles = (): FlattenSimpleInterpolation => {
+   const forDesktop = MyCSS.Media.desktop(css``);
+
+   const medium = css`
+      @media (min-width: 544px) {
+         max-width: 45em;
       }
    `;
-};
-
-const screenStyles = (): FlattenSimpleInterpolation => {
-   const forDesktop = MyCSS.Media.desktop(css`
-      font-size: 1.2em;
-   `);
-   return MyCSS.Helper.concatStyles(forDesktop);
+   return MyCSS.Helper.concatStyles(forDesktop, medium);
 };

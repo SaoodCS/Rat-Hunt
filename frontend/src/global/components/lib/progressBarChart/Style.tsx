@@ -26,7 +26,7 @@ export const BarTitle = styled.div`
 `;
 
 export const BarAndInfoWrapper = styled.div`
-   margin-bottom: 0.6em;
+   margin-bottom: 0.8em;
 `;
 
 export const CompletedBar = styled.div<{
