@@ -54,6 +54,24 @@ export namespace GameHelper {
       export function isUserInRoom(userId: string, userStates: AppTypes.UserState[]): boolean {
          return ArrOfObj.hasKeyVal(userStates, 'userId', userId);
       }
+
+      export function shouldSkipTurn(gameState: AppTypes.GameState): boolean {
+         const { currentTurn, userStates } = gameState;
+         const currentTurnUserId = GameHelper.Get.currentTurnUserId(currentTurn);
+         const disconnectedUsers = GameHelper.Get.disconnectedUserIds(userStates);
+         const spectatingUsers = GameHelper.Get.spectatingUserIds(userStates);
+         const gamePhase = GameHelper.Get.gamePhase(gameState);
+         const currentTurnUserIsDisconnected = disconnectedUsers.includes(currentTurnUserId);
+         const currentTurnUserIsSpectating = spectatingUsers.includes(currentTurnUserId);
+         const gamePhaseIsRoundSummary = gamePhase === 'roundSummary';
+         if (
+            !gamePhaseIsRoundSummary &&
+            (currentTurnUserIsDisconnected || currentTurnUserIsSpectating)
+         ) {
+            return true;
+         }
+         return false;
+      }
    }
 
    export namespace Get {
@@ -411,6 +429,40 @@ export namespace GameHelper {
             currentTurnChangedAt: new Date().getTime() + 3000, // 3 seconds as this is how long the user role splash screen is displayed
             userStates: updatedUserStates,
          };
+         return updatedGameState;
+      }
+
+      export function skipCurrentTurn(gameState: AppTypes.GameState): AppTypes.GameState {
+         const { currentTurn, userStates, currentRat } = gameState;
+         const currentTurnUserId = GameHelper.Get.currentTurnUserId(currentTurn);
+         const currentGamePhase = GameHelper.Get.gamePhase(gameState);
+         if (currentGamePhase === 'roundSummary') {
+            throw new Error('Cannot skip turn during round summary');
+         }
+         const isNextPhaseRoundSummary = currentGamePhase === 'guess';
+         const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(
+            gameState,
+            currentTurnUserId,
+            currentGamePhase,
+            currentRat,
+         );
+         const updatedUserStates = GameHelper.SetUserStates.updateUser(
+            userStates,
+            currentTurnUserId,
+            [{ key: currentGamePhase, value: 'SKIP' }],
+         );
+         const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
+            { key: 'currentTurn', value: updatedCurrentTurn },
+            {
+               key: 'currentTurnChangedAt',
+               value: isNextPhaseRoundSummary ? '' : new Date().getTime(),
+            },
+            { key: 'userStates', value: updatedUserStates },
+         ]);
+
+         if (isNextPhaseRoundSummary) {
+            return GameHelper.SetGameState.userPoints(updatedGameState);
+         }
          return updatedGameState;
       }
 

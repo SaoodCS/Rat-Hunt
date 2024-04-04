@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from 'react';
-import { GameContext } from '../../../../../../../global/context/game/GameContext';
-import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
-import MiscHelper from '../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
-import NumberHelper from '../../../../../../../../../shared/lib/helpers/number/NumberHelper';
-import { FlexRowWrapper } from '../../../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
-import { TextColourizer } from '../../../../../../../global/components/lib/font/textColorizer/TextColourizer';
-import Color from '../../../../../../../global/css/colors';
 import GameHelper from '../../../../../../../../../shared/app/GameHelper/GameHelper';
 import ArrayHelper from '../../../../../../../../../shared/lib/helpers/arrayHelper/ArrayHelper';
+import MiscHelper from '../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
+import NumberHelper from '../../../../../../../../../shared/lib/helpers/number/NumberHelper';
+import { TextColourizer } from '../../../../../../../global/components/lib/font/textColorizer/TextColourizer';
+import { FlexRowWrapper } from '../../../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
+import { GameContext } from '../../../../../../../global/context/game/GameContext';
+import Color from '../../../../../../../global/css/colors';
+import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
 
 const TURN_TIME_LIMIT = NumberHelper.minsToMs(1);
 
@@ -22,45 +22,19 @@ export default function CurrentTurnCountdown(): JSX.Element {
       const interval = setInterval(() => {
          const timeRemaining = Math.floor((countdownExpiry - Date.now()) / 1000);
          if (timeRemaining <= 0) {
-            // TODO: some of the logic here is similar to the first useEffect in Gameplay.tsx. May be worth refactoring to avoid duplication...
-            // TODO: after that is done, clean up the file / folder structure of the front-end project (esp in the pages folder) so that it's neatly organized
             // TODO: then, improve the UI of the gameplay (the form and current turn part where the countdown is) for different screen sizes
+            // TODO: after that is done, clean up the file / folder structure of the front-end project (esp in the pages folder) so that it's neatly organized
+            // This logic handles the case of skipping the current turn if the current user takes too long to make a move (i.e. the countdown expires)
             if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
             const connectedUsers = GameHelper.Get.connectedUserIds(roomData.gameState.userStates);
             const sortedConnectedUsers = ArrayHelper.sort(connectedUsers);
             if (localDbUser !== sortedConnectedUsers[0]) return;
             const { gameState } = roomData;
-            const { currentTurn, currentRat, userStates } = gameState;
-            const currentTurnUserId = GameHelper.Get.currentTurnUserId(currentTurn);
-            const currentGamePhase = GameHelper.Get.gamePhase(gameState);
-            if (currentGamePhase === 'roundSummary') return;
-            const isRoundSummaryPostSkip = currentGamePhase === 'guess';
-            const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(
-               gameState,
-               currentTurnUserId,
-               currentGamePhase,
-               currentRat,
-            );
-            const updatedUserStates = GameHelper.SetUserStates.updateUser(
-               userStates,
-               currentTurnUserId,
-               [{ key: currentGamePhase, value: 'SKIP' }],
-            );
-            const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
-               { key: 'currentTurn', value: updatedCurrentTurn },
-               {
-                  key: 'currentTurnChangedAt',
-                  value: isRoundSummaryPostSkip ? '' : new Date().getTime(),
-               },
-               { key: 'userStates', value: updatedUserStates },
-            ]);
+            const updatedGameState = GameHelper.SetGameState.skipCurrentTurn(gameState);
             updateGameStateMutation.mutate({
                roomId: localDbRoom,
-               gameState: isRoundSummaryPostSkip
-                  ? GameHelper.SetGameState.userPoints(updatedGameState)
-                  : updatedGameState,
+               gameState: updatedGameState,
             });
-
             clearInterval(interval);
             return;
          }

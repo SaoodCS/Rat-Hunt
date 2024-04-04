@@ -32,43 +32,18 @@ export default function Gameplay(): JSX.Element {
    const updateGameStateMutation = DBConnect.FSDB.Set.gameState({}, false);
 
    useEffect(() => {
+      // This useEffect handles the case of skipping the current turn if the current user is disconnected or spectating
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
       const connectedUsers = GameHelper.Get.connectedUserIds(roomData.gameState.userStates);
       const sortedConnectedUsers = ArrayHelper.sort(connectedUsers);
       if (localDbUser !== sortedConnectedUsers[0]) return;
-      const { currentTurn, userStates, currentRat } = gameState;
-      const currentTurnUserId = GameHelper.Get.currentTurnUserId(currentTurn);
-      const disconnectedUsers = GameHelper.Get.disconnectedUserIds(roomData.gameState.userStates);
-      const spectatingUsers = GameHelper.Get.spectatingUserIds(userStates);
-      const currentTurnUserIsDisconnected = disconnectedUsers.includes(currentTurnUserId);
-      const currentTurnUserIsSpectating = spectatingUsers.includes(currentTurnUserId);
-      if (!(currentTurnUserIsDisconnected || currentTurnUserIsSpectating)) return;
-      const currentGamePhase = GameHelper.Get.gamePhase(gameState);
-      if (currentGamePhase === 'roundSummary') return;
-      const isNextPhaseRoundSummary = currentGamePhase === 'guess';
-      const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(
-         gameState,
-         currentTurnUserId,
-         currentGamePhase,
-         currentRat,
-      );
-      const updatedUserStates = GameHelper.SetUserStates.updateUser(userStates, currentTurnUserId, [
-         { key: currentGamePhase, value: 'SKIP' },
-      ]);
-      const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
-         { key: 'currentTurn', value: updatedCurrentTurn },
-         {
-            key: 'currentTurnChangedAt',
-            value: isNextPhaseRoundSummary ? '' : new Date().getTime(),
-         },
-         { key: 'userStates', value: updatedUserStates },
-      ]);
+      const shouldSkipTurn = GameHelper.Check.shouldSkipTurn(gameState);
+      if (!shouldSkipTurn) return;
+      const updatedGameState = GameHelper.SetGameState.skipCurrentTurn(gameState);
       updateGameStateMutation.mutate({
          roomId: localDbRoom,
-         gameState: isNextPhaseRoundSummary
-            ? GameHelper.SetGameState.userPoints(updatedGameState)
-            : updatedGameState,
+         gameState: updatedGameState,
       });
    }, [roomData?.gameState?.currentTurn, localDbUser, roomData?.gameState.userStates]);
 
