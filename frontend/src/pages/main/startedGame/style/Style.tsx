@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import Color from '../../../../global/css/colors';
 
-const headerHeightAsPercentage = 20;
-const gameplayHeightAsPercentage = 35;
+const headerHeightAsPercentage = 15;
+const gameplayHeightAsPercentage = 40;
 
 export const GamePageWrapper = styled.div`
    height: 100%;
