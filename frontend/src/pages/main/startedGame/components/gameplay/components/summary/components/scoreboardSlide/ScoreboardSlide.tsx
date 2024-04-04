@@ -1,25 +1,20 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
-import ArrOfObj from '../../../../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
-import { ArrowCircleLeftIcon } from '../../../../../../../../global/components/lib/icons/arrows/ArrowCircleLeft';
-import { FlexCenterer } from '../../../../../../../../global/components/lib/positionModifiers/centerers/FlexCenterer';
-import type { IProgressBarChartData } from '../../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
-import ProgressBarChart from '../../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
-import ConditionalRender from '../../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
-import Scroller from '../../../../../../../../global/components/lib/scroller/Scroller';
-import { GameContext } from '../../../../../../../../global/context/game/GameContext';
-import useThemeContext from '../../../../../../../../global/context/theme/hooks/useThemeContext';
-import MyCSS from '../../../../../../../../global/css/MyCSS';
-import DBConnect from '../../../../../../../../global/database/DBConnect/DBConnect';
-import { ScoreboardContainer } from '../../../../header/style/Style';
+import ArrOfObj from '../../../../../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
+import { ArrowCircleLeftIcon } from '../../../../../../../../../global/components/lib/icons/arrows/ArrowCircleLeft';
+import { FlexCenterer } from '../../../../../../../../../global/components/lib/positionModifiers/centerers/FlexCenterer';
+import type { IProgressBarChartData } from '../../../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
+import ProgressBarChart from '../../../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
+import ConditionalRender from '../../../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
+import Scroller from '../../../../../../../../../global/components/lib/scroller/Scroller';
+import { GameContext } from '../../../../../../../../../global/context/game/GameContext';
+import useThemeContext from '../../../../../../../../../global/context/theme/hooks/useThemeContext';
+import MyCSS from '../../../../../../../../../global/css/MyCSS';
+import DBConnect from '../../../../../../../../../global/database/DBConnect/DBConnect';
+import { ScoreboardWrapper } from './style/Style';
 
-interface IScoreboardSlide {
-   scrollToSlide?: (slideNum: number) => void;
-}
-
-export default function ScoreboardSlide(props: IScoreboardSlide): JSX.Element {
-   const { scrollToSlide } = props;
+export default function ScoreboardSlide(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [chartData, setChartData] = useState<IProgressBarChartData[]>([]);
@@ -47,7 +42,7 @@ export default function ScoreboardSlide(props: IScoreboardSlide): JSX.Element {
 
    return (
       <>
-         <ScoreboardContainer localStyles={screenStyles()}>
+         <ScoreboardWrapper localStyles={screenStyles()}>
             <Scroller scrollbarWidth={5} withFader dependencies={[chartData]}>
                <ProgressBarChart
                   data={ArrOfObj.sort(chartData, 'completedAmnt', true)}
@@ -55,7 +50,7 @@ export default function ScoreboardSlide(props: IScoreboardSlide): JSX.Element {
                   barWidth="95%"
                />
             </Scroller>
-         </ScoreboardContainer>
+         </ScoreboardWrapper>
          <ConditionalRender condition={!isPortableDevice}>
             <FlexCenterer
                position="absolute"

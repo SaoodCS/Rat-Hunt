@@ -10,9 +10,9 @@ import MyCSS from '../../../../../../../global/css/MyCSS';
 import Color from '../../../../../../../global/css/colors';
 import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
 import RoundEndForm from './components/form/RoundEndForm';
+import ScoreboardSlide from './components/scoreboardSlide/ScoreboardSlide';
 import SummaryMarquee from './components/summaryMarquee/SummaryMarquee';
 import WinnerLoserSplash from './components/winnerLoserSplash/WinnerLoserSplash';
-import ScoreboardSlide from './scoreboardSlide/ScoreboardSlide';
 import {
    MarqueeContainer,
    NextPlayAgainBtnContainer,
