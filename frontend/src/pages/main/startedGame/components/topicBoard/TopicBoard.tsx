@@ -6,17 +6,28 @@ import { GameContext } from '../../../../../global/context/game/GameContext';
 import MyCSS from '../../../../../global/css/MyCSS';
 import DBConnect from '../../../../../global/database/DBConnect/DBConnect';
 import { BoardCell, BoardContainer, BoardRow, CellValue } from './style/Style';
-import type GameHelper from '../../../../../../../shared/app/GameHelper/GameHelper';
+import GameHelper from '../../../../../../../shared/app/GameHelper/GameHelper';
+import MiscHelper from '../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 
 export default function TopicBoard(): JSX.Element {
-   const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
+   const { localDbRoom, localDbUser, activeTopicWords, setActiveTopicWords } =
+      useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
+   const { data: topicsData } = DBConnect.FSDB.Get.topics();
    const [rows, setRows] = useState<GameHelper.I.WordCell[][]>([[]]);
-   const [isThisUserRat, setIsThisUserRat] = useState<boolean>(false);
 
    useEffect(() => {
-      setIsThisUserRat(localDbUser === roomData?.gameState?.currentRat);
-   }, [roomData?.gameState?.currentRat, localDbUser]);
+      // this useEffect is responsible for updating the activeTopicWords when the activeTopic changes
+      const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
+      const topicsDataExists = MiscHelper.isNotFalsyOrEmpty(topicsData);
+      if (roomDataExists && topicsDataExists) {
+         const activeTopicWords = GameHelper.Get.topicWordsAndCells(
+            topicsData,
+            roomData.gameState.activeTopic,
+         );
+         setActiveTopicWords(activeTopicWords);
+      }
+   }, [roomData?.gameState?.activeWord, topicsData]);
 
    useEffect(() => {
       const rowA = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'A');
@@ -38,7 +49,7 @@ export default function TopicBoard(): JSX.Element {
                      <BoardCell
                         key={index}
                         isActiveWord={isItemActiveWord(item.word)}
-                        isUserRat={isThisUserRat}
+                        isUserRat={localDbUser === roomData?.gameState?.currentRat}
                      >
                         <CellValue>{item.word}</CellValue>
                      </BoardCell>
