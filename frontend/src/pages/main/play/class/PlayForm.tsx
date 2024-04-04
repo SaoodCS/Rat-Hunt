@@ -1,4 +1,5 @@
 import type { DocumentData, DocumentSnapshot } from 'firebase/firestore';
+import GameHelper from '../../../../../../shared/app/GameHelper/GameHelper';
 import type AppTypes from '../../../../../../shared/app/types/AppTypes';
 import StringHelper from '../../../../../../shared/lib/helpers/string/StringHelper';
 import { N_Form } from '../../../../global/components/lib/form/N_Form';
@@ -143,8 +144,8 @@ export default class PlayFormClass {
       if (usernameTaken) {
          return { name: 'Username already taken' };
       }
-      const MAX_USERS = 30;
-      const roomIsFull = roomData.gameState.userStates.length >= MAX_USERS;
+      const roomIsFull =
+         roomData.gameState.userStates.length >= GameHelper.CONSTANTS.MAX_PLAYERS_IN_ROOM;
       if (roomIsFull) {
          return { roomId: 'Room is full' };
       }

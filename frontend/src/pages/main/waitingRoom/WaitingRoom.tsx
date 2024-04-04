@@ -5,6 +5,9 @@ import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
+import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
+import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
+import StringHelper from '../../../../../shared/lib/helpers/string/StringHelper';
 import AnimatedDots from '../../../global/components/lib/font/animatedDots/AnimatedDots';
 import { TextColourizer } from '../../../global/components/lib/font/textColorizer/TextColourizer';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
@@ -26,11 +29,6 @@ import {
    UserListItemContainer,
    WaitingRoomTitle,
 } from './style/Style';
-import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
-import StringHelper from '../../../../../shared/lib/helpers/string/StringHelper';
-import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
-
-const MIN_PLAYERS = 1;
 
 export default function WaitingRoom(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -57,7 +55,9 @@ export default function WaitingRoom(): JSX.Element {
    }, [roomData?.gameState?.userStates]);
 
    useEffect(() => {
-      setDisablePlay(allUsers.length < MIN_PLAYERS ? true : false);
+      setDisablePlay(
+         allUsers.length < GameHelper.CONSTANTS.MIN_PLAYERS_TO_START_GAME ? true : false,
+      );
    }, [allUsers]);
 
    useEffect(() => {

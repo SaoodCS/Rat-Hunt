@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import ArrayHelper from '../../lib/helpers/arrayHelper/ArrayHelper';
 import ArrOfObj from '../../lib/helpers/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../lib/helpers/miscHelper/MiscHelper';
+import NumberHelper from '../../lib/helpers/number/NumberHelper';
 import type AppTypes from '../types/AppTypes';
 
 export namespace GameHelper {
@@ -9,6 +11,13 @@ export namespace GameHelper {
          cellId: string;
          word: string;
       }
+   }
+
+   export namespace CONSTANTS {
+      export const TURN_TIME_LIMIT_SECONDS = 60;
+      export const TURN_TIME_LIMIT_MS = NumberHelper.secsToMs(TURN_TIME_LIMIT_SECONDS);
+      export const MIN_PLAYERS_TO_START_GAME = 1;
+      export const MAX_PLAYERS_IN_ROOM = 20;
    }
 
    export namespace New {
