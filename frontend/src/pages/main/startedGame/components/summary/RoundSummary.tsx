@@ -97,6 +97,18 @@ const screenStyles = (): FlattenSimpleInterpolation => {
             border-left: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.5)};
             border-right: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.5)};
          }
+         ${PointsMsgsWrapper} {
+            max-width: 45em;
+            margin: 0 auto;
+            border-left: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.5)};
+            border-right: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.5)};
+         }
+         ${ScoreboardContainer} {
+            max-width: 45em;
+            margin: 0 auto;
+            border-left: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.5)};
+            border-right: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.5)};
+         }
       }
    `;
    return MyCSS.Helper.concatStyles(forAll, forDesktop, forTablet, medium);
