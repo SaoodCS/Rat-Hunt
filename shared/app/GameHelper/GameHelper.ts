@@ -53,6 +53,11 @@ export namespace GameHelper {
          return ratGuess === activeWord;
       }
 
+      export function userVotedForRat(gameState: AppTypes.GameState, userId: string): boolean {
+         const ratVoters = Get.ratVoters(gameState);
+         return ratVoters.includes(userId);
+      }
+
       export function ratGotCaught(gameState: AppTypes.GameState): boolean {
          const { userStates, currentRat } = gameState;
          const userVotes: string[] = ArrOfObj.getArrOfValuesFromKey(userStates, 'votedFor');
@@ -246,6 +251,12 @@ export namespace GameHelper {
          const ratUserState = Get.userState(currentRat, userStates);
          return ratUserState.guess;
       }
+
+      export function ratVoters(gameState: AppTypes.GameState): string[] {
+         const { currentRat, userStates } = gameState;
+         const usersWhoVotedForRat = ArrOfObj.getObjects(userStates, 'votedFor', currentRat);
+         return ArrOfObj.getArrOfValuesFromKey(usersWhoVotedForRat, 'userId');
+      }
    }
 
    export namespace SetRoomState {
@@ -329,17 +340,20 @@ export namespace GameHelper {
       export function userPoints(gameState: AppTypes.GameState): AppTypes.GameState {
          const { userStates, currentRat, activeWord } = gameState;
          const rat = Get.userState(currentRat, userStates);
-         const ratVoters = ArrOfObj.getObjects(userStates, 'votedFor', currentRat);
+         const ratVoters = Get.ratVoters(gameState);
+         const noUserVotedForRat = ratVoters.length === 0;
          const ratGuessedCorrectly = rat.guess === activeWord;
-         const ratGotMostVotes = ratVoters.length > userStates.length / 2;
+         const ratGotMostVotes = Check.ratGotCaught(gameState);
          const updatedUserStates: AppTypes.UserState[] = userStates.map((userState) => {
             let userPoints: number = 0;
             if (userState.userId === currentRat) {
                if (ratGuessedCorrectly) userPoints = userPoints + 1;
                if (!ratGotMostVotes) userPoints = userPoints + 1;
+               if (noUserVotedForRat) userPoints = userPoints + 1;
             } else {
                if (ratGotMostVotes) userPoints = userPoints + 1;
                if (userState.votedFor === currentRat) userPoints = userPoints + 1;
+               if (!ratGuessedCorrectly) userPoints = userPoints + 1;
             }
             return {
                ...userState,

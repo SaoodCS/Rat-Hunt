@@ -44,7 +44,7 @@ export const NextRoundPlayAgainBtn = styled(TextColourizer)`
 
 export const ScoreboardContainer = styled.div`
    position: absolute;
-   top: 5.5em;
+   top: 8.5em;
    bottom: 0px;
    left: 0px;
    right: 0px;
@@ -62,4 +62,8 @@ export const MarqueeContainer = styled.div`
    filter: brightness(1);
    background-color: ${Color.setRgbOpacity(Color.darkThm.bg, 1)};
    z-index: 999;
+`;
+
+export const PointsWrapper = styled(MarqueeContainer)`
+   overflow: hidden;
 `;

@@ -8,6 +8,7 @@ import {
    MarqueeContainer,
    NextPlayAgainBtnContainer,
    NextRoundPlayAgainBtn,
+   PointsWrapper,
    RoundSummaryTitle,
    ScoreboardContainer,
 } from './style/Style';
@@ -18,6 +19,7 @@ import MiscHelper from '../../../../../../../shared/lib/helpers/miscHelper/MiscH
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import MyCSS from '../../../../../global/css/MyCSS';
 import Color from '../../../../../global/css/colors';
+import PointsMarquee from './components/pointsMarquee/PointsMarquee';
 
 export default function RoundSummary(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);
@@ -61,6 +63,9 @@ export default function RoundSummary(): JSX.Element {
             <MarqueeContainer>
                <SummaryMarquee />
             </MarqueeContainer>
+            <PointsWrapper>
+               <PointsMarquee />
+            </PointsWrapper>
             <ScoreboardContainer>
                <ScoreboardSlide />
             </ScoreboardContainer>

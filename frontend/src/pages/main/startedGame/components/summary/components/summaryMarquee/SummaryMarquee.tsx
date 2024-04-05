@@ -42,7 +42,7 @@ export default function SummaryMarquee(): JSX.Element {
       roomData?.gameState?.userStates,
    ]);
    return (
-      <Marquee>
+      <Marquee speed={30}>
          {roundSummaryMap.map((item) => (
             <MarqueeItem key={item.key}>
                <TextColourizer color={Color.darkThm.error}>{item.key}</TextColourizer>

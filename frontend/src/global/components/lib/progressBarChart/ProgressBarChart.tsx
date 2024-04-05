@@ -1,11 +1,11 @@
 import { useContext } from 'react';
+import NumberHelper from '../../../../../../shared/lib/helpers/number/NumberHelper';
 import { GameContext } from '../../../context/game/GameContext';
 import useThemeContext from '../../../context/theme/hooks/useThemeContext';
 import Color from '../../../css/colors';
+import { FlexCenterer } from '../positionModifiers/centerers/FlexCenterer';
 import type { ITooltipPositioning } from '../tooltip/Tooltip';
 import { BarAndInfoWrapper, BarAndPercentageWrapper, BarBackground, CompletedBar } from './Style';
-import NumberHelper from '../../../../../../shared/lib/helpers/number/NumberHelper';
-import { FlexCenterer } from '../positionModifiers/centerers/FlexCenterer';
 
 export interface IProgressBarChartData {
    label: string;

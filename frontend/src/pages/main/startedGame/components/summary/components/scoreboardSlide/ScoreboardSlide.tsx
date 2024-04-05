@@ -5,7 +5,6 @@ import { ScoreboardWrapper } from './style/Style';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
 import type { IProgressBarChartData } from '../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
-import useThemeContext from '../../../../../../../global/context/theme/hooks/useThemeContext';
 import ArrOfObj from '../../../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 import Scroller from '../../../../../../../global/components/lib/scroller/Scroller';
 import ProgressBarChart from '../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
@@ -15,7 +14,6 @@ export default function ScoreboardSlide(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [chartData, setChartData] = useState<IProgressBarChartData[]>([]);
-   const { isPortableDevice } = useThemeContext();
 
    useEffect(() => {
       const totalScores = ArrOfObj.getArrOfValuesFromKey(
