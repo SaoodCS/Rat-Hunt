@@ -1,5 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import GameHelper from '../../../../../../../../../shared/app/GameHelper/GameHelper';
+import ArrOfObj from '../../../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import NumberHelper from '../../../../../../../../../shared/lib/helpers/number/NumberHelper';
 import { TextColourizer } from '../../../../../../../global/components/lib/font/textColorizer/TextColourizer';
@@ -8,7 +9,6 @@ import { GameContext } from '../../../../../../../global/context/game/GameContex
 import Color from '../../../../../../../global/css/colors';
 import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
 import { PointsItem } from './style/Style';
-import ArrOfObj from '../../../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 
 interface IPointsMsgs {
    msg: string;

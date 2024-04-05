@@ -66,4 +66,5 @@ export const MarqueeContainer = styled.div`
 
 export const PointsMsgsWrapper = styled(MarqueeContainer)`
    overflow: hidden;
+   width: 100%;
 `;
