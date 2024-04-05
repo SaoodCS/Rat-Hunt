@@ -20,7 +20,6 @@ export const BarAndPercentageWrapper = styled.div`
 `;
 
 export const BarTitle = styled.div`
-   font-size: 0.9em;
    margin-bottom: 0.5em;
    margin-left: 0.5em;
 `;
