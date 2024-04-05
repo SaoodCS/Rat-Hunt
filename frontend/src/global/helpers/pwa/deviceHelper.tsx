@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import useDetectKeyboardOpen from 'use-detect-keyboard-open';
 
 export default class Device {
@@ -24,4 +25,15 @@ export default class Device {
    static useIsKeyboardOpen = (): boolean => {
       return useDetectKeyboardOpen();
    };
+   static removeBrowserCache(cacheName: string): Promise<void> {
+      return Promise.resolve(
+         caches.keys().then((names) => {
+            names.forEach((name) => {
+               if (name === cacheName) {
+                  caches.delete(name);
+               }
+            });
+         }),
+      );
+   }
 }
