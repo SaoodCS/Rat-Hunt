@@ -10,29 +10,15 @@ import { TimerBar } from './style/Style';
 export default function CurrentTurnCountdown(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
-   const [timeRemaining, setTimeRemaining] = useState<number>(0); // [1]
+   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
    const [countdownExpiry, setCountdownExpiry] = useState<number>(0);
    const updateGameStateMutation = DBConnect.FSDB.Set.gameState({}, false);
 
    useEffect(() => {
       const interval = setInterval(() => {
-         const timeRemaining = Math.floor((countdownExpiry - Date.now()) / 1000);
-         if (timeRemaining <= 0) {
-            // This logic handles the case of skipping the current turn if the current user takes too long to make a move (i.e. the countdown expires)
-            if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
-            const connectedUsers = GameHelper.Get.connectedUserIds(roomData.gameState.userStates);
-            const sortedConnectedUsers = ArrayHelper.sort(connectedUsers);
-            if (localDbUser !== sortedConnectedUsers[0]) return;
-            const { gameState } = roomData;
-            const updatedGameState = GameHelper.SetGameState.skipCurrentTurn(gameState);
-            updateGameStateMutation.mutate({
-               roomId: localDbRoom,
-               gameState: updatedGameState,
-            });
-            clearInterval(interval);
-            return;
-         }
-         setTimeRemaining(timeRemaining);
+         const newTimeRemaining = Math.floor((countdownExpiry - Date.now()) / 1000);
+         setTimeRemaining(newTimeRemaining);
+         if (newTimeRemaining <= 0) clearInterval(interval);
       }, 1000);
       return () => clearInterval(interval);
    }, [countdownExpiry]);
@@ -45,9 +31,25 @@ export default function CurrentTurnCountdown(): JSX.Element {
       setCountdownExpiry(currentTurnChangedAt + GameHelper.CONSTANTS.TURN_TIME_LIMIT_MS);
    }, [roomData?.gameState?.currentTurnChangedAt]);
 
+   useEffect(() => {
+      if (timeRemaining === null) return;
+      if (timeRemaining > 0) return;
+      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
+      const connectedUsers = GameHelper.Get.connectedUserIds(roomData.gameState.userStates);
+      const sortedConnectedUsers = ArrayHelper.sort(connectedUsers);
+      if (localDbUser !== sortedConnectedUsers[0]) return;
+      const { gameState } = roomData;
+      const updatedGameState = GameHelper.SetGameState.skipCurrentTurn(gameState);
+      updateGameStateMutation.mutate({
+         roomId: localDbRoom,
+         gameState: updatedGameState,
+      });
+      setTimeRemaining(null);
+   }, [timeRemaining]);
+
    return (
       <TimerBar
-         timeRemainingSecs={timeRemaining}
+         timeRemainingSecs={timeRemaining || 0}
          timeGivenSecs={GameHelper.CONSTANTS.TURN_TIME_LIMIT_SECONDS}
       />
    );
