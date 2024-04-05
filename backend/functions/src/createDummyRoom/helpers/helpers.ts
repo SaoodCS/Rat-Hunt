@@ -1,7 +1,7 @@
 import type AppTypes from '../../../../../shared/app/types/AppTypes';
 
 export const baseDummyUser: AppTypes.UserState = {
-   userStatus: 'connected',
+   userStatus: 'disconnected',
    statusUpdatedAt: new Date().toISOString(),
    userId: 'dummyUser1',
    totalScore: 0,

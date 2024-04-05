@@ -34,7 +34,7 @@ export default class RoundEndFormClass {
          Component: NumberLineInput,
          name: 'noOfRounds',
          id: 'no-of-rounds',
-         label: 'Number of Rounds',
+         label: 'Rounds',
          type: 'number',
          isRequired: true,
          isDisabled: false,
