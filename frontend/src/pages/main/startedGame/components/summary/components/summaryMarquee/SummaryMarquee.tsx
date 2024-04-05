@@ -3,7 +3,6 @@ import Marquee from 'react-fast-marquee';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
 import MiscHelper from '../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
-import GameHelper from '../../../../../../../../../shared/app/GameHelper/GameHelper';
 import { MarqueeItem } from './style/Style';
 import { TextColourizer } from '../../../../../../../global/components/lib/font/textColorizer/TextColourizer';
 import Color from '../../../../../../../global/css/colors';
@@ -20,8 +19,7 @@ export default function SummaryMarquee(): JSX.Element {
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
-      const { currentRat, activeWord } = gameState;
-      const ratGuess = GameHelper.Get.ratGuess(gameState);
+      const { currentRat, activeWord, ratGuess } = gameState;
       setRoundSummaryMap([
          {
             key: 'the rat',

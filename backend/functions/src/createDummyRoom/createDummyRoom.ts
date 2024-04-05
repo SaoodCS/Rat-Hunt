@@ -27,6 +27,7 @@ async function createDummyRoom(): Promise<void> {
          activeTopic: selectedTopic,
          activeWord: selectedWord,
          currentRat: dummyUsers[0].userId,
+         ratGuess: '',
          currentRound: 0,
          currentTurn: dummyUsers[0].userId,
          currentTurnChangedAt: '',

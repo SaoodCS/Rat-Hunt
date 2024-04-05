@@ -15,7 +15,7 @@ import ObjectHelper from '../../../../../../../../../../shared/lib/helpers/objec
 import GameHelper from '../../../../../../../../../../shared/app/GameHelper/GameHelper';
 
 export default function WordGuessForm(): JSX.Element {
-   const { localDbRoom, localDbUser, activeTopicWords } = useContext(GameContext);
+   const { localDbRoom, activeTopicWords } = useContext(GameContext);
    const { apiError } = useApiErrorContext();
    const { form, errors, setErrors, handleChange, initHandleSubmit } = useForm(
       WordGuessFormClass.form.initialState,
@@ -28,14 +28,10 @@ export default function WordGuessForm(): JSX.Element {
    async function submitOnChange(): Promise<void> {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
-      const { userStates } = gameState;
-      const updatedUserStates = GameHelper.SetUserStates.updateUser(userStates, localDbUser, [
-         { key: 'guess', value: form.guess },
-      ]);
       const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
-         { key: 'userStates', value: updatedUserStates },
          { key: 'currentTurnChangedAt', value: '' },
          { key: 'currentTurn', value: '' },
+         { key: 'ratGuess', value: form.guess },
       ]);
       await updateGameStateMutation.mutateAsync({
          roomId: localDbRoom,

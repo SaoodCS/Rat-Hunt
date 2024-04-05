@@ -44,13 +44,12 @@ export namespace GameHelper {
 
    export namespace Check {
       export function hasRatGuessed(gameState: AppTypes.GameState): boolean {
-         const ratsGuess = Get.ratGuess(gameState);
-         return ratsGuess !== '';
+         const { ratGuess } = gameState;
+         return ratGuess !== '';
       }
 
       export function isRatGuessCorrect(gameState: AppTypes.GameState): boolean {
-         const { activeWord } = gameState;
-         const ratGuess = Get.ratGuess(gameState);
+         const { activeWord, ratGuess } = gameState;
          return ratGuess === activeWord;
       }
 
@@ -247,12 +246,6 @@ export namespace GameHelper {
          return 'guess';
       }
 
-      export function ratGuess(gameState: AppTypes.GameState): string {
-         const { currentRat, userStates } = gameState;
-         const ratUserState = Get.userState(currentRat, userStates);
-         return ratUserState.guess;
-      }
-
       export function ratVoters(gameState: AppTypes.GameState): string[] {
          const { currentRat, userStates } = gameState;
          const usersWhoVotedForRat = ArrOfObj.getObjects(userStates, 'votedFor', currentRat);
@@ -285,6 +278,7 @@ export namespace GameHelper {
                activeTopic: topic,
                activeWord: '',
                currentRat: '',
+               ratGuess: '',
                currentRound: 0,
                numberOfRoundsSet: noOfRounds,
                currentTurn: '',
@@ -295,7 +289,6 @@ export namespace GameHelper {
                      totalScore: 0,
                      roundScores: [],
                      clue: '',
-                     guess: '',
                      votedFor: '',
                      spectate: false,
                      userStatus: 'connected',
@@ -314,7 +307,6 @@ export namespace GameHelper {
             totalScore: 0,
             roundScores: [],
             clue: gameStarted ? 'SKIP' : '',
-            guess: '',
             votedFor: gameStarted ? 'SKIP' : '',
             spectate: gameStarted,
             userStatus: 'connected',
@@ -339,11 +331,10 @@ export namespace GameHelper {
 
    export namespace SetGameState {
       export function userPoints(gameState: AppTypes.GameState): AppTypes.GameState {
-         const { userStates, currentRat, activeWord } = gameState;
-         const rat = Get.userState(currentRat, userStates);
+         const { userStates, currentRat, activeWord, ratGuess } = gameState;
          const ratVoters = Get.ratVoters(gameState);
          const noUserVotedForRat = ratVoters.length === 0;
-         const ratGuessedCorrectly = rat.guess === activeWord;
+         const ratGuessedCorrectly = ratGuess === activeWord;
          const ratGotMostVotes = Check.ratGotCaught(gameState);
          const updatedUserStates: AppTypes.UserState[] = userStates.map((userState) => {
             let userPoints: number = 0;
@@ -380,7 +371,6 @@ export namespace GameHelper {
          const newWord = GameHelper.New.word(topicsData, topic);
          const updatedUserStates = ArrOfObj.setKeyValsInAllObjects(userStates, [
             { key: 'clue', value: '' },
-            { key: 'guess', value: '' },
             { key: 'votedFor', value: '' },
             { key: 'roundScores', value: [] },
             { key: 'totalScore', value: 0 },
@@ -392,6 +382,7 @@ export namespace GameHelper {
             activeTopic: topic,
             activeWord: newWord,
             currentRat: newRat,
+            ratGuess: '',
             currentRound: 1,
             currentTurn: updatedCurrentTurn,
             currentTurnChangedAt: new Date().getTime() + 3000, // 3 seconds as this is how long the user role splash screen is displayed,
@@ -410,13 +401,13 @@ export namespace GameHelper {
          const newWord = GameHelper.New.word(topicsData, activeTopic);
          const updatedUserStates = ArrOfObj.setKeyValsInAllObjects(userStates, [
             { key: 'clue', value: '' },
-            { key: 'guess', value: '' },
             { key: 'votedFor', value: '' },
             { key: 'spectate', value: false },
          ]);
          const updatedCurrentTurn = GameHelper.Get.firstUser(currentRound, userStates);
          const updatedGameState: AppTypes.GameState = {
             ...gameState,
+            ratGuess: '',
             activeWord: newWord,
             currentRat: newRat,
             currentTurn: updatedCurrentTurn,
@@ -437,7 +428,6 @@ export namespace GameHelper {
          const newWord = GameHelper.New.word(topicsData, newTopic);
          const updatedUserStates = ArrOfObj.setKeyValsInAllObjects(userStates, [
             { key: 'clue', value: '' },
-            { key: 'guess', value: '' },
             { key: 'votedFor', value: '' },
             { key: 'spectate', value: false },
          ]);
@@ -446,6 +436,7 @@ export namespace GameHelper {
          const updatedGameState: AppTypes.GameState = {
             ...gameState,
             activeTopic: newTopic,
+            ratGuess: '',
             activeWord: newWord,
             currentRat: newRat,
             currentRound: newRoundNo,
@@ -470,18 +461,25 @@ export namespace GameHelper {
             currentGamePhase,
             currentRat,
          );
-         const updatedUserStates = GameHelper.SetUserStates.updateUser(
-            userStates,
-            currentTurnUserId,
-            [{ key: currentGamePhase, value: 'SKIP' }],
-         );
+         let updatedUserStates: AppTypes.UserState[] = [];
+         if (currentGamePhase === 'guess') updatedUserStates = userStates;
+         else {
+            updatedUserStates = GameHelper.SetUserStates.updateUser(userStates, currentTurnUserId, [
+               { key: currentGamePhase, value: 'SKIP' },
+            ]);
+         }
+
          const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
             { key: 'currentTurn', value: updatedCurrentTurn },
             {
                key: 'currentTurnChangedAt',
                value: isNextPhaseRoundSummary ? '' : new Date().getTime(),
             },
-            { key: 'userStates', value: updatedUserStates },
+            { key: 'ratGuess', value: currentGamePhase === 'guess' ? 'SKIP' : '' },
+            {
+               key: 'userStates',
+               value: updatedUserStates,
+            },
          ]);
 
          if (isNextPhaseRoundSummary) {

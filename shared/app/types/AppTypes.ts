@@ -28,6 +28,7 @@ export namespace AppTypes {
       gameState: {
          activeTopic: string;
          activeWord: string;
+         ratGuess: string;
          currentRat: string;
          currentRound: number;
          currentTurn: string;
@@ -38,7 +39,6 @@ export namespace AppTypes {
             totalScore: number;
             roundScores: number[];
             clue: string;
-            guess: string;
             votedFor: string;
             spectate: boolean;
             userStatus: 'connected' | 'disconnected';

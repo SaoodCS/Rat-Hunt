@@ -7,7 +7,6 @@ export const baseDummyUser: AppTypes.UserState = {
    totalScore: 0,
    roundScores: [],
    clue: '',
-   guess: '',
    votedFor: '',
    spectate: false,
 };
@@ -39,7 +38,6 @@ export function addDummyUsersToRoom(
       totalScore: user.totalScore,
       roundScores: user.roundScores,
       clue: user.clue,
-      guess: user.guess,
       votedFor: user.votedFor,
       spectate: user.spectate,
       userStatus: user.userStatus,
