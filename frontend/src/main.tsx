@@ -7,6 +7,10 @@ import InstallAppModal from './global/components/app/installAppModal/InstallAppM
 import GlobalConfig from './global/config/GlobalConfig';
 import DeviceContextProvider from './global/context/device/DeviceContextProvider';
 import ThemeContextProvider from './global/context/theme/ThemeContextProvider';
+// eslint-disable-next-line import/no-unresolved
+import { registerSW } from 'virtual:pwa-register';
+
+registerSW({ immediate: true });
 
 function Root(): JSX.Element {
    return (
