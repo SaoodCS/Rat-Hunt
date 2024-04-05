@@ -16,8 +16,8 @@ export namespace GameHelper {
    export namespace CONSTANTS {
       export const TURN_TIME_LIMIT_SECONDS = 30;
       export const TURN_TIME_LIMIT_MS = NumberHelper.secsToMs(TURN_TIME_LIMIT_SECONDS);
-      export const DISCONNECTED_USER_TIME_LIMIT_MS = NumberHelper.minsToMs(1);
-      export const MIN_PLAYERS_TO_START_GAME = 1;
+      export const DISCONNECTED_USER_TIME_LIMIT_MS = NumberHelper.minsToMs(5);
+      export const MIN_PLAYERS_TO_START_GAME = 3;
       export const MAX_PLAYERS_IN_ROOM = 20;
    }
 
