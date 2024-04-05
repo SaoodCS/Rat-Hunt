@@ -32,7 +32,6 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
       setLocalDbRoom('');
       setLocalDbUser('');
       queryClient.clear();
-      queryClient.invalidateQueries();
       navigation('/main/play', { replace: true });
    }
 

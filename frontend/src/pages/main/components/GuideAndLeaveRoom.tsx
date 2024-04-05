@@ -67,7 +67,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
       await onDisconnect(userStatusRef).cancel();
       setLocalDbRoom('');
       setLocalDbUser('');
-      queryClient.removeQueries();
+      queryClient.clear();
       navigation('/main/play', { replace: true });
    }
 
