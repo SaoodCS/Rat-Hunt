@@ -10,7 +10,7 @@ import Scroller from '../../../../../../../global/components/lib/scroller/Scroll
 import ProgressBarChart from '../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
 import MyCSS from '../../../../../../../global/css/MyCSS';
 
-export default function ScoreboardSlide(): JSX.Element {
+export default function Scoreboard(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [chartData, setChartData] = useState<IProgressBarChartData[]>([]);

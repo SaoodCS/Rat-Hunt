@@ -17,7 +17,7 @@ interface IPointsMsgs {
 
 const TIME_TO_SHOW = NumberHelper.secsToMs(5);
 
-export default function PointsMarquee(): JSX.Element {
+export default function PointsMsgsFader(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [currentIndex, setCurrentIndex] = useState(0);

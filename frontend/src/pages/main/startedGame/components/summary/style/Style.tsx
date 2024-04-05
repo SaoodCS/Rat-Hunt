@@ -64,6 +64,6 @@ export const MarqueeContainer = styled.div`
    z-index: 999;
 `;
 
-export const PointsWrapper = styled(MarqueeContainer)`
+export const PointsMsgsWrapper = styled(MarqueeContainer)`
    overflow: hidden;
 `;

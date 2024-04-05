@@ -12,7 +12,6 @@ import GameDetails from './components/header/GameDetails';
 import RatOrPlayerSplash from './components/ratOrPlayerSplash/RatOrPlayerSplash';
 import RoundSummary from './components/summary/RoundSummary';
 import TopicBoard from './components/topicBoard/TopicBoard';
-import WinnerLoserSplash from './components/winnerLoserSplash/WinnerLoserSplash';
 import {
    GameHeaderWrapper,
    GamePageWrapper,
@@ -54,8 +53,6 @@ export default function StartedGame(): JSX.Element {
          setShowRoundSummary(false);
          return;
       }
-      setSplashScreenContent(<WinnerLoserSplash />);
-      toggleSplashScreen(true);
       setShowRoundSummary(true);
    }, [roomData?.gameState?.currentTurn]);
 

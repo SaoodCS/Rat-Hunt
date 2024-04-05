@@ -1,25 +1,25 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
+import MiscHelper from '../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
+import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
+import { GameContext } from '../../../../../global/context/game/GameContext';
+import { ModalContext } from '../../../../../global/context/widget/modal/ModalContext';
+import MyCSS from '../../../../../global/css/MyCSS';
+import Color from '../../../../../global/css/colors';
+import DBConnect from '../../../../../global/database/DBConnect/DBConnect';
 import RoundEndForm from './components/form/RoundEndForm';
-import ScoreboardSlide from './components/scoreboardSlide/ScoreboardSlide';
+import PointsMsgsFader from './components/pointsMsgsFader/PointsMsgsFader';
+import Scoreboard from './components/scoreboard/Scoreboard';
 import SummaryMarquee from './components/summaryMarquee/SummaryMarquee';
 import {
    MarqueeContainer,
    NextPlayAgainBtnContainer,
    NextRoundPlayAgainBtn,
-   PointsWrapper,
+   PointsMsgsWrapper,
    RoundSummaryTitle,
    ScoreboardContainer,
 } from './style/Style';
-import { GameContext } from '../../../../../global/context/game/GameContext';
-import { ModalContext } from '../../../../../global/context/widget/modal/ModalContext';
-import DBConnect from '../../../../../global/database/DBConnect/DBConnect';
-import MiscHelper from '../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
-import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
-import MyCSS from '../../../../../global/css/MyCSS';
-import Color from '../../../../../global/css/colors';
-import PointsMarquee from './components/pointsMarquee/PointsMarquee';
 
 export default function RoundSummary(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);
@@ -36,7 +36,7 @@ export default function RoundSummary(): JSX.Element {
       return () => {
          toggleModal(false);
       };
-   }, []);
+   }, [roomData?.gameState?.currentRound, roomData?.gameState?.numberOfRoundsSet]);
 
    function handleUpdateGameState(): void {
       setModalHeader(!isLastRound ? 'Next Round' : 'Play Again');
@@ -63,11 +63,11 @@ export default function RoundSummary(): JSX.Element {
             <MarqueeContainer>
                <SummaryMarquee />
             </MarqueeContainer>
-            <PointsWrapper>
-               <PointsMarquee />
-            </PointsWrapper>
+            <PointsMsgsWrapper>
+               <PointsMsgsFader />
+            </PointsMsgsWrapper>
             <ScoreboardContainer>
-               <ScoreboardSlide />
+               <Scoreboard />
             </ScoreboardContainer>
          </FlexColumnWrapper>
       </>
