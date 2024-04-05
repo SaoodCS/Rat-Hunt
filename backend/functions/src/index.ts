@@ -8,11 +8,6 @@ import MiscHelper from '../../../shared/lib/helpers/miscHelper/MiscHelper';
 import type { IChangeDetails } from './helpers/FirebaseConnect';
 import FBConnect from './helpers/FirebaseConnect';
 
-const test = true;
-const thirtySeconds = 30000;
-const fiveMinutes = 300000;
-const TIMER = test ? thirtySeconds : fiveMinutes;
-
 if (!admin.apps.length) {
    admin.initializeApp();
 }
@@ -107,5 +102,5 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
          await userRefRT.remove();
          FBConnect.log('setTimeout: User still disconnected after 5 minutes so removed: ', userId);
       }
-   }, TIMER);
+   }, GameHelper.CONSTANTS.DISCONNECTED_USER_TIME_LIMIT_MS);
 });

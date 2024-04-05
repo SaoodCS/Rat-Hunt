@@ -57,7 +57,7 @@ export default function Modal(props: IModal): JSX.Element {
                      <ModalCloseButton onClick={onClose} />
                   </ModalHeaderContainer>
                   <ModalBody>
-                     <Scroller scrollbarWidth={8} withFader={true} dependencies={[renderModal]}>
+                     <Scroller hideScrollbar withFader dependencies={[renderModal]}>
                         {children}
                      </Scroller>
                   </ModalBody>
