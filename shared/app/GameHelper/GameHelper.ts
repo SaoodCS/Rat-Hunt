@@ -17,7 +17,7 @@ export namespace GameHelper {
    export namespace CONSTANTS {
       export const TURN_TIME_LIMIT_SECONDS = 30;
       export const DISCONNECTED_USER_TIME_LIMIT_MS = NumberHelper.minsToMs(5);
-      export const MIN_PLAYERS_TO_START_GAME = 3;
+      export const MIN_PLAYERS_TO_START_GAME = 2;
       export const MAX_PLAYERS_IN_ROOM = 20;
    }
 
@@ -189,17 +189,21 @@ export namespace GameHelper {
             return '';
          }
          // if type is 'leaveRoom':
+         const sortedUserQueueWithoutThisUser = Get.sortedUserQueue(
+            currentRound,
+            userStatesWithoutThisUser
+         );
          const allVotesSubmitted = finalVoteSubmission;
          const allCluesSubmitted = finalClueSubmission;
          const thisUserIsRat = currentRat === currentTurnUser;
          const ratSubmittedGuess = Check.hasRatGuessed(gameState);
          if (ratSubmittedGuess) return '';
-         if (thisUserIsRat) return sortedUserQueue[0];
+         if (thisUserIsRat) return sortedUserQueueWithoutThisUser[0];
          if (allVotesSubmitted) return `${currentRat}.wordGuess`;
-         if (allCluesSubmitted) return sortedUserQueue[0];
+         if (allCluesSubmitted) return sortedUserQueueWithoutThisUser[0];
          // If not all clues are submitted:
-         const firstUser = sortedUserQueue[0];
-         const nextUser = sortedUserQueue[thisUserIndex + 1] || firstUser;
+         const firstUser = sortedUserQueueWithoutThisUser[0];
+         const nextUser = sortedUserQueueWithoutThisUser[thisUserIndex + 1] || firstUser;
          const updatedCurrentTurn = nextUser;
          return updatedCurrentTurn;
       }
@@ -388,7 +392,7 @@ export namespace GameHelper {
             ratGuess: '',
             currentRound: 1,
             currentTurn: updatedCurrentTurn,
-            currentTurnChangedAt: currentTime + 3000, // 3 seconds as this is how long the user role splash screen is displayed,
+            currentTurnChangedAt: currentTime + 3, // 3 seconds as this is how long the user role splash screen is displayed,
             userStates: updatedUserStates,
             numberOfRoundsSet: noOfRounds,
          };
@@ -446,7 +450,7 @@ export namespace GameHelper {
             currentRat: newRat,
             currentRound: newRoundNo,
             currentTurn: updatedCurrentTurn,
-            currentTurnChangedAt: currentTime + 3000, // 3 seconds as this is how long the user role splash screen is displayed
+            currentTurnChangedAt: currentTime + 3, // 3 seconds as this is how long the user role splash screen is displayed
             userStates: updatedUserStates,
          };
          return updatedGameState;
