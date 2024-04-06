@@ -96,13 +96,8 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    async function changeTurnAndDeleteUser(): Promise<void> {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
-      const { userStates, currentRat } = gameState;
-      const nextUser = GameHelper.Get.nextTurnUserId(
-         gameState,
-         localDbUser,
-         'leaveRoom',
-         currentRat,
-      );
+      const { userStates } = gameState;
+      const nextUser = GameHelper.Get.nextTurnUserId(gameState);
       const updatedUserStates = ArrOfObj.filterOut(userStates, 'userId', localDbUser);
       const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
          { key: 'currentTurn', value: nextUser },

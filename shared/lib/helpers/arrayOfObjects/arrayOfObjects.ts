@@ -108,4 +108,8 @@ export default class ArrOfObj {
    static isEmpty<T>(arr: T[]): boolean {
       return arr.length === 0;
    }
+
+   static isLastItem<T>(arr: T[], key: keyof T, value: T[keyof T]): boolean {
+      return arr[arr.length - 1][key] === value;
+   }
 }

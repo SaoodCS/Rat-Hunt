@@ -143,6 +143,11 @@ export namespace GameHelper {
          return sortedUsers[0];
       }
 
+      export function lastUser(roundNo: number, userStates: AppTypes.UserState[]): string {
+         const sortedUsers = Get.sortedUserQueue(roundNo, userStates);
+         return sortedUsers[sortedUsers.length - 1];
+      }
+
       export function userState(
          userId: string,
          userStates: AppTypes.UserState[]
@@ -158,54 +163,26 @@ export namespace GameHelper {
          return currentTurn.replace('.wordGuess', '');
       }
 
-      export function nextTurnUserId(
-         gameState: AppTypes.GameState,
-         currentTurnUser: string,
-         type: 'votedFor' | 'clue' | 'guess' | 'leaveRoom',
-         currentRat: string
-      ): string {
-         const { userStates, currentRound } = gameState;
+      export function nextTurnUserId(gameState: AppTypes.GameState): string {
+         const { currentTurn, userStates, currentRat, currentRound } = gameState;
+         const currentTurnUserId = GameHelper.Get.currentTurnUserId(currentTurn);
+         const gamePhase = GameHelper.Get.gamePhase(gameState);
+         if (gamePhase === 'roundSummary') {
+            throw new Error(
+               'This function should only be executed when in the "votedFor", "clue" or "guess" phase. The other Get.firstUser function handles cases where the gamePhase is "roundSummary" or the game is restarted / just beginning'
+            );
+         }
          const sortedUserQueue = Get.sortedUserQueue(currentRound, userStates);
-         const thisUserIndex = sortedUserQueue.indexOf(currentTurnUser);
-         const userStatesWithoutThisUser = ArrOfObj.filterOut(
-            userStates,
-            'userId',
-            currentTurnUser
-         );
-         const finalVoteSubmission = !ArrOfObj.hasKeyVal(userStatesWithoutThisUser, 'votedFor', '');
-         const finalClueSubmission = !ArrOfObj.hasKeyVal(userStatesWithoutThisUser, 'clue', '');
-         if (type === 'votedFor') {
-            const nextUser = sortedUserQueue[thisUserIndex + 1] || currentRat;
-            const updatedCurrentTurn = finalVoteSubmission ? `${currentRat}.wordGuess` : nextUser;
-            return updatedCurrentTurn;
+         const firstUserInQueue = Get.firstUser(currentRound, userStates);
+         const lastUserInQueue = Get.lastUser(currentRound, userStates);
+         const isLastUserInQueue = currentTurnUserId === lastUserInQueue;
+         const queuePosition = sortedUserQueue.indexOf(currentTurnUserId);
+         if (gamePhase === 'guess' && currentTurnUserId === currentRat) return '';
+         if (isLastUserInQueue) {
+            if (gamePhase === 'clue') return firstUserInQueue;
+            if (gamePhase === 'votedFor') return `${currentRat}.wordGuess`;
          }
-         if (type === 'clue') {
-            const firstUser = sortedUserQueue[0];
-            const nextUser = sortedUserQueue[thisUserIndex + 1] || firstUser;
-            const updatedCurrentTurn = finalClueSubmission ? firstUser : nextUser;
-            return updatedCurrentTurn;
-         }
-         if (type === 'guess') {
-            return '';
-         }
-         // if type is 'leaveRoom':
-         const sortedUserQueueWithoutThisUser = Get.sortedUserQueue(
-            currentRound,
-            userStatesWithoutThisUser
-         );
-         const allVotesSubmitted = finalVoteSubmission;
-         const allCluesSubmitted = finalClueSubmission;
-         const thisUserIsRat = currentRat === currentTurnUser;
-         const ratSubmittedGuess = Check.hasRatGuessed(gameState);
-         if (ratSubmittedGuess) return '';
-         if (thisUserIsRat) return sortedUserQueueWithoutThisUser[0];
-         if (allVotesSubmitted) return `${currentRat}.wordGuess`;
-         if (allCluesSubmitted) return sortedUserQueueWithoutThisUser[0];
-         // If not all clues are submitted:
-         const firstUser = sortedUserQueueWithoutThisUser[0];
-         const nextUser = sortedUserQueueWithoutThisUser[thisUserIndex + 1] || firstUser;
-         const updatedCurrentTurn = nextUser;
-         return updatedCurrentTurn;
+         return sortedUserQueue[queuePosition + 1];
       }
 
       export function allUserIds(userStates: AppTypes.UserState[]): string[] {
@@ -304,7 +281,10 @@ export namespace GameHelper {
          };
       }
 
-      export async function newUser(roomData: AppTypes.Room, userId: string): Promise<AppTypes.Room> {
+      export async function newUser(
+         roomData: AppTypes.Room,
+         userId: string
+      ): Promise<AppTypes.Room> {
          const { gameStarted, gameState } = roomData;
          const { userStates } = gameState;
          const currentTime = await DateHelper.getCurrentTime();
@@ -459,19 +439,14 @@ export namespace GameHelper {
       export async function skipCurrentTurn(
          gameState: AppTypes.GameState
       ): Promise<AppTypes.GameState> {
-         const { currentTurn, userStates, currentRat } = gameState;
+         const { currentTurn, userStates } = gameState;
          const currentTurnUserId = GameHelper.Get.currentTurnUserId(currentTurn);
          const currentGamePhase = GameHelper.Get.gamePhase(gameState);
          if (currentGamePhase === 'roundSummary') {
             throw new Error('Cannot skip turn during round summary');
          }
          const isNextPhaseRoundSummary = currentGamePhase === 'guess';
-         const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(
-            gameState,
-            currentTurnUserId,
-            currentGamePhase,
-            currentRat
-         );
+         const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(gameState);
          let updatedUserStates: AppTypes.UserState[] = [];
          if (currentGamePhase === 'guess') updatedUserStates = userStates;
          else {

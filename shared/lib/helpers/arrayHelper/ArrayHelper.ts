@@ -65,4 +65,8 @@ export default class ArrayHelper {
       const deepCopy: T = JSON.parse(JSON.stringify(arr));
       return deepCopy.map((item) => item.toUpperCase()) as T;
    }
+
+   static isLastItem<T>(array: T[], item: T): boolean {
+      return array[array.length - 1] === item;
+   }
 }
