@@ -24,8 +24,5 @@
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
-  },
-  "dependencies": {
-    "react-fast-marquee": "^1.6.4"
   }
 }
