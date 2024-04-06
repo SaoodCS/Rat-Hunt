@@ -69,7 +69,7 @@ export default function Play(): JSX.Element {
          return;
       }
       const roomData = docSnap.data() as AppTypes.Room;
-      const roomDataWithAddedUser = GameHelper.SetRoomState.newUser(roomData, formName);
+      const roomDataWithAddedUser = await GameHelper.SetRoomState.newUser(roomData, formName);
       await setRoomData.mutateAsync(roomDataWithAddedUser);
       setLocalDbRoom(roomId);
       setLocalDbUser(formName);
@@ -82,7 +82,12 @@ export default function Play(): JSX.Element {
       const generatedRoomId = GameHelper.New.roomUID(allRoomIds ?? ['']);
       const { name, topic, noOfRounds } = form;
       const formName = name;
-      const room = GameHelper.SetRoomState.newRoom(generatedRoomId, formName, topic, noOfRounds);
+      const room = await GameHelper.SetRoomState.newRoom(
+         generatedRoomId,
+         formName,
+         topic,
+         noOfRounds,
+      );
       await setRoomData.mutateAsync(room);
       setLocalDbRoom(generatedRoomId);
       setLocalDbUser(formName);

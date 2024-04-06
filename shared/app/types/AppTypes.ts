@@ -13,7 +13,7 @@ export namespace AppTypes {
          string,
          string,
          string,
-         string,
+         string
       ];
    }
 
@@ -42,7 +42,7 @@ export namespace AppTypes {
             votedFor: string;
             spectate: boolean;
             userStatus: 'connected' | 'disconnected';
-            statusUpdatedAt: string;
+            statusUpdatedAt: number;
          }[];
       };
    }

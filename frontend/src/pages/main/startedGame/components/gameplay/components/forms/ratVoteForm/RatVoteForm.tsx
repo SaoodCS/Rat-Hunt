@@ -13,6 +13,7 @@ import MiscHelper from '../../../../../../../../../../shared/lib/helpers/miscHel
 import ObjectHelper from '../../../../../../../../../../shared/lib/helpers/objectHelper/ObjectHelper';
 import ArrOfObj from '../../../../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 import GameHelper from '../../../../../../../../../../shared/app/GameHelper/GameHelper';
+import DateHelper from '../../../../../../../../../../shared/lib/helpers/date/DateHelper';
 
 export default function RatVoteForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -38,9 +39,11 @@ export default function RatVoteForm(): JSX.Element {
          'votedFor',
          currentRat,
       );
+
+      const currentTime = await DateHelper.getCurrentTime();
       const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
          { key: 'currentTurn', value: updatedCurrentTurn },
-         { key: 'currentTurnChangedAt', value: new Date().getTime() },
+         { key: 'currentTurnChangedAt', value: currentTime },
          { key: 'userStates', value: updatedUserStates },
       ]);
       await updateGameStateMutation.mutateAsync({

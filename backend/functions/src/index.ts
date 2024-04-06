@@ -4,9 +4,11 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import GameHelper from '../../../shared/app/GameHelper/GameHelper';
 import ArrOfObj from '../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
+import DateHelper from '../../../shared/lib/helpers/date/DateHelper';
 import MiscHelper from '../../../shared/lib/helpers/miscHelper/MiscHelper';
 import type { IChangeDetails } from './helpers/FirebaseConnect';
 import FBConnect from './helpers/FirebaseConnect';
+import type AppTypes from '../../../shared/app/types/AppTypes';
 
 if (!admin.apps.length) {
    admin.initializeApp();
@@ -17,7 +19,9 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
    const { before, after } = change;
    const allChanges = FBConnect.compare(before.val(), after.val());
    if (!MiscHelper.isNotFalsyOrEmpty(allChanges)) return;
-   const objectsInTimeout: (IChangeDetails & { functionExecutedAt: string })[] = [];
+   const objectsInTimeout: (IChangeDetails & {
+      functionExecutedAt: AppTypes.UserState['statusUpdatedAt'];
+   })[] = [];
    for (let i = 0; i < allChanges.length; i++) {
       const { roomId, userId, userStatus, fullPath } = FBConnect.getChangeDetails(allChanges[i]);
       const { roomRefFS } = FBConnect.getRefs(roomId, userId);
@@ -27,7 +31,7 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
          continue;
       }
       const userStates = roomData.gameState.userStates;
-      const functionExecutedAt = new Date().toUTCString();
+      const functionExecutedAt = await DateHelper.getCurrentTime();
       const updatedUserStates = GameHelper.SetUserStates.updateUser(userStates, userId, [
          { key: 'userStatus', value: userStatus },
          { key: 'statusUpdatedAt', value: functionExecutedAt },
@@ -91,7 +95,7 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
                'setTimeout: Rat User still disconnected during game for over 5 mins so setting new rat',
             );
             const topics = await FBConnect.getTopics();
-            updatedGameState = GameHelper.SetGameState.resetCurrentRound(
+            updatedGameState = await GameHelper.SetGameState.resetCurrentRound(
                gameStateWithoutUser,
                topics,
             );

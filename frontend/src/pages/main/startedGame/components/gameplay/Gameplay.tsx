@@ -43,11 +43,16 @@ export default function Gameplay(): JSX.Element {
       if (localDbUser !== sortedConnectedUsers[0]) return;
       const shouldSkipTurn = GameHelper.Check.shouldSkipTurn(gameState);
       if (!shouldSkipTurn) return;
-      const updatedGameState = GameHelper.SetGameState.skipCurrentTurn(gameState);
-      updateGameStateMutation.mutate({
-         roomId: localDbRoom,
-         gameState: updatedGameState,
-      });
+      GameHelper.SetGameState.skipCurrentTurn(gameState)
+         .then((updatedGameState) => {
+            updateGameStateMutation.mutate({
+               roomId: localDbRoom,
+               gameState: updatedGameState,
+            });
+         })
+         .catch((error) => {
+            console.error('Error in skipping turn: ', error);
+         });
    }, [roomData?.gameState?.currentTurn, localDbUser, roomData?.gameState?.userStates]);
 
    useEffect(() => {

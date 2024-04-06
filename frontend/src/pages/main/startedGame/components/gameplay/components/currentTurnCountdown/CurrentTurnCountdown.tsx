@@ -5,6 +5,7 @@ import MiscHelper from '../../../../../../../../../shared/lib/helpers/miscHelper
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
 import { TimerBar } from './style/Style';
+import DateHelper from '../../../../../../../../../shared/lib/helpers/date/DateHelper';
 
 // CurrentTurnTimerFiller
 export default function CurrentTurnCountdown(): JSX.Element {
@@ -15,8 +16,9 @@ export default function CurrentTurnCountdown(): JSX.Element {
    const updateGameStateMutation = DBConnect.FSDB.Set.gameState({}, false);
 
    useEffect(() => {
-      const interval = setInterval(() => {
-         const newTimeRemaining = Math.floor((countdownExpiry - Date.now()) / 1000);
+      const interval = setInterval(async () => {
+         const currentTime = await DateHelper.getCurrentTime();
+         const newTimeRemaining = countdownExpiry - currentTime;
          setTimeRemaining(newTimeRemaining);
          if (newTimeRemaining <= 0) clearInterval(interval);
       }, 1000);
@@ -28,7 +30,7 @@ export default function CurrentTurnCountdown(): JSX.Element {
       const { gameState } = roomData;
       const { currentTurnChangedAt } = gameState;
       if (!currentTurnChangedAt) return;
-      setCountdownExpiry(currentTurnChangedAt + GameHelper.CONSTANTS.TURN_TIME_LIMIT_MS);
+      setCountdownExpiry(currentTurnChangedAt + GameHelper.CONSTANTS.TURN_TIME_LIMIT_SECONDS);
    }, [roomData?.gameState?.currentTurnChangedAt]);
 
    useEffect(() => {
@@ -39,11 +41,16 @@ export default function CurrentTurnCountdown(): JSX.Element {
       const sortedConnectedUsers = ArrayHelper.sort(connectedUsers);
       if (localDbUser !== sortedConnectedUsers[0]) return;
       const { gameState } = roomData;
-      const updatedGameState = GameHelper.SetGameState.skipCurrentTurn(gameState);
-      updateGameStateMutation.mutate({
-         roomId: localDbRoom,
-         gameState: updatedGameState,
-      });
+      GameHelper.SetGameState.skipCurrentTurn(gameState)
+         .then((updatedGameState) => {
+            updateGameStateMutation.mutate({
+               roomId: localDbRoom,
+               gameState: updatedGameState,
+            });
+         })
+         .catch((error) => {
+            console.error('Error in skipping turn: ', error);
+         });
       setTimeRemaining(null);
    }, [timeRemaining]);
 

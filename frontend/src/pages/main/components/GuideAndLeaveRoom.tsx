@@ -80,7 +80,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
       const gamePhase = GameHelper.Get.gamePhase(gameStateWithUser);
       let updatedGameState: typeof gameStateWithoutUser;
       if (gamePhase !== 'roundSummary') {
-         updatedGameState = GameHelper.SetGameState.resetCurrentRound(
+         updatedGameState = await GameHelper.SetGameState.resetCurrentRound(
             gameStateWithoutUser,
             topicsData,
          );

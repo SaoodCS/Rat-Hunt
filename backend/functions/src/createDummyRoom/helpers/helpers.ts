@@ -1,14 +1,18 @@
 import type AppTypes from '../../../../../shared/app/types/AppTypes';
+import DateHelper from '../../../../../shared/lib/helpers/date/DateHelper';
 
-export const baseDummyUser: AppTypes.UserState = {
-   userStatus: 'disconnected',
-   statusUpdatedAt: new Date().toISOString(),
-   userId: 'dummyUser1',
-   totalScore: 0,
-   roundScores: [],
-   clue: '',
-   votedFor: '',
-   spectate: false,
+export const baseDummyUser = async (): Promise<AppTypes.UserState> => {
+   const currentTime = await DateHelper.getCurrentTime();
+   return {
+      userStatus: 'disconnected',
+      statusUpdatedAt: currentTime,
+      userId: 'dummyUser1',
+      totalScore: 0,
+      roundScores: [],
+      clue: '',
+      votedFor: '',
+      spectate: false,
+   };
 };
 
 export function createCopyOfDummyUser(

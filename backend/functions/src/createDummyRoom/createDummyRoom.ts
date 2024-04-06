@@ -15,7 +15,8 @@ async function createDummyRoom(): Promise<void> {
    if (!topics) throw new Error('No topics found');
    const selectedTopic = topics[0].key;
    const selectedWord = topics[0].values[0];
-   const dummyUsers: AppTypes.UserState[] = generateDummyUsers(baseDummyUser, [
+   const baseDummy = await baseDummyUser();
+   const dummyUsers: AppTypes.UserState[] = generateDummyUsers(baseDummy, [
       { userId: 'dummyUser2' },
       { userId: 'dummyUser3' },
       { userId: 'dummyUser4', spectate: true },

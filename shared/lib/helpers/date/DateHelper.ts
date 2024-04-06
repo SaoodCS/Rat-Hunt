@@ -1,4 +1,10 @@
 export default class DateHelper {
+   static async getCurrentTime(): Promise<number> {
+      const res = await fetch('http://worldtimeapi.org/api/ip');
+      const data = await res.json();
+      return data.unixtime;
+   }
+
    static toDDMMYYYY = (date: Date): string => {
       let day: number | string = date.getDate();
       let month: number | string = date.getMonth() + 1;

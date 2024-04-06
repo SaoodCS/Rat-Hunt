@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import ArrayHelper from '../../lib/helpers/arrayHelper/ArrayHelper';
 import ArrOfObj from '../../lib/helpers/arrayOfObjects/arrayOfObjects';
+import DateHelper from '../../lib/helpers/date/DateHelper';
 import MiscHelper from '../../lib/helpers/miscHelper/MiscHelper';
 import NumberHelper from '../../lib/helpers/number/NumberHelper';
 import type AppTypes from '../types/AppTypes';
@@ -15,7 +16,6 @@ export namespace GameHelper {
 
    export namespace CONSTANTS {
       export const TURN_TIME_LIMIT_SECONDS = 30;
-      export const TURN_TIME_LIMIT_MS = NumberHelper.secsToMs(TURN_TIME_LIMIT_SECONDS);
       export const DISCONNECTED_USER_TIME_LIMIT_MS = NumberHelper.minsToMs(5);
       export const MIN_PLAYERS_TO_START_GAME = 3;
       export const MAX_PLAYERS_IN_ROOM = 20;
@@ -99,7 +99,7 @@ export namespace GameHelper {
 
       export function topicWordsAndCells(
          topics: AppTypes.Topic[],
-         activeTopic: string,
+         activeTopic: string
       ): GameHelper.I.WordCell[] {
          const topicObj = Get.topic(activeTopic, topics);
          const words = topicObj.values;
@@ -132,7 +132,7 @@ export namespace GameHelper {
 
       export function sortedUserStates(
          roundNo: number,
-         userStates: AppTypes.UserState[],
+         userStates: AppTypes.UserState[]
       ): AppTypes.UserState[] {
          const sortedUserIdQueue = Get.sortedUserQueue(roundNo, userStates);
          return ArrOfObj.orderByArrOfVals(userStates, 'userId', sortedUserIdQueue);
@@ -145,7 +145,7 @@ export namespace GameHelper {
 
       export function userState(
          userId: string,
-         userStates: AppTypes.UserState[],
+         userStates: AppTypes.UserState[]
       ): AppTypes.UserState {
          const userState = ArrOfObj.getObj(userStates, 'userId', userId);
          if (!MiscHelper.isNotFalsyOrEmpty(userState)) {
@@ -162,7 +162,7 @@ export namespace GameHelper {
          gameState: AppTypes.GameState,
          currentTurnUser: string,
          type: 'votedFor' | 'clue' | 'guess' | 'leaveRoom',
-         currentRat: string,
+         currentRat: string
       ): string {
          const { userStates, currentRound } = gameState;
          const sortedUserQueue = Get.sortedUserQueue(currentRound, userStates);
@@ -170,7 +170,7 @@ export namespace GameHelper {
          const userStatesWithoutThisUser = ArrOfObj.filterOut(
             userStates,
             'userId',
-            currentTurnUser,
+            currentTurnUser
          );
          const finalVoteSubmission = !ArrOfObj.hasKeyVal(userStatesWithoutThisUser, 'votedFor', '');
          const finalClueSubmission = !ArrOfObj.hasKeyVal(userStatesWithoutThisUser, 'clue', '');
@@ -224,7 +224,7 @@ export namespace GameHelper {
       }
 
       export function gamePhase(
-         gameState: AppTypes.GameState,
+         gameState: AppTypes.GameState
       ): 'votedFor' | 'clue' | 'guess' | 'roundSummary' {
          const { currentTurn, userStates } = gameState;
          if (currentTurn === '') return 'roundSummary';
@@ -256,7 +256,7 @@ export namespace GameHelper {
    export namespace SetRoomState {
       export function keysVals<T extends keyof AppTypes.Room>(
          roomData: AppTypes.Room,
-         keyVals: { key: T; value: AppTypes.Room[T] }[],
+         keyVals: { key: T; value: AppTypes.Room[T] }[]
       ): AppTypes.Room {
          const updatedRoomData: typeof roomData = JSON.parse(JSON.stringify(roomData));
          keyVals.forEach((keyVal) => {
@@ -265,12 +265,13 @@ export namespace GameHelper {
          return updatedRoomData;
       }
 
-      export function newRoom(
+      export async function newRoom(
          generatedRoomId: string,
          hostUserId: string,
          topic: string,
-         noOfRounds: number,
-      ): AppTypes.Room {
+         noOfRounds: number
+      ): Promise<AppTypes.Room> {
+         const currentTime = await DateHelper.getCurrentTime();
          return {
             gameStarted: false,
             roomId: generatedRoomId,
@@ -292,16 +293,17 @@ export namespace GameHelper {
                      votedFor: '',
                      spectate: false,
                      userStatus: 'connected',
-                     statusUpdatedAt: new Date().toUTCString(),
+                     statusUpdatedAt: currentTime,
                   },
                ],
             },
          };
       }
 
-      export function newUser(roomData: AppTypes.Room, userId: string): AppTypes.Room {
+      export async function newUser(roomData: AppTypes.Room, userId: string): Promise<AppTypes.Room> {
          const { gameStarted, gameState } = roomData;
          const { userStates } = gameState;
+         const currentTime = await DateHelper.getCurrentTime();
          const newUserState: AppTypes.UserState = {
             userId,
             totalScore: 0,
@@ -310,7 +312,7 @@ export namespace GameHelper {
             votedFor: gameStarted ? 'SKIP' : '',
             spectate: gameStarted,
             userStatus: 'connected',
-            statusUpdatedAt: new Date().toUTCString(),
+            statusUpdatedAt: currentTime,
          };
          const updatedUserStates = [...userStates, newUserState];
          const updatedGameState = { ...gameState, userStates: updatedUserStates };
@@ -360,12 +362,12 @@ export namespace GameHelper {
          return updatedGameState;
       }
 
-      export function resetGame(
+      export async function resetGame(
          gameState: AppTypes.GameState,
          noOfRounds: number,
          topicsData: AppTypes.Topic[],
-         topic: string,
-      ): AppTypes.GameState {
+         topic: string
+      ): Promise<AppTypes.GameState> {
          const { userStates } = gameState;
          const newRat = ArrOfObj.getRandItem(userStates).userId;
          const newWord = GameHelper.New.word(topicsData, topic);
@@ -377,6 +379,7 @@ export namespace GameHelper {
             { key: 'spectate', value: false },
          ]);
          const updatedCurrentTurn = GameHelper.Get.firstUser(1, userStates);
+         const currentTime = await DateHelper.getCurrentTime();
          const updatedGameState: AppTypes.GameState = {
             ...gameState,
             activeTopic: topic,
@@ -385,17 +388,17 @@ export namespace GameHelper {
             ratGuess: '',
             currentRound: 1,
             currentTurn: updatedCurrentTurn,
-            currentTurnChangedAt: new Date().getTime() + 3000, // 3 seconds as this is how long the user role splash screen is displayed,
+            currentTurnChangedAt: currentTime + 3000, // 3 seconds as this is how long the user role splash screen is displayed,
             userStates: updatedUserStates,
             numberOfRoundsSet: noOfRounds,
          };
          return updatedGameState;
       }
 
-      export function resetCurrentRound(
+      export async function resetCurrentRound(
          gameState: AppTypes.GameState,
-         topicsData: AppTypes.Topic[],
-      ): AppTypes.GameState {
+         topicsData: AppTypes.Topic[]
+      ): Promise<AppTypes.GameState> {
          const { userStates, activeTopic, currentRound } = gameState;
          const newRat = ArrOfObj.getRandItem(userStates).userId;
          const newWord = GameHelper.New.word(topicsData, activeTopic);
@@ -404,6 +407,7 @@ export namespace GameHelper {
             { key: 'votedFor', value: '' },
             { key: 'spectate', value: false },
          ]);
+         const currentTime = await DateHelper.getCurrentTime();
          const updatedCurrentTurn = GameHelper.Get.firstUser(currentRound, userStates);
          const updatedGameState: AppTypes.GameState = {
             ...gameState,
@@ -411,17 +415,17 @@ export namespace GameHelper {
             activeWord: newWord,
             currentRat: newRat,
             currentTurn: updatedCurrentTurn,
-            currentTurnChangedAt: new Date().getTime(),
+            currentTurnChangedAt: currentTime,
             userStates: updatedUserStates,
          };
          return updatedGameState;
       }
 
-      export function nextRound(
+      export async function nextRound(
          gameState: AppTypes.GameState,
          topicsData: AppTypes.Topic[],
-         newTopic: string,
-      ): AppTypes.GameState {
+         newTopic: string
+      ): Promise<AppTypes.GameState> {
          const { userStates } = gameState;
          const newRat = ArrOfObj.getRandItem(userStates).userId;
          const { currentRound } = gameState;
@@ -433,6 +437,7 @@ export namespace GameHelper {
          ]);
          const newRoundNo = currentRound + 1;
          const updatedCurrentTurn = GameHelper.Get.firstUser(newRoundNo, userStates);
+         const currentTime = await DateHelper.getCurrentTime();
          const updatedGameState: AppTypes.GameState = {
             ...gameState,
             activeTopic: newTopic,
@@ -441,13 +446,15 @@ export namespace GameHelper {
             currentRat: newRat,
             currentRound: newRoundNo,
             currentTurn: updatedCurrentTurn,
-            currentTurnChangedAt: new Date().getTime() + 3000, // 3 seconds as this is how long the user role splash screen is displayed
+            currentTurnChangedAt: currentTime + 3000, // 3 seconds as this is how long the user role splash screen is displayed
             userStates: updatedUserStates,
          };
          return updatedGameState;
       }
 
-      export function skipCurrentTurn(gameState: AppTypes.GameState): AppTypes.GameState {
+      export async function skipCurrentTurn(
+         gameState: AppTypes.GameState
+      ): Promise<AppTypes.GameState> {
          const { currentTurn, userStates, currentRat } = gameState;
          const currentTurnUserId = GameHelper.Get.currentTurnUserId(currentTurn);
          const currentGamePhase = GameHelper.Get.gamePhase(gameState);
@@ -459,7 +466,7 @@ export namespace GameHelper {
             gameState,
             currentTurnUserId,
             currentGamePhase,
-            currentRat,
+            currentRat
          );
          let updatedUserStates: AppTypes.UserState[] = [];
          if (currentGamePhase === 'guess') updatedUserStates = userStates;
@@ -469,11 +476,12 @@ export namespace GameHelper {
             ]);
          }
 
+         const currentTime = await DateHelper.getCurrentTime();
          const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
             { key: 'currentTurn', value: updatedCurrentTurn },
             {
                key: 'currentTurnChangedAt',
-               value: isNextPhaseRoundSummary ? '' : new Date().getTime(),
+               value: isNextPhaseRoundSummary ? '' : currentTime,
             },
             { key: 'ratGuess', value: currentGamePhase === 'guess' ? 'SKIP' : '' },
             {
@@ -490,7 +498,7 @@ export namespace GameHelper {
 
       export function keysVals<T extends keyof AppTypes.GameState>(
          gameState: AppTypes.GameState,
-         keyVals: { key: T; value: AppTypes.GameState[T] }[],
+         keyVals: { key: T; value: AppTypes.GameState[T] }[]
       ): AppTypes.GameState {
          const updatedGameState: typeof gameState = JSON.parse(JSON.stringify(gameState));
          keyVals.forEach((keyVal) => {
@@ -504,7 +512,7 @@ export namespace GameHelper {
       export function updateUser<T extends keyof AppTypes.UserState>(
          userStates: AppTypes.UserState[],
          userId: string,
-         keyVals: { key: T; value: AppTypes.UserState[T] }[],
+         keyVals: { key: T; value: AppTypes.UserState[T] }[]
       ): AppTypes.UserState[] {
          const userState = Get.userState(userId, userStates);
          const userStatesWithoutUser = ArrOfObj.filterOut(userStates, 'userId', userId);
