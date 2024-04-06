@@ -29,16 +29,11 @@ export default function RatVoteForm(): JSX.Element {
    async function submitOnChange(): Promise<void> {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
-      const { userStates, currentRat } = gameState;
+      const { userStates } = gameState;
       const updatedUserStates = GameHelper.SetUserStates.updateUser(userStates, localDbUser, [
          { key: 'votedFor', value: form.vote },
       ]);
-      const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(
-         gameState,
-         localDbUser,
-         'votedFor',
-         currentRat,
-      );
+      const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(gameState);
 
       const currentTime = await DateHelper.getCurrentTime();
       const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [

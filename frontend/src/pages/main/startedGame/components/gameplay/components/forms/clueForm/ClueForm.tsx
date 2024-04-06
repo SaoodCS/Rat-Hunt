@@ -35,7 +35,7 @@ export default function ClueForm(): JSX.Element {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const userClue = form.clue.trim();
       const { gameState } = roomData;
-      const { userStates, currentRat } = gameState;
+      const { userStates } = gameState;
       const submittedClues = ArrOfObj.getArrOfValuesFromKey(userStates, 'clue');
       if (ArrayHelper.toCapitalize(submittedClues).includes(userClue.toUpperCase())) {
          setErrors((prev) => ({ ...prev, clue: 'Another user has already submitted this clue.' }));
@@ -45,12 +45,7 @@ export default function ClueForm(): JSX.Element {
       const updatedUserStates = GameHelper.SetUserStates.updateUser(userStates, localDbUser, [
          { key: 'clue', value: userClue },
       ]);
-      const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(
-         gameState,
-         localDbUser,
-         'clue',
-         currentRat,
-      );
+      const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(gameState);
       const currentTime = await DateHelper.getCurrentTime();
       const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
          { key: 'currentTurn', value: updatedCurrentTurn },

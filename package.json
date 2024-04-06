@@ -2,7 +2,8 @@
   "scripts": {
     "f-install": "cd frontend && npm install",
     "b-install": "cd backend/functions && npm install",
-    "app-install": "npm run f-install && npm run b-install && npm install",
+    "shared-install": "cd shared && npm install",
+    "app-install": "npm run f-install && npm run b-install && npm run shared-install && npm install",
     "start": "cd frontend && npm start",
     "f-start": "cd frontend && npm start",
     "b-start": "cd backend && firebase serve",

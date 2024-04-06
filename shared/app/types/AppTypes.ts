@@ -13,7 +13,7 @@ export namespace AppTypes {
          string,
          string,
          string,
-         string
+         string,
       ];
    }
 
