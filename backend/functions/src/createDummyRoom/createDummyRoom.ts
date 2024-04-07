@@ -1,8 +1,8 @@
 import * as admin from 'firebase-admin';
-import { addDummyUsersToRoom, baseDummyUser, generateDummyUsers } from './helpers/helpers';
-import FBConnect from '../helpers/FirebaseConnect';
 import type AppTypes from '../../../../shared/app/types/AppTypes';
 import * as serviceAccount from '../../env/service-account-key.json';
+import FBConnect from '../helpers/FirebaseConnect';
+import { addDummyUsersToRoom, baseDummyUser, generateDummyUsers } from './helpers/helpers';
 
 if (!admin.apps.length) {
    admin.initializeApp({
@@ -21,6 +21,7 @@ async function createDummyRoom(): Promise<void> {
       { userId: 'dummyUser3' },
       { userId: 'dummyUser4', spectate: true },
    ]);
+   const turnQueue = dummyUsers.map((user) => user.userId);
    const dummyRoom: AppTypes.Room = {
       gameStarted: false,
       roomId: 'DUMMY',
@@ -34,6 +35,7 @@ async function createDummyRoom(): Promise<void> {
          currentTurnChangedAt: '',
          numberOfRoundsSet: 4,
          userStates: [],
+         turnQueue,
       },
    };
    const roomWithDummyUsers = addDummyUsersToRoom(dummyRoom, dummyUsers);
