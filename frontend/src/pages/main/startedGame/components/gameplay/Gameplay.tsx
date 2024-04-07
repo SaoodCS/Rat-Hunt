@@ -39,8 +39,7 @@ export default function Gameplay(): JSX.Element {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
       const connectedUsers = GameHelper.Get.connectedUserIds(roomData.gameState.userStates);
-      const sortedConnectedUsers = ArrayHelper.sort(connectedUsers);
-      if (localDbUser !== sortedConnectedUsers[0]) return;
+      if (localDbUser !== connectedUsers[0]) return;
       const shouldSkipTurn = GameHelper.Check.shouldSkipTurn(gameState);
       if (!shouldSkipTurn) return;
       GameHelper.SetGameState.skipCurrentTurn(gameState)

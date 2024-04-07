@@ -1,11 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
 import GameHelper from '../../../../../../../../../shared/app/GameHelper/GameHelper';
-import ArrayHelper from '../../../../../../../../../shared/lib/helpers/arrayHelper/ArrayHelper';
+import DateHelper from '../../../../../../../../../shared/lib/helpers/date/DateHelper';
 import MiscHelper from '../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
 import { TimerBar } from './style/Style';
-import DateHelper from '../../../../../../../../../shared/lib/helpers/date/DateHelper';
 
 // CurrentTurnTimerFiller
 export default function CurrentTurnCountdown(): JSX.Element {
@@ -38,8 +37,7 @@ export default function CurrentTurnCountdown(): JSX.Element {
       if (timeRemaining > 0) return;
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const connectedUsers = GameHelper.Get.connectedUserIds(roomData.gameState.userStates);
-      const sortedConnectedUsers = ArrayHelper.sort(connectedUsers);
-      if (localDbUser !== sortedConnectedUsers[0]) return;
+      if (localDbUser !== connectedUsers[0]) return;
       const { gameState } = roomData;
       GameHelper.SetGameState.skipCurrentTurn(gameState)
          .then((updatedGameState) => {
