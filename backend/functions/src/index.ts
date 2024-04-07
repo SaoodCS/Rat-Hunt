@@ -3,12 +3,12 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import GameHelper from '../../../shared/app/GameHelper/GameHelper';
+import type AppTypes from '../../../shared/app/types/AppTypes';
 import ArrOfObj from '../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 import DateHelper from '../../../shared/lib/helpers/date/DateHelper';
 import MiscHelper from '../../../shared/lib/helpers/miscHelper/MiscHelper';
 import type { IChangeDetails } from './helpers/FirebaseConnect';
 import FBConnect from './helpers/FirebaseConnect';
-import type AppTypes from '../../../shared/app/types/AppTypes';
 
 if (!admin.apps.length) {
    admin.initializeApp();
@@ -84,24 +84,10 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
             await roomRefRT.remove();
             continue;
          }
-         const gameStateWithoutUser = GameHelper.SetGameState.keysVals(gameStateFS, [
-            { key: 'userStates', value: ArrOfObj.filterOut(userStatesFS, 'userId', userId) },
-         ]);
-         const isRat = currentRatFS === userId;
-         const isRoundSummaryPhase = GameHelper.Get.gamePhase(gameStateFS) === 'roundSummary';
-         let updatedGameState: typeof gameStateFS;
-         if (isRat && !isRoundSummaryPhase) {
-            FBConnect.log(
-               'setTimeout: Rat User still disconnected during game for over 5 mins so setting new rat',
-            );
-            const topics = await FBConnect.getTopics();
-            updatedGameState = await GameHelper.SetGameState.resetCurrentRound(
-               gameStateWithoutUser,
-               topics,
-            );
-         } else {
-            updatedGameState = gameStateWithoutUser;
-         }
+         const topics = await FBConnect.getTopics();
+         const updatedGameState = (
+            await GameHelper.SetRoomState.removeUser(roomDataFS, topics, userId)
+         ).gameState;
          await roomRefFS.update({ gameState: updatedGameState });
          await userRefRT.remove();
          FBConnect.log('setTimeout: User still disconnected after 5 minutes so removed: ', userId);

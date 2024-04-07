@@ -7,7 +7,6 @@ import { onDisconnect, ref } from 'firebase/database';
 import { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
-import ArrOfObj from '../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import { GameContext } from '../../../global/context/game/GameContext';
 import { ModalContext } from '../../../global/context/widget/modal/ModalContext';
@@ -71,46 +70,6 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
       navigation('/main/play', { replace: true });
    }
 
-   async function changeRatAndDeleteUser(): Promise<void> {
-      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
-      if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
-      const roomDataWithoutUser = GameHelper.SetRoomState.removeUser(roomData, localDbUser);
-      const { gameState: gameStateWithUser } = roomData;
-      const { gameState: gameStateWithoutUser } = roomDataWithoutUser;
-      const gamePhase = GameHelper.Get.gamePhase(gameStateWithUser);
-      let updatedGameState: typeof gameStateWithoutUser;
-      if (gamePhase !== 'roundSummary') {
-         updatedGameState = await GameHelper.SetGameState.resetCurrentRound(
-            gameStateWithoutUser,
-            topicsData,
-         );
-      } else updatedGameState = gameStateWithoutUser;
-      const updatedRoomState = GameHelper.SetRoomState.keysVals(roomData, [
-         { key: 'gameState', value: updatedGameState },
-      ]);
-      await updateRoomStateMutation.mutateAsync(updatedRoomState);
-      await DBConnect.RTDB.Delete.user(localDbUser, localDbRoom);
-      await clearAppState();
-   }
-
-   async function changeTurnAndDeleteUser(): Promise<void> {
-      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
-      const { gameState } = roomData;
-      const { userStates } = gameState;
-      const nextUser = GameHelper.Get.nextTurnUserId(gameState);
-      const updatedUserStates = ArrOfObj.filterOut(userStates, 'userId', localDbUser);
-      const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
-         { key: 'currentTurn', value: nextUser },
-         { key: 'userStates', value: updatedUserStates },
-      ]);
-      const updatedRoomState = GameHelper.SetRoomState.keysVals(roomData, [
-         { key: 'gameState', value: updatedGameState },
-      ]);
-      await updateRoomStateMutation.mutateAsync(updatedRoomState);
-      await DBConnect.RTDB.Delete.user(localDbUser, localDbRoom);
-      await clearAppState();
-   }
-
    async function handleLeaveRoom(): Promise<void> {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
@@ -121,23 +80,16 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
          await clearAppState();
          return;
       }
-      const { gameState } = roomData;
-      const { currentTurn, currentRat } = gameState;
       if (!location.pathname.includes('waiting')) {
-         if (currentRat === localDbUser) {
-            await changeRatAndDeleteUser();
-            return;
-         } else if (GameHelper.Get.currentTurnUserId(currentTurn) === localDbUser) {
-            await changeTurnAndDeleteUser();
-            return;
-         }
+         const updatedRoomState = await GameHelper.SetRoomState.removeUser(
+            roomData,
+            topicsData,
+            localDbUser,
+         );
+         await updateRoomStateMutation.mutateAsync(updatedRoomState);
+         await DBConnect.RTDB.Delete.user(localDbUser, localDbRoom);
+         await clearAppState();
       }
-      await deleteUserFromFs.mutateAsync({
-         roomData: roomData,
-         userId: localDbUser,
-      });
-      await DBConnect.RTDB.Delete.user(localDbUser, localDbRoom);
-      await clearAppState();
    }
 
    async function shareApp(): Promise<void> {

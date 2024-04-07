@@ -58,6 +58,15 @@ export namespace GameHelper {
          return ratVoters.includes(userId);
       }
 
+      export function isFinalUserToVote(gameState: AppTypes.GameState, userId: string): boolean {
+         const { userStates } = gameState;
+         const thisUserState = Get.userState(userId, userStates);
+         const thisUserHasNotVoted = thisUserState.votedFor === '';
+         const userStatesWithoutUser = ArrOfObj.filterOut(userStates, 'userId', userId);
+         const allVotedForValuesExist = !ArrOfObj.hasKeyVal(userStatesWithoutUser, 'votedFor', '');
+         return allVotedForValuesExist && thisUserHasNotVoted;
+      }
+
       export function ratGotCaught(gameState: AppTypes.GameState): boolean {
          const { userStates, currentRat } = gameState;
          const userVotes: string[] = ArrOfObj.getArrOfValuesFromKey(userStates, 'votedFor');
@@ -118,34 +127,19 @@ export namespace GameHelper {
          return wordsWithCellIds;
       }
 
-      export function sortedUserQueue(roundNo: number, userStates: AppTypes.UserState[]): string[] {
-         const usersQueued: string[] = [];
-         const usersLength = userStates.length;
-         const users = ArrOfObj.getArrOfValuesFromKey(userStates, 'userId');
-         const sortedUsers = ArrayHelper.sort(users);
-         for (let i = 0; i < usersLength; i++) {
-            const index = (roundNo - 1 + i) % usersLength;
-            usersQueued.push(sortedUsers[index]);
-         }
-         return usersQueued;
-      }
-
       export function sortedUserStates(
-         roundNo: number,
          userStates: AppTypes.UserState[],
+         turnQueue: AppTypes.GameState['turnQueue'],
       ): AppTypes.UserState[] {
-         const sortedUserIdQueue = Get.sortedUserQueue(roundNo, userStates);
-         return ArrOfObj.orderByArrOfVals(userStates, 'userId', sortedUserIdQueue);
+         return ArrOfObj.orderByArrOfVals(userStates, 'userId', turnQueue);
       }
 
-      export function firstUser(roundNo: number, userStates: AppTypes.UserState[]): string {
-         const sortedUsers = Get.sortedUserQueue(roundNo, userStates);
-         return sortedUsers[0];
+      export function firstUser(turnQueue: string[]): string {
+         return turnQueue[0];
       }
 
-      export function lastUser(roundNo: number, userStates: AppTypes.UserState[]): string {
-         const sortedUsers = Get.sortedUserQueue(roundNo, userStates);
-         return sortedUsers[sortedUsers.length - 1];
+      export function lastUser(turnQueue: string[]): string {
+         return turnQueue[turnQueue.length - 1];
       }
 
       export function userState(
@@ -164,25 +158,27 @@ export namespace GameHelper {
       }
 
       export function nextTurnUserId(gameState: AppTypes.GameState): string {
-         const { currentTurn, userStates, currentRat, currentRound } = gameState;
+         const { currentTurn, currentRat, turnQueue, userStates } = gameState;
          const currentTurnUserId = GameHelper.Get.currentTurnUserId(currentTurn);
-         const gamePhase = GameHelper.Get.gamePhase(gameState);
-         if (gamePhase === 'roundSummary') {
-            throw new Error(
-               'This function should only be executed when in the "votedFor", "clue" or "guess" phase. The other Get.firstUser function handles cases where the gamePhase is "roundSummary" or the game is restarted / just beginning',
-            );
-         }
-         const sortedUserQueue = Get.sortedUserQueue(currentRound, userStates);
-         const firstUserInQueue = Get.firstUser(currentRound, userStates);
-         const lastUserInQueue = Get.lastUser(currentRound, userStates);
+         const areAllCluesSubmitted = !ArrOfObj.hasKeyVal(userStates, 'clue', '');
+         const areAllVotesSubmitted = !ArrOfObj.hasKeyVal(userStates, 'votedFor', '');
+         const firstUserInQueue = Get.firstUser(turnQueue);
+         const lastUserInQueue = Get.lastUser(turnQueue);
          const isLastUserInQueue = currentTurnUserId === lastUserInQueue;
-         const queuePosition = sortedUserQueue.indexOf(currentTurnUserId);
-         if (gamePhase === 'guess' && currentTurnUserId === currentRat) return '';
-         if (isLastUserInQueue) {
-            if (gamePhase === 'clue') return firstUserInQueue;
-            if (gamePhase === 'votedFor') return `${currentRat}.wordGuess`;
+         const queuePosition = turnQueue.indexOf(currentTurnUserId);
+         const isFinalUserToVote = Check.isFinalUserToVote(gameState, currentTurnUserId);
+         const isCurrentTurnUserRat = currentTurnUserId === currentRat;
+         if (!areAllCluesSubmitted) {
+            if (isLastUserInQueue) return firstUserInQueue;
+            return turnQueue[queuePosition + 1];
          }
-         return sortedUserQueue[queuePosition + 1];
+         if (!areAllVotesSubmitted) {
+            if (isFinalUserToVote) return `${currentRat}.wordGuess`;
+            if (isLastUserInQueue) return firstUserInQueue;
+            return turnQueue[queuePosition + 1];
+         }
+         if (isCurrentTurnUserRat) return '';
+         return `${currentRat}.wordGuess`;
       }
 
       export function allUserIds(userStates: AppTypes.UserState[]): string[] {
@@ -207,24 +203,14 @@ export namespace GameHelper {
       export function gamePhase(
          gameState: AppTypes.GameState,
       ): 'votedFor' | 'clue' | 'guess' | 'roundSummary' {
-         const { currentTurn, userStates } = gameState;
-         if (currentTurn === '') return 'roundSummary';
-         const currentTurnUserId = GameHelper.Get.currentTurnUserId(currentTurn);
-         const currentTurnUserState = Get.userState(currentTurnUserId, userStates);
+         const { userStates } = gameState;
          const hasRatGuessed = GameHelper.Check.hasRatGuessed(gameState);
-         if (currentTurnUserState.spectate) {
-            // Spectating user's clue and votedFor values are already set to 'SKIP' for the round
-            const allCluesExist = !ArrOfObj.hasKeyVal(userStates, 'clue', '');
-            const allVotedForValuesExist = !ArrOfObj.hasKeyVal(userStates, 'votedFor', '');
-            if (hasRatGuessed) return 'roundSummary';
-            if (allCluesExist && allVotedForValuesExist) return 'guess';
-            if (allCluesExist) return 'votedFor';
-            return 'clue';
-         }
-         if (currentTurnUserState.clue === '') return 'clue';
-         if (currentTurnUserState.votedFor === '') return 'votedFor';
-         if (hasRatGuessed) return 'roundSummary';
-         return 'guess';
+         const allCluesExist = !ArrOfObj.hasKeyVal(userStates, 'clue', '');
+         const allVotedForValuesExist = !ArrOfObj.hasKeyVal(userStates, 'votedFor', '');
+         if (!allCluesExist) return 'clue';
+         if (!allVotedForValuesExist) return 'votedFor';
+         if (!hasRatGuessed) return 'guess';
+         return 'roundSummary';
       }
 
       export function ratVoters(gameState: AppTypes.GameState): string[] {
@@ -265,6 +251,7 @@ export namespace GameHelper {
                numberOfRoundsSet: noOfRounds,
                currentTurn: '',
                currentTurnChangedAt: '',
+               turnQueue: [hostUserId],
                userStates: [
                   {
                      userId: hostUserId,
@@ -286,7 +273,7 @@ export namespace GameHelper {
          userId: string,
       ): Promise<AppTypes.Room> {
          const { gameStarted, gameState } = roomData;
-         const { userStates } = gameState;
+         const { userStates, turnQueue } = gameState;
          const currentTime = await DateHelper.getCurrentTime();
          const newUserState: AppTypes.UserState = {
             userId,
@@ -298,17 +285,49 @@ export namespace GameHelper {
             userStatus: 'connected',
             statusUpdatedAt: currentTime,
          };
+         const updatedQueue = ArrayHelper.push(turnQueue, userId);
          const updatedUserStates = [...userStates, newUserState];
-         const updatedGameState = { ...gameState, userStates: updatedUserStates };
+         const updatedGameState = {
+            ...gameState,
+            userStates: updatedUserStates,
+            turnQueue: updatedQueue,
+         };
          return { ...roomData, gameState: updatedGameState };
       }
 
-      export function removeUser(roomData: AppTypes.Room, userId: string): AppTypes.Room {
+      export async function removeUser(
+         roomData: AppTypes.Room,
+         topicsData: AppTypes.Topic[],
+         userId: string,
+      ): Promise<AppTypes.Room> {
          const { gameState } = roomData;
-         const { userStates } = gameState;
+         const { currentRat, userStates, turnQueue, currentTurn } = gameState;
+         const gamePhase = GameHelper.Get.gamePhase(gameState);
          const gameStateWithoutUser = GameHelper.SetGameState.keysVals(gameState, [
             { key: 'userStates', value: ArrOfObj.filterOut(userStates, 'userId', userId) },
+            { key: 'turnQueue', value: ArrayHelper.filterOut(turnQueue, userId) },
          ]);
+
+         if (currentRat === userId && gamePhase !== 'roundSummary') {
+            const updatedGameState = await GameHelper.SetGameState.resetCurrentRound(
+               gameStateWithoutUser,
+               topicsData,
+            );
+            return GameHelper.SetRoomState.keysVals(roomData, [
+               { key: 'gameState', value: updatedGameState },
+            ]);
+         }
+
+         if (GameHelper.Get.currentTurnUserId(currentTurn) === userId) {
+            const nextUser = GameHelper.Get.nextTurnUserId(gameState);
+            const updatedGameState = GameHelper.SetGameState.keysVals(gameStateWithoutUser, [
+               { key: 'currentTurn', value: nextUser },
+            ]);
+            return GameHelper.SetRoomState.keysVals(roomData, [
+               { key: 'gameState', value: updatedGameState },
+            ]);
+         }
+
          return GameHelper.SetRoomState.keysVals(roomData, [
             { key: 'gameState', value: gameStateWithoutUser },
          ]);
@@ -352,7 +371,7 @@ export namespace GameHelper {
          topicsData: AppTypes.Topic[],
          topic: string,
       ): Promise<AppTypes.GameState> {
-         const { userStates } = gameState;
+         const { userStates, turnQueue } = gameState;
          const newRat = ArrOfObj.getRandItem(userStates).userId;
          const newWord = GameHelper.New.word(topicsData, topic);
          const updatedUserStates = ArrOfObj.setKeyValsInAllObjects(userStates, [
@@ -362,7 +381,7 @@ export namespace GameHelper {
             { key: 'totalScore', value: 0 },
             { key: 'spectate', value: false },
          ]);
-         const updatedCurrentTurn = GameHelper.Get.firstUser(1, userStates);
+         const updatedCurrentTurn = GameHelper.Get.firstUser(turnQueue);
          const currentTime = await DateHelper.getCurrentTime();
          const updatedGameState: AppTypes.GameState = {
             ...gameState,
@@ -383,7 +402,7 @@ export namespace GameHelper {
          gameState: AppTypes.GameState,
          topicsData: AppTypes.Topic[],
       ): Promise<AppTypes.GameState> {
-         const { userStates, activeTopic, currentRound } = gameState;
+         const { userStates, activeTopic, turnQueue } = gameState;
          const newRat = ArrOfObj.getRandItem(userStates).userId;
          const newWord = GameHelper.New.word(topicsData, activeTopic);
          const updatedUserStates = ArrOfObj.setKeyValsInAllObjects(userStates, [
@@ -392,7 +411,7 @@ export namespace GameHelper {
             { key: 'spectate', value: false },
          ]);
          const currentTime = await DateHelper.getCurrentTime();
-         const updatedCurrentTurn = GameHelper.Get.firstUser(currentRound, userStates);
+         const updatedCurrentTurn = GameHelper.Get.firstUser(turnQueue);
          const updatedGameState: AppTypes.GameState = {
             ...gameState,
             ratGuess: '',
@@ -410,7 +429,7 @@ export namespace GameHelper {
          topicsData: AppTypes.Topic[],
          newTopic: string,
       ): Promise<AppTypes.GameState> {
-         const { userStates } = gameState;
+         const { userStates, turnQueue } = gameState;
          const newRat = ArrOfObj.getRandItem(userStates).userId;
          const { currentRound } = gameState;
          const newWord = GameHelper.New.word(topicsData, newTopic);
@@ -420,7 +439,8 @@ export namespace GameHelper {
             { key: 'spectate', value: false },
          ]);
          const newRoundNo = currentRound + 1;
-         const updatedCurrentTurn = GameHelper.Get.firstUser(newRoundNo, userStates);
+         const updatedTurnQueue = ArrayHelper.shiftLeftByOne(turnQueue);
+         const updatedCurrentTurn = GameHelper.Get.firstUser(updatedTurnQueue);
          const currentTime = await DateHelper.getCurrentTime();
          const updatedGameState: AppTypes.GameState = {
             ...gameState,
@@ -432,6 +452,7 @@ export namespace GameHelper {
             currentTurn: updatedCurrentTurn,
             currentTurnChangedAt: currentTime + 3, // 3 seconds as this is how long the user role splash screen is displayed
             userStates: updatedUserStates,
+            turnQueue: updatedTurnQueue,
          };
          return updatedGameState;
       }
@@ -454,7 +475,6 @@ export namespace GameHelper {
                { key: currentGamePhase, value: 'SKIP' },
             ]);
          }
-
          const currentTime = await DateHelper.getCurrentTime();
          const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
             { key: 'currentTurn', value: updatedCurrentTurn },

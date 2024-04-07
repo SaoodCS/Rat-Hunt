@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
+import GameHelper from '../../../../../../../../../shared/app/GameHelper/GameHelper';
 import type AppTypes from '../../../../../../../../../shared/app/types/AppTypes';
+import MiscHelper from '../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import Scroller from '../../../../../../../global/components/lib/scroller/Scroller';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import MyCSS from '../../../../../../../global/css/MyCSS';
 import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
 import { TableBody, TableCell, TableContainer, TableHead, TableRow } from './style/Style';
-import MiscHelper from '../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
-import GameHelper from '../../../../../../../../../shared/app/GameHelper/GameHelper';
 
 export default function GameStateTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -26,8 +26,8 @@ export default function GameStateTable(): JSX.Element {
    useEffect(() => {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       const { gameState } = roomData;
-      const { userStates, currentRound } = gameState;
-      setSortedUserStates(GameHelper.Get.sortedUserStates(currentRound, userStates));
+      const { userStates, turnQueue } = gameState;
+      setSortedUserStates(GameHelper.Get.sortedUserStates(userStates, turnQueue));
       setGamePhase(GameHelper.Get.gamePhase(gameState));
    }, [roomData?.gameState?.userStates, localDbUser]);
 

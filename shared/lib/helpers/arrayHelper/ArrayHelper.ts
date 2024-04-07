@@ -60,6 +60,16 @@ export default class ArrayHelper {
       }) as T;
    }
 
+   static push<T>(array: T[], item: T): T[] {
+      const deepCopy: T[] = JSON.parse(JSON.stringify(array));
+      deepCopy.push(item);
+      return deepCopy;
+   }
+
+   static filterOut<T>(array: T[], item: T): T[] {
+      return array.filter((i) => i !== item);
+   }
+
    // was "toUppercase"
    static toCapitalize<T extends string[]>(arr: T): T {
       const deepCopy: T = JSON.parse(JSON.stringify(arr));
@@ -68,5 +78,12 @@ export default class ArrayHelper {
 
    static isLastItem<T>(array: T[], item: T): boolean {
       return array[array.length - 1] === item;
+   }
+
+   static shiftLeftByOne<T>(arr: T[]): T[] {
+      const deepCopy: T[] = JSON.parse(JSON.stringify(arr));
+      if (deepCopy.length === 0) return deepCopy;
+      deepCopy.push(deepCopy.shift() || deepCopy[0]);
+      return deepCopy;
    }
 }

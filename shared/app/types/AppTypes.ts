@@ -34,6 +34,7 @@ export namespace AppTypes {
          currentTurn: string;
          currentTurnChangedAt: number | '';
          numberOfRoundsSet: number;
+         turnQueue: string[];
          userStates: {
             userId: string;
             totalScore: number;
