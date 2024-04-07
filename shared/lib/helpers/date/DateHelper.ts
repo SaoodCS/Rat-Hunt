@@ -1,6 +1,6 @@
 export default class DateHelper {
    static async getCurrentTime(): Promise<number> {
-      const res = await fetch('http://worldtimeapi.org/api/ip');
+      const res = await fetch('https://worldtimeapi.org/api/ip');
       const data = await res.json();
       return data.unixtime;
    }
