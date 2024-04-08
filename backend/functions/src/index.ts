@@ -31,14 +31,19 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
          const functionExecutedAt = await DateHelper.getCurrentTime(axios);
          const instanceId = DateHelper.unixTimeToReadable(functionExecutedAt);
          const { room, user } = deletedUsers[i];
-         const { roomRefFS, userRefRT, roomRefRT } = FBConnect.getRefs(room, user);
+         const { roomRefFS } = FBConnect.getRefs(room, user);
          const roomData = await FBConnect.getRoomFromFS(roomRefFS);
+         FBConnect.log(
+            `${instanceId}: Room Data for ${room} where user ${user} will be deleted: `,
+            roomData,
+         );
          if (!MiscHelper.isNotFalsyOrEmpty(roomData)) {
             FBConnect.log(`${instanceId}: Room Data Not Found in Firestore: `, room);
             continue;
          }
          const { userStates } = roomData.gameState;
          const thisUserInFS = ArrOfObj.getObj(userStates, 'userId', user);
+         FBConnect.log(`${instanceId}: Users State To Delete in Firestore: `, thisUserInFS);
          if (!MiscHelper.isNotFalsyOrEmpty(thisUserInFS)) {
             FBConnect.log(`${instanceId}: User Not Found in Firestore: `, user);
             continue;
@@ -49,7 +54,7 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
                room,
             );
             await roomRefFS.delete();
-            await roomRefRT.remove();
+            // await roomRefRT.remove();
             continue;
          }
          const topics = await FBConnect.getTopics();
@@ -57,7 +62,7 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
             await GameHelper.SetRoomState.removeUser(roomData, topics, user, axios)
          ).gameState;
          await roomRefFS.update({ gameState: updatedGameState });
-         await userRefRT.remove();
+         FBConnect.log(`${instanceId}: User (${user}) Removed from Firestore Room: `, room);
       }
       return;
    }
