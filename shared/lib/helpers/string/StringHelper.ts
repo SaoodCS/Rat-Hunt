@@ -14,4 +14,10 @@ export default class StringHelper {
    static containsOneOf(str: string, chars: string[]): boolean {
       return chars.some((char) => str.includes(char));
    }
+
+   static generateRandUID(length: number): string {
+      return Math.random()
+         .toString(36)
+         .substring(2, length + 2);
+   }
 }
