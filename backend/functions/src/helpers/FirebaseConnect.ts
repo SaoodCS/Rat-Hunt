@@ -12,15 +12,68 @@ export interface IChangeDetails {
    userStatus: AppTypes.UserState['userStatus'];
 }
 
+interface UserStatus {
+   userStatus: string;
+}
+
 interface PathAndChangedVal {
    path: string;
    changedVal: string;
 }
 
+interface Room {
+   [userId: string]: UserStatus;
+}
+
+interface Rooms {
+   [roomId: string]: Room;
+}
+
+interface BeforeAfter {
+   rooms: Rooms;
+}
+
+interface DeletedUser {
+   room: string;
+   user: string;
+}
+
 type Obj = { [key: string]: Obj | string };
 
 export namespace FBConnect {
-   // eslint-disable-next-line unused-imports/no-unused-vars
+   export function findDeletedUsers(
+      before: BeforeAfter | null | undefined,
+      after: BeforeAfter | null | undefined,
+   ): DeletedUser[] | null {
+      const deletedUsers: DeletedUser[] = [];
+      if (!before) return null;
+      if (!after) {
+         for (const roomId in before.rooms) {
+            for (const userId in before.rooms[roomId]) {
+               deletedUsers.push({ room: roomId, user: userId });
+            }
+         }
+         return deletedUsers;
+      }
+      for (const roomId in before.rooms) {
+         if (roomId in after.rooms) {
+            const beforeRoom = before.rooms[roomId];
+            const afterRoom = after.rooms[roomId];
+
+            for (const userId in beforeRoom) {
+               if (!(userId in afterRoom)) {
+                  deletedUsers.push({ room: roomId, user: userId });
+               }
+            }
+         } else {
+            for (const userId in before.rooms[roomId]) {
+               deletedUsers.push({ room: roomId, user: userId });
+            }
+         }
+      }
+      return deletedUsers;
+   }
+
    export function compare(
       beforeObj: Obj | null | undefined,
       afterObj: Obj | null | undefined,
