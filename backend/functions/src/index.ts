@@ -9,6 +9,7 @@ import DateHelper from '../../../shared/lib/helpers/date/DateHelper';
 import MiscHelper from '../../../shared/lib/helpers/miscHelper/MiscHelper';
 import type { IChangeDetails } from './helpers/FirebaseConnect';
 import FBConnect from './helpers/FirebaseConnect';
+import axios from 'axios';
 
 if (!admin.apps.length) {
    admin.initializeApp();
@@ -31,7 +32,7 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
          continue;
       }
       const userStates = roomData.gameState.userStates;
-      const functionExecutedAt = await DateHelper.getCurrentTime();
+      const functionExecutedAt = await DateHelper.getCurrentTime(axios);
       const updatedUserStates = GameHelper.SetUserStates.updateUser(userStates, userId, [
          { key: 'userStatus', value: userStatus },
          { key: 'statusUpdatedAt', value: functionExecutedAt },
@@ -54,7 +55,7 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
             continue;
          }
          const { gameState: gameStateFS } = roomDataFS;
-         const { userStates: userStatesFS, currentRat: currentRatFS } = gameStateFS;
+         const { userStates: userStatesFS } = gameStateFS;
          const thisUserInFS = ArrOfObj.getObj(userStatesFS, 'userId', userId);
          if (!MiscHelper.isNotFalsyOrEmpty(thisUserInFS)) {
             FBConnect.log('setTimeout: User Not Found in Firestore: ', userId);
@@ -86,7 +87,7 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
          }
          const topics = await FBConnect.getTopics();
          const updatedGameState = (
-            await GameHelper.SetRoomState.removeUser(roomDataFS, topics, userId)
+            await GameHelper.SetRoomState.removeUser(roomDataFS, topics, userId, axios)
          ).gameState;
          await roomRefFS.update({ gameState: updatedGameState });
          await userRefRT.remove();

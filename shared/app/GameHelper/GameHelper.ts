@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import type { AxiosStatic } from 'axios';
 import ArrayHelper from '../../lib/helpers/arrayHelper/ArrayHelper';
 import ArrOfObj from '../../lib/helpers/arrayOfObjects/arrayOfObjects';
 import DateHelper from '../../lib/helpers/date/DateHelper';
@@ -237,8 +238,9 @@ export namespace GameHelper {
          hostUserId: string,
          topic: string,
          noOfRounds: number,
+         axios: AxiosStatic,
       ): Promise<AppTypes.Room> {
-         const currentTime = await DateHelper.getCurrentTime();
+         const currentTime = await DateHelper.getCurrentTime(axios);
          return {
             gameStarted: false,
             roomId: generatedRoomId,
@@ -271,10 +273,11 @@ export namespace GameHelper {
       export async function newUser(
          roomData: AppTypes.Room,
          userId: string,
+         axios: AxiosStatic,
       ): Promise<AppTypes.Room> {
          const { gameStarted, gameState } = roomData;
          const { userStates, turnQueue } = gameState;
-         const currentTime = await DateHelper.getCurrentTime();
+         const currentTime = await DateHelper.getCurrentTime(axios);
          const newUserState: AppTypes.UserState = {
             userId,
             totalScore: 0,
@@ -299,6 +302,7 @@ export namespace GameHelper {
          roomData: AppTypes.Room,
          topicsData: AppTypes.Topic[],
          userId: string,
+         axios: AxiosStatic,
       ): Promise<AppTypes.Room> {
          const { gameState } = roomData;
          const { currentRat, userStates, turnQueue, currentTurn } = gameState;
@@ -312,6 +316,7 @@ export namespace GameHelper {
             const updatedGameState = await GameHelper.SetGameState.resetCurrentRound(
                gameStateWithoutUser,
                topicsData,
+               axios,
             );
             return GameHelper.SetRoomState.keysVals(roomData, [
                { key: 'gameState', value: updatedGameState },
@@ -370,6 +375,7 @@ export namespace GameHelper {
          noOfRounds: number,
          topicsData: AppTypes.Topic[],
          topic: string,
+         axios: AxiosStatic,
       ): Promise<AppTypes.GameState> {
          const { userStates, turnQueue } = gameState;
          const newRat = ArrOfObj.getRandItem(userStates).userId;
@@ -382,7 +388,7 @@ export namespace GameHelper {
             { key: 'spectate', value: false },
          ]);
          const updatedCurrentTurn = GameHelper.Get.firstUser(turnQueue);
-         const currentTime = await DateHelper.getCurrentTime();
+         const currentTime = await DateHelper.getCurrentTime(axios);
          const updatedGameState: AppTypes.GameState = {
             ...gameState,
             activeTopic: topic,
@@ -401,6 +407,7 @@ export namespace GameHelper {
       export async function resetCurrentRound(
          gameState: AppTypes.GameState,
          topicsData: AppTypes.Topic[],
+         axios: AxiosStatic,
       ): Promise<AppTypes.GameState> {
          const { userStates, activeTopic, turnQueue } = gameState;
          const newRat = ArrOfObj.getRandItem(userStates).userId;
@@ -410,7 +417,7 @@ export namespace GameHelper {
             { key: 'votedFor', value: '' },
             { key: 'spectate', value: false },
          ]);
-         const currentTime = await DateHelper.getCurrentTime();
+         const currentTime = await DateHelper.getCurrentTime(axios);
          const updatedCurrentTurn = GameHelper.Get.firstUser(turnQueue);
          const updatedGameState: AppTypes.GameState = {
             ...gameState,
@@ -428,6 +435,7 @@ export namespace GameHelper {
          gameState: AppTypes.GameState,
          topicsData: AppTypes.Topic[],
          newTopic: string,
+         axios: AxiosStatic,
       ): Promise<AppTypes.GameState> {
          const { userStates, turnQueue } = gameState;
          const newRat = ArrOfObj.getRandItem(userStates).userId;
@@ -441,7 +449,7 @@ export namespace GameHelper {
          const newRoundNo = currentRound + 1;
          const updatedTurnQueue = ArrayHelper.shiftLeftByOne(turnQueue);
          const updatedCurrentTurn = GameHelper.Get.firstUser(updatedTurnQueue);
-         const currentTime = await DateHelper.getCurrentTime();
+         const currentTime = await DateHelper.getCurrentTime(axios);
          const updatedGameState: AppTypes.GameState = {
             ...gameState,
             activeTopic: newTopic,
@@ -459,6 +467,7 @@ export namespace GameHelper {
 
       export async function skipCurrentTurn(
          gameState: AppTypes.GameState,
+         axios: AxiosStatic,
       ): Promise<AppTypes.GameState> {
          const { currentTurn, userStates } = gameState;
          const currentTurnUserId = GameHelper.Get.currentTurnUserId(currentTurn);
@@ -475,7 +484,7 @@ export namespace GameHelper {
                { key: currentGamePhase, value: 'SKIP' },
             ]);
          }
-         const currentTime = await DateHelper.getCurrentTime();
+         const currentTime = await DateHelper.getCurrentTime(axios);
          const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
             { key: 'currentTurn', value: updatedCurrentTurn },
             {

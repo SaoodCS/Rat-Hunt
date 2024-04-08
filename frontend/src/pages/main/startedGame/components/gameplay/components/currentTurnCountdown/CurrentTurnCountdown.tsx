@@ -5,6 +5,7 @@ import MiscHelper from '../../../../../../../../../shared/lib/helpers/miscHelper
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
 import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
 import { TimerBar } from './style/Style';
+import axios from 'axios';
 
 // CurrentTurnTimerFiller
 export default function CurrentTurnCountdown(): JSX.Element {
@@ -16,7 +17,7 @@ export default function CurrentTurnCountdown(): JSX.Element {
 
    useEffect(() => {
       const interval = setInterval(async () => {
-         const currentTime = await DateHelper.getCurrentTime();
+         const currentTime = await DateHelper.getCurrentTime(axios);
          const newTimeRemaining = countdownExpiry - currentTime;
          setTimeRemaining(newTimeRemaining);
          if (newTimeRemaining <= 0) clearInterval(interval);
@@ -39,7 +40,7 @@ export default function CurrentTurnCountdown(): JSX.Element {
       const connectedUsers = GameHelper.Get.connectedUserIds(roomData.gameState.userStates);
       if (localDbUser !== connectedUsers[0]) return;
       const { gameState } = roomData;
-      GameHelper.SetGameState.skipCurrentTurn(gameState)
+      GameHelper.SetGameState.skipCurrentTurn(gameState, axios)
          .then((updatedGameState) => {
             updateGameStateMutation.mutate({
                roomId: localDbRoom,

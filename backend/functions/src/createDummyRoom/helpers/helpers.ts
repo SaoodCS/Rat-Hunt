@@ -1,8 +1,9 @@
+import axios from 'axios';
 import type AppTypes from '../../../../../shared/app/types/AppTypes';
 import DateHelper from '../../../../../shared/lib/helpers/date/DateHelper';
 
 export const baseDummyUser = async (): Promise<AppTypes.UserState> => {
-   const currentTime = await DateHelper.getCurrentTime();
+   const currentTime = await DateHelper.getCurrentTime(axios);
    return {
       userStatus: 'disconnected',
       statusUpdatedAt: currentTime,

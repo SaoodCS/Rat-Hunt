@@ -3,7 +3,6 @@ import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
 import GameHelper from '../../../../../../../shared/app/GameHelper/GameHelper';
-import ArrayHelper from '../../../../../../../shared/lib/helpers/arrayHelper/ArrayHelper';
 import MiscHelper from '../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import Fader from '../../../../../global/components/lib/animation/fader/Fader';
 import { TextColourizer } from '../../../../../global/components/lib/font/textColorizer/TextColourizer';
@@ -23,6 +22,7 @@ import {
    FormContainer,
    GameStateTableWrapper,
 } from './style/Style';
+import axios from 'axios';
 
 export default function Gameplay(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -42,7 +42,7 @@ export default function Gameplay(): JSX.Element {
       if (localDbUser !== connectedUsers[0]) return;
       const shouldSkipTurn = GameHelper.Check.shouldSkipTurn(gameState);
       if (!shouldSkipTurn) return;
-      GameHelper.SetGameState.skipCurrentTurn(gameState)
+      GameHelper.SetGameState.skipCurrentTurn(gameState, axios)
          .then((updatedGameState) => {
             updateGameStateMutation.mutate({
                roomId: localDbRoom,

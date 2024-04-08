@@ -29,6 +29,7 @@ import {
    UserListItemContainer,
    WaitingRoomTitle,
 } from './style/Style';
+import axios from 'axios';
 
 export default function WaitingRoom(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -82,6 +83,7 @@ export default function WaitingRoom(): JSX.Element {
          gameState,
          topicsData,
          activeTopic,
+         axios,
       );
       await setRoomData.mutateAsync({
          ...roomData,

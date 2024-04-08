@@ -16,6 +16,7 @@ import useForm from '../../../../../../../../global/hooks/useForm';
 import { gameFormStyles, gameInputFieldStyles } from '../style/Style';
 import ClueFormClass from './class/ClueFormClass';
 import DateHelper from '../../../../../../../../../../shared/lib/helpers/date/DateHelper';
+import axios from 'axios';
 
 export default function ClueForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -46,7 +47,7 @@ export default function ClueForm(): JSX.Element {
          { key: 'clue', value: userClue },
       ]);
       const updatedCurrentTurn = GameHelper.Get.nextTurnUserId(gameState);
-      const currentTime = await DateHelper.getCurrentTime();
+      const currentTime = await DateHelper.getCurrentTime(axios);
       const updatedGameState = GameHelper.SetGameState.keysVals(gameState, [
          { key: 'currentTurn', value: updatedCurrentTurn },
          { key: 'currentTurnChangedAt', value: currentTime },

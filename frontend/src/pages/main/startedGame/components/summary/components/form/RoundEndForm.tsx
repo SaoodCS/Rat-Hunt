@@ -13,6 +13,7 @@ import { StyledForm } from '../../../../../../../global/components/lib/form/styl
 import InputCombination from '../../../../../../../global/components/lib/form/inputCombination/InputCombination';
 import { StaticButton } from '../../../../../../../global/components/lib/button/staticButton/Style';
 import type AppTypes from '../../../../../../../../../shared/app/types/AppTypes';
+import axios from 'axios';
 
 interface IRoundEndForm {
    isLastRound: boolean;
@@ -46,12 +47,14 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
             noOfRounds,
             topicsData,
             newTopic,
+            axios,
          );
       } else {
          updatedGameState = await GameHelper.SetGameState.nextRound(
             gameState,
             topicsData,
             newTopic,
+            axios,
          );
       }
       await setRoomData.mutateAsync({

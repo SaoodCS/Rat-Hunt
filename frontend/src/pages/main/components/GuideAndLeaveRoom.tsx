@@ -15,6 +15,7 @@ import DBConnect from '../../../global/database/DBConnect/DBConnect';
 import { firebaseRTDB } from '../../../global/database/config/config';
 import Device from '../../../global/helpers/pwa/deviceHelper';
 import HelpGuide from './HelpGuide';
+import axios from 'axios';
 
 interface IGuideAndLeaveRoom {
    currentPath: string;
@@ -38,7 +39,6 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    const [isPlayPage, setIsPlayPage] = useState(currentPath.includes('play'));
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const { data: topicsData } = DBConnect.FSDB.Get.topics();
-   const deleteUserFromFs = DBConnect.FSDB.Delete.user({});
    const deleteRoomMutation = DBConnect.FSDB.Delete.room({});
    const updateRoomStateMutation = DBConnect.FSDB.Set.room({}, false);
    const navigation = useNavigate();
@@ -85,6 +85,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
             roomData,
             topicsData,
             localDbUser,
+            axios,
          );
          await updateRoomStateMutation.mutateAsync(updatedRoomState);
          await DBConnect.RTDB.Delete.user(localDbUser, localDbRoom);

@@ -1,7 +1,9 @@
+import type { AxiosStatic } from 'axios';
+
 export default class DateHelper {
-   static async getCurrentTime(): Promise<number> {
-      const res = await fetch('https://worldtimeapi.org/api/ip');
-      const data = await res.json();
+   static async getCurrentTime(axios: AxiosStatic): Promise<number> {
+      const res = await axios.get('https://worldtimeapi.org/api/ip');
+      const data = await res.data;
       return data.unixtime;
    }
 

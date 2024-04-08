@@ -23,6 +23,7 @@ import DBConnect from '../../../global/database/DBConnect/DBConnect';
 import { firestore } from '../../../global/database/config/config';
 import useForm from '../../../global/hooks/useForm';
 import PlayFormClass from './class/PlayForm';
+import axios from 'axios';
 
 export default function Play(): JSX.Element {
    const { apiError } = useApiErrorContext();
@@ -69,7 +70,11 @@ export default function Play(): JSX.Element {
          return;
       }
       const roomData = docSnap.data() as AppTypes.Room;
-      const roomDataWithAddedUser = await GameHelper.SetRoomState.newUser(roomData, formName);
+      const roomDataWithAddedUser = await GameHelper.SetRoomState.newUser(
+         roomData,
+         formName,
+         axios,
+      );
       await setRoomData.mutateAsync(roomDataWithAddedUser);
       setLocalDbRoom(roomId);
       setLocalDbUser(formName);
@@ -87,6 +92,7 @@ export default function Play(): JSX.Element {
          formName,
          topic,
          noOfRounds,
+         axios,
       );
       await setRoomData.mutateAsync(room);
       setLocalDbRoom(generatedRoomId);
