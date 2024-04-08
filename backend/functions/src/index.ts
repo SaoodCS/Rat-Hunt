@@ -16,8 +16,52 @@ if (!admin.apps.length) {
 }
 
 export const onDataChange = functions.database.ref('/').onWrite(async (change) => {
-   FBConnect.log('New Instance of onDataChange Executed...');
    const { before, after } = change;
+   FBConnect.log('New Instance of onDataChange Executed...');
+   FBConnect.log('BEFORE: ', before.val());
+   FBConnect.log('AFTER: ', after.val());
+
+   const deletedUsers = FBConnect.findDeletedUsers(before.val(), after.val());
+   if (MiscHelper.isNotFalsyOrEmpty(deletedUsers)) {
+      FBConnect.log(
+         'Users have been deleted from Realtime Database. Deleting them from Firestore if not already deleted...: ',
+         deletedUsers,
+      );
+      for (let i = 0; i < deletedUsers.length; i++) {
+         const functionExecutedAt = await DateHelper.getCurrentTime(axios);
+         const instanceId = DateHelper.unixTimeToReadable(functionExecutedAt);
+         const { room, user } = deletedUsers[i];
+         const { roomRefFS, userRefRT, roomRefRT } = FBConnect.getRefs(room, user);
+         const roomData = await FBConnect.getRoomFromFS(roomRefFS);
+         if (!MiscHelper.isNotFalsyOrEmpty(roomData)) {
+            FBConnect.log(`${instanceId}: Room Data Not Found in Firestore: `, room);
+            continue;
+         }
+         const { userStates } = roomData.gameState;
+         const thisUserInFS = ArrOfObj.getObj(userStates, 'userId', user);
+         if (!MiscHelper.isNotFalsyOrEmpty(thisUserInFS)) {
+            FBConnect.log(`${instanceId}: User Not Found in Firestore: `, user);
+            continue;
+         }
+         if (userStates.length <= 1) {
+            FBConnect.log(
+               `${instanceId}: This is the only user (${user}) left in firestore room so deleting the room: `,
+               room,
+            );
+            await roomRefFS.delete();
+            await roomRefRT.remove();
+            continue;
+         }
+         const topics = await FBConnect.getTopics();
+         const updatedGameState = (
+            await GameHelper.SetRoomState.removeUser(roomData, topics, user, axios)
+         ).gameState;
+         await roomRefFS.update({ gameState: updatedGameState });
+         await userRefRT.remove();
+      }
+      return;
+   }
+
    const allChanges = FBConnect.compare(before.val(), after.val());
    if (!MiscHelper.isNotFalsyOrEmpty(allChanges)) return;
    const objectsInTimeout: (IChangeDetails & {

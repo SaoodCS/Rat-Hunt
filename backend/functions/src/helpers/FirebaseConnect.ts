@@ -46,8 +46,8 @@ export namespace FBConnect {
       after: BeforeAfter | null | undefined,
    ): DeletedUser[] | null {
       const deletedUsers: DeletedUser[] = [];
-      if (!before) return null;
-      if (!after) {
+      if (!MiscHelper.isNotFalsyOrEmpty(before)) return null;
+      if (!MiscHelper.isNotFalsyOrEmpty(after)) {
          for (const roomId in before.rooms) {
             for (const userId in before.rooms[roomId]) {
                deletedUsers.push({ room: roomId, user: userId });
@@ -57,8 +57,8 @@ export namespace FBConnect {
       }
       for (const roomId in before.rooms) {
          if (roomId in after.rooms) {
-            const beforeRoom = before.rooms[roomId];
-            const afterRoom = after.rooms[roomId];
+            const beforeRoom: Room = before.rooms[roomId];
+            const afterRoom: Room = after.rooms[roomId];
 
             for (const userId in beforeRoom) {
                if (!(userId in afterRoom)) {
@@ -78,8 +78,6 @@ export namespace FBConnect {
       beforeObj: Obj | null | undefined,
       afterObj: Obj | null | undefined,
    ): PathAndChangedVal[] | null {
-      log('BEFORE: ', beforeObj);
-      log('AFTER: ', afterObj);
       const beforeObjCopy = !MiscHelper.isNotFalsyOrEmpty(beforeObj) ? {} : beforeObj;
       if (!MiscHelper.isNotFalsyOrEmpty(afterObj)) return null;
       const changes: PathAndChangedVal[] = [];
