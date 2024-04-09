@@ -3,9 +3,20 @@
 <img src="frontend/resources/icons/logo-192x192.png" alt="Rat Hunt Logo" width="200"/>
 
 <br/>
+<a href="https://rat-hunt.web.app/">Click Here to Visit the Live Web App</a>
+<br/>
 <a href="https://github.com/SaoodCS/Rat-Hunt/tree/prod/frontend">Click Here to View the Front-End README</a>
 <br/>
 <a href="https://github.com/SaoodCS/Rat-Hunt/tree/prod/backend">Click Here to View the Back-End README</a>
+
+## Gameplay Demo Video
+Press the play button to watch a gameplay demo video of Rat Hunt
+<a href="https://youtu.be/WxCCqd9LFTQ" target="_blank">
+<img src="resources/readme/thumbnails/youtubeplaybtn.png" alt="Rat Hunt Gameplay Demo" width = "70%">
+</a>
+
+## How to Play Guide
+// TODO: Add the how to play guide for the game here
 
 ## Prerequisites
 
