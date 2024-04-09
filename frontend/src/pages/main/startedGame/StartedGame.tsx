@@ -33,10 +33,10 @@ export default function StartedGame(): JSX.Element {
       const { gameState } = roomData;
       const { userStates } = gameState;
       const thisUserState = GameHelper.Get.userState(localDbUser, userStates);
-      const gamePhase = GameHelper.Get.gamePhase(gameState); // TODO: test that this doesn't error (when currentTurn user leaves mid game) and test that it works (when on the roundSummary page it shouldn't display the modal if the user joins when on the roundSummar page)
+      const gamePhase = GameHelper.Get.gamePhase(gameState);
       if (thisUserState.spectate === true && gamePhase !== 'roundSummary') {
          setModalHeader('Spectator Mode');
-         setModalContent(<Wrapper padding="1.5em">The current round has already started</Wrapper>);
+         setModalContent(<Wrapper padding="1.5em">You will begin in the next round</Wrapper>);
          toggleModal(true);
          return;
       }
