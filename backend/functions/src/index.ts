@@ -4,155 +4,162 @@ import axios from 'axios';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import GameHelper from '../../../shared/app/GameHelper/GameHelper';
-import type AppTypes from '../../../shared/app/types/AppTypes';
 import ArrOfObj from '../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 import DateHelper from '../../../shared/lib/helpers/date/DateHelper';
 import MiscHelper from '../../../shared/lib/helpers/miscHelper/MiscHelper';
-import type { IChangeDetails } from './helpers/FirebaseConnect';
+import StringHelper from '../../../shared/lib/helpers/string/StringHelper';
 import FBConnect from './helpers/FirebaseConnect';
 
 if (!admin.apps.length) {
    admin.initializeApp();
 }
 
+// -- Realtime Database onWrite Listener -- //
 export const onDataChange = functions.database.ref('/').onWrite(async (change) => {
+   const instanceId = `${StringHelper.generateRandUID(6).toUpperCase()} :::: `;
    const { before, after } = change;
-   FBConnect.log('New Instance of onDataChange Executed...');
-   FBConnect.log('BEFORE: ', before.val());
-   FBConnect.log('AFTER: ', after.val());
+   FBConnect.log('New Instance of onDataChange Executed: ', instanceId);
+   FBConnect.log(`${instanceId} BEFORE: `, before.val());
+   FBConnect.log(`${instanceId} AFTER: `, after.val());
+   const comparison = FBConnect.compare(before.val(), after.val());
+   FBConnect.log(`${instanceId} COMAPARISON: `, comparison);
+   if (!MiscHelper.isNotFalsyOrEmpty(comparison)) return;
+   const objectsInTimeout: {
+      roomId: string;
+      userId: string;
+      functionExecutedAt: number;
+      instanceId: string;
+   }[] = [];
+   // topics is only needed if there are deleted users in the comparison, so only fetch topics if deleted users exist
+   const deletedUsersExist = ArrOfObj.hasKeyVal(comparison, 'type', 'deleted');
+   let topics = deletedUsersExist ? await FBConnect.getTopics() : null;
 
-   const deletedUsers = FBConnect.findDeletedUsers(before.val(), after.val());
-   if (MiscHelper.isNotFalsyOrEmpty(deletedUsers)) {
-      FBConnect.log(
-         'Users have been deleted from Realtime Database. Deleting them from Firestore if not already deleted...: ',
-         deletedUsers,
-      );
-      for (let i = 0; i < deletedUsers.length; i++) {
-         const functionExecutedAt = await DateHelper.getCurrentTime(axios);
-         const instanceId = DateHelper.unixTimeToReadable(functionExecutedAt);
-         const { room, user } = deletedUsers[i];
-         const { roomRefFS } = FBConnect.getRefs(room, user);
-         const roomData = await FBConnect.getRoomFromFS(roomRefFS);
-         FBConnect.log(
-            `${instanceId}: Room Data for ${room} where user ${user} will be deleted: `,
-            roomData,
-         );
-         if (!MiscHelper.isNotFalsyOrEmpty(roomData)) {
-            FBConnect.log(`${instanceId}: Room Data Not Found in Firestore: `, room);
-            continue;
-         }
-         const { userStates } = roomData.gameState;
-         const thisUserInFS = ArrOfObj.getObj(userStates, 'userId', user);
-         FBConnect.log(`${instanceId}: Users State To Delete in Firestore: `, thisUserInFS);
-         if (!MiscHelper.isNotFalsyOrEmpty(thisUserInFS)) {
-            FBConnect.log(`${instanceId}: User Not Found in Firestore: `, user);
-            continue;
-         }
+   for (let i = 0; i < comparison.length; i++) {
+      const { roomId, userId, userStatus, type } = comparison[i];
+      const { roomRefFS } = FBConnect.getRefs(roomId, userId);
+      const roomData = await FBConnect.getRoomFromFS(roomRefFS);
+      const msgSuffix = type === 'deleted' ? 'deletion of user' : 'updating userStatus of user';
+      const logMsgs = FBConnect.getLogMsgs(instanceId, roomId, userId, userStatus, msgSuffix);
+
+      // Skip updating the userStatus / deleting the user in Firestore if they don't exist in Firestore
+      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) {
+         FBConnect.log(logMsgs.roomDoesNotExistInFS);
+         continue;
+      }
+      const { userStates } = roomData.gameState;
+      const thisUserInFS = ArrOfObj.getObj(userStates, 'userId', userId);
+      if (!MiscHelper.isNotFalsyOrEmpty(thisUserInFS)) {
+         FBConnect.log(logMsgs.userDoesNotExistInFS);
+         continue;
+      }
+      // If user was in the before snapshot, but not in the after snapshot, then the user was deleted from RTDB
+      if (type === 'deleted') {
+         FBConnect.log(logMsgs.initializingDeletionInFS);
          if (userStates.length <= 1) {
-            FBConnect.log(
-               `${instanceId}: This is the only user (${user}) left in firestore room so deleting the room: `,
-               room,
-            );
+            FBConnect.log(logMsgs.preDeletingRoomInFS);
             await roomRefFS.delete();
-            // await roomRefRT.remove();
+            FBConnect.log(logMsgs.postDeletingRoomInFS);
             continue;
          }
-         const topics = await FBConnect.getTopics();
+         if (!MiscHelper.isNotFalsyOrEmpty(topics)) topics = await FBConnect.getTopics();
          const updatedGameState = (
-            await GameHelper.SetRoomState.removeUser(roomData, topics, user, axios)
+            await GameHelper.SetRoomState.removeUser(roomData, topics, userId, axios)
          ).gameState;
          await roomRefFS.update({ gameState: updatedGameState });
-         FBConnect.log(`${instanceId}: User (${user}) Removed from Firestore Room: `, room);
+         FBConnect.log(logMsgs.postDeletingUserInFS);
       }
+      // If user was in the before snapshot and after snapshot, but their userStatus changed, then their status was updated in RTDB
+      else if (type === 'changedStatus') {
+         FBConnect.log(logMsgs.initializingStatusChangeInFS);
+         const functionExecutedAt = await DateHelper.getCurrentTime(axios);
+         const updatedUserStates = GameHelper.SetUserStates.updateUser(userStates, userId, [
+            { key: 'userStatus', value: userStatus },
+            { key: 'statusUpdatedAt', value: functionExecutedAt },
+         ]);
+         const updatedGameState = { ...roomData.gameState, userStates: updatedUserStates };
+         await roomRefFS.update({ gameState: updatedGameState });
+         FBConnect.log(logMsgs.postStatusChangeInFS);
+         // If the userStatus was changed to "disconnected" in RTDB, then set a timeout to see if they reconnect within the time limit
+         if (userStatus === 'disconnected') {
+            FBConnect.log(logMsgs.initializeObjsInTimeout);
+            objectsInTimeout.push({
+               roomId,
+               userId,
+               functionExecutedAt,
+               instanceId,
+            });
+         }
+      }
+      // If type is 'added' (item existed in after snapshot, but not in before snapshot), then a new user was added to the room in RTDB and Firestore directly from the front-end, so don't do anything & ignore this case
+   }
+   // If no users userStatus changed to "disconnected", then do not set a Timeout and end the function here
+   if (!MiscHelper.isNotFalsyOrEmpty(objectsInTimeout)) {
+      FBConnect.log(`${instanceId} No userStatus changed to "disconnected" so no Timeout set`);
       return;
    }
 
-   const allChanges = FBConnect.compare(before.val(), after.val());
-   if (!MiscHelper.isNotFalsyOrEmpty(allChanges)) return;
-   const objectsInTimeout: (IChangeDetails & {
-      functionExecutedAt: AppTypes.UserState['statusUpdatedAt'];
-      instanceId: string;
-   })[] = [];
-   for (let i = 0; i < allChanges.length; i++) {
-      const functionExecutedAt = await DateHelper.getCurrentTime(axios);
-      const instanceId = DateHelper.unixTimeToReadable(functionExecutedAt);
-      const { roomId, userId, userStatus, fullPath } = FBConnect.getChangeDetails(allChanges[i]);
-      const { roomRefFS } = FBConnect.getRefs(roomId, userId);
-      const roomData = await FBConnect.getRoomFromFS(roomRefFS);
-      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) {
-         FBConnect.log(`${instanceId}: Room Data Not Found in Firestore: `, roomId);
-         continue;
-      }
-      const userStates = roomData.gameState.userStates;
-      const updatedUserStates = GameHelper.SetUserStates.updateUser(userStates, userId, [
-         { key: 'userStatus', value: userStatus },
-         { key: 'statusUpdatedAt', value: functionExecutedAt },
-      ]);
-      const updatedGameState = { ...roomData.gameState, userStates: updatedUserStates };
-      await roomRefFS.update({ gameState: updatedGameState });
-      if (userStatus === 'disconnected') {
-         objectsInTimeout.push({
-            roomId,
-            userId,
-            userStatus,
-            fullPath,
-            functionExecutedAt,
-            instanceId,
-         });
-      }
-   }
-   if (!MiscHelper.isNotFalsyOrEmpty(objectsInTimeout)) return;
-   // if userStatus is disconnected then set a timeout which will remove the user if it remains disconnected for 5 minutes
+   // Set a timeout to check if the users who's statuses changed to disconnected haven't reconnected and are still "disconnected" after the time limit
    setTimeout(async () => {
       for (let i = 0; i < objectsInTimeout.length; i++) {
          const { roomId, userId, functionExecutedAt, instanceId } = objectsInTimeout[i];
+         const timeoutId = `${instanceId} :: SETTIMEOUT for user ${userId} ::`;
          const { roomRefFS, roomRefRT, userRefRT } = FBConnect.getRefs(roomId, userId);
          const roomDataFS = await FBConnect.getRoomFromFS(roomRefFS);
+         const roomDataRT = await FBConnect.getRoomFromRT(roomRefRT);
+         const msgSuffix = 'status check of user';
+         const logMsgs = FBConnect.getLogMsgs(timeoutId, roomId, userId, 'disconnected', msgSuffix);
+         if (!MiscHelper.isNotFalsyOrEmpty(roomDataRT)) {
+            FBConnect.log(logMsgs.roomDoesNotExistInRTDB);
+            continue;
+         }
          if (!MiscHelper.isNotFalsyOrEmpty(roomDataFS)) {
-            FBConnect.log(`${instanceId}: setTimeout: Room Data Not Found in Firestore: `, roomId);
+            FBConnect.log(logMsgs.roomDoesNotExistInFS);
             continue;
          }
-         const { gameState: gameStateFS } = roomDataFS;
-         const { userStates: userStatesFS } = gameStateFS;
-         const thisUserInFS = ArrOfObj.getObj(userStatesFS, 'userId', userId);
+         const { userStates } = roomDataFS.gameState;
+         const thisUserInFS = ArrOfObj.getObj(userStates, 'userId', userId);
          if (!MiscHelper.isNotFalsyOrEmpty(thisUserInFS)) {
-            FBConnect.log(`${instanceId}: setTimeout: User Not Found in Firestore: `, userId);
+            FBConnect.log(logMsgs.userDoesNotExistInFS);
             continue;
          }
-         const { statusUpdatedAt: statusUpdatedAtFS, userStatus: currentUserStatus } = thisUserInFS;
-         if (statusUpdatedAtFS !== functionExecutedAt) {
-            FBConnect.log(
-               `${instanceId}: setTimeout: User changed status again so a new instance of onWrite is running and this one is terminated: `,
-               userId,
-            );
+         const { statusUpdatedAt, userStatus: currentUserStatus } = thisUserInFS;
+         if (statusUpdatedAt !== functionExecutedAt) {
+            FBConnect.log(logMsgs.statusChangedBeforeTimeoutEnd);
             continue;
          }
          if (currentUserStatus !== 'disconnected') {
-            FBConnect.log(
-               `${instanceId}: setTimeout: User Status is no longer disconnected so they will not be removed from room: `,
-               userId,
-            );
+            FBConnect.log(logMsgs.noLongerDisconnected);
             continue;
          }
-         if (userStatesFS.length <= 1) {
-            FBConnect.log(
-               `${instanceId}: setTimeout: Only 1 User with disconnected status Left in Room so Room will be deleted: `,
-               roomId,
-            );
-            await roomRefFS.delete();
+         // If the user is still disconnected after the time limit and they are the only user in the room, then delete the room in RealtimeDB
+         if (userStates.length <= 1) {
+            FBConnect.log(logMsgs.preDeletingRoomInRTDB);
             await roomRefRT.remove();
+            FBConnect.log(logMsgs.postDeletingRoomInRTDB);
             continue;
          }
-         const topics = await FBConnect.getTopics();
-         const updatedGameState = (
-            await GameHelper.SetRoomState.removeUser(roomDataFS, topics, userId, axios)
-         ).gameState;
-         await roomRefFS.update({ gameState: updatedGameState });
+         // If the user is still disconnected after the time limit and they are not the only user in the room, then delete the user from the room in RealtimeDB
+         FBConnect.log(logMsgs.preDeletingUserInRTDB);
          await userRefRT.remove();
-         FBConnect.log(
-            `${instanceId}: setTimeout: User still disconnected after 5 minutes so removed: `,
-            userId,
-         );
+         FBConnect.log(logMsgs.postDeletingUserInRTDB);
       }
    }, GameHelper.CONSTANTS.DISCONNECTED_USER_TIME_LIMIT_MS);
 });
+
+// -- Testing Cases -- //
+
+// Case 1: User ceates a room on the front-end
+
+// Case 1: User joins a room on the front-end
+
+// Case 2: User leaves a room on the front-end
+
+// Case 2: User disconnects from the room
+
+// Case 3: User disconnects from the room then reconnects within the time limit
+
+// Case 4: User disconnects from the room and does not reconnect within the time limit
+
+// Case 5: Two users leave the room at the same time
+
+// Case 6: Two users disconnect from the room at the same time

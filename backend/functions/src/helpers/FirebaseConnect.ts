@@ -2,126 +2,112 @@ import * as admin from 'firebase-admin';
 import type { Reference } from 'firebase-admin/database';
 import type { DocumentReference } from 'firebase-admin/firestore';
 import * as functions from 'firebase-functions';
+import GameHelper from '../../../../shared/app/GameHelper/GameHelper';
 import type AppTypes from '../../../../shared/app/types/AppTypes';
 import MiscHelper from '../../../../shared/lib/helpers/miscHelper/MiscHelper';
 
-export interface IChangeDetails {
-   fullPath: string;
-   roomId: AppTypes.Room['roomId'];
-   userId: AppTypes.UserState['userId'];
-   userStatus: AppTypes.UserState['userStatus'];
-}
-
-interface UserStatus {
+interface UserStatusRTDB {
    userStatus: string;
 }
 
-interface PathAndChangedVal {
-   path: string;
-   changedVal: string;
+interface RoomRTDB {
+   [userId: string]: UserStatusRTDB;
 }
 
-interface Room {
-   [userId: string]: UserStatus;
-}
-
-interface Rooms {
-   [roomId: string]: Room;
+interface RoomsRTDB {
+   [roomId: string]: RoomRTDB;
 }
 
 interface BeforeAfter {
-   rooms: Rooms;
+   rooms: RoomsRTDB;
 }
 
-interface DeletedUser {
-   room: string;
-   user: string;
+export interface UserRTDB {
+   roomId: string;
+   userId: string;
+   userStatus: 'connected' | 'disconnected';
+   type: 'deleted' | 'added' | 'changedStatus';
 }
-
-type Obj = { [key: string]: Obj | string };
 
 export namespace FBConnect {
-   export function findDeletedUsers(
+   export function compare(
       before: BeforeAfter | null | undefined,
       after: BeforeAfter | null | undefined,
-   ): DeletedUser[] | null {
-      const deletedUsers: DeletedUser[] = [];
-      if (!MiscHelper.isNotFalsyOrEmpty(before)) return null;
-      if (!MiscHelper.isNotFalsyOrEmpty(after)) {
-         for (const roomId in before.rooms) {
-            for (const userId in before.rooms[roomId]) {
-               deletedUsers.push({ room: roomId, user: userId });
-            }
-         }
-         return deletedUsers;
-      }
-      for (const roomId in before.rooms) {
-         if (roomId in after.rooms) {
-            const beforeRoom: Room = before.rooms[roomId];
-            const afterRoom: Room = after.rooms[roomId];
-
-            for (const userId in beforeRoom) {
-               if (!(userId in afterRoom)) {
-                  deletedUsers.push({ room: roomId, user: userId });
-               }
-            }
-         } else {
-            for (const userId in before.rooms[roomId]) {
-               deletedUsers.push({ room: roomId, user: userId });
-            }
-         }
-      }
-      return deletedUsers;
-   }
-
-   export function compare(
-      beforeObj: Obj | null | undefined,
-      afterObj: Obj | null | undefined,
-   ): PathAndChangedVal[] | null {
-      const beforeObjCopy = !MiscHelper.isNotFalsyOrEmpty(beforeObj) ? {} : beforeObj;
-      if (!MiscHelper.isNotFalsyOrEmpty(afterObj)) return null;
-      const changes: PathAndChangedVal[] = [];
-      function findChanges(before: Obj, after: Obj, path: string): void {
-         for (const key in after) {
-            if (typeof after[key] === 'object' && after[key] !== null) {
-               const nextPath = path ? `${path}.${key}` : key;
-               if (!(key in before)) {
-                  findChanges({}, after[key] as Obj, nextPath);
-               } else if (typeof before[key] === 'object' && before[key] !== null) {
-                  findChanges(before[key] as Obj, after[key] as Obj, nextPath);
-               } else if (before[key] !== after[key]) {
-                  changes.push({
-                     path: nextPath.replace(/\./g, '/'),
-                     changedVal: after[key] as string,
-                  });
-               }
-            } else if (!(key in before) || before[key] !== after[key]) {
-               const nextPath = path ? `${path}.${key}` : key;
+   ): UserRTDB[] | null {
+      const changes: UserRTDB[] = [];
+      const isBeforeEmpty = !MiscHelper.isNotFalsyOrEmpty(before);
+      const isAfterEmpty = !MiscHelper.isNotFalsyOrEmpty(after);
+      if (isBeforeEmpty) {
+         if (isAfterEmpty) return null;
+         Object.keys(after.rooms).forEach((roomId) => {
+            Object.keys(after.rooms[roomId]).forEach((userId) => {
                changes.push({
-                  path: nextPath.replace(/\./g, '/'),
-                  changedVal: after[key] as string,
+                  roomId,
+                  userId,
+                  userStatus: after.rooms[roomId][userId].userStatus as
+                     | 'connected'
+                     | 'disconnected',
+                  type: 'added',
+               });
+            });
+         });
+         return changes;
+      }
+      if (isAfterEmpty) {
+         Object.keys(before.rooms).forEach((roomId) => {
+            Object.keys(before.rooms[roomId]).forEach((userId) => {
+               changes.push({
+                  roomId,
+                  userId,
+                  userStatus: before.rooms[roomId][userId].userStatus as
+                     | 'connected'
+                     | 'disconnected',
+                  type: 'deleted',
+               });
+            });
+         });
+         return changes;
+      }
+      Object.keys(before.rooms).forEach((roomId) => {
+         Object.keys(before.rooms[roomId]).forEach((userId) => {
+            if (!after.rooms[roomId] || !after.rooms[roomId][userId]) {
+               changes.push({
+                  roomId,
+                  userId,
+                  userStatus: before.rooms[roomId][userId].userStatus as
+                     | 'connected'
+                     | 'disconnected',
+                  type: 'deleted',
+               });
+            } else if (
+               before.rooms[roomId][userId].userStatus !== after.rooms[roomId][userId].userStatus
+            ) {
+               changes.push({
+                  roomId,
+                  userId,
+                  userStatus: after.rooms[roomId][userId].userStatus as
+                     | 'connected'
+                     | 'disconnected',
+                  type: 'changedStatus',
                });
             }
-         }
-      }
-      findChanges(beforeObjCopy, afterObj, '');
-      const isChangesEmpty = !MiscHelper.isNotFalsyOrEmpty(changes);
-      log('CHANGES: ', isChangesEmpty ? null : changes);
-      return isChangesEmpty ? null : changes;
-   }
-
-   export function getChangeDetails(changes: PathAndChangedVal): IChangeDetails {
-      const path = changes.path.split('/');
-      const roomId = path[1];
-      const userId = path[2];
-      const changeDetails = {
-         fullPath: changes.path,
-         roomId,
-         userId,
-         userStatus: changes.changedVal as AppTypes.UserState['userStatus'],
-      };
-      log('CHANGE DETAILS: ', changeDetails);
-      return changeDetails;
+         });
+      });
+      Object.keys(after.rooms).forEach((roomId) => {
+         Object.keys(after.rooms[roomId]).forEach((userId) => {
+            if (!before.rooms[roomId] || !before.rooms[roomId][userId]) {
+               changes.push({
+                  roomId,
+                  userId,
+                  userStatus: after.rooms[roomId][userId].userStatus as
+                     | 'connected'
+                     | 'disconnected',
+                  type: 'added',
+               });
+            }
+         });
+      });
+      return changes;
    }
 
    export function getRefs(
@@ -142,13 +128,52 @@ export namespace FBConnect {
       roomRefFS: DocumentReference,
    ): Promise<AppTypes.Room | undefined> {
       const roomSnapshot = await roomRefFS.get();
+      if (!roomSnapshot.exists) return undefined;
       return roomSnapshot.data() as AppTypes.Room | undefined;
+   }
+
+   export async function getRoomFromRT(roomRefRT: Reference): Promise<RoomRTDB | null> {
+      const roomSnapshot = await roomRefRT.once('value');
+      if (!roomSnapshot.exists()) return null;
+      return (await roomRefRT.once('value')).val() as RoomRTDB | null;
    }
 
    export async function getTopics(): Promise<AppTypes.Topic[]> {
       const topicsSnapshot = await admin.firestore().collection('topics').doc('topics').get();
+      if (!topicsSnapshot.exists) throw new Error('Topics document does not exist in Firestore');
       return topicsSnapshot.data()?.topics as AppTypes.Topic[];
    }
+
+   export const getLogMsgs = (
+      instanceId: string,
+      roomId: string,
+      userId: string,
+      userStatus: string,
+      msgSuffix: string,
+      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+   ) => {
+      return {
+         roomDoesNotExistInFS: `${instanceId} Room ${roomId} does not exist in Firestore, so skipping ${msgSuffix} ${userId} in Firestore...`,
+         userDoesNotExistInFS: `${instanceId} User ${userId} does not exist in room ${roomId} in Firestore, so skipping ${msgSuffix} in Firestore`,
+         initializingDeletionInFS: `${instanceId} User ${userId} was deleted in RTDB, so initializing deletion in Firestore...`,
+         preDeletingRoomInFS: `${instanceId} User ${userId} is the only user in room ${roomId} in Firestore, so deleting the room ${roomId} in Firestore...`,
+         postDeletingRoomInFS: `${instanceId} -- FBMUTATION -- Room ${roomId} has been deleted in Firestore successfully`,
+         postDeletingUserInFS: `${instanceId} -- FBMUTATION -- User ${userId} has been deleted from room ${roomId} in Firestore successfully`,
+         initializingStatusChangeInFS: `${instanceId} User ${userId} had a status change in RTDB to ${userStatus}, so initializing the changing of userStatus in Firestore...`,
+         postStatusChangeInFS: `${instanceId} -- FBMUTATION -- User ${userId} has had their status updated in room ${roomId} to "${userStatus}" in Firestore successfully`,
+         initializeObjsInTimeout: `${instanceId} Timeout set for user ${userId} after changing their userStatus in Firestore to ${userStatus}, to see if they're still disconnected after ${
+            GameHelper.CONSTANTS.DISCONNECTED_USER_TIME_LIMIT_MS / 1000 / 60
+         } minutes...`,
+         noTimeoutSet: `${instanceId} No users userStatus changed to "disconnected" therefore no Timeout set`,
+         roomDoesNotExistInRTDB: `${instanceId} Room ${roomId} does not exist in RTDB, so skipping setTimeout for ${userId}`,
+         statusChangedBeforeTimeoutEnd: `${instanceId} User ${userId} changed status again so a new instance of onDataChange is running, so skipping this setTimeout for ${userId}`,
+         noLongerDisconnected: `${instanceId} User ${userId} is no longer disconnected so they will not be removed from room ${roomId}...`,
+         preDeletingRoomInRTDB: `${instanceId} User ${userId} is still disconnected after 5 minutes and is the only user in room ${roomId} in Firestore, so deleting the room ${roomId} in RTDB...`,
+         postDeletingRoomInRTDB: `${instanceId} -- RTDB-MUTATION -- Room ${roomId} has been deleted in RTDB successfully`,
+         preDeletingUserInRTDB: `${instanceId} User ${userId} is still disconnected after 5 minutes, so deleting ${userId} from the room ${roomId} in RTDB...`,
+         postDeletingUserInRTDB: `${instanceId} -- RTDB-MUTATION -- User ${userId} has been deleted from room ${roomId} in RTDB successfully`,
+      };
+   };
 
    // eslint-disable-next-line @typescript-eslint/no-explicit-any
    export function log(...args: any[]): void {
