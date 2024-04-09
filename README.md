@@ -11,8 +11,10 @@ Click Here to Visit the Live Web App
 
 ## Gameplay Demo Video
 
-Press the play button to watch a gameplay demo video of Rat Hunt
 <a href="https://youtu.be/WxCCqd9LFTQ" target="_blank">
+Click here or press the play button to watch a gameplay demo video
+</br>
+</br>
 <img src="resources/readme/thumbnails/youtubeplaybtn.png" alt="Rat Hunt Gameplay Demo" width = "70%">
 </a>
 
