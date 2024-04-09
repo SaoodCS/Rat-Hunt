@@ -131,14 +131,14 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
             FBConnect.log(logMsgs.noLongerDisconnected);
             continue;
          }
-         // If the user is still disconnected after the time limit and they are the only user in the room, then delete the room in RealtimeDB
+         // If the user is still disconnected after the time limit and they are the only user in the room, then delete the room in RealtimeDB (This then triggers a new instance of onDataChange which updates Firestore accordingly)
          if (userStates.length <= 1) {
             FBConnect.log(logMsgs.preDeletingRoomInRTDB);
             await roomRefRT.remove();
             FBConnect.log(logMsgs.postDeletingRoomInRTDB);
             continue;
          }
-         // If the user is still disconnected after the time limit and they are not the only user in the room, then delete the user from the room in RealtimeDB
+         // If the user is still disconnected after the time limit and they are not the only user in the room, then delete the user from the room in RealtimeDB (This then triggers a new instance of onDataChange which updates Firestore accordingly)
          FBConnect.log(logMsgs.preDeletingUserInRTDB);
          await userRefRT.remove();
          FBConnect.log(logMsgs.postDeletingUserInRTDB);
