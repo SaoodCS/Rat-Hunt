@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import type { DatabaseReference } from 'firebase/database';
 import { onDisconnect, ref } from 'firebase/database';
 import { useContext, useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
 import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import { GameContext } from '../../../global/context/game/GameContext';
@@ -43,7 +43,6 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    const updateRoomStateMutation = DBConnect.FSDB.Set.room({}, false);
    const navigation = useNavigate();
    const queryClient = useQueryClient();
-   const location = useLocation();
 
    useEffect(() => {
       setIsWaitingPage(currentPath.includes('waiting'));
@@ -80,17 +79,15 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
          await clearAppState();
          return;
       }
-      if (!location.pathname.includes('waiting')) {
-         const updatedRoomState = await GameHelper.SetRoomState.removeUser(
-            roomData,
-            topicsData,
-            localDbUser,
-            axios,
-         );
-         await updateRoomStateMutation.mutateAsync(updatedRoomState);
-         await DBConnect.RTDB.Delete.user(localDbUser, localDbRoom);
-         await clearAppState();
-      }
+      const updatedRoomState = await GameHelper.SetRoomState.removeUser(
+         roomData,
+         topicsData,
+         localDbUser,
+         axios,
+      );
+      await updateRoomStateMutation.mutateAsync(updatedRoomState);
+      await DBConnect.RTDB.Delete.user(localDbUser, localDbRoom);
+      await clearAppState();
    }
 
    async function shareApp(): Promise<void> {
