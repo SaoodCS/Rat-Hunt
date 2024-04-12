@@ -131,7 +131,9 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
          FBConnect.log(logMsgs.beginRunTimeoutForUser);
          const { roomRefFS, userRefRT } = FBConnect.getRefs(roomId, userId);
          const roomDataFS = await FBConnect.getRoomFromFS(roomRefFS);
+         FBConnect.log(logMsgs.currentRoomDataInFS, roomDataFS);
          const userDataRT = await FBConnect.getUserFromRT(userRefRT);
+         FBConnect.log(logMsgs.currentUserDataInRTDB, userDataRT);
 
          if (!MiscHelper.isNotFalsyOrEmpty(userDataRT)) {
             FBConnect.log(logMsgs.userDoesNotExistInRTDB);
@@ -143,6 +145,7 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
          }
          const { userStates } = roomDataFS.gameState;
          const thisUserInFS = ArrOfObj.getObj(userStates, 'userId', userId);
+         FBConnect.log(logMsgs.currentUserDataInFS, thisUserInFS);
          if (!MiscHelper.isNotFalsyOrEmpty(thisUserInFS)) {
             FBConnect.log(logMsgs.userDoesNotExistInFS);
             continue;
