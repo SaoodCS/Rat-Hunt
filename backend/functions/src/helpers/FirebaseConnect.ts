@@ -42,14 +42,9 @@ export namespace FBConnect {
                   (change) => change.roomId === roomId && change.type === 'roomAdded',
                );
                if (!existingObj) {
-                  changes.push({
-                     roomId,
-                     userId,
-                     userStatus: after.rooms[roomId][userId].userStatus as
-                        | 'connected'
-                        | 'disconnected',
-                     type: 'roomAdded',
-                  });
+                  const userStatus = after.rooms[roomId][userId].userStatus;
+                  const type = 'roomAdded';
+                  changes.push({ roomId, userId, userStatus, type });
                }
             });
          });
@@ -60,14 +55,9 @@ export namespace FBConnect {
                   (change) => change.roomId === roomId && change.type === 'roomDeleted',
                );
                if (!existingObj) {
-                  changes.push({
-                     roomId,
-                     userId,
-                     userStatus: before.rooms[roomId][userId].userStatus as
-                        | 'connected'
-                        | 'disconnected',
-                     type: 'roomDeleted',
-                  });
+                  const userStatus = before.rooms[roomId][userId].userStatus;
+                  const type = 'roomDeleted';
+                  changes.push({ roomId, userId, userStatus, type });
                }
             });
          });
@@ -79,35 +69,20 @@ export namespace FBConnect {
                      (change) => change.roomId === roomId && change.type === 'roomDeleted',
                   );
                   if (!existingObj) {
-                     changes.push({
-                        roomId,
-                        userId,
-                        userStatus: before.rooms[roomId][userId].userStatus as
-                           | 'connected'
-                           | 'disconnected',
-                        type: 'roomDeleted',
-                     });
+                     const userStatus = before.rooms[roomId][userId].userStatus;
+                     const type = 'roomDeleted';
+                     changes.push({ roomId, userId, userStatus, type });
                   }
                } else if (!after.rooms[roomId][userId]) {
-                  changes.push({
-                     roomId,
-                     userId,
-                     userStatus: before.rooms[roomId][userId].userStatus as
-                        | 'connected'
-                        | 'disconnected',
-                     type: 'userDeleted',
-                  });
+                  const userStatus = before.rooms[roomId][userId].userStatus;
+                  const type = 'userDeleted';
+                  changes.push({ roomId, userId, userStatus, type });
                } else if (
                   before.rooms[roomId][userId].userStatus !== after.rooms[roomId][userId].userStatus
                ) {
-                  changes.push({
-                     roomId,
-                     userId,
-                     userStatus: after.rooms[roomId][userId].userStatus as
-                        | 'connected'
-                        | 'disconnected',
-                     type: 'changedStatus',
-                  });
+                  const userStatus = after.rooms[roomId][userId].userStatus;
+                  const type = 'changedStatus';
+                  changes.push({ roomId, userId, userStatus, type });
                }
             });
          });
@@ -118,24 +93,14 @@ export namespace FBConnect {
                      (change) => change.roomId === roomId && change.type === 'roomAdded',
                   );
                   if (!existingObj) {
-                     changes.push({
-                        roomId,
-                        userId,
-                        userStatus: after.rooms[roomId][userId].userStatus as
-                           | 'connected'
-                           | 'disconnected',
-                        type: 'roomAdded',
-                     });
+                     const userStatus = after.rooms[roomId][userId].userStatus;
+                     const type = 'roomAdded';
+                     changes.push({ roomId, userId, userStatus, type });
                   }
                } else if (!before.rooms[roomId][userId]) {
-                  changes.push({
-                     roomId,
-                     userId,
-                     userStatus: after.rooms[roomId][userId].userStatus as
-                        | 'connected'
-                        | 'disconnected',
-                     type: 'userAdded',
-                  });
+                  const userStatus = after.rooms[roomId][userId].userStatus;
+                  const type = 'userAdded';
+                  changes.push({ roomId, userId, userStatus, type });
                }
             });
          });
