@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
+import axios from 'axios';
 import { doc, getDoc } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -23,7 +24,6 @@ import DBConnect from '../../../global/database/DBConnect/DBConnect';
 import { firestore } from '../../../global/database/config/config';
 import useForm from '../../../global/hooks/useForm';
 import PlayFormClass from './class/PlayForm';
-import axios from 'axios';
 
 export default function Play(): JSX.Element {
    const { apiError } = useApiErrorContext();
@@ -70,15 +70,9 @@ export default function Play(): JSX.Element {
          return;
       }
       const roomData = docSnap.data() as AppTypes.Room;
-      const roomDataWithAddedUser = await GameHelper.SetRoomState.newUser(
-         roomData,
-         formName,
-         axios,
-      );
-      await setRoomData.mutateAsync(roomDataWithAddedUser);
+      await DBConnect.RTDB.Set.userStatus(formName, roomId);
       setLocalDbRoom(roomId);
       setLocalDbUser(formName);
-      await DBConnect.RTDB.Set.userStatus(formName, roomId);
       const { gameStarted } = roomData;
       navigation(gameStarted ? '/main/startedgame' : '/main/waitingroom', { replace: true });
    }

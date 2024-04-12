@@ -6,7 +6,6 @@ import type { DatabaseReference } from 'firebase/database';
 import { onDisconnect, ref } from 'firebase/database';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
 import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import { GameContext } from '../../../global/context/game/GameContext';
 import { ModalContext } from '../../../global/context/widget/modal/ModalContext';
@@ -15,7 +14,6 @@ import DBConnect from '../../../global/database/DBConnect/DBConnect';
 import { firebaseRTDB } from '../../../global/database/config/config';
 import Device from '../../../global/helpers/pwa/deviceHelper';
 import HelpGuide from './HelpGuide';
-import axios from 'axios';
 
 interface IGuideAndLeaveRoom {
    currentPath: string;
@@ -39,8 +37,6 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    const [isPlayPage, setIsPlayPage] = useState(currentPath.includes('play'));
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const { data: topicsData } = DBConnect.FSDB.Get.topics();
-   const deleteRoomMutation = DBConnect.FSDB.Delete.room({});
-   const updateRoomStateMutation = DBConnect.FSDB.Set.room({}, false);
    const navigation = useNavigate();
    const queryClient = useQueryClient();
 
@@ -72,20 +68,6 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    async function handleLeaveRoom(): Promise<void> {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
-      const isLastUser = roomData.gameState.userStates.length === 1;
-      if (isLastUser) {
-         await deleteRoomMutation.mutateAsync({ roomId: localDbRoom });
-         await DBConnect.RTDB.Delete.room(localDbRoom);
-         await clearAppState();
-         return;
-      }
-      const updatedRoomState = await GameHelper.SetRoomState.removeUser(
-         roomData,
-         topicsData,
-         localDbUser,
-         axios,
-      );
-      await updateRoomStateMutation.mutateAsync(updatedRoomState);
       await DBConnect.RTDB.Delete.user(localDbUser, localDbRoom);
       await clearAppState();
    }

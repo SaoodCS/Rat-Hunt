@@ -139,7 +139,7 @@ export default class PlayFormClass {
       }
       const roomData = roomDocSnap.data() as AppTypes.Room;
       const usernameTaken = roomData.gameState.userStates.some(
-         (user) => user.userId.trim().toUpperCase() === form.name.trim().toUpperCase(),
+         (user) => user.userId.trim() === form.name.trim(),
       );
       if (usernameTaken) {
          return { name: 'Username already taken' };

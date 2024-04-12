@@ -23,7 +23,10 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
    FBConnect.log(`${instanceId} AFTER: `, after.val());
    const comparison = FBConnect.compare(before.val(), after.val());
    FBConnect.log(`${instanceId} COMAPARISON: `, comparison);
-   if (!MiscHelper.isNotFalsyOrEmpty(comparison)) return;
+   if (!MiscHelper.isNotFalsyOrEmpty(comparison)) {
+      FBConnect.log(`${instanceId} No changes detected in RTDB, so no action taken`);
+      return;
+   }
    const objectsInTimeout: {
       roomId: string;
       userId: string;
@@ -31,21 +34,42 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
       instanceId: string;
    }[] = [];
    // topics is only needed if there are deleted users in the comparison, so only fetch topics if deleted users exist
-   const deletedUsersExist = ArrOfObj.hasKeyVal(comparison, 'type', 'deleted');
+   const deletedUsersExist = ArrOfObj.hasKeyVal(comparison, 'type', 'userDeleted');
    let topics = deletedUsersExist ? await FBConnect.getTopics() : null;
 
    for (let i = 0; i < comparison.length; i++) {
       const { roomId, userId, userStatus, type } = comparison[i];
-      const { roomRefFS } = FBConnect.getRefs(roomId, userId);
-      const roomData = await FBConnect.getRoomFromFS(roomRefFS);
-      const msgSuffix = type === 'deleted' ? 'deletion of user' : 'updating userStatus of user';
+      const msgSuffix = type === 'userDeleted' ? 'deletion of user' : 'updating userStatus of user';
       const logMsgs = FBConnect.getLogMsgs(instanceId, roomId, userId, userStatus, msgSuffix);
 
-      // Skip updating the userStatus / deleting the user in Firestore if they don't exist in Firestore
+      // If a room is not in the before snapshot, but is in the after snapshot, then the room was added to RTDB
+      if (type === 'roomAdded') {
+         // Skip making any changes if the room was added to RTDB from the client-side (meaning it was also added to Firestore from the client side)
+         FBConnect.log(logMsgs.roomAddedType);
+         continue;
+      }
+
+      const { roomRefFS } = FBConnect.getRefs(roomId, userId);
+      const roomData = await FBConnect.getRoomFromFS(roomRefFS);
+      // Skip making any changes if the room does not exist in Firestore
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) {
          FBConnect.log(logMsgs.roomDoesNotExistInFS);
          continue;
       }
+
+      // If a user is not in the before snapshot, but is in the after snapshot, then the user was added to RTDB
+      if (type === 'userAdded') {
+         FBConnect.log(logMsgs.initializingAddUserInFS);
+         const roomDataWithAddedUser = await GameHelper.SetRoomState.newUser(
+            roomData,
+            userId,
+            axios,
+         );
+         await roomRefFS.update({ gameState: roomDataWithAddedUser.gameState });
+         FBConnect.log(logMsgs.postAddingUserInFS);
+         continue;
+      }
+
       const { userStates } = roomData.gameState;
       const thisUserInFS = ArrOfObj.getObj(userStates, 'userId', userId);
       if (!MiscHelper.isNotFalsyOrEmpty(thisUserInFS)) {
@@ -53,23 +77,29 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
          continue;
       }
       // If user was in the before snapshot, but not in the after snapshot, then the user was deleted from RTDB
-      if (type === 'deleted') {
-         FBConnect.log(logMsgs.initializingDeletionInFS);
-         if (userStates.length <= 1) {
-            FBConnect.log(logMsgs.preDeletingRoomInFS);
-            await roomRefFS.delete();
-            FBConnect.log(logMsgs.postDeletingRoomInFS);
-            continue;
-         }
+      if (type === 'userDeleted') {
+         FBConnect.log(logMsgs.initializingUserDeletionInFS);
          if (!MiscHelper.isNotFalsyOrEmpty(topics)) topics = await FBConnect.getTopics();
-         const updatedGameState = (
-            await GameHelper.SetRoomState.removeUser(roomData, topics, userId, axios)
-         ).gameState;
-         await roomRefFS.update({ gameState: updatedGameState });
+         const updatedRoomState = await GameHelper.SetRoomState.removeUser(
+            roomData,
+            topics,
+            userId,
+            axios,
+         );
+         await roomRefFS.update({ gameState: updatedRoomState.gameState });
          FBConnect.log(logMsgs.postDeletingUserInFS);
+         continue;
       }
+
+      if (type === 'roomDeleted') {
+         FBConnect.log(logMsgs.initializingRoomDeletionInFS);
+         await roomRefFS.delete();
+         FBConnect.log(logMsgs.postDeletingRoomInFS);
+         continue;
+      }
+
       // If user was in the before snapshot and after snapshot, but their userStatus changed, then their status was updated in RTDB
-      else if (type === 'changedStatus') {
+      if (type === 'changedStatus') {
          FBConnect.log(logMsgs.initializingStatusChangeInFS);
          const functionExecutedAt = await DateHelper.getCurrentTime(axios);
          const updatedUserStates = GameHelper.SetUserStates.updateUser(userStates, userId, [
@@ -89,8 +119,8 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
                instanceId,
             });
          }
+         continue;
       }
-      // If type is 'added' (item existed in after snapshot, but not in before snapshot), then a new user was added to the room in RTDB and Firestore directly from the front-end, so don't do anything & ignore this case
    }
    // If no users userStatus changed to "disconnected", then do not set a Timeout and end the function here
    if (!MiscHelper.isNotFalsyOrEmpty(objectsInTimeout)) {
@@ -131,14 +161,7 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
             FBConnect.log(logMsgs.noLongerDisconnected);
             continue;
          }
-         // If the user is still disconnected after the time limit and they are the only user in the room, then delete the room in RealtimeDB (This then triggers a new instance of onDataChange which updates Firestore accordingly)
-         if (userStates.length <= 1) {
-            FBConnect.log(logMsgs.preDeletingRoomInRTDB);
-            await roomRefRT.remove();
-            FBConnect.log(logMsgs.postDeletingRoomInRTDB);
-            continue;
-         }
-         // If the user is still disconnected after the time limit and they are not the only user in the room, then delete the user from the room in RealtimeDB (This then triggers a new instance of onDataChange which updates Firestore accordingly)
+         // If the user is still disconnected after the time limit, then delete the user from the room in RealtimeDB (This then triggers a new instance of onDataChange which updates Firestore accordingly)
          FBConnect.log(logMsgs.preDeletingUserInRTDB);
          await userRefRT.remove();
          FBConnect.log(logMsgs.postDeletingUserInRTDB);

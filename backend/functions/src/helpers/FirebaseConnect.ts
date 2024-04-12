@@ -26,7 +26,7 @@ export interface UserRTDB {
    roomId: string;
    userId: string;
    userStatus: 'connected' | 'disconnected';
-   type: 'deleted' | 'added' | 'changedStatus';
+   type: 'userDeleted' | 'userAdded' | 'changedStatus' | 'roomDeleted' | 'roomAdded';
 }
 
 export namespace FBConnect {
@@ -41,72 +41,108 @@ export namespace FBConnect {
          if (isAfterEmpty) return null;
          Object.keys(after.rooms).forEach((roomId) => {
             Object.keys(after.rooms[roomId]).forEach((userId) => {
-               changes.push({
-                  roomId,
-                  userId,
-                  userStatus: after.rooms[roomId][userId].userStatus as
-                     | 'connected'
-                     | 'disconnected',
-                  type: 'added',
-               });
+               const existingObj = changes.find(
+                  (change) => change.roomId === roomId && change.type === 'roomAdded',
+               );
+               if (!existingObj) {
+                  changes.push({
+                     roomId,
+                     userId,
+                     userStatus: after.rooms[roomId][userId].userStatus as
+                        | 'connected'
+                        | 'disconnected',
+                     type: 'roomAdded',
+                  });
+               }
             });
          });
-         return changes;
-      }
-      if (isAfterEmpty) {
+      } else if (isAfterEmpty) {
          Object.keys(before.rooms).forEach((roomId) => {
             Object.keys(before.rooms[roomId]).forEach((userId) => {
-               changes.push({
-                  roomId,
-                  userId,
-                  userStatus: before.rooms[roomId][userId].userStatus as
-                     | 'connected'
-                     | 'disconnected',
-                  type: 'deleted',
-               });
+               const existingObj = changes.find(
+                  (change) => change.roomId === roomId && change.type === 'roomDeleted',
+               );
+               if (!existingObj) {
+                  changes.push({
+                     roomId,
+                     userId,
+                     userStatus: before.rooms[roomId][userId].userStatus as
+                        | 'connected'
+                        | 'disconnected',
+                     type: 'roomDeleted',
+                  });
+               }
             });
          });
-         return changes;
+      } else {
+         Object.keys(before.rooms).forEach((roomId) => {
+            Object.keys(before.rooms[roomId]).forEach((userId) => {
+               if (!after.rooms[roomId]) {
+                  const existingObj = changes.find(
+                     (change) => change.roomId === roomId && change.type === 'roomDeleted',
+                  );
+                  if (!existingObj) {
+                     changes.push({
+                        roomId,
+                        userId,
+                        userStatus: before.rooms[roomId][userId].userStatus as
+                           | 'connected'
+                           | 'disconnected',
+                        type: 'roomDeleted',
+                     });
+                  }
+               } else if (!after.rooms[roomId][userId]) {
+                  changes.push({
+                     roomId,
+                     userId,
+                     userStatus: before.rooms[roomId][userId].userStatus as
+                        | 'connected'
+                        | 'disconnected',
+                     type: 'userDeleted',
+                  });
+               } else if (
+                  before.rooms[roomId][userId].userStatus !== after.rooms[roomId][userId].userStatus
+               ) {
+                  changes.push({
+                     roomId,
+                     userId,
+                     userStatus: after.rooms[roomId][userId].userStatus as
+                        | 'connected'
+                        | 'disconnected',
+                     type: 'changedStatus',
+                  });
+               }
+            });
+         });
+         Object.keys(after.rooms).forEach((roomId) => {
+            Object.keys(after.rooms[roomId]).forEach((userId) => {
+               if (!before.rooms[roomId]) {
+                  const existingObj = changes.find(
+                     (change) => change.roomId === roomId && change.type === 'roomAdded',
+                  );
+                  if (!existingObj) {
+                     changes.push({
+                        roomId,
+                        userId,
+                        userStatus: after.rooms[roomId][userId].userStatus as
+                           | 'connected'
+                           | 'disconnected',
+                        type: 'roomAdded',
+                     });
+                  }
+               } else if (!before.rooms[roomId][userId]) {
+                  changes.push({
+                     roomId,
+                     userId,
+                     userStatus: after.rooms[roomId][userId].userStatus as
+                        | 'connected'
+                        | 'disconnected',
+                     type: 'userAdded',
+                  });
+               }
+            });
+         });
       }
-      Object.keys(before.rooms).forEach((roomId) => {
-         Object.keys(before.rooms[roomId]).forEach((userId) => {
-            if (!after.rooms[roomId] || !after.rooms[roomId][userId]) {
-               changes.push({
-                  roomId,
-                  userId,
-                  userStatus: before.rooms[roomId][userId].userStatus as
-                     | 'connected'
-                     | 'disconnected',
-                  type: 'deleted',
-               });
-            } else if (
-               before.rooms[roomId][userId].userStatus !== after.rooms[roomId][userId].userStatus
-            ) {
-               changes.push({
-                  roomId,
-                  userId,
-                  userStatus: after.rooms[roomId][userId].userStatus as
-                     | 'connected'
-                     | 'disconnected',
-                  type: 'changedStatus',
-               });
-            }
-         });
-      });
-      Object.keys(after.rooms).forEach((roomId) => {
-         Object.keys(after.rooms[roomId]).forEach((userId) => {
-            if (!before.rooms[roomId] || !before.rooms[roomId][userId]) {
-               changes.push({
-                  roomId,
-                  userId,
-                  userStatus: after.rooms[roomId][userId].userStatus as
-                     | 'connected'
-                     | 'disconnected',
-                  type: 'added',
-               });
-            }
-         });
-      });
       return changes;
    }
 
@@ -153,12 +189,15 @@ export namespace FBConnect {
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
    ) => {
       return {
+         roomAddedType: `${instanceId} Room ${roomId} and host ${userId} were added to RTDB and Firestore from the client-side, so skipping...`,
          roomDoesNotExistInFS: `${instanceId} Room ${roomId} does not exist in Firestore, so skipping ${msgSuffix} ${userId} in Firestore...`,
+         initializingAddUserInFS: `${instanceId} User ${userId} was added to room ${roomId} in RTDB, so initializing adding in Firestore...`,
          userDoesNotExistInFS: `${instanceId} User ${userId} does not exist in room ${roomId} in Firestore, so skipping ${msgSuffix} in Firestore`,
-         initializingDeletionInFS: `${instanceId} User ${userId} was deleted in RTDB, so initializing deletion in Firestore...`,
-         preDeletingRoomInFS: `${instanceId} User ${userId} is the only user in room ${roomId} in Firestore, so deleting the room ${roomId} in Firestore...`,
+         initializingUserDeletionInFS: `${instanceId} User ${userId} was deleted in RTDB, so initializing deletion in Firestore...`,
+         initializingRoomDeletionInFS: `${instanceId} Room ${roomId} was deleted in RTDB, so initializing deletion in Firestore...`,
          postDeletingRoomInFS: `${instanceId} -- FBMUTATION -- Room ${roomId} has been deleted in Firestore successfully`,
          postDeletingUserInFS: `${instanceId} -- FBMUTATION -- User ${userId} has been deleted from room ${roomId} in Firestore successfully`,
+         postAddingUserInFS: `${instanceId} -- FBMUTATION -- User ${userId} has been added to room ${roomId} in Firestore successfully`,
          initializingStatusChangeInFS: `${instanceId} User ${userId} had a status change in RTDB to ${userStatus}, so initializing the changing of userStatus in Firestore...`,
          postStatusChangeInFS: `${instanceId} -- FBMUTATION -- User ${userId} has had their status updated in room ${roomId} to "${userStatus}" in Firestore successfully`,
          initializeObjsInTimeout: `${instanceId} Timeout set for user ${userId} after changing their userStatus in Firestore to ${userStatus}, to see if they're still disconnected after ${
@@ -168,8 +207,6 @@ export namespace FBConnect {
          roomDoesNotExistInRTDB: `${instanceId} Room ${roomId} does not exist in RTDB, so skipping setTimeout for ${userId}`,
          statusChangedBeforeTimeoutEnd: `${instanceId} User ${userId} changed status again so a new instance of onDataChange is running, so skipping this setTimeout for ${userId}`,
          noLongerDisconnected: `${instanceId} User ${userId} is no longer disconnected so they will not be removed from room ${roomId}...`,
-         preDeletingRoomInRTDB: `${instanceId} User ${userId} is still disconnected after 5 minutes and is the only user in room ${roomId} in Firestore, so deleting the room ${roomId} in RTDB...`,
-         postDeletingRoomInRTDB: `${instanceId} -- RTDB-MUTATION -- Room ${roomId} has been deleted in RTDB successfully`,
          preDeletingUserInRTDB: `${instanceId} User ${userId} is still disconnected after 5 minutes, so deleting ${userId} from the room ${roomId} in RTDB...`,
          postDeletingUserInRTDB: `${instanceId} -- RTDB-MUTATION -- User ${userId} has been deleted from room ${roomId} in RTDB successfully`,
       };

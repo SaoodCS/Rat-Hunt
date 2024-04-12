@@ -19,8 +19,8 @@
 
 ### Server-Side onDataChange cloud function Cases
 
-1. If a user is added and a new room is created in RTDB, it adds the room and user to Firestore
-2. If a user is added to an existing room in RTDB, it adds the user to the room in Firestore
+1. If a new room is created in RTDB, it does nothing as the client-side will add the room to Firestore (with the host user, topic, and noOfRounds)
+2. If a user is added to RTDB, it adds the user to the room in Firestore
 3. If a user is deleted from a room in RTDB, it deletes the user from the room in Firestore
 4. If a room is deleted from RTDB, it deletes the room from Firestore
 5. If a user's status is changed to 'connected' in RTDB, it changes the user's status to 'connected' in Firestore
@@ -30,7 +30,12 @@
 
 #### Changes Requires:
 
-[ ] TODO: Double check whether a room is deleted from RTDB automatically when the last user is deleted from the room
-[ ] TODO: Get rid of any functions / calls on the client side that involve adding / deleting users and rooms to and from firestore
-[ ] TODO: Update the 'compare' function on the server-side to check if a room is created / deleted in RTDB (and make it return types roomAdded and roomDeleted)
-[ ] TODO: Update the onDataChange cloud function to be aligned with the above cases
+[x] TODO: Double check whether a room is deleted from RTDB automatically when the last user is deleted from the room
+[x] TODO: Get rid of any functions / calls on the client side that involve adding / deleting users to and from RTDB
+[x] TODO: Get rid of any functions / calls on the client side that involve deleting rooms from firestore (need to keep the adding rooms on client-side in order for the topic and noOfRounds to be set - could set this to be done when pressing the play button in the waiting room instead...)
+[x] TODO: Update the 'compare' function on the server-side to check if a room is deleted in RTDB (and make it return type 'roomDeleted')
+[x] TODO: Update the 'compare' function on the server-side to check if a new room is created in RTDB (and make it return type 'roomAdded')
+[x] TODO: Update the onDataChange cloud function to be aligned with the above cases
+
+[ ] TODO: Potential further improvement - set the number of rounds and topics on the waiting room page so that when a new room is created by the host, the server-side can add the room and the host to Firestore instead of the client-side doing it (making the code more consistent since the client side is only responsible for mutating RTDB and updating firestore rather than creating and deleting data from firestore)
+- [ ] Then update this documentation to reflect those changes...
