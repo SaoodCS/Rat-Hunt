@@ -48,25 +48,18 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
          FBConnect.log(logMsgs.roomAddedType);
          continue;
       }
+      // If a user is not in the before snapshot, but is in the after snapshot, then the user was added to RTDB
+      if (type === 'userAdded') {
+         // Skip making any changes if the user was added to RTDB from the client-side (meaning they were also added to Firestore from the client side)
+         FBConnect.log(logMsgs.userAddedType);
+         continue;
+      }
 
       const { roomRefFS } = FBConnect.getRefs(roomId, userId);
       const roomData = await FBConnect.getRoomFromFS(roomRefFS);
       // Skip making any changes if the room does not exist in Firestore
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) {
          FBConnect.log(logMsgs.roomDoesNotExistInFS);
-         continue;
-      }
-
-      // If a user is not in the before snapshot, but is in the after snapshot, then the user was added to RTDB
-      if (type === 'userAdded') {
-         FBConnect.log(logMsgs.initializingAddUserInFS);
-         const roomDataWithAddedUser = await GameHelper.SetRoomState.newUser(
-            roomData,
-            userId,
-            axios,
-         );
-         await roomRefFS.update({ gameState: roomDataWithAddedUser.gameState });
-         FBConnect.log(logMsgs.postAddingUserInFS);
          continue;
       }
 
@@ -133,11 +126,13 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
       for (let i = 0; i < objectsInTimeout.length; i++) {
          const { roomId, userId, functionExecutedAt, instanceId } = objectsInTimeout[i];
          const timeoutId = `${instanceId} :: SETTIMEOUT for user ${userId} ::`;
+         const msgSuffix = 'status check of user';
+         const logMsgs = FBConnect.getLogMsgs(timeoutId, roomId, userId, 'disconnected', msgSuffix);
+         FBConnect.log(logMsgs.beginRunTimeoutForUser);
          const { roomRefFS, roomRefRT, userRefRT } = FBConnect.getRefs(roomId, userId);
          const roomDataFS = await FBConnect.getRoomFromFS(roomRefFS);
          const roomDataRT = await FBConnect.getRoomFromRT(roomRefRT);
-         const msgSuffix = 'status check of user';
-         const logMsgs = FBConnect.getLogMsgs(timeoutId, roomId, userId, 'disconnected', msgSuffix);
+
          if (!MiscHelper.isNotFalsyOrEmpty(roomDataRT)) {
             FBConnect.log(logMsgs.roomDoesNotExistInRTDB);
             continue;

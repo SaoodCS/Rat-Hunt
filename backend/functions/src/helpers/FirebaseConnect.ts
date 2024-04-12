@@ -188,10 +188,11 @@ export namespace FBConnect {
       msgSuffix: string,
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
    ) => {
+      const timerInMins = GameHelper.CONSTANTS.DISCONNECTED_USER_TIME_LIMIT_MS / 1000 / 60;
       return {
          roomAddedType: `${instanceId} Room ${roomId} and host ${userId} were added to RTDB and Firestore from the client-side, so skipping...`,
+         userAddedType: `${instanceId} User ${userId} was added to the room ${roomId} in RTDB and Firestore from the client-side, so skipping...`,
          roomDoesNotExistInFS: `${instanceId} Room ${roomId} does not exist in Firestore, so skipping ${msgSuffix} ${userId} in Firestore...`,
-         initializingAddUserInFS: `${instanceId} User ${userId} was added to room ${roomId} in RTDB, so initializing adding in Firestore...`,
          userDoesNotExistInFS: `${instanceId} User ${userId} does not exist in room ${roomId} in Firestore, so skipping ${msgSuffix} in Firestore`,
          initializingUserDeletionInFS: `${instanceId} User ${userId} was deleted in RTDB, so initializing deletion in Firestore...`,
          initializingRoomDeletionInFS: `${instanceId} Room ${roomId} was deleted in RTDB, so initializing deletion in Firestore...`,
@@ -200,10 +201,9 @@ export namespace FBConnect {
          postAddingUserInFS: `${instanceId} -- FBMUTATION -- User ${userId} has been added to room ${roomId} in Firestore successfully`,
          initializingStatusChangeInFS: `${instanceId} User ${userId} had a status change in RTDB to ${userStatus}, so initializing the changing of userStatus in Firestore...`,
          postStatusChangeInFS: `${instanceId} -- FBMUTATION -- User ${userId} has had their status updated in room ${roomId} to "${userStatus}" in Firestore successfully`,
-         initializeObjsInTimeout: `${instanceId} Timeout set for user ${userId} after changing their userStatus in Firestore to ${userStatus}, to see if they're still disconnected after ${
-            GameHelper.CONSTANTS.DISCONNECTED_USER_TIME_LIMIT_MS / 1000 / 60
-         } minutes...`,
+         initializeObjsInTimeout: `${instanceId} Timeout set for user ${userId} after changing their userStatus in Firestore to ${userStatus}, to see if they're still disconnected after ${timerInMins} minutes...`,
          noTimeoutSet: `${instanceId} No users userStatus changed to "disconnected" therefore no Timeout set`,
+         beginRunTimeoutForUser: `${instanceId} ${timerInMins} minutes have passed so beginning timeout for user ${userId} to check if they have reconnected...`,
          roomDoesNotExistInRTDB: `${instanceId} Room ${roomId} does not exist in RTDB, so skipping setTimeout for ${userId}`,
          statusChangedBeforeTimeoutEnd: `${instanceId} User ${userId} changed status again so a new instance of onDataChange is running, so skipping this setTimeout for ${userId}`,
          noLongerDisconnected: `${instanceId} User ${userId} is no longer disconnected so they will not be removed from room ${roomId}...`,

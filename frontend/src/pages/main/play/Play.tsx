@@ -70,6 +70,8 @@ export default function Play(): JSX.Element {
          return;
       }
       const roomData = docSnap.data() as AppTypes.Room;
+      const roomWithUser = await GameHelper.SetRoomState.newUser(roomData, formName, axios);
+      await setRoomData.mutateAsync(roomWithUser);
       await DBConnect.RTDB.Set.userStatus(formName, roomId);
       setLocalDbRoom(roomId);
       setLocalDbUser(formName);
