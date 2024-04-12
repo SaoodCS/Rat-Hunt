@@ -6,21 +6,18 @@ import GameHelper from '../../../../shared/app/GameHelper/GameHelper';
 import type AppTypes from '../../../../shared/app/types/AppTypes';
 import MiscHelper from '../../../../shared/lib/helpers/miscHelper/MiscHelper';
 
-interface UserStatusRTDB {
-   userStatus: string;
-}
-
-interface RoomRTDB {
-   [userId: string]: UserStatusRTDB;
-}
-
-interface RoomsRTDB {
-   [roomId: string]: RoomRTDB;
-}
-
 interface BeforeAfter {
-   rooms: RoomsRTDB;
+   rooms: {
+      [roomId: string]: {
+         [userId: string]: {
+            userStatus: 'connected' | 'disconnected';
+         };
+      };
+   };
 }
+
+type RoomBeforeAfter = BeforeAfter['rooms'][0];
+type UserBeforeAfter = BeforeAfter['rooms'][0][0];
 
 export interface UserRTDB {
    roomId: string;
@@ -168,10 +165,16 @@ export namespace FBConnect {
       return roomSnapshot.data() as AppTypes.Room | undefined;
    }
 
-   export async function getRoomFromRT(roomRefRT: Reference): Promise<RoomRTDB | null> {
+   export async function getRoomFromRT(roomRefRT: Reference): Promise<RoomBeforeAfter | null> {
       const roomSnapshot = await roomRefRT.once('value');
       if (!roomSnapshot.exists()) return null;
-      return (await roomRefRT.once('value')).val() as RoomRTDB | null;
+      return (await roomRefRT.once('value')).val() as RoomBeforeAfter | null;
+   }
+
+   export async function getUserFromRT(userRefRT: Reference): Promise<UserBeforeAfter | null> {
+      const userSnapshot = await userRefRT.once('value');
+      if (!userSnapshot.exists()) return null;
+      return (await userRefRT.once('value')).val() as UserBeforeAfter | null;
    }
 
    export async function getTopics(): Promise<AppTypes.Topic[]> {
@@ -204,7 +207,7 @@ export namespace FBConnect {
          initializeObjsInTimeout: `${instanceId} Timeout set for user ${userId} after changing their userStatus in Firestore to ${userStatus}, to see if they're still disconnected after ${timerInMins} minutes...`,
          noTimeoutSet: `${instanceId} No users userStatus changed to "disconnected" therefore no Timeout set`,
          beginRunTimeoutForUser: `${instanceId} ${timerInMins} minutes have passed so beginning timeout for user ${userId} to check if they have reconnected...`,
-         roomDoesNotExistInRTDB: `${instanceId} Room ${roomId} does not exist in RTDB, so skipping setTimeout for ${userId}`,
+         userDoesNotExistInRTDB: `${instanceId} User ${userId} does not exist in room ${roomId} in RTDB, so skipping setTimeout for ${userId}`,
          statusChangedBeforeTimeoutEnd: `${instanceId} User ${userId} changed status again so a new instance of onDataChange is running, so skipping this setTimeout for ${userId}`,
          noLongerDisconnected: `${instanceId} User ${userId} is no longer disconnected so they will not be removed from room ${roomId}...`,
          preDeletingUserInRTDB: `${instanceId} User ${userId} is still disconnected after 5 minutes, so deleting ${userId} from the room ${roomId} in RTDB...`,

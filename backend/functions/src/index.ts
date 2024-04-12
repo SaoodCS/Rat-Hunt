@@ -129,12 +129,12 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
          const msgSuffix = 'status check of user';
          const logMsgs = FBConnect.getLogMsgs(timeoutId, roomId, userId, 'disconnected', msgSuffix);
          FBConnect.log(logMsgs.beginRunTimeoutForUser);
-         const { roomRefFS, roomRefRT, userRefRT } = FBConnect.getRefs(roomId, userId);
+         const { roomRefFS, userRefRT } = FBConnect.getRefs(roomId, userId);
          const roomDataFS = await FBConnect.getRoomFromFS(roomRefFS);
-         const roomDataRT = await FBConnect.getRoomFromRT(roomRefRT);
+         const userDataRT = await FBConnect.getUserFromRT(userRefRT);
 
-         if (!MiscHelper.isNotFalsyOrEmpty(roomDataRT)) {
-            FBConnect.log(logMsgs.roomDoesNotExistInRTDB);
+         if (!MiscHelper.isNotFalsyOrEmpty(userDataRT)) {
+            FBConnect.log(logMsgs.userDoesNotExistInRTDB);
             continue;
          }
          if (!MiscHelper.isNotFalsyOrEmpty(roomDataFS)) {
