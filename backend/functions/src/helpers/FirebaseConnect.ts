@@ -4,7 +4,6 @@ import type { DocumentReference } from 'firebase-admin/firestore';
 import * as functions from 'firebase-functions';
 import GameHelper from '../../../../shared/app/GameHelper/GameHelper';
 import type AppTypes from '../../../../shared/app/types/AppTypes';
-import MiscHelper from '../../../../shared/lib/helpers/miscHelper/MiscHelper';
 
 interface BeforeAfter {
    rooms: {
@@ -30,80 +29,41 @@ export namespace FBConnect {
    export function compare(
       before: BeforeAfter | null | undefined,
       after: BeforeAfter | null | undefined,
-   ): UserRTDB[] | null {
+   ): UserRTDB[] {
       const changes: UserRTDB[] = [];
-      const isBeforeEmpty = !MiscHelper.isNotFalsyOrEmpty(before);
-      const isAfterEmpty = !MiscHelper.isNotFalsyOrEmpty(after);
-      if (isBeforeEmpty) {
-         if (isAfterEmpty) return null;
-         Object.keys(after.rooms).forEach((roomId) => {
-            Object.keys(after.rooms[roomId]).forEach((userId) => {
-               const existingObj = changes.find(
-                  (change) => change.roomId === roomId && change.type === 'roomAdded',
-               );
-               if (!existingObj) {
-                  const userStatus = after.rooms[roomId][userId].userStatus;
-                  const type = 'roomAdded';
-                  changes.push({ roomId, userId, userStatus, type });
-               }
-            });
-         });
-      } else if (isAfterEmpty) {
-         Object.keys(before.rooms).forEach((roomId) => {
-            Object.keys(before.rooms[roomId]).forEach((userId) => {
-               const existingObj = changes.find(
-                  (change) => change.roomId === roomId && change.type === 'roomDeleted',
-               );
-               if (!existingObj) {
-                  const userStatus = before.rooms[roomId][userId].userStatus;
-                  const type = 'roomDeleted';
-                  changes.push({ roomId, userId, userStatus, type });
-               }
-            });
-         });
-      } else {
-         Object.keys(before.rooms).forEach((roomId) => {
-            Object.keys(before.rooms[roomId]).forEach((userId) => {
-               if (!after.rooms[roomId]) {
-                  const existingObj = changes.find(
-                     (change) => change.roomId === roomId && change.type === 'roomDeleted',
-                  );
-                  if (!existingObj) {
-                     const userStatus = before.rooms[roomId][userId].userStatus;
-                     const type = 'roomDeleted';
-                     changes.push({ roomId, userId, userStatus, type });
-                  }
-               } else if (!after.rooms[roomId][userId]) {
-                  const userStatus = before.rooms[roomId][userId].userStatus;
-                  const type = 'userDeleted';
-                  changes.push({ roomId, userId, userStatus, type });
-               } else if (
-                  before.rooms[roomId][userId].userStatus !== after.rooms[roomId][userId].userStatus
-               ) {
-                  const userStatus = after.rooms[roomId][userId].userStatus;
-                  const type = 'changedStatus';
-                  changes.push({ roomId, userId, userStatus, type });
-               }
-            });
-         });
-         Object.keys(after.rooms).forEach((roomId) => {
-            Object.keys(after.rooms[roomId]).forEach((userId) => {
-               if (!before.rooms[roomId]) {
-                  const existingObj = changes.find(
-                     (change) => change.roomId === roomId && change.type === 'roomAdded',
-                  );
-                  if (!existingObj) {
-                     const userStatus = after.rooms[roomId][userId].userStatus;
-                     const type = 'roomAdded';
-                     changes.push({ roomId, userId, userStatus, type });
-                  }
-               } else if (!before.rooms[roomId][userId]) {
-                  const userStatus = after.rooms[roomId][userId].userStatus;
-                  const type = 'userAdded';
-                  changes.push({ roomId, userId, userStatus, type });
-               }
-            });
-         });
+      for (const roomId in after?.rooms ?? {}) {
+         for (const userId in after?.rooms[roomId] ?? {}) {
+            if (!after) continue;
+            const userStatus = after.rooms[roomId][userId].userStatus;
+            const roomInBefore = before?.rooms[roomId];
+            const userInBefore = roomInBefore?.[userId];
+            if (!roomInBefore) {
+               const type = 'roomAdded';
+               const existsInChanges = changes.find((i) => i.roomId === roomId && i.type === type);
+               if (existsInChanges) continue;
+               changes.push({ roomId, userId, userStatus, type });
+            } else if (!userInBefore) {
+               changes.push({ roomId, userId, userStatus, type: 'userAdded' });
+            } else if (userInBefore.userStatus !== userStatus) {
+               changes.push({ roomId, userId, userStatus, type: 'changedStatus' });
+            }
+         }
+      }
+      for (const roomId in before?.rooms ?? {}) {
+         for (const userId in before?.rooms[roomId] ?? {}) {
+            if (!before) continue;
+            const userStatus = before.rooms[roomId][userId].userStatus;
+            const roomInAfter = after?.rooms[roomId];
+            const userInAfter = roomInAfter?.[userId];
+            if (!roomInAfter) {
+               const type = 'roomDeleted';
+               const existsInChanges = changes.find((i) => i.roomId === roomId && i.type === type);
+               if (existsInChanges) continue;
+               changes.push({ roomId, userId, userStatus, type });
+            } else if (!userInAfter) {
+               changes.push({ roomId, userId, userStatus, type: 'userDeleted' });
+            }
+         }
       }
       return changes;
    }
