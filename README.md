@@ -6,9 +6,21 @@
 Click here to Visit the Live Web App
 </a>
 
-## About
+## How to Play
 
-// TODO: Add some bg info about the game and how to play guide for the game here
+1. At the start of each round, a rat is randomly selected out of the players in the game
+2. All players receive the same secret word from the grid, except for the rat
+3. All players then take turns to provide a clue related to the secret word in order to convince others that they are not the rat, without revealing the word to the rat. The rat also gives a clue based on their estimation of the secret word.
+4. All players (including the rat) then vote on who they think the rat is, and the rat guesses what the secret word is.
+
+### Scoring
+
+- If the rat correctly guesses the secret word, they earn 1 point
+- If the rat does not receive the most votes, they earn 1 point
+- If the rat does not receive any votes, they earn 1 point
+- If the rat receives the most votes, all players (except the rat) earn 1 point
+- If a player that is not the rat correctly votes for the rat, they earn 1 point
+- If the rat does not correctly guess the secret word, all players (except the rat) earn 1 point
 
 ## Gameplay Demo Video
 
