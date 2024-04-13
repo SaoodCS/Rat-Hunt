@@ -6,6 +6,15 @@
 Click here to Visit the Live Web App
 </a>
 
+## Gameplay Demo Video
+
+<a href="https://youtu.be/WxCCqd9LFTQ" target="_blank">
+Click here or press the play button to watch a gameplay demo video
+</br>
+</br>
+<img src="resources/readme/thumbnails/youtubeplaybtn.png" alt="Rat Hunt Gameplay Demo" width = "70%">
+</a>
+
 ## How to Play
 
 1. At the start of each round, a rat is randomly selected out of the players in the game
@@ -21,15 +30,6 @@ Click here to Visit the Live Web App
 - If the rat receives the most votes, all players (except the rat) earn 1 point
 - If a player that is not the rat correctly votes for the rat, they earn 1 point
 - If the rat does not correctly guess the secret word, all players (except the rat) earn 1 point
-
-## Gameplay Demo Video
-
-<a href="https://youtu.be/WxCCqd9LFTQ" target="_blank">
-Click here or press the play button to watch a gameplay demo video
-</br>
-</br>
-<img src="resources/readme/thumbnails/youtubeplaybtn.png" alt="Rat Hunt Gameplay Demo" width = "70%">
-</a>
 
 ## For Software Development
 
