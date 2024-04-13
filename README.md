@@ -1,9 +1,10 @@
 # Rat Hunt Monorepo
 
-<a href="https://rat-hunt.web.app/" target="_blank"><img src="frontend/resources/icons/logo-192x192.png" alt="Rat Hunt Logo" width="200"/>
-</br>
-</br>
+<a href="https://rat-hunt.web.app/" target="_blank">
 Click here to Visit the Live Web App
+</br>
+</br>
+<img src="frontend/resources/icons/logo-192x192.png" alt="Rat Hunt Logo" width="200"/>
 </a>
 
 ---
