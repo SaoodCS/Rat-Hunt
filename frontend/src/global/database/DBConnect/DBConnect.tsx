@@ -207,53 +207,48 @@ export namespace DBConnect {
 
    /* -- REALTIME DB -- */
    export namespace RTDB {
-      // -- SET MUTATIONS -- //
-      export namespace Set {
-         export async function userStatus(userId: string, roomId: string): Promise<void> {
-            const userStatusRef: DatabaseReference = ref(
-               firebaseRTDB,
-               `/rooms/${roomId}/${userId}`,
-            );
-            const connectedStatus = { userStatus: 'connected' };
-            await set(userStatusRef, connectedStatus);
-            await onDisconnect(userStatusRef).set({
-               userStatus: 'disconnected',
-            });
-         }
-      }
-
+      // -- GET QUERIES -- //
       export namespace Get {
+         export function userRef(roomId: string, userId: string): DatabaseReference {
+            return ref(firebaseRTDB, `/rooms/${roomId}/${userId}`);
+         }
+
+         export function roomRef(roomId: string): DatabaseReference {
+            return ref(firebaseRTDB, `/rooms/${roomId}`);
+         }
+
          export async function userStatus(
             userId: string,
             roomId: string,
          ): Promise<AppTypes.UserState['userStatus'] | null> {
-            const userStatusRef: DatabaseReference = ref(
-               firebaseRTDB,
-               `/rooms/${roomId}/${userId}`,
-            );
+            const userStatusRef = userRef(roomId, userId);
             const userSnap = await get(userStatusRef);
             if (!userSnap.exists()) return null;
-            const userData = userSnap.val() as { userStatus: AppTypes.UserState['userStatus'] };
+            const userData = userSnap.val();
             return userData.userStatus;
-         }
-
-         export function userRef(roomId: string, userId: string): DatabaseReference {
-            return ref(firebaseRTDB, `/rooms/${roomId}/${userId}`);
          }
       }
 
+      // -- SET MUTATIONS -- //
+      export namespace Set {
+         export async function userStatus(userId: string, roomId: string): Promise<void> {
+            const userStatusRef = Get.userRef(roomId, userId);
+            const connectedStatus = { userStatus: 'connected' };
+            await set(userStatusRef, connectedStatus);
+            await onDisconnect(userStatusRef).set({ userStatus: 'disconnected' });
+         }
+      }
+
+      // -- DELETE MUTATIONS -- //
       export namespace Delete {
          export async function user(userId: string, roomId: string): Promise<void> {
-            const userStatusRef: DatabaseReference = ref(
-               firebaseRTDB,
-               `/rooms/${roomId}/${userId}`,
-            );
+            const userStatusRef = Get.userRef(roomId, userId);
             await onDisconnect(userStatusRef).cancel();
             await remove(userStatusRef);
          }
 
          export async function room(roomId: string): Promise<void> {
-            const roomRef: DatabaseReference = ref(firebaseRTDB, `/rooms/${roomId}`);
+            const roomRef = Get.roomRef(roomId);
             await onDisconnect(roomRef).cancel();
             await remove(roomRef);
          }
