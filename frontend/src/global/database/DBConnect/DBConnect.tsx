@@ -7,6 +7,7 @@ import type {
 import { useQuery } from '@tanstack/react-query';
 import type { DatabaseReference } from 'firebase/database';
 import { get, onDisconnect, ref, remove, set } from 'firebase/database';
+import type { DocumentReference } from 'firebase/firestore';
 import { collection, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
 import type AppTypes from '../../../../../shared/app/types/AppTypes';
 import ArrOfObj from '../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
@@ -31,6 +32,10 @@ export namespace DBConnect {
       };
       // -- GET QUERIES -- //
       export namespace Get {
+         export function roomRef(roomId: string): DocumentReference {
+            return doc(firestore, CONSTS.GAME_COLLECTION, `${CONSTS.ROOM_DOC_PREFIX}${roomId}`);
+         }
+
          export function room(
             roomId: string,
             options: UseQueryOptions<AppTypes.Room> = {},
@@ -40,11 +45,7 @@ export namespace DBConnect {
                queryFn: async (): Promise<AppTypes.Room> => {
                   try {
                      if (roomId === '') return {} as AppTypes.Room;
-                     const docRef = doc(
-                        firestore,
-                        CONSTS.GAME_COLLECTION,
-                        `${CONSTS.ROOM_DOC_PREFIX}${roomId}`,
-                     );
+                     const docRef = roomRef(roomId);
                      const docSnap = await getDoc(docRef);
                      if (docSnap.exists()) {
                         return docSnap.data() as AppTypes.Room;
@@ -113,11 +114,7 @@ export namespace DBConnect {
             return useCustomMutation(
                async (roomData: AppTypes.Room) => {
                   try {
-                     const docRef = doc(
-                        firestore,
-                        CONSTS.GAME_COLLECTION,
-                        `${CONSTS.ROOM_DOC_PREFIX}${roomData.roomId}`,
-                     );
+                     const docRef = Get.roomRef(roomData.roomId);
                      await setDoc(docRef, { ...roomData });
                   } catch (e) {
                      throw new APIHelper.ErrorThrower(APIHelper.handleError(e));
@@ -140,11 +137,7 @@ export namespace DBConnect {
                async (params: ISetGameState) => {
                   const { gameState, roomId } = params;
                   try {
-                     const docRef = doc(
-                        firestore,
-                        CONSTS.GAME_COLLECTION,
-                        `${CONSTS.ROOM_DOC_PREFIX}${roomId}`,
-                     );
+                     const docRef = Get.roomRef(roomId);
                      await updateDoc(docRef, { gameState });
                   } catch (e) {
                      throw new APIHelper.ErrorThrower(APIHelper.handleError(e));
@@ -168,11 +161,7 @@ export namespace DBConnect {
                async (userData: IDeleteUser) => {
                   try {
                      const { roomData, userId } = userData;
-                     const docRef = doc(
-                        firestore,
-                        CONSTS.GAME_COLLECTION,
-                        `${CONSTS.ROOM_DOC_PREFIX}${roomData.roomId}`,
-                     );
+                     const docRef = Get.roomRef(roomData.roomId);
                      if (!userId) return;
                      const updatedUserStates = ArrOfObj.filterOut(
                         roomData.gameState.userStates,
@@ -203,11 +192,7 @@ export namespace DBConnect {
             return useCustomMutation(
                async (params: IDeleteRoom) => {
                   try {
-                     const docRef = doc(
-                        firestore,
-                        CONSTS.GAME_COLLECTION,
-                        `${CONSTS.ROOM_DOC_PREFIX}${params.roomId}`,
-                     );
+                     const docRef = Get.roomRef(params.roomId);
                      await deleteDoc(docRef);
                   } catch (e) {
                      throw new APIHelper.ErrorThrower(APIHelper.handleError(e));

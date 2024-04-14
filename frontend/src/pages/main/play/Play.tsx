@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import axios from 'axios';
-import { doc, getDoc } from 'firebase/firestore';
+import { getDoc } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { css, type FlattenSimpleInterpolation } from 'styled-components';
@@ -15,13 +14,11 @@ import OfflineFetch from '../../../global/components/lib/fetch/offlineFetch/offl
 import type { IDropDownOptions } from '../../../global/components/lib/form/dropDown/DropDownInput';
 import InputCombination from '../../../global/components/lib/form/inputCombination/InputCombination';
 import { StyledForm } from '../../../global/components/lib/form/style/Style';
-import Loader from '../../../global/components/lib/loader/fullScreen/Loader';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { GameContext } from '../../../global/context/game/GameContext';
 import useApiErrorContext from '../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import MyCSS from '../../../global/css/MyCSS';
 import DBConnect from '../../../global/database/DBConnect/DBConnect';
-import { firestore } from '../../../global/database/config/config';
 import useForm from '../../../global/hooks/useForm';
 import PlayFormClass from './class/PlayForm';
 
@@ -33,7 +30,7 @@ export default function Play(): JSX.Element {
       PlayFormClass.form.initialErrors,
       PlayFormClass.form.validate,
    );
-   const { isLoading, isPaused, data } = DBConnect.FSDB.Get.topics();
+   const { isPaused, data } = DBConnect.FSDB.Get.topics();
    const { data: allRoomIds } = DBConnect.FSDB.Get.allRoomIds();
    const navigation = useNavigate();
    const setRoomData = DBConnect.FSDB.Set.room({});
@@ -48,21 +45,14 @@ export default function Play(): JSX.Element {
    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
       const { isFormValid } = initHandleSubmit(e);
       if (!isFormValid) return;
-      if (form.joinOrHost === 'host') {
-         await handleHostGame();
-         return;
-      }
-      await handleJoinGame();
+      if (form.joinOrHost === 'host') await handleHostGame();
+      else await handleJoinGame();
    }
 
    async function handleJoinGame(): Promise<void> {
       const roomId = form.roomId;
       const formName = form.name;
-      const docRef = doc(
-         firestore,
-         DBConnect.FSDB.CONSTS.GAME_COLLECTION,
-         `${DBConnect.FSDB.CONSTS.ROOM_DOC_PREFIX}${roomId}`,
-      );
+      const docRef = DBConnect.FSDB.Get.roomRef(roomId);
       const docSnap = await getDoc(docRef);
       const joinRoomErrors = PlayFormClass.form.validateJoin(docSnap, form);
       if (MiscHelper.isNotFalsyOrEmpty(joinRoomErrors)) {
@@ -91,9 +81,9 @@ export default function Play(): JSX.Element {
          axios,
       );
       await setRoomData.mutateAsync(room);
+      await DBConnect.RTDB.Set.userStatus(formName, generatedRoomId);
       setLocalDbRoom(generatedRoomId);
       setLocalDbUser(formName);
-      DBConnect.RTDB.Set.userStatus(formName, generatedRoomId);
       navigation('/main/waitingroom', { replace: true });
    }
 
@@ -117,9 +107,9 @@ export default function Play(): JSX.Element {
       return input.dropDownOptions;
    }
 
-   if (isLoading && !isPaused) return <Loader isDisplayed />;
-   if (isPaused) return <OfflineFetch />;
+   // if (isLoading && !isPaused) return <Loader isDisplayed />;
    // if (error) return <FetchError />;
+   if (isPaused) return <OfflineFetch />;
 
    return (
       <FlexColumnWrapper
