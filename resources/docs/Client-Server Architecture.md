@@ -2,9 +2,10 @@
 
 1. **The Client Side**
 
-   - Adds users and rooms to RTDB and Firestore
-   - Deletes users and rooms from RTDB 
+   - Adds users and rooms to RTDB and Firestore and adds an onDisconnect event to RTDB.
+   - Deletes users and rooms and the onDisconnect event from RTDB
    - Changes the userStatus to 'connected' or 'disconnected' in RTDB
+
 2. This then triggers the onDataChange cloud function on the server-side which is triggered every time the RTDB is updated.
 
 3. **The Server Side**
@@ -25,5 +26,7 @@
 4. If a room is deleted from RTDB, it deletes the room from Firestore
 5. If a user's status is changed to 'connected' in RTDB, it changes the user's status to 'connected' in Firestore
 6. If a user's status is changed to 'disconnected' in RTDB, it changes the user's status to 'disconnected' in Firestore and then waits 5 minutes to see if the user reconnects:
-   1. If the user does not reconnect within 5 minutes, it deletes the user from RTDB (should delete the room too if it's the last user in the room).
+   1. If the user does not reconnect within 5 minutes, it:
+      - Removes the onDisconnect event associated with the user from RTDB
+      - Deletes the user from RTDB (which will also delete the room if it's the last user in the room)
       - This then triggers a new instance of onDataChange cloud function which will check if the user / room is deleted in RTDB and then delete them from Firestore if so
