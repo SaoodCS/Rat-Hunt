@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { useQueryClient } from '@tanstack/react-query';
+import { onValue } from 'firebase/database';
 import { onSnapshot } from 'firebase/firestore';
 import type { ReactNode } from 'react';
 import { useContext, useEffect, useState } from 'react';
 import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
 import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import DBConnect from '../../database/DBConnect/DBConnect';
+import useCustomNavigate from '../../hooks/useCustomNavigate';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { DeviceContext } from '../device/DeviceContext';
 import { GameContext } from './GameContext';
-import useCustomNavigate from '../../hooks/useCustomNavigate';
+// TODO: RTDB also has an unsub event listener called onValue to listen to changes in the userStatus of a user in RTDB (may be useful to implement this here too)
 
 interface IGameContextProvider {
    children: ReactNode;
