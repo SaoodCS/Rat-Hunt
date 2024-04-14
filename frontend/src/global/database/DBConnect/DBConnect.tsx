@@ -55,6 +55,7 @@ export namespace DBConnect {
                      throw new APIHelper.ErrorThrower(APIHelper.handleError(e));
                   }
                },
+               // enabled: false, // NOTE: May be useful to do this and let the onSnapshot listener handle the updates
                ...options,
             });
          }
