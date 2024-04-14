@@ -2,7 +2,6 @@ import { PlayCircleFill } from '@styled-icons/bootstrap/PlayCircleFill';
 import { CircleUser } from '@styled-icons/fa-solid/CircleUser';
 import { SquareShareNodes } from '@styled-icons/fa-solid/SquareShareNodes';
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
 import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
@@ -30,10 +29,11 @@ import {
    WaitingRoomTitle,
 } from './style/Style';
 import axios from 'axios';
+import useCustomNavigate from '../../../global/hooks/useCustomNavigate';
 
 export default function WaitingRoom(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
-   const navigation = useNavigate();
+   const navigation = useCustomNavigate();
    const {
       toggleToast,
       setToastMessage,
@@ -63,7 +63,7 @@ export default function WaitingRoom(): JSX.Element {
 
    useEffect(() => {
       if (MiscHelper.isNotFalsyOrEmpty(roomData) && roomData.gameStarted) {
-         navigation('/main/startedgame', { replace: true });
+         navigation('/main/startedgame');
       }
    }, [roomData?.gameStarted]);
 

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { getDoc } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { css, type FlattenSimpleInterpolation } from 'styled-components';
 import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
 import type AppTypes from '../../../../../shared/app/types/AppTypes';
@@ -21,6 +20,7 @@ import MyCSS from '../../../global/css/MyCSS';
 import DBConnect from '../../../global/database/DBConnect/DBConnect';
 import useForm from '../../../global/hooks/useForm';
 import PlayFormClass from './class/PlayForm';
+import useCustomNavigate from '../../../global/hooks/useCustomNavigate';
 
 export default function Play(): JSX.Element {
    const { apiError } = useApiErrorContext();
@@ -32,7 +32,7 @@ export default function Play(): JSX.Element {
    );
    const { isPaused, data } = DBConnect.FSDB.Get.topics();
    const { data: allRoomIds } = DBConnect.FSDB.Get.allRoomIds();
-   const navigation = useNavigate();
+   const navigation = useCustomNavigate();
    const setRoomData = DBConnect.FSDB.Set.room({});
    const [showHostFields, setShowHostFields] = useState(false);
    const [showRoomIdField, setShowRoomIdField] = useState(false);
@@ -66,7 +66,7 @@ export default function Play(): JSX.Element {
       setLocalDbRoom(roomId);
       setLocalDbUser(formName);
       const { gameStarted } = roomData;
-      navigation(gameStarted ? '/main/startedgame' : '/main/waitingroom', { replace: true });
+      navigation(gameStarted ? '/main/startedgame' : '/main/waitingroom');
    }
 
    async function handleHostGame(): Promise<void> {
@@ -84,7 +84,7 @@ export default function Play(): JSX.Element {
       await DBConnect.RTDB.Set.userStatus(formName, generatedRoomId);
       setLocalDbRoom(generatedRoomId);
       setLocalDbUser(formName);
-      navigation('/main/waitingroom', { replace: true });
+      navigation('/main/waitingroom');
    }
 
    function dropDownOptions(

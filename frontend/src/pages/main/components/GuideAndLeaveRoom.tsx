@@ -3,7 +3,6 @@ import { Share } from '@styled-icons/fluentui-system-regular/Share';
 import { Help } from '@styled-icons/ionicons-outline/Help';
 import { useQueryClient } from '@tanstack/react-query';
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import { GameContext } from '../../../global/context/game/GameContext';
 import { ModalContext } from '../../../global/context/widget/modal/ModalContext';
@@ -11,6 +10,7 @@ import { ToastContext } from '../../../global/context/widget/toast/ToastContext'
 import DBConnect from '../../../global/database/DBConnect/DBConnect';
 import Device from '../../../global/helpers/pwa/deviceHelper';
 import HelpGuide from './HelpGuide';
+import useCustomNavigate from '../../../global/hooks/useCustomNavigate';
 
 interface IGuideAndLeaveRoom {
    currentPath: string;
@@ -34,7 +34,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    const [isPlayPage, setIsPlayPage] = useState(currentPath.includes('play'));
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const { data: topicsData } = DBConnect.FSDB.Get.topics();
-   const navigation = useNavigate();
+   const navigation = useCustomNavigate();
    const queryClient = useQueryClient();
 
    useEffect(() => {
@@ -57,7 +57,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
       setLocalDbRoom('');
       setLocalDbUser('');
       queryClient.clear();
-      navigation('/main/play', { replace: true });
+      navigation('/main/play');
    }
 
    async function shareApp(): Promise<void> {

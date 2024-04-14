@@ -3,13 +3,13 @@ import { useQueryClient } from '@tanstack/react-query';
 import { onSnapshot } from 'firebase/firestore';
 import type { ReactNode } from 'react';
 import { useContext, useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
 import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import DBConnect from '../../database/DBConnect/DBConnect';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { DeviceContext } from '../device/DeviceContext';
 import { GameContext } from './GameContext';
+import useCustomNavigate from '../../hooks/useCustomNavigate';
 
 interface IGameContextProvider {
    children: ReactNode;
@@ -23,15 +23,14 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
    const { data: roomData, isLoading } = DBConnect.FSDB.Get.room(localDbRoom);
    const { isInForeground } = useContext(DeviceContext);
    const [initialRender, setInitialRender] = useState(true);
-   const navigation = useNavigate();
-   const location = useLocation();
+   const navigation = useCustomNavigate();
    const queryClient = useQueryClient();
 
    function clearDataAndNavToPlay(): void {
       setLocalDbRoom('');
       setLocalDbUser('');
       queryClient.clear();
-      if (location.pathname !== '/main/play') navigation('/main/play', { replace: true });
+      navigation('/main/play');
    }
 
    useEffect(() => {
@@ -63,7 +62,7 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
          clearDataAndNavToPlay();
          return;
       }
-      navigation(gameStarted ? '/main/startedgame' : '/main/waitingroom', { replace: true });
+      navigation(gameStarted ? '/main/startedgame' : '/main/waitingroom');
       DBConnect.RTDB.Set.userStatus(localDbUser, roomData.roomId);
    }, [isLoading]);
 
