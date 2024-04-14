@@ -224,10 +224,6 @@ export namespace DBConnect {
       // -- SET MUTATIONS -- //
       export namespace Set {
          export async function userStatus(userId: string, roomId: string): Promise<void> {
-            if (!userId || !roomId) {
-               console.error('User ID or Room not available.');
-               return;
-            }
             const userStatusRef: DatabaseReference = ref(
                firebaseRTDB,
                `/rooms/${roomId}/${userId}`,
@@ -241,45 +237,39 @@ export namespace DBConnect {
       }
 
       export namespace Get {
-         export async function userStatus(userId: string, roomId: string): Promise<string> {
-            if (!userId || !roomId) {
-               console.error('User ID or Room not available.');
-               return '';
-            }
+         export async function userStatus(
+            userId: string,
+            roomId: string,
+         ): Promise<AppTypes.UserState['userStatus'] | null> {
             const userStatusRef: DatabaseReference = ref(
                firebaseRTDB,
                `/rooms/${roomId}/${userId}`,
             );
             const userSnap = await get(userStatusRef);
-            if (!userSnap.exists()) {
-               console.error('User does not exist in the room.');
-               return '';
-            }
-            const userData = userSnap.val() as { userStatus: string };
+            if (!userSnap.exists()) return null;
+            const userData = userSnap.val() as { userStatus: AppTypes.UserState['userStatus'] };
             return userData.userStatus;
+         }
+
+         export function userRef(roomId: string, userId: string): DatabaseReference {
+            return ref(firebaseRTDB, `/rooms/${roomId}/${userId}`);
          }
       }
 
       export namespace Delete {
          export async function user(userId: string, roomId: string): Promise<void> {
-            if (!userId || !roomId) {
-               console.error('User ID or Room not available.');
-               return;
-            }
             const userStatusRef: DatabaseReference = ref(
                firebaseRTDB,
                `/rooms/${roomId}/${userId}`,
             );
+            await onDisconnect(userStatusRef).cancel();
             await remove(userStatusRef);
          }
 
          export async function room(roomId: string): Promise<void> {
-            if (!roomId) {
-               console.error('Room not available. Room cannot be deleted.');
-               return;
-            }
             const roomRef: DatabaseReference = ref(firebaseRTDB, `/rooms/${roomId}`);
-            await set(roomRef, null);
+            await onDisconnect(roomRef).cancel();
+            await remove(roomRef);
          }
       }
    }

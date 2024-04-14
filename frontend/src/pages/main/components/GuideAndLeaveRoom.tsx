@@ -2,8 +2,6 @@ import { LogOut } from '@styled-icons/boxicons-regular/LogOut';
 import { Share } from '@styled-icons/fluentui-system-regular/Share';
 import { Help } from '@styled-icons/ionicons-outline/Help';
 import { useQueryClient } from '@tanstack/react-query';
-import type { DatabaseReference } from 'firebase/database';
-import { onDisconnect, ref } from 'firebase/database';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
@@ -11,7 +9,6 @@ import { GameContext } from '../../../global/context/game/GameContext';
 import { ModalContext } from '../../../global/context/widget/modal/ModalContext';
 import { ToastContext } from '../../../global/context/widget/toast/ToastContext';
 import DBConnect from '../../../global/database/DBConnect/DBConnect';
-import { firebaseRTDB } from '../../../global/database/config/config';
 import Device from '../../../global/helpers/pwa/deviceHelper';
 import HelpGuide from './HelpGuide';
 
@@ -53,23 +50,14 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
       toggleModal(true);
    }
 
-   async function clearAppState(): Promise<void> {
-      const userStatusRef: DatabaseReference = ref(
-         firebaseRTDB,
-         `/rooms/${localDbRoom}/${localDbUser}`,
-      );
-      await onDisconnect(userStatusRef).cancel();
-      setLocalDbRoom('');
-      setLocalDbUser('');
-      queryClient.clear();
-      navigation('/main/play', { replace: true });
-   }
-
    async function handleLeaveRoom(): Promise<void> {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
       if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
       await DBConnect.RTDB.Delete.user(localDbUser, localDbRoom);
-      await clearAppState();
+      setLocalDbRoom('');
+      setLocalDbUser('');
+      queryClient.clear();
+      navigation('/main/play', { replace: true });
    }
 
    async function shareApp(): Promise<void> {
