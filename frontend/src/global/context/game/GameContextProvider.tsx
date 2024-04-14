@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { onSnapshot } from 'firebase/firestore';
 import type { ReactNode } from 'react';
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
 import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import DBConnect from '../../database/DBConnect/DBConnect';
@@ -24,13 +24,14 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
    const { isInForeground } = useContext(DeviceContext);
    const [initialRender, setInitialRender] = useState(true);
    const navigation = useNavigate();
+   const location = useLocation();
    const queryClient = useQueryClient();
 
    function clearDataAndNavToPlay(): void {
       setLocalDbRoom('');
       setLocalDbUser('');
       queryClient.clear();
-      navigation('/main/play', { replace: true });
+      if (location.pathname !== '/main/play') navigation('/main/play', { replace: true });
    }
 
    useEffect(() => {
@@ -50,20 +51,20 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
 
    useEffect(() => {
       // This useEffect runs only once after the app finishes it's first attempt to fetch the roomData from firestore
-      if (!isLoading && initialRender) {
-         setInitialRender(false);
-         if (!MiscHelper.isNotFalsyOrEmpty(roomData)) {
-            clearDataAndNavToPlay();
-            return;
-         }
-         const { gameStarted, gameState } = roomData;
-         if (!GameHelper.Check.isUserInRoom(localDbUser, gameState.userStates)) {
-            alert('You have been removed from the room!');
-            return;
-         }
-         navigation(gameStarted ? '/main/startedgame' : '/main/waitingroom', { replace: true });
-         DBConnect.RTDB.Set.userStatus(localDbUser, roomData.roomId);
+      if (isLoading || !initialRender) return;
+      setInitialRender(false);
+      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) {
+         clearDataAndNavToPlay();
+         return;
       }
+      const { gameStarted, gameState } = roomData;
+      if (!GameHelper.Check.isUserInRoom(localDbUser, gameState.userStates)) {
+         alert('You have been removed from the room!');
+         clearDataAndNavToPlay();
+         return;
+      }
+      navigation(gameStarted ? '/main/startedgame' : '/main/waitingroom', { replace: true });
+      DBConnect.RTDB.Set.userStatus(localDbUser, roomData.roomId);
    }, [isLoading]);
 
    useEffect(() => {
