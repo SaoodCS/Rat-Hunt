@@ -9,6 +9,7 @@ import DateHelper from '../../../shared/lib/helpers/date/DateHelper';
 import MiscHelper from '../../../shared/lib/helpers/miscHelper/MiscHelper';
 import StringHelper from '../../../shared/lib/helpers/string/StringHelper';
 import FBConnect from './helpers/FirebaseConnect';
+import { topics } from './updateTopics/updateTopics';
 
 if (!admin.apps.length) {
    admin.initializeApp();
@@ -33,9 +34,6 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
       functionExecutedAt: number;
       instanceId: string;
    }[] = [];
-   // topics is only needed if there are deleted users in the comparison, so only fetch topics if deleted users exist
-   const deletedUsersExist = ArrOfObj.hasKeyVal(comparison, 'type', 'userDeleted');
-   let topics = deletedUsersExist ? await FBConnect.getTopics() : null;
 
    for (let i = 0; i < comparison.length; i++) {
       const { roomId, userId, userStatus, type } = comparison[i];
@@ -72,7 +70,6 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
       // If user was in the before snapshot, but not in the after snapshot, then the user was deleted from RTDB
       if (type === 'userDeleted') {
          FBConnect.log(logMsgs.initializingUserDeletionInFS);
-         if (!MiscHelper.isNotFalsyOrEmpty(topics)) topics = await FBConnect.getTopics();
          const updatedRoomState = await GameHelper.SetRoomState.removeUser(
             roomData,
             topics,
@@ -161,8 +158,13 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
          }
          // If the user is still disconnected after the time limit, then delete the user from the room in RealtimeDB (This then triggers a new instance of onDataChange which updates Firestore accordingly)
          FBConnect.log(logMsgs.preDeletingUserInRTDB);
-         await userRefRT.remove();
-         FBConnect.log(logMsgs.postDeletingUserInRTDB);
+         await userRefRT.onDisconnect().cancel((error) => {
+            if (error) FBConnect.log(logMsgs.errorCancellingOnDisconnect, error);
+         });
+         await userRefRT.remove((error) => {
+            if (error) FBConnect.log(logMsgs.errorRemovingUserFromRTDB, error);
+            else FBConnect.log(logMsgs.postDeletingUserInRTDB);
+         });
       }
    }, GameHelper.CONSTANTS.DISCONNECTED_USER_TIME_LIMIT_MS);
 });

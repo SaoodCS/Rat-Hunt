@@ -139,7 +139,9 @@ export namespace FBConnect {
          statusChangedBeforeTimeoutEnd: `${instanceId} User ${userId} changed status again so a new instance of onDataChange is running, so skipping this setTimeout for ${userId}`,
          noLongerDisconnected: `${instanceId} User ${userId} is no longer disconnected so they will not be removed from room ${roomId}...`,
          preDeletingUserInRTDB: `${instanceId} User ${userId} is still disconnected after 5 minutes, so deleting ${userId} from the room ${roomId} in RTDB...`,
-         postDeletingUserInRTDB: `${instanceId} -- RTDB-MUTATION -- User ${userId} has been deleted from room ${roomId} in RTDB successfully`,
+         errorCancellingOnDisconnect: `${instanceId} -- ERROR!! -- Error cancelling onDisconnect for user ${userId} in room ${roomId} in RTDB: `,
+         errorRemovingUserFromRTDB: `${instanceId} -- ERROR!! -- Error removing user ${userId} from room ${roomId} in RTDB: `,
+         postDeletingUserInRTDB: `${instanceId} -- RTDB-MUTATION -- User ${userId} has been deleted from room ${roomId} in RTDB successfully and their onDisconnect has been cancelled...`,
       };
    };
 

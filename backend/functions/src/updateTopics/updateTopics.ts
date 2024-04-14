@@ -16,7 +16,7 @@ if (!admin.apps.length) {
    });
 }
 
-const topics: AppTypes.Topic[] = [
+export const topics: AppTypes.Topic[] = [
    animals,
    countries,
    movies,
