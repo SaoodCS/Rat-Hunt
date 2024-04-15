@@ -1,7 +1,7 @@
+import type { CSSProperties } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
 import Color from './colors';
-import type { CSSProperties } from 'react';
 
 export namespace MyCSS {
    export class PortableBp {
@@ -33,6 +33,37 @@ export namespace MyCSS {
             ${styles}
          }
       `;
+   }
+
+   export namespace Animations {
+      export type Types = {
+         fade?: boolean;
+         fromLeft?: boolean;
+         fromRight?: boolean;
+         fromTop?: boolean;
+         fromBottom?: boolean;
+         expand?: boolean;
+      };
+      export const multi = (types: Types, durationSec: number): FlattenSimpleInterpolation => {
+         const { fade, fromLeft, fromRight, fromTop, fromBottom, expand } = types;
+         return css`
+            animation: transitions ${durationSec}s;
+            @keyframes transitions {
+               0% {
+                  opacity: ${fade && 0};
+                  transform: ${fromLeft && 'translateX(-100%)'};
+                  transform: ${fromRight && 'translateX(100%)'};
+                  transform: ${fromTop && 'translateY(-100%)'};
+                  transform: ${fromBottom && 'translateY(100%)'};
+                  transform: ${expand && 'scale(0)'};
+               }
+               100% {
+                  opacity: 1;
+                  transform: none;
+               }
+            }
+         `;
+      };
    }
 
    export namespace Clickables {

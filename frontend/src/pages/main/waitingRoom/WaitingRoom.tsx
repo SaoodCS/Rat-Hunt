@@ -112,6 +112,7 @@ export default function WaitingRoom(): JSX.Element {
          localStyles={screenStyles()}
          boxSizing="border-box"
          height="100%"
+         animations={{ types: { fade: true }, durationSecs: 0.5 }}
       >
          <FlexRowWrapper position="relative" alignItems="center" padding="0em 0em 1em 0em" flex={1}>
             <WaitingRoomTitle>

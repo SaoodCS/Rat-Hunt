@@ -4,7 +4,6 @@ import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
 import GameHelper from '../../../../../../../shared/app/GameHelper/GameHelper';
 import MiscHelper from '../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
-import Fader from '../../../../../global/components/lib/animation/fader/Fader';
 import { TextColourizer } from '../../../../../global/components/lib/font/textColorizer/TextColourizer';
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
@@ -92,25 +91,20 @@ export default function Gameplay(): JSX.Element {
             >
                {gameplayHeadMap.map(({ text, condition, component }, index) => (
                   <ConditionalRender key={index} condition={condition}>
-                     <Fader
-                        fadeInCondition={condition}
-                        transitionDuration={0.5}
-                        height="100%"
-                        width="100%"
+                     <CurrentTurnAndFormItem
+                        animations={{ types: { fade: true }, durationSecs: 0.5 }}
                      >
-                        <CurrentTurnAndFormItem>
-                           <ConditionalRender condition={!!text}>
-                              <TextColourizer color={'yellow'} textAlign="center">
-                                 {text}
-                              </TextColourizer>
-                              <CurrentTurnCountdown />
-                           </ConditionalRender>
-                           <ConditionalRender condition={!!component}>
-                              <FormContainer>{component}</FormContainer>
-                              <CurrentTurnCountdown />
-                           </ConditionalRender>
-                        </CurrentTurnAndFormItem>
-                     </Fader>
+                        <ConditionalRender condition={!!text}>
+                           <TextColourizer color={'yellow'} textAlign="center">
+                              {text}
+                           </TextColourizer>
+                           <CurrentTurnCountdown />
+                        </ConditionalRender>
+                        <ConditionalRender condition={!!component}>
+                           <FormContainer>{component}</FormContainer>
+                           <CurrentTurnCountdown />
+                        </ConditionalRender>
+                     </CurrentTurnAndFormItem>
                   </ConditionalRender>
                ))}
             </FlexColumnWrapper>

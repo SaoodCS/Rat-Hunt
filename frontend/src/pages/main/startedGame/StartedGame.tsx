@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react';
 import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
 import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import { Wrapper } from '../../../global/components/lib/positionModifiers/wrapper/Style';
-import ConditionalRender from '../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../global/context/game/GameContext';
 import { ModalContext } from '../../../global/context/widget/modal/ModalContext';
 import { SplashScreenContext } from '../../../global/context/widget/splashScreen/SplashScreenContext';
@@ -23,8 +22,7 @@ export default function StartedGame(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const { toggleModal, setModalContent, setModalHeader } = useContext(ModalContext);
-   const { toggleSplashScreen, setSplashScreenContent, isSplashScreenDisplayed } =
-      useContext(SplashScreenContext);
+   const { toggleSplashScreen, setSplashScreenContent } = useContext(SplashScreenContext);
    const [showRoundSummary, setShowRoundSummary] = useState(false);
 
    useEffect(() => {
@@ -58,18 +56,14 @@ export default function StartedGame(): JSX.Element {
    }, [roomData?.gameState?.currentTurn]);
 
    return (
-      <ConditionalRender condition={!isSplashScreenDisplayed}>
-         <GamePageWrapper>
-            <GameHeaderWrapper>
-               <GameDetails />
-            </GameHeaderWrapper>
-            <GameStateWrapper>
-               {showRoundSummary ? <RoundSummary /> : <Gameplay />}
-            </GameStateWrapper>
-            <TopicBoardWrapper>
-               <TopicBoard />
-            </TopicBoardWrapper>
-         </GamePageWrapper>
-      </ConditionalRender>
+      <GamePageWrapper animations={{ types: { fade: true }, durationSecs: 0.5 }}>
+         <GameHeaderWrapper>
+            <GameDetails />
+         </GameHeaderWrapper>
+         <GameStateWrapper>{showRoundSummary ? <RoundSummary /> : <Gameplay />}</GameStateWrapper>
+         <TopicBoardWrapper>
+            <TopicBoard />
+         </TopicBoardWrapper>
+      </GamePageWrapper>
    );
 }

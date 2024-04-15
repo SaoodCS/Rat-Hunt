@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import Color from '../../../../global/css/colors';
+import { Wrapper } from '../../../../global/components/lib/positionModifiers/wrapper/Style';
 
 const headerHeightAsPercentage = 12;
 const gameplayHeightAsPercentage = 43;
 
-export const GamePageWrapper = styled.div`
+export const GamePageWrapper = styled(Wrapper)`
    height: 100%;
 `;
 
