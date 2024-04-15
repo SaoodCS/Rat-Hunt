@@ -9,7 +9,7 @@ import DateHelper from '../../../shared/lib/helpers/date/DateHelper';
 import MiscHelper from '../../../shared/lib/helpers/miscHelper/MiscHelper';
 import StringHelper from '../../../shared/lib/helpers/string/StringHelper';
 import FBConnect from './helpers/FirebaseConnect';
-import { topics } from './updateTopics/updateTopics';
+import { topics } from './topics/topics';
 
 if (!admin.apps.length) {
    admin.initializeApp();
