@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as serviceAccount from '../../env/service-account-key.json';
-import { topics } from '../topics/topics';
+import { topics } from '../../../../shared/app/utils/topics/topics';
 
 if (!admin.apps.length) {
    admin.initializeApp({

@@ -102,12 +102,6 @@ export namespace FBConnect {
       return (await userRefRT.once('value')).val() as UserBeforeAfter | null;
    }
 
-   export async function getTopics(): Promise<AppTypes.Topic[]> {
-      const topicsSnapshot = await admin.firestore().collection('topics').doc('topics').get();
-      if (!topicsSnapshot.exists) throw new Error('Topics document does not exist in Firestore');
-      return topicsSnapshot.data()?.topics as AppTypes.Topic[];
-   }
-
    export const getLogMsgs = (
       instanceId: string,
       roomId: string,

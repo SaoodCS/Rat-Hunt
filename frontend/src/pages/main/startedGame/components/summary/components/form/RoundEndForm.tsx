@@ -14,6 +14,7 @@ import InputCombination from '../../../../../../../global/components/lib/form/in
 import { StaticButton } from '../../../../../../../global/components/lib/button/staticButton/Style';
 import type AppTypes from '../../../../../../../../../shared/app/types/AppTypes';
 import axios from 'axios';
+import { topics } from '../../../../../../../../../shared/app/utils/topics/topics';
 
 interface IRoundEndForm {
    isLastRound: boolean;
@@ -29,7 +30,6 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
       RoundEndFormClass.form.initialErrors,
       RoundEndFormClass.form.validate(isLastRound),
    );
-   const { data: topicsData } = DBConnect.FSDB.Get.topics();
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const setRoomData = DBConnect.FSDB.Set.room({});
 
@@ -37,7 +37,6 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
       const { isFormValid } = initHandleSubmit(e);
       if (!isFormValid) return;
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
-      if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
       const { gameState } = roomData;
       const { newTopic, noOfRounds } = form;
       let updatedGameState: AppTypes.GameState;
@@ -45,17 +44,11 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
          updatedGameState = await GameHelper.SetGameState.resetGame(
             gameState,
             noOfRounds,
-            topicsData,
             newTopic,
             axios,
          );
       } else {
-         updatedGameState = await GameHelper.SetGameState.nextRound(
-            gameState,
-            topicsData,
-            newTopic,
-            axios,
-         );
+         updatedGameState = await GameHelper.SetGameState.nextRound(gameState, newTopic, axios);
       }
       await setRoomData.mutateAsync({
          ...roomData,
@@ -67,13 +60,13 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
       input: (typeof RoundEndFormClass.form.inputs)[0],
    ): IDropDownOptions | undefined {
       if (input.dropDownOptions === undefined) return;
-      if (input.name === 'newTopic' && MiscHelper.isNotFalsyOrEmpty(topicsData)) {
-         const topics = topicsData.flatMap((topic) => topic.key);
-         if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return input.dropDownOptions;
+      if (input.name === 'newTopic') {
+         const topicsNames = topics.flatMap((topic) => topic.key);
+         if (!MiscHelper.isNotFalsyOrEmpty(topics)) return input.dropDownOptions;
          const dropDownOptions: IDropDownOptions['options'] = [];
-         const topicLabels = ArrayHelper.toTitleCase(topics);
-         for (let i = 0; i < topics.length; i++) {
-            dropDownOptions.push({ value: topics[i], label: topicLabels[i] });
+         const topicLabels = ArrayHelper.toTitleCase(topicsNames);
+         for (let i = 0; i < topicsNames.length; i++) {
+            dropDownOptions.push({ value: topicsNames[i], label: topicLabels[i] });
          }
          return {
             ...input.dropDownOptions,

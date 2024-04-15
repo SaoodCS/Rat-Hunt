@@ -8,26 +8,21 @@ import DBConnect from '../../../../../global/database/DBConnect/DBConnect';
 import { BoardCell, BoardContainer, BoardRow, CellValue } from './style/Style';
 import GameHelper from '../../../../../../../shared/app/GameHelper/GameHelper';
 import MiscHelper from '../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
+import { topics } from '../../../../../../../shared/app/utils/topics/topics';
 
 export default function TopicBoard(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords, setActiveTopicWords } =
       useContext(GameContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
-   const { data: topicsData } = DBConnect.FSDB.Get.topics();
    const [rows, setRows] = useState<GameHelper.I.WordCell[][]>([[]]);
 
    useEffect(() => {
       // this useEffect is responsible for updating the activeTopicWords when the activeTopic changes
-      const roomDataExists = MiscHelper.isNotFalsyOrEmpty(roomData);
-      const topicsDataExists = MiscHelper.isNotFalsyOrEmpty(topicsData);
-      if (roomDataExists && topicsDataExists) {
-         const activeTopicWords = GameHelper.Get.topicWordsAndCells(
-            topicsData,
-            roomData.gameState.activeTopic,
-         );
-         setActiveTopicWords(activeTopicWords);
-      }
-   }, [roomData?.gameState?.activeWord, topicsData]);
+      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
+      const { activeTopic } = roomData.gameState;
+      const activeTopicWords = GameHelper.Get.topicWordsAndCells(activeTopic);
+      setActiveTopicWords(activeTopicWords);
+   }, [roomData?.gameState?.activeWord, topics]);
 
    useEffect(() => {
       const rowA = activeTopicWords.filter((word) => word.cellId.charAt(0) === 'A');

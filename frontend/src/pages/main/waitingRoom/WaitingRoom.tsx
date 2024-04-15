@@ -1,6 +1,7 @@
 import { PlayCircleFill } from '@styled-icons/bootstrap/PlayCircleFill';
 import { CircleUser } from '@styled-icons/fa-solid/CircleUser';
 import { SquareShareNodes } from '@styled-icons/fa-solid/SquareShareNodes';
+import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
@@ -20,6 +21,7 @@ import MyCSS from '../../../global/css/MyCSS';
 import Color from '../../../global/css/colors';
 import DBConnect from '../../../global/database/DBConnect/DBConnect';
 import Device from '../../../global/helpers/pwa/deviceHelper';
+import useCustomNavigate from '../../../global/hooks/useCustomNavigate';
 import {
    ItemLabel,
    ItemValue,
@@ -28,8 +30,6 @@ import {
    UserListItemContainer,
    WaitingRoomTitle,
 } from './style/Style';
-import axios from 'axios';
-import useCustomNavigate from '../../../global/hooks/useCustomNavigate';
 
 export default function WaitingRoom(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -46,7 +46,6 @@ export default function WaitingRoom(): JSX.Element {
    const [disablePlay, setDisablePlay] = useState(false);
    const { toggleBanner, setBannerMessage, setBannerType, setBannerZIndex } =
       useContext(BannerContext);
-   const { data: topicsData } = DBConnect.FSDB.Get.topics();
    const setRoomData = DBConnect.FSDB.Set.room({});
    const [allUsers, setAllUsers] = useState<string[]>([]);
 
@@ -76,12 +75,10 @@ export default function WaitingRoom(): JSX.Element {
          return;
       }
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
-      if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
       const { gameState } = roomData;
       const { activeTopic } = gameState;
       const initialRoundGameState = await GameHelper.SetGameState.nextRound(
          gameState,
-         topicsData,
          activeTopic,
          axios,
       );

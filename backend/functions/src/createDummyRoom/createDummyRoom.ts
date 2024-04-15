@@ -1,8 +1,8 @@
 import * as admin from 'firebase-admin';
 import type AppTypes from '../../../../shared/app/types/AppTypes';
 import * as serviceAccount from '../../env/service-account-key.json';
-import FBConnect from '../helpers/FirebaseConnect';
 import { addDummyUsersToRoom, baseDummyUser, generateDummyUsers } from './helpers/helpers';
+import { topics } from '../../../../shared/app/utils/topics/topics';
 
 if (!admin.apps.length) {
    admin.initializeApp({
@@ -11,8 +11,6 @@ if (!admin.apps.length) {
 }
 
 async function createDummyRoom(): Promise<void> {
-   const topics = await FBConnect.getTopics();
-   if (!topics) throw new Error('No topics found');
    const selectedTopic = topics[0].key;
    const selectedWord = topics[0].values[0];
    const baseDummy = await baseDummyUser();

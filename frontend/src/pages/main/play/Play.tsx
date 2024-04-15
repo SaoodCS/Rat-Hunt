@@ -4,12 +4,12 @@ import { useContext, useEffect, useState } from 'react';
 import { css, type FlattenSimpleInterpolation } from 'styled-components';
 import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
 import type AppTypes from '../../../../../shared/app/types/AppTypes';
+import { topics } from '../../../../../shared/app/utils/topics/topics';
 import ArrayHelper from '../../../../../shared/lib/helpers/arrayHelper/ArrayHelper';
 import ArrOfObj from '../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import LogoFader from '../../../global/components/app/logo/LogoFader';
 import { StaticButton } from '../../../global/components/lib/button/staticButton/Style';
-import OfflineFetch from '../../../global/components/lib/fetch/offlineFetch/offlineFetch';
 import type { IDropDownOptions } from '../../../global/components/lib/form/dropDown/DropDownInput';
 import InputCombination from '../../../global/components/lib/form/inputCombination/InputCombination';
 import { StyledForm } from '../../../global/components/lib/form/style/Style';
@@ -18,9 +18,9 @@ import { GameContext } from '../../../global/context/game/GameContext';
 import useApiErrorContext from '../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import MyCSS from '../../../global/css/MyCSS';
 import DBConnect from '../../../global/database/DBConnect/DBConnect';
+import useCustomNavigate from '../../../global/hooks/useCustomNavigate';
 import useForm from '../../../global/hooks/useForm';
 import PlayFormClass from './class/PlayForm';
-import useCustomNavigate from '../../../global/hooks/useCustomNavigate';
 
 export default function Play(): JSX.Element {
    const { apiError } = useApiErrorContext();
@@ -30,7 +30,6 @@ export default function Play(): JSX.Element {
       PlayFormClass.form.initialErrors,
       PlayFormClass.form.validate,
    );
-   const { isPaused, data } = DBConnect.FSDB.Get.topics();
    const { data: allRoomIds } = DBConnect.FSDB.Get.allRoomIds();
    const navigation = useCustomNavigate();
    const setRoomData = DBConnect.FSDB.Set.room({});
@@ -39,8 +38,8 @@ export default function Play(): JSX.Element {
 
    useEffect(() => {
       setShowRoomIdField(form.joinOrHost === 'join');
-      setShowHostFields(MiscHelper.isNotFalsyOrEmpty(data) && form.joinOrHost === 'host');
-   }, [data, form.joinOrHost]);
+      setShowHostFields(form.joinOrHost === 'host');
+   }, [form.joinOrHost]);
 
    async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
       const { isFormValid } = initHandleSubmit(e);
@@ -91,13 +90,13 @@ export default function Play(): JSX.Element {
       input: (typeof PlayFormClass.form.inputs)[0],
    ): IDropDownOptions | undefined {
       if (input.dropDownOptions === undefined) return;
-      if (input.name === 'topic' && MiscHelper.isNotFalsyOrEmpty(data)) {
-         const topics = data.flatMap((topic) => topic.key);
-         if (!MiscHelper.isNotFalsyOrEmpty(data)) return input.dropDownOptions;
+      if (input.name === 'topic') {
+         const topicNames = topics.flatMap((topic) => topic.key);
+         if (!MiscHelper.isNotFalsyOrEmpty(topics)) return input.dropDownOptions;
          const options: IDropDownOptions['options'] = [];
-         const topicLabels = ArrayHelper.toTitleCase(topics);
-         for (let i = 0; i < topics.length; i++) {
-            options.push({ value: topics[i], label: topicLabels[i] });
+         const topicLabels = ArrayHelper.toTitleCase(topicNames);
+         for (let i = 0; i < topicNames.length; i++) {
+            options.push({ value: topicNames[i], label: topicLabels[i] });
          }
          return {
             ...input.dropDownOptions,
@@ -106,10 +105,6 @@ export default function Play(): JSX.Element {
       }
       return input.dropDownOptions;
    }
-
-   // if (isLoading && !isPaused) return <Loader isDisplayed />;
-   // if (error) return <FetchError />;
-   if (isPaused) return <OfflineFetch />;
 
    return (
       <FlexColumnWrapper

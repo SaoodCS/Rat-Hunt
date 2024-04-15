@@ -6,6 +6,7 @@ import DateHelper from '../../lib/helpers/date/DateHelper';
 import MiscHelper from '../../lib/helpers/miscHelper/MiscHelper';
 import NumberHelper from '../../lib/helpers/number/NumberHelper';
 import type AppTypes from '../types/AppTypes';
+import { topics } from '../utils/topics/topics';
 
 export namespace GameHelper {
    export namespace I {
@@ -23,8 +24,8 @@ export namespace GameHelper {
    }
 
    export namespace New {
-      export function word(topicsData: AppTypes.Topic[], activeTopic: string): string {
-         const topic = Get.topic(activeTopic, topicsData);
+      export function word(activeTopic: string): string {
+         const topic = Get.topic(activeTopic);
          if (!MiscHelper.isNotFalsyOrEmpty(topic)) {
             throw new Error('Topic does not exist in topicsData.');
          }
@@ -99,19 +100,16 @@ export namespace GameHelper {
    }
 
    export namespace Get {
-      export function topic(topicKey: string, topicsData: AppTypes.Topic[]): AppTypes.Topic {
-         const topic = ArrOfObj.getObj(topicsData, 'key', topicKey);
+      export function topic(topicKey: string): AppTypes.Topic {
+         const topic = ArrOfObj.getObj(topics, 'key', topicKey);
          if (!MiscHelper.isNotFalsyOrEmpty(topic)) {
             throw new Error('Topic does not exist in topicsData.');
          }
          return topic;
       }
 
-      export function topicWordsAndCells(
-         topics: AppTypes.Topic[],
-         activeTopic: string,
-      ): GameHelper.I.WordCell[] {
-         const topicObj = Get.topic(activeTopic, topics);
+      export function topicWordsAndCells(activeTopic: string): GameHelper.I.WordCell[] {
+         const topicObj = Get.topic(activeTopic);
          const words = topicObj.values;
          const sortedWords = ArrayHelper.sort(words);
          const words16 = sortedWords.slice(0, 16);
@@ -300,7 +298,6 @@ export namespace GameHelper {
 
       export async function removeUser(
          roomData: AppTypes.Room,
-         topicsData: AppTypes.Topic[],
          userId: string,
          axios: AxiosStatic,
       ): Promise<AppTypes.Room> {
@@ -315,7 +312,6 @@ export namespace GameHelper {
          if (currentRat === userId && gamePhase !== 'roundSummary') {
             const updatedGameState = await GameHelper.SetGameState.resetCurrentRound(
                gameStateWithoutUser,
-               topicsData,
                axios,
             );
             return GameHelper.SetRoomState.keysVals(roomData, [
@@ -373,13 +369,12 @@ export namespace GameHelper {
       export async function resetGame(
          gameState: AppTypes.GameState,
          noOfRounds: number,
-         topicsData: AppTypes.Topic[],
          topic: string,
          axios: AxiosStatic,
       ): Promise<AppTypes.GameState> {
          const { userStates, turnQueue } = gameState;
          const newRat = ArrOfObj.getRandItem(userStates).userId;
-         const newWord = GameHelper.New.word(topicsData, topic);
+         const newWord = GameHelper.New.word(topic);
          const updatedUserStates = ArrOfObj.setKeyValsInAllObjects(userStates, [
             { key: 'clue', value: '' },
             { key: 'votedFor', value: '' },
@@ -406,12 +401,11 @@ export namespace GameHelper {
 
       export async function resetCurrentRound(
          gameState: AppTypes.GameState,
-         topicsData: AppTypes.Topic[],
          axios: AxiosStatic,
       ): Promise<AppTypes.GameState> {
          const { userStates, activeTopic, turnQueue } = gameState;
          const newRat = ArrOfObj.getRandItem(userStates).userId;
-         const newWord = GameHelper.New.word(topicsData, activeTopic);
+         const newWord = GameHelper.New.word(activeTopic);
          const updatedUserStates = ArrOfObj.setKeyValsInAllObjects(userStates, [
             { key: 'clue', value: '' },
             { key: 'votedFor', value: '' },
@@ -433,14 +427,13 @@ export namespace GameHelper {
 
       export async function nextRound(
          gameState: AppTypes.GameState,
-         topicsData: AppTypes.Topic[],
          newTopic: string,
          axios: AxiosStatic,
       ): Promise<AppTypes.GameState> {
          const { userStates, turnQueue } = gameState;
          const newRat = ArrOfObj.getRandItem(userStates).userId;
          const { currentRound } = gameState;
-         const newWord = GameHelper.New.word(topicsData, newTopic);
+         const newWord = GameHelper.New.word(newTopic);
          const updatedUserStates = ArrOfObj.setKeyValsInAllObjects(userStates, [
             { key: 'clue', value: '' },
             { key: 'votedFor', value: '' },

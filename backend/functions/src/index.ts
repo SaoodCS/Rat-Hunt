@@ -9,7 +9,6 @@ import DateHelper from '../../../shared/lib/helpers/date/DateHelper';
 import MiscHelper from '../../../shared/lib/helpers/miscHelper/MiscHelper';
 import StringHelper from '../../../shared/lib/helpers/string/StringHelper';
 import FBConnect from './helpers/FirebaseConnect';
-import { topics } from './topics/topics';
 
 if (!admin.apps.length) {
    admin.initializeApp();
@@ -70,12 +69,7 @@ export const onDataChange = functions.database.ref('/').onWrite(async (change) =
       // If user was in the before snapshot, but not in the after snapshot, then the user was deleted from RTDB
       if (type === 'userDeleted') {
          FBConnect.log(logMsgs.initializingUserDeletionInFS);
-         const updatedRoomState = await GameHelper.SetRoomState.removeUser(
-            roomData,
-            topics,
-            userId,
-            axios,
-         );
+         const updatedRoomState = await GameHelper.SetRoomState.removeUser(roomData, userId, axios);
          await roomRefFS.update({ gameState: updatedRoomState.gameState });
          FBConnect.log(logMsgs.postDeletingUserInFS);
          continue;

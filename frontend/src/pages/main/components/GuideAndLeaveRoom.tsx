@@ -33,7 +33,6 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    const [isStartedGamePage, setIsStartedGamePage] = useState(currentPath.includes('started'));
    const [isPlayPage, setIsPlayPage] = useState(currentPath.includes('play'));
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
-   const { data: topicsData } = DBConnect.FSDB.Get.topics();
    const navigation = useCustomNavigate();
    const queryClient = useQueryClient();
 
@@ -52,7 +51,6 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
 
    async function handleLeaveRoom(): Promise<void> {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
-      if (!MiscHelper.isNotFalsyOrEmpty(topicsData)) return;
       await DBConnect.RTDB.Delete.user(localDbUser, localDbRoom);
       setLocalDbRoom('');
       setLocalDbUser('');
