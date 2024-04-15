@@ -1,7 +1,5 @@
 import type { ReactNode } from 'react';
-import { useEffect, useMemo, useState } from 'react';
-import ConditionalRender from '../../components/lib/renderModifiers/conditionalRender/ConditionalRender';
-import SplashScreen from '../../components/lib/splashScreen/SplashScreen';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import MyCSS from '../../css/MyCSS';
 import Color from '../../css/colors';
 import { GlobalTheme } from '../../css/theme';
@@ -19,23 +17,17 @@ export default function ThemeContextProvider(props: IThemeContextProvider): JSX.
    const [isPortableDevice, setIsPortableDevice] = useState<boolean>(
       window.innerWidth < MyCSS.PortableBp.asNum,
    );
-   const [showSplashScreen, setShowSplashScreen] = useState(Device.isPwa());
 
    useEffect(() => {
-      let timer: NodeJS.Timeout | null = null;
-      if (showSplashScreen) {
-         timer = setTimeout(() => setShowSplashScreen(false), 1750);
-      }
       const handleResize = (): void =>
          setIsPortableDevice(window.innerWidth < MyCSS.PortableBp.asNum);
       window.addEventListener(`resize`, handleResize);
       return () => {
-         timer && clearTimeout(timer);
          window.removeEventListener(`resize`, handleResize);
       };
    }, []);
 
-   useEffect(() => {
+   useLayoutEffect(() => {
       const metaThemeColor = document.querySelector(`meta[name=theme-color]`);
       if (metaThemeColor) {
          metaThemeColor.setAttribute(`content`, isDarkTheme ? Color.darkThm.bg : Color.lightThm.bg);
@@ -54,11 +46,8 @@ export default function ThemeContextProvider(props: IThemeContextProvider): JSX.
    return (
       <>
          <ThemeContext.Provider value={contextMemo}>
-            <SplashScreen isDisplayed={showSplashScreen} />
-            <ConditionalRender condition={!showSplashScreen}>
-               <GlobalTheme darkTheme={isDarkTheme} />
-               {children}
-            </ConditionalRender>
+            <GlobalTheme darkTheme={isDarkTheme} />
+            {children}
          </ThemeContext.Provider>
       </>
    );

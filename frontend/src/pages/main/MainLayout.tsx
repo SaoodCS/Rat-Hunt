@@ -16,12 +16,9 @@ import useHeaderContext from '../../global/context/widget/header/hooks/useHeader
 import Color from '../../global/css/colors';
 import GuideAndLeaveRoom from './components/GuideAndLeaveRoom';
 import RoomIdBtn from './startedGame/components/roomIdBtn/RoomIdBtn';
-import { useContext } from 'react';
-import { SplashScreenContext } from '../../global/context/widget/splashScreen/SplashScreenContext';
 
 export default function MainLayout(): JSX.Element {
    const { isDarkTheme, isPortableDevice } = useThemeContext();
-   const { isSplashScreenDisplayed } = useContext(SplashScreenContext);
    const {
       headerTitle,
       showBackBtn,
@@ -43,26 +40,24 @@ export default function MainLayout(): JSX.Element {
    return (
       <>
          <GameContextProvider>
-            <ConditionalRender condition={!isSplashScreenDisplayed}>
-               <Header isDarkTheme={isDarkTheme}>
-                  <ConditionalRender condition={showBackBtn}>
-                     <StyledBackArr
-                        onClick={handleBackBtnClick}
-                        darktheme={BoolHelper.boolToStr(isDarkTheme)}
-                     />
-                  </ConditionalRender>
-                  <TextColourizer
-                     color={Color.darkThm.accent}
-                     fontSize={isPortableDevice ? '1.8em' : '4rem'}
-                  >
-                     {headerTitle}
-                  </TextColourizer>
-                  <HeaderSubtitleWrapper>{headerSubtitleElement}</HeaderSubtitleWrapper>
-                  <HeaderRightElWrapper isDarkTheme={isDarkTheme}>
-                     {headerRightElement}
-                  </HeaderRightElWrapper>
-               </Header>
-            </ConditionalRender>
+            <Header isDarkTheme={isDarkTheme}>
+               <ConditionalRender condition={showBackBtn}>
+                  <StyledBackArr
+                     onClick={handleBackBtnClick}
+                     darktheme={BoolHelper.boolToStr(isDarkTheme)}
+                  />
+               </ConditionalRender>
+               <TextColourizer
+                  color={Color.darkThm.accent}
+                  fontSize={isPortableDevice ? '1.8em' : '4rem'}
+               >
+                  {headerTitle}
+               </TextColourizer>
+               <HeaderSubtitleWrapper>{headerSubtitleElement}</HeaderSubtitleWrapper>
+               <HeaderRightElWrapper isDarkTheme={isDarkTheme}>
+                  {headerRightElement}
+               </HeaderRightElWrapper>
+            </Header>
             <Body isDarkTheme={isDarkTheme}>
                <Outlet />
             </Body>
