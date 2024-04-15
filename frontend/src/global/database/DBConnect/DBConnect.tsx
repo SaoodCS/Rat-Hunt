@@ -55,28 +55,7 @@ export namespace DBConnect {
                      throw new APIHelper.ErrorThrower(APIHelper.handleError(e));
                   }
                },
-               // enabled: false, // NOTE: May be useful to do this and let the onSnapshot listener handle the updates
-               ...options,
-            });
-         }
-
-         export function topics(
-            options: UseQueryOptions<AppTypes.Topic[]> = {},
-         ): UseQueryResult<AppTypes.Topic[], unknown> {
-            return useQuery({
-               queryKey: [CONSTS.QUERY_KEYS.GET_TOPICS],
-               queryFn: async (): Promise<AppTypes.Topic[]> => {
-                  try {
-                     const docRef = doc(firestore, CONSTS.TOPICS_COLLECTION, CONSTS.TOPICS_DOC);
-                     const docSnap = await getDoc(docRef);
-                     if (docSnap.exists()) {
-                        return docSnap.data().topics;
-                     }
-                     throw new APIHelper.ErrorThrower('Error: Document Does Not Exist');
-                  } catch (e) {
-                     throw new APIHelper.ErrorThrower(APIHelper.handleError(e));
-                  }
-               },
+               enabled: false, // NOTE: May be useful to do this and let the onSnapshot listener handle the updates
                ...options,
             });
          }

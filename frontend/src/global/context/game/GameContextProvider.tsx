@@ -1,17 +1,15 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { useQueryClient } from '@tanstack/react-query';
-import { onValue } from 'firebase/database';
 import { onSnapshot } from 'firebase/firestore';
 import type { ReactNode } from 'react';
 import { useContext, useEffect, useState } from 'react';
 import GameHelper from '../../../../../shared/app/GameHelper/GameHelper';
-import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
+import type AppTypes from '../../../../../shared/app/types/AppTypes';
 import DBConnect from '../../database/DBConnect/DBConnect';
 import useCustomNavigate from '../../hooks/useCustomNavigate';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { DeviceContext } from '../device/DeviceContext';
 import { GameContext } from './GameContext';
-// TODO: RTDB also has an unsub event listener called onValue to listen to changes in the userStatus of a user in RTDB (may be useful to implement this here too)
 
 interface IGameContextProvider {
    children: ReactNode;
@@ -22,59 +20,37 @@ export default function GameContextProvider(props: IGameContextProvider): JSX.El
    const [activeTopicWords, setActiveTopicWords] = useState<GameHelper.I.WordCell[]>([]);
    const [localDbUser, setLocalDbUser] = useLocalStorage(DBConnect.Local.STORAGE_KEYS.USER, '');
    const [localDbRoom, setLocalDbRoom] = useLocalStorage(DBConnect.Local.STORAGE_KEYS.ROOM, '');
-   const { data: roomData, isLoading } = DBConnect.FSDB.Get.room(localDbRoom);
    const { isInForeground } = useContext(DeviceContext);
-   const [initialRender, setInitialRender] = useState(true);
    const navigation = useCustomNavigate();
    const queryClient = useQueryClient();
-
-   function clearDataAndNavToPlay(): void {
-      setLocalDbRoom('');
-      setLocalDbUser('');
-      queryClient.clear();
-      navigation('/main/play');
-   }
 
    useEffect(() => {
       // This useEffect listens to changes in the firestore room document and updates the roomData cache when the document is updated (doesn't re-run the getRoomQuery, so onSuccess etc. query events are not triggered)
       const docRef = DBConnect.FSDB.Get.roomRef(localDbRoom);
-      const unsubscribe = onSnapshot(docRef, (doc) => {
-         const { isUserInRoom } = GameHelper.Check;
-         if (doc.exists() && isUserInRoom(localDbUser, doc.data().gameState.userStates)) {
-            queryClient.setQueryData([DBConnect.FSDB.CONSTS.QUERY_KEYS.GET_ROOM], doc.data());
-            return;
+      const unsubscribe = onSnapshot(docRef, async (doc) => {
+         if (doc.exists()) {
+            const roomInScope = doc.data() as AppTypes.Room;
+            const { gameStarted } = roomInScope;
+            const { userStates } = roomInScope.gameState;
+            if (GameHelper.Check.isUserInRoom(localDbUser, userStates)) {
+               const { userStatus } = GameHelper.Get.userState(localDbUser, userStates);
+               if (userStatus !== 'connected' && isInForeground) {
+                  await DBConnect.RTDB.Set.userStatus(localDbUser, localDbRoom);
+               }
+               queryClient.setQueryData([DBConnect.FSDB.CONSTS.QUERY_KEYS.GET_ROOM], roomInScope);
+               navigation(gameStarted ? '/main/startedgame' : '/main/waitingroom');
+               return;
+            }
+            alert('You have been removed from the room!');
          }
-         clearDataAndNavToPlay();
+         setLocalDbRoom('');
+         setLocalDbUser('');
+         queryClient.clear();
+         navigation('/main/play');
          unsubscribe();
       });
       return () => unsubscribe();
-   }, [localDbRoom, isInForeground]); // these dependency arrays run the cleanup function when the localDbRoom changes or the app goes to the foreground before a new event listener is created
-
-   useEffect(() => {
-      // This useEffect runs only once after the app finishes it's first attempt to fetch the roomData from firestore
-      if (isLoading || !initialRender) return;
-      setInitialRender(false);
-      if (!MiscHelper.isNotFalsyOrEmpty(roomData)) {
-         clearDataAndNavToPlay();
-         return;
-      }
-      const { gameStarted, gameState } = roomData;
-      if (!GameHelper.Check.isUserInRoom(localDbUser, gameState.userStates)) {
-         alert('You have been removed from the room!');
-         clearDataAndNavToPlay();
-         return;
-      }
-      navigation(gameStarted ? '/main/startedgame' : '/main/waitingroom');
-      DBConnect.RTDB.Set.userStatus(localDbUser, roomData.roomId);
-   }, [isLoading]);
-
-   useEffect(() => {
-      // This useEffect runs whenever the app is back in the foreground and sets the connection status to connected in RTDB if the user is still in a room
-      if (!(isInForeground && MiscHelper.isNotFalsyOrEmpty(roomData))) return;
-      DBConnect.RTDB.Get.userStatus(localDbUser, localDbRoom).then((userStatus): void => {
-         if (userStatus === 'disconnected') DBConnect.RTDB.Set.userStatus(localDbUser, localDbRoom);
-      });
-   }, [isInForeground]);
+   }, [localDbRoom, localDbUser, isInForeground]);
 
    return (
       <GameContext.Provider
