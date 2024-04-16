@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react';
 import { useLayoutEffect, useMemo, useState } from 'react';
 import NumberHelper from '../../../../../../shared/lib/helpers/number/NumberHelper';
+import Fader from '../../../components/lib/animation/fader/Fader';
+import ConditionalRender from '../../../components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import SplashScreen from '../../../components/lib/splashScreen/SplashScreen';
 import Device from '../../../helpers/pwa/deviceHelper';
 import { SplashScreenContext } from './SplashScreenContext';
-import Fader from '../../../components/lib/animation/fader/Fader';
 
 interface ISplashScreenContextProvider {
    children: ReactNode;
@@ -54,9 +55,13 @@ export default function SplashScreenContextProvider(
    return (
       <>
          <SplashScreenContext.Provider value={contextMemo}>
-            <Fader fadeInCondition={!isSplashScreenDisplayed}>{children}</Fader>
+            <Fader fadeInCondition={!isSplashScreenDisplayed} transitionDuration={2}>
+               {children}
+            </Fader>
          </SplashScreenContext.Provider>
-         <SplashScreen isDisplayed={isSplashScreenDisplayed} component={splashScreenContent} />
+         <ConditionalRender condition={isSplashScreenDisplayed}>
+            <SplashScreen isDisplayed={isSplashScreenDisplayed} component={splashScreenContent} />
+         </ConditionalRender>
       </>
    );
 }
