@@ -55,7 +55,12 @@ export default function SplashScreenContextProvider(
    return (
       <>
          <SplashScreenContext.Provider value={contextMemo}>
-            <Fader fadeInCondition={!isSplashScreenDisplayed} transitionDuration={2}>
+            <Fader
+               fadeInCondition={!isSplashScreenDisplayed}
+               transitionDuration={2}
+               height={'100dvh'}
+               width={'100dvw'}
+            >
                {children}
             </Fader>
          </SplashScreenContext.Provider>
