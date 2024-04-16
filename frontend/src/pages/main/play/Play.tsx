@@ -114,7 +114,6 @@ export default function Play(): JSX.Element {
          localStyles={screenStyles()}
          padding="1em 0em 1em 0em"
          boxSizing="border-box"
-         animations={{ types: { fade: true }, durationSecs: 0.5 }}
       >
          <LogoFader />
          <StyledForm

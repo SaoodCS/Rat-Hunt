@@ -91,9 +91,7 @@ export default function Gameplay(): JSX.Element {
             >
                {gameplayHeadMap.map(({ text, condition, component }, index) => (
                   <ConditionalRender key={index} condition={condition}>
-                     <CurrentTurnAndFormItem
-                        animations={{ types: { fade: true }, durationSecs: 0.5 }}
-                     >
+                     <CurrentTurnAndFormItem>
                         <ConditionalRender condition={!!text}>
                            <TextColourizer color={'yellow'} textAlign="center">
                               {text}

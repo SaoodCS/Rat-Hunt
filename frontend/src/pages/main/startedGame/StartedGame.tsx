@@ -56,7 +56,7 @@ export default function StartedGame(): JSX.Element {
    }, [roomData?.gameState?.currentTurn]);
 
    return (
-      <GamePageWrapper animations={{ types: { fade: true }, durationSecs: 0.5 }}>
+      <GamePageWrapper>
          <GameHeaderWrapper>
             <GameDetails />
          </GameHeaderWrapper>

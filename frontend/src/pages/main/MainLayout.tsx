@@ -16,6 +16,7 @@ import useHeaderContext from '../../global/context/widget/header/hooks/useHeader
 import Color from '../../global/css/colors';
 import GuideAndLeaveRoom from './components/GuideAndLeaveRoom';
 import RoomIdBtn from './startedGame/components/roomIdBtn/RoomIdBtn';
+import RouteTransitioner from '../../global/components/lib/animation/routeTransitioner/RouteTransitioner';
 
 export default function MainLayout(): JSX.Element {
    const { isDarkTheme, isPortableDevice } = useThemeContext();
@@ -38,7 +39,7 @@ export default function MainLayout(): JSX.Element {
    );
 
    return (
-      <>
+      <RouteTransitioner>
          <GameContextProvider>
             <Header isDarkTheme={isDarkTheme}>
                <ConditionalRender condition={showBackBtn}>
@@ -62,6 +63,6 @@ export default function MainLayout(): JSX.Element {
                <Outlet />
             </Body>
          </GameContextProvider>
-      </>
+      </RouteTransitioner>
    );
 }
