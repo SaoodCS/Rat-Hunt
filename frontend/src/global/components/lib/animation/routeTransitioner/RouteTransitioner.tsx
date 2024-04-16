@@ -17,7 +17,7 @@ export default function RouteTransitioner(props: RouteTransitionerProps): JSX.El
       startAnimation = { opacity: 0 },
       endAnimation = { opacity: 1 },
       leavingPageAnimation = { opacity: 0 },
-      duration = 0.3,
+      duration = 0.25,
       style = { width: '100dvw', height: '100dvh' },
    } = props;
    return (
