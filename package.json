@@ -19,7 +19,7 @@
     "git-prune-local": "npx git-removed-branches --prune --force",
     "git-pull-all": "powershell -ExecutionPolicy Bypass -File .\\scripts\\gitPullAll.ps1",
     "git-sync": "npm run git-pull-all && npm run git-prune-remote && npm run git-prune-local && npm run app-install",
-    "git-remove-file-from-hist": "powershell -ExecutionPolicy Bypass -File .\\scripts\\gitRemoveFromHistory.ps1 fbServiceKey.json"
+    "git-remove-file-from-hist": "powershell -ExecutionPolicy Bypass -File .\\scripts\\gitRemoveFromHistory.ps1 .env"
   },
   "engines": {
     "node": "18.19.0"
