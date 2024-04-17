@@ -17,9 +17,9 @@
     "app-deploy": "npm run f-deploy && npm run b-deploy",
     "git-prune-remote": "git remote update origin --prune",
     "git-prune-local": "npx git-removed-branches --prune --force",
-    "git-pull-all": "powershell -ExecutionPolicy Bypass -File .\\scripts\\gitPullAll.ps1",
+    "git-pull-all": "powershell -ExecutionPolicy Bypass -File .\\scripts\\gitPullAll\\gitPullAll.ps1",
     "git-sync": "npm run git-pull-all && npm run git-prune-remote && npm run git-prune-local && npm run app-install",
-    "git-remove-file-from-hist": "powershell -ExecutionPolicy Bypass -File .\\scripts\\gitRemoveFromHistory.ps1 .env"
+    "git-remove-file-from-hist": "powershell -ExecutionPolicy Bypass -File .\\scripts\\gitRemoveFromHistory\\gitRemoveFromHistory.ps1 scripts/gitRemoveFromHistory/bfg.jar .env"
   },
   "engines": {
     "node": "18.19.0"
