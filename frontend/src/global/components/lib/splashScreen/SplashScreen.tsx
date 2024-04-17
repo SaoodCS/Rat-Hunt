@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import useThemeContext from '../../../context/theme/hooks/useThemeContext';
-import { LogoText } from '../../app/logo/LogoText';
-import RatExterminationLogo from '../../app/logo/RatExterminationLogo';
 import Fader from '../animation/fader/Fader';
 import { OpaqueOverlay } from '../overlay/opaqueOverlay/Style';
 import { FlexColumnWrapper } from '../positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import ConditionalRender from '../renderModifiers/conditionalRender/ConditionalRender';
 import { SplashScreenFooter } from './Style';
+import GradientBgLogo from '../../app/logo/gradientBgLogo/GradientBgLogo';
 
 interface ISplashScreen {
    isDisplayed: boolean;
@@ -43,10 +42,7 @@ export default function SplashScreen(props: ISplashScreen): JSX.Element {
                      height="100dvh"
                      width="100dvw"
                   >
-                     <LogoText size={'4.5em'} style={{ marginBottom: '0.25em' }}>
-                        RAT HUNT
-                     </LogoText>
-                     <RatExterminationLogo size="16em" />
+                     <GradientBgLogo sizeEm={18} />
                   </FlexColumnWrapper>
                   <SplashScreenFooter>{'Rat Hunt'} v0.1.0</SplashScreenFooter>
                </ConditionalRender>

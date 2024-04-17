@@ -8,7 +8,6 @@ import { topics } from '../../../../../shared/app/utils/topics/topics';
 import ArrayHelper from '../../../../../shared/lib/helpers/arrayHelper/ArrayHelper';
 import ArrOfObj from '../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
-import LogoFader from '../../../global/components/app/logo/LogoFader';
 import { StaticButton } from '../../../global/components/lib/button/staticButton/Style';
 import type { IDropDownOptions } from '../../../global/components/lib/form/dropDown/DropDownInput';
 import InputCombination from '../../../global/components/lib/form/inputCombination/InputCombination';
@@ -21,6 +20,7 @@ import DBConnect from '../../../global/database/DBConnect/DBConnect';
 import useCustomNavigate from '../../../global/hooks/useCustomNavigate';
 import useForm from '../../../global/hooks/useForm';
 import PlayFormClass from './class/PlayForm';
+import GradientBgLogo from '../../../global/components/app/logo/gradientBgLogo/GradientBgLogo';
 
 export default function Play(): JSX.Element {
    const { apiError } = useApiErrorContext();
@@ -115,7 +115,7 @@ export default function Play(): JSX.Element {
          padding="1em 0em 1em 0em"
          boxSizing="border-box"
       >
-         <LogoFader />
+         <GradientBgLogo sizeEm={16} />
          <StyledForm
             onSubmit={handleSubmit}
             apiError={apiError}
