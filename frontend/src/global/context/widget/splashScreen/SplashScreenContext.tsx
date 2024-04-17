@@ -6,6 +6,8 @@ export interface ISplashScreenContext {
    splashScreenContent: JSX.Element | undefined;
    setSplashScreenContent: Dispatch<SetStateAction<JSX.Element | undefined>>;
    isSplashScreenDisplayed: boolean;
+   splashDurationSecs: number;
+   setSplashDurationSecs: Dispatch<SetStateAction<number>>;
 }
 
 export const SplashScreenContext = createContext<ISplashScreenContext>({
@@ -13,4 +15,6 @@ export const SplashScreenContext = createContext<ISplashScreenContext>({
    splashScreenContent: undefined,
    setSplashScreenContent: () => {},
    isSplashScreenDisplayed: false,
+   splashDurationSecs: 2,
+   setSplashDurationSecs: () => {},
 });

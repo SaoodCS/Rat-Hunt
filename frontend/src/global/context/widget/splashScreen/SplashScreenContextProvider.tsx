@@ -15,23 +15,18 @@ export default function SplashScreenContextProvider(
    props: ISplashScreenContextProvider,
 ): JSX.Element {
    const { children } = props;
+   const [splashDurationSecs, setSplashDurationSecs] = useState(2);
    const [isSplashScreenDisplayed, setIsSplashScreenDisplayed] = useState(Device.isPwa());
    const [splashScreenContent, setSplashScreenContent] = useState<JSX.Element | undefined>(
       undefined,
    );
 
    useLayoutEffect(() => {
-      let timer: NodeJS.Timeout | null = null;
-      if (isSplashScreenDisplayed) {
-         timer = setTimeout(() => {
-            toggleSplashScreen(false);
-         }, NumberHelper.secsToMs(2));
-      } else {
-         timer && clearTimeout(timer);
-      }
-      return () => {
-         timer && clearTimeout(timer);
-      };
+      if (!isSplashScreenDisplayed) return;
+      const timer = setTimeout(() => {
+         toggleSplashScreen(false);
+      }, NumberHelper.secsToMs(splashDurationSecs));
+      return () => clearTimeout(timer);
    }, [isSplashScreenDisplayed]);
 
    function toggleSplashScreen(show: boolean): void {
@@ -39,6 +34,7 @@ export default function SplashScreenContextProvider(
       else {
          setIsSplashScreenDisplayed(false);
          setSplashScreenContent(undefined);
+         setSplashDurationSecs(2);
       }
    }
 
@@ -48,8 +44,17 @@ export default function SplashScreenContextProvider(
          splashScreenContent,
          setSplashScreenContent,
          isSplashScreenDisplayed,
+         splashDurationSecs,
+         setSplashDurationSecs,
       }),
-      [toggleSplashScreen, splashScreenContent, setSplashScreenContent, isSplashScreenDisplayed],
+      [
+         toggleSplashScreen,
+         splashScreenContent,
+         setSplashScreenContent,
+         isSplashScreenDisplayed,
+         splashDurationSecs,
+         setSplashDurationSecs,
+      ],
    );
 
    return (
@@ -57,7 +62,7 @@ export default function SplashScreenContextProvider(
          <SplashScreenContext.Provider value={contextMemo}>
             <Fader
                fadeInCondition={!isSplashScreenDisplayed}
-               transitionDuration={2}
+               transitionDuration={splashDurationSecs}
                height={'100dvh'}
                width={'100dvw'}
             >
@@ -65,7 +70,7 @@ export default function SplashScreenContextProvider(
             </Fader>
          </SplashScreenContext.Provider>
          <ConditionalRender condition={isSplashScreenDisplayed}>
-            <SplashScreen isDisplayed={isSplashScreenDisplayed} component={splashScreenContent} />
+            <SplashScreen component={splashScreenContent} durationSecs={splashDurationSecs} />
          </ConditionalRender>
       </>
    );
