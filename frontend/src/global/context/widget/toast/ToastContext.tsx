@@ -9,8 +9,14 @@ interface IToastContext {
    setWidth: Dispatch<SetStateAction<string>>;
    setVerticalPos: Dispatch<SetStateAction<TVerticalPos>>;
    setHorizontalPos: Dispatch<SetStateAction<THorizontalPos>>;
-   toastZIndex: number | undefined;
-   setToastZIndex: Dispatch<SetStateAction<number | undefined>>;
+   toastZIndex: number;
+   setToastZIndex: Dispatch<SetStateAction<number>>;
+   toastTextAlign: 'left' | 'center' | 'right';
+   setToastTextAlign: Dispatch<SetStateAction<'left' | 'center' | 'right'>>;
+   toastType: 'info' | 'success' | 'error' | 'warning';
+   setToastType: Dispatch<SetStateAction<'info' | 'success' | 'error' | 'warning'>>;
+   toastDurationSecs: number;
+   setToastDurationSecs: Dispatch<SetStateAction<number>>;
 }
 
 export const ToastContext = createContext<IToastContext>({
@@ -20,6 +26,12 @@ export const ToastContext = createContext<IToastContext>({
    setWidth: () => {},
    setVerticalPos: () => {},
    setHorizontalPos: () => {},
-   toastZIndex: undefined,
+   toastZIndex: 99999,
    setToastZIndex: () => {},
+   toastTextAlign: 'left',
+   setToastTextAlign: () => {},
+   toastType: 'info',
+   setToastType: () => {},
+   toastDurationSecs: 2,
+   setToastDurationSecs: () => {},
 });

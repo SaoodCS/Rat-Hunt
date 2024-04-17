@@ -15,7 +15,6 @@ import { FlexRowWrapper } from '../../../global/components/lib/positionModifiers
 import { Wrapper } from '../../../global/components/lib/positionModifiers/wrapper/Style';
 import Scroller from '../../../global/components/lib/scroller/Scroller';
 import { GameContext } from '../../../global/context/game/GameContext';
-import { BannerContext } from '../../../global/context/widget/banner/BannerContext';
 import { ToastContext } from '../../../global/context/widget/toast/ToastContext';
 import MyCSS from '../../../global/css/MyCSS';
 import Color from '../../../global/css/colors';
@@ -41,11 +40,12 @@ export default function WaitingRoom(): JSX.Element {
       setVerticalPos,
       setHorizontalPos,
       setToastZIndex,
+      setToastTextAlign,
+      setToastType,
+      setToastDurationSecs,
    } = useContext(ToastContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const [disablePlay, setDisablePlay] = useState(false);
-   const { toggleBanner, setBannerMessage, setBannerType, setBannerZIndex } =
-      useContext(BannerContext);
    const setRoomData = DBConnect.FSDB.Set.room({});
    const [allUsers, setAllUsers] = useState<string[]>([]);
 
@@ -68,10 +68,15 @@ export default function WaitingRoom(): JSX.Element {
 
    async function handleStartGame(): Promise<void> {
       if (disablePlay) {
-         toggleBanner(true);
-         setBannerType('warning');
-         setBannerMessage('3 Players are Required to Start the Game!');
-         setBannerZIndex(100);
+         setToastZIndex(100);
+         toggleToast(true);
+         setToastMessage('3 Players are Required to Start the Game!');
+         setWidth('auto');
+         setVerticalPos('top');
+         setHorizontalPos('center');
+         setToastTextAlign('center');
+         setToastType('warning');
+         setToastDurationSecs(3);
          return;
       }
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
