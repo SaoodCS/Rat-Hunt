@@ -3,6 +3,7 @@ import { FlexColumnWrapper } from '../positionModifiers/flexColumnWrapper/FlexCo
 import ConditionalRender from '../renderModifiers/conditionalRender/ConditionalRender';
 import { SplashScreenFooter, SplashScreenWrapper } from './Style';
 import GradientBgLogo from '../../app/logo/gradientBgLogo/GradientBgLogo';
+import Color from '../../../css/colors';
 
 interface ISplashScreen {
    component?: JSX.Element;
@@ -14,7 +15,11 @@ export default function SplashScreen(props: ISplashScreen): JSX.Element {
    const { isDarkTheme } = useThemeContext();
 
    return (
-      <SplashScreenWrapper isDarkTheme={isDarkTheme} durationSecs={durationSecs}>
+      <SplashScreenWrapper
+         durationSecs={durationSecs}
+         color={isDarkTheme ? Color.darkThm.bg : Color.lightThm.bg}
+         zIndex={1}
+      >
          <ConditionalRender condition={component === undefined}>
             <FlexColumnWrapper
                justifyContent="center"

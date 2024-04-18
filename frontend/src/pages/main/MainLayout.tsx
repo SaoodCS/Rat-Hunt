@@ -7,6 +7,7 @@ import {
    HeaderSubtitleWrapper,
    StyledBackArr,
 } from '../../global/components/app/layout/header/Header';
+import { SimpleAnimator } from '../../global/components/lib/animation/simpleAnimator/SimpleAnimator';
 import { TextColourizer } from '../../global/components/lib/font/textColorizer/TextColourizer';
 import ConditionalRender from '../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import GameContextProvider from '../../global/context/game/GameContextProvider';
@@ -16,7 +17,6 @@ import useHeaderContext from '../../global/context/widget/header/hooks/useHeader
 import Color from '../../global/css/colors';
 import GuideAndLeaveRoom from './components/GuideAndLeaveRoom';
 import RoomIdBtn from './startedGame/components/roomIdBtn/RoomIdBtn';
-import RouteTransitioner from '../../global/components/lib/animation/routeTransitioner/RouteTransitioner';
 
 export default function MainLayout(): JSX.Element {
    const { isDarkTheme, isPortableDevice } = useThemeContext();
@@ -39,7 +39,11 @@ export default function MainLayout(): JSX.Element {
    );
 
    return (
-      <RouteTransitioner>
+      <SimpleAnimator
+         animateType={['fade']}
+         duration={0.2}
+         style={{ height: '100dvh', width: '100dvw' }}
+      >
          <GameContextProvider>
             <Header isDarkTheme={isDarkTheme}>
                <ConditionalRender condition={showBackBtn}>
@@ -63,6 +67,6 @@ export default function MainLayout(): JSX.Element {
                <Outlet />
             </Body>
          </GameContextProvider>
-      </RouteTransitioner>
+      </SimpleAnimator>
    );
 }

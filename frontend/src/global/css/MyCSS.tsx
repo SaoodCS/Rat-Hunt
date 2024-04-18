@@ -35,37 +35,6 @@ export namespace MyCSS {
       `;
    }
 
-   export namespace Animations {
-      export type Types = {
-         fade?: boolean;
-         fromLeft?: boolean;
-         fromRight?: boolean;
-         fromTop?: boolean;
-         fromBottom?: boolean;
-         expand?: boolean;
-      };
-      export const multi = (types: Types, durationSec: number): FlattenSimpleInterpolation => {
-         const { fade, fromLeft, fromRight, fromTop, fromBottom, expand } = types;
-         return css`
-            animation: transitions ${durationSec}s;
-            @keyframes transitions {
-               0% {
-                  opacity: ${fade && 0};
-                  transform: ${fromLeft && 'translateX(-100%)'};
-                  transform: ${fromRight && 'translateX(100%)'};
-                  transform: ${fromTop && 'translateY(-100%)'};
-                  transform: ${fromBottom && 'translateY(100%)'};
-                  transform: ${expand && 'scale(0)'};
-               }
-               100% {
-                  opacity: 1;
-                  transform: none;
-               }
-            }
-         `;
-      };
-   }
-
    export namespace Clickables {
       export const removeDefaultEffects = css`
          background: none;
@@ -225,6 +194,26 @@ export namespace MyCSS {
             ${cssString}
          `;
       }
+   }
+
+   export namespace Keyframes {
+      export const fadeInAndOut = (durationSecs: number): FlattenSimpleInterpolation => css`
+         animation: fadeInAndOut ${durationSecs}s linear;
+         @keyframes fadeInThenOut {
+            0% {
+               opacity: 0;
+            }
+            10% {
+               opacity: 1;
+            }
+            90% {
+               opacity: 1;
+            }
+            100% {
+               opacity: 0;
+            }
+         }
+      `;
    }
 }
 

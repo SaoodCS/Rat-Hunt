@@ -1,6 +1,5 @@
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import styled from 'styled-components';
-import MyCSS from '../../../../css/MyCSS';
 
 export const FlexRowWrapper = styled.div<{
    justifyContent?: string;
@@ -22,7 +21,6 @@ export const FlexRowWrapper = styled.div<{
    fontSize?: string;
    flex?: number;
    boxSizing?: 'border-box' | 'content-box';
-   animations?: { types: MyCSS.Animations.Types; durationSecs: number };
 }>`
    display: flex;
    flex-direction: row;
@@ -46,6 +44,4 @@ export const FlexRowWrapper = styled.div<{
    font-size: ${({ fontSize }) => fontSize};
    flex: ${({ flex }) => flex};
    box-sizing: ${({ boxSizing }) => boxSizing};
-   ${({ animations }) =>
-      animations ? MyCSS.Animations.multi(animations.types, animations.durationSecs) : null};
 `;

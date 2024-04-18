@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
 import { useLayoutEffect, useMemo, useState } from 'react';
 import NumberHelper from '../../../../../../shared/lib/helpers/number/NumberHelper';
-import Fader from '../../../components/lib/animation/fader/Fader';
 import ConditionalRender from '../../../components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import SplashScreen from '../../../components/lib/splashScreen/SplashScreen';
 import Device from '../../../helpers/pwa/deviceHelper';
 import { SplashScreenContext } from './SplashScreenContext';
+import { SimpleAnimator } from '../../../components/lib/animation/simpleAnimator/SimpleAnimator';
 
 interface ISplashScreenContextProvider {
    children: ReactNode;
@@ -60,14 +60,14 @@ export default function SplashScreenContextProvider(
    return (
       <>
          <SplashScreenContext.Provider value={contextMemo}>
-            <Fader
-               fadeInCondition={!isSplashScreenDisplayed}
-               transitionDuration={splashDurationSecs}
-               height={'100dvh'}
-               width={'100dvw'}
+            <SimpleAnimator
+               animateType={['fade']}
+               duration={splashDurationSecs}
+               startWhen={!isSplashScreenDisplayed}
+               style={{ height: '100dvh', width: '100dvw' }}
             >
                {children}
-            </Fader>
+            </SimpleAnimator>
          </SplashScreenContext.Provider>
          <ConditionalRender condition={isSplashScreenDisplayed}>
             <SplashScreen component={splashScreenContent} durationSecs={splashDurationSecs} />

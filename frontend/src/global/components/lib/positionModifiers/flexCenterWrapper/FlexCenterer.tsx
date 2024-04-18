@@ -4,6 +4,7 @@ import styled from 'styled-components';
 export const FlexCenterer = styled.div<{
    height?: string;
    width?: string;
+   flexDirection?: string;
    position?: string;
    left?: string;
    right?: string;
@@ -21,5 +22,6 @@ export const FlexCenterer = styled.div<{
    right: ${({ right }) => right || 'auto'};
    padding: ${({ padding }) => padding};
    color: ${({ color }) => color};
+   flex-direction: ${({ flexDirection }) => flexDirection || 'row'};
    ${({ localStyles }) => localStyles};
 `;

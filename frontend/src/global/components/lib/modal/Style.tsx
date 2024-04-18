@@ -1,7 +1,9 @@
 import { Close } from '@styled-icons/evil/Close';
 import styled from 'styled-components';
-import MyCSS from '../../../css/MyCSS';
 import Color from '../../../css/colors';
+import { SimpleAnimator } from '../animation/simpleAnimator/SimpleAnimator';
+
+export const ModalAnimator = styled(SimpleAnimator)``;
 
 export const ModalHeader = styled.span<{ isDarkTheme: boolean }>`
    text-shadow: ${({ isDarkTheme }) =>
@@ -13,10 +15,6 @@ export const ModalBody = styled.div`
    max-height: 25em;
    font-size: 0.85em;
    word-spacing: 0.1em;
-   //overflow-x: hidden;
-   //overflow-y: auto;
-   //${MyCSS.Scrollbar.gradientStyle};
-   //padding: 1em;
 `;
 
 export const ModalHeaderContainer = styled.div<{ isDarkTheme: boolean }>`

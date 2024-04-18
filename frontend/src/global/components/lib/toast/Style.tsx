@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import MyCSS from '../../../css/MyCSS';
 import Color from '../../../css/colors';
 import type { THorizontalPos, TVerticalPos } from './Toast';
 
@@ -25,21 +26,7 @@ export const ToastContainer = styled.div<{
    }};
    z-index: ${({ zIndex }) => zIndex || 99999};
    align-items: center;
-   animation: ${({ duration }) => `fadeInAndOut ${duration}s linear forwards`};
-   @keyframes fadeInAndOut {
-      0% {
-         opacity: 0;
-      }
-      7% {
-         opacity: 1;
-      }
-      93% {
-         opacity: 1;
-      }
-      100% {
-         opacity: 0;
-      }
-   }
+   ${({ duration }) => MyCSS.Keyframes.fadeInAndOut(duration)};
 `;
 
 export const StyledToast = styled.div<{

@@ -2,7 +2,7 @@
 import type { QueryObserverResult } from '@tanstack/react-query';
 import React, { useEffect, useRef } from 'react';
 import { CustomSpinner } from '../loader/Style';
-import { FlexCenterer } from '../positionModifiers/centerers/FlexCenterer';
+import { FlexCenterer } from '../positionModifiers/flexCenterWrapper/FlexCenterer';
 import { DIRECTION } from './helpers/direction';
 import { isTreeScrollable } from './helpers/isScrollable';
 import './styles/main.scss';

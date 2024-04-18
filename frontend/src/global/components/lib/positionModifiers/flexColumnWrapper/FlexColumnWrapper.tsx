@@ -1,6 +1,5 @@
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import styled from 'styled-components';
-import MyCSS from '../../../../css/MyCSS';
 
 export const FlexColumnWrapper = styled.div<{
    justifyContent?: string;
@@ -23,7 +22,6 @@ export const FlexColumnWrapper = styled.div<{
    localStyles?: FlattenSimpleInterpolation;
    textAlign?: string;
    color?: string;
-   animations?: { types: MyCSS.Animations.Types; durationSecs: number };
 }>`
    display: flex;
    flex-direction: column;
@@ -48,6 +46,4 @@ export const FlexColumnWrapper = styled.div<{
    text-align: ${({ textAlign }) => textAlign};
    color: ${({ color }) => color};
    ${({ localStyles }) => localStyles};
-   ${({ animations }) =>
-      animations ? MyCSS.Animations.multi(animations.types, animations.durationSecs) : null};
 `;
