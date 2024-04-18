@@ -22,7 +22,8 @@
     "git-remove-file-from-hist": "powershell -ExecutionPolicy Bypass -File .\\scripts\\gitRemoveFromHistory\\gitRemoveFromHistory.ps1 scripts/gitRemoveFromHistory/bfg.jar .env"
   },
   "engines": {
-    "node": "20.12.2"
+    "node": "20.12.2",
+    "firebase-tools": "13.7.2"
   },
 
   "devDependencies": {
