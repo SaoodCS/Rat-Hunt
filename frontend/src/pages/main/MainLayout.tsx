@@ -15,6 +15,7 @@ import useThemeContext from '../../global/context/theme/hooks/useThemeContext';
 import HeaderHooks from '../../global/context/widget/header/hooks/HeaderHooks';
 import useHeaderContext from '../../global/context/widget/header/hooks/useHeaderContext';
 import CSS_Color from '../../global/css/utils/colors';
+import CSS_ZIndex from '../../global/css/utils/zIndex';
 import GuideAndLeaveRoom from './components/GuideAndLeaveRoom';
 import RoomIdBtn from './startedGame/components/roomIdBtn/RoomIdBtn';
 
@@ -43,7 +44,7 @@ export default function MainLayout(): JSX.Element {
          key="main-layout"
          animateType={['fade']}
          duration={0.2}
-         style={{ height: '100dvh', width: '100dvw' }}
+         style={{ height: '100dvh', width: '100dvw', zIndex: CSS_ZIndex.get('default') }}
       >
          <GameContextProvider>
             <Header isDarkTheme={isDarkTheme}>
