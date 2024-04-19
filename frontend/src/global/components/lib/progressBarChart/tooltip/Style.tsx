@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import Color from '../../../../css/utils/colors';
+import CSS_Color from '../../../../css/utils/colors';
 
 const rightPos = css`
    bottom: calc(-50%);
@@ -33,7 +33,7 @@ export const TooltipContent = styled.div<{
    padding: 0.5em;
    font-size: 0.8em;
    border-radius: 10px;
-   background-color: ${Color.setRgbOpacity(Color.darkThm.dialog, 1)};
+   background-color: ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.dialog, 1)};
    backdrop-filter: blur(5px);
    visibility: hidden;
    opacity: 0;

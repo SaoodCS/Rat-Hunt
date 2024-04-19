@@ -6,7 +6,7 @@ import NumberHelper from '../../../../../../../../../shared/lib/helpers/number/N
 import { TextColourizer } from '../../../../../../../global/components/lib/font/textColorizer/TextColourizer';
 import ConditionalRender from '../../../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
-import Color from '../../../../../../../global/css/utils/colors';
+import CSS_Color from '../../../../../../../global/css/utils/colors';
 import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
 import { PointsItem } from './style/Style';
 
@@ -103,7 +103,9 @@ export default function PointsMsgsFader(): JSX.Element {
             <ConditionalRender condition={index === currentIndex} key={index}>
                <PointsItem ref={pointsItemRef}>
                   <TextColourizer
-                     color={point.type === 'error' ? Color.darkThm.error : Color.darkThm.success}
+                     color={
+                        point.type === 'error' ? CSS_Color.darkThm.error : CSS_Color.darkThm.success
+                     }
                   >
                      {point.msg}
                   </TextColourizer>

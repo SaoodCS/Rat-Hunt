@@ -1,16 +1,16 @@
 import { createGlobalStyle, css } from 'styled-components';
-import Color from '../utils/colors';
+import CSS_Color from '../utils/colors';
 
 const darkThemeDefaults = css`
-   background-color: ${Color.darkThm.bg};
-   color: ${Color.darkThm.txt};
-   text-shadow: ${Color.darkThm.txtShadow};
+   background-color: ${CSS_Color.darkThm.bg};
+   color: ${CSS_Color.darkThm.txt};
+   text-shadow: ${CSS_Color.darkThm.txtShadow};
 `;
 
 const lightThemeDefaults = css`
-   background-color: ${Color.lightThm.bg};
-   color: ${Color.lightThm.txt};
-   text-shadow: ${Color.lightThm.txtShadow};
+   background-color: ${CSS_Color.lightThm.bg};
+   color: ${CSS_Color.lightThm.txt};
+   text-shadow: ${CSS_Color.lightThm.txtShadow};
 `;
 
 export const GlobalTheme = createGlobalStyle<{ darkTheme: boolean }>`

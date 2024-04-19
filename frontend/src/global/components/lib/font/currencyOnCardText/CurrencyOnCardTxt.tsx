@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Color from '../../../../css/utils/colors';
+import CSS_Color from '../../../../css/utils/colors';
 
 export const CurrencyOnCardTxt = styled.span<{ isDarkTheme: boolean; color?: string }>`
    display: inline-block;
@@ -7,12 +7,15 @@ export const CurrencyOnCardTxt = styled.span<{ isDarkTheme: boolean; color?: str
    -webkit-transform: scale(1.05, 0.95);
    letter-spacing: 0.02em;
    color: ${({ isDarkTheme, color }) =>
-      color ? color : isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt};
+      color ? color : isDarkTheme ? CSS_Color.darkThm.txt : CSS_Color.lightThm.txt};
    text-shadow: ${({ isDarkTheme, color }) =>
       `0.5px 0.5px 0.5px ${
          color
             ? color
-            : Color.setRgbOpacity(isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt, 1)
+            : CSS_Color.setRgbOpacity(
+                 isDarkTheme ? CSS_Color.darkThm.txt : CSS_Color.lightThm.txt,
+                 1,
+              )
       }`};
    font-size: 1.75em;
    &:after {

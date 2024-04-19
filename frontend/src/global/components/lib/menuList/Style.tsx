@@ -1,8 +1,8 @@
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import styled, { css } from 'styled-components';
-import Color from '../../../css/utils/colors';
-import { CSS_Media } from '../../../css/utils/media';
 import CSS_Clickables from '../../../css/utils/clickables';
+import CSS_Color from '../../../css/utils/colors';
+import { CSS_Media } from '../../../css/utils/media';
 
 class MenuWrapperStyles {
    static largeScrn = css`
@@ -14,17 +14,17 @@ class MenuWrapperStyles {
    static smallScrn = (isDarkTheme: boolean): FlattenSimpleInterpolation => css`
       margin: 1em;
       background-color: ${isDarkTheme
-         ? Color.setRgbOpacity(Color.darkThm.txt, 0.07)
+         ? CSS_Color.setRgbOpacity(CSS_Color.darkThm.txt, 0.07)
          : `rgba(0, 0, 0, 0.1)`};
       border-radius: 1em;
       width: 100%;
       border: ${isDarkTheme
-         ? `1px solid ${Color.setRgbOpacity(Color.darkThm.txt, 0.1)}`
-         : `1px solid ${Color.setRgbOpacity(Color.lightThm.txt, 0.1)}`};
+         ? `1px solid ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.txt, 0.1)}`
+         : `1px solid ${CSS_Color.setRgbOpacity(CSS_Color.lightThm.txt, 0.1)}`};
       & > *:not(:last-child) {
          border-bottom: ${isDarkTheme
-            ? `1px solid ${Color.setRgbOpacity(Color.darkThm.txt, 0.1)}`
-            : `1px solid ${Color.setRgbOpacity(Color.lightThm.txt, 0.1)}`};
+            ? `1px solid ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.txt, 0.1)}`
+            : `1px solid ${CSS_Color.setRgbOpacity(CSS_Color.lightThm.txt, 0.1)}`};
       }
    `;
 }
@@ -48,8 +48,8 @@ export const MenuListWrapper = styled.div<{ isDarkTheme: boolean }>`
 class ItemContainerStyles {
    static largeScrn = (isDarkTheme: boolean): FlattenSimpleInterpolation => css`
       border: ${isDarkTheme
-         ? `1px solid ${Color.darkThm.border}`
-         : `1px solid ${Color.lightThm.border}`};
+         ? `1px solid ${CSS_Color.darkThm.border}`
+         : `1px solid ${CSS_Color.lightThm.border}`};
       height: 12.5em;
       width: 12.5em;
       margin: 1.5em;
@@ -59,7 +59,7 @@ class ItemContainerStyles {
       align-items: center;
       justify-content: center;
       ${CSS_Clickables.desktop.changeColorOnHover(
-         Color.setRgbOpacity(isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt, 0.1),
+         CSS_Color.setRgbOpacity(isDarkTheme ? CSS_Color.darkThm.txt : CSS_Color.lightThm.txt, 0.1),
          'background-color',
       )};
    `;
@@ -86,16 +86,19 @@ export const ItemContainer = styled.div<{
    color: ${({ dangerItem, warningItem, isDarkTheme }) =>
       dangerItem
          ? isDarkTheme
-            ? Color.darkThm.error
-            : Color.lightThm.error
+            ? CSS_Color.darkThm.error
+            : CSS_Color.lightThm.error
          : warningItem
            ? isDarkTheme
-              ? Color.darkThm.warning
-              : Color.lightThm.warning
+              ? CSS_Color.darkThm.warning
+              : CSS_Color.lightThm.warning
            : undefined};
    &:hover:active {
       background-color: ${({ isDarkTheme }) =>
-         Color.setRgbOpacity(isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt, 0.1)};
+         CSS_Color.setRgbOpacity(
+            isDarkTheme ? CSS_Color.darkThm.txt : CSS_Color.lightThm.txt,
+            0.1,
+         )};
    }
    @media (max-width: ${CSS_Media.PortableBp.asPx}) {
       ${({ spaceRow }) => ItemContainerStyles.smallSrn(!!spaceRow)};
@@ -140,7 +143,7 @@ export const ItemContentWrapper = styled.div`
 export const ItemDetails = styled.div<{ isDarkTheme: boolean }>`
    font-size: 0.75em;
    color: ${({ isDarkTheme }) =>
-      Color.setRgbOpacity(isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt, 0.5)};
+      CSS_Color.setRgbOpacity(isDarkTheme ? CSS_Color.darkThm.txt : CSS_Color.lightThm.txt, 0.5)};
 `;
 
 export const ItemSubElement = styled.div`

@@ -1,5 +1,5 @@
 import styled, { keyframes } from 'styled-components';
-import Color from '../../../css/utils/colors';
+import CSS_Color from '../../../css/utils/colors';
 
 const slideIn = keyframes`
    from {
@@ -54,13 +54,13 @@ export const BarBackground = styled.div<{
 }>`
    position: relative;
    display: flex;
-   background-color: ${Color.setRgbOpacity(Color.darkThm.inactive, 0.4)};
+   background-color: ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.inactive, 0.4)};
    border-top-right-radius: 10px;
    border-bottom-right-radius: 10px;
    width: ${({ barWidth }) => barWidth || '20em'};
    height: ${({ barHeight }) => barHeight || '2em'};
    &:hover {
-      border: ${Color.darkThm.accent};
+      border: ${CSS_Color.darkThm.accent};
       border-left: none;
       box-sizing: border-box;
    }

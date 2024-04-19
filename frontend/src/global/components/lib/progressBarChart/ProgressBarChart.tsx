@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import NumberHelper from '../../../../../../shared/lib/helpers/number/NumberHelper';
 import { GameContext } from '../../../context/game/GameContext';
 import useThemeContext from '../../../context/theme/hooks/useThemeContext';
-import Color from '../../../css/utils/colors';
+import CSS_Color from '../../../css/utils/colors';
 import { FlexCenterer } from '../positionModifiers/flexCenterWrapper/FlexCenterer';
 import { BarAndInfoWrapper, BarAndPercentageWrapper, BarBackground, CompletedBar } from './Style';
 import type { ITooltipPositioning } from './tooltip/Tooltip';
@@ -39,8 +39,8 @@ export default function ProgressBarChart(props: IProgressBarChart): JSX.Element 
    }
 
    function textColor(itemLabel: string): string {
-      return Color.setRgbOpacity(
-         isLocalDbUser(itemLabel) ? Color.darkThm.error : Color.darkThm.success,
+      return CSS_Color.setRgbOpacity(
+         isLocalDbUser(itemLabel) ? CSS_Color.darkThm.error : CSS_Color.darkThm.success,
          1,
       );
    }

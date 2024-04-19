@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import Color from '../../../css/utils/colors';
-import { FullScreenWrapper } from '../positionModifiers/fullScreenWrapper/FullScreenWrapper';
+import CSS_Color from '../../../css/utils/colors';
 import CSS_ZIndex from '../../../css/utils/zIndex';
+import { FullScreenWrapper } from '../positionModifiers/fullScreenWrapper/FullScreenWrapper';
 
 export const CustomSpinnerWrapper = styled(FullScreenWrapper)`
    z-index: ${CSS_ZIndex.get('loader')};
@@ -14,12 +14,12 @@ export const CustomSpinner = styled.div<{
 }>`
    border: ${({ isDarkTheme, sizePx }) =>
       isDarkTheme
-         ? `calc(${sizePx || '70px'} / 7 ) solid ${Color.setRgbOpacity(Color.darkThm.txt, 0.5)}`
-         : `calc(${sizePx || '70px'} / 7 ) solid ${Color.setRgbOpacity(Color.lightThm.txt, 0.5)}`};
+         ? `calc(${sizePx || '70px'} / 7 ) solid ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.txt, 0.5)}`
+         : `calc(${sizePx || '70px'} / 7 ) solid ${CSS_Color.setRgbOpacity(CSS_Color.lightThm.txt, 0.5)}`};
    border-top: ${({ isDarkTheme, sizePx }) =>
       isDarkTheme
-         ? `calc(${sizePx || '70px'} / 7 ) solid ${Color.darkThm.txt}`
-         : `calc(${sizePx || '70px'} / 7 ) solid ${Color.lightThm.txt}`};
+         ? `calc(${sizePx || '70px'} / 7 ) solid ${CSS_Color.darkThm.txt}`
+         : `calc(${sizePx || '70px'} / 7 ) solid ${CSS_Color.lightThm.txt}`};
    border-radius: 50%;
    height: ${({ sizePx }) => sizePx || '70px'};
    width: ${({ sizePx }) => sizePx || '70px'};

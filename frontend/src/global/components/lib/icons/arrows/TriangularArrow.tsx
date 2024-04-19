@@ -1,7 +1,7 @@
 import { UpArrow } from '@styled-icons/boxicons-solid/UpArrow';
 import styled from 'styled-components';
 import BoolHelper from '../../../../../../../shared/lib/helpers/bool/BoolHelper';
-import Color from '../../../../css/utils/colors';
+import CSS_Color from '../../../../css/utils/colors';
 
 export const TriangularArrowIcon = styled(UpArrow)<{
    direction: 'up' | 'down' | 'left' | 'right';
@@ -14,9 +14,15 @@ export const TriangularArrowIcon = styled(UpArrow)<{
 
    color: ${({ darktheme, type }) =>
       ({
-         warning: BoolHelper.strToBool(darktheme) ? Color.darkThm.warning : Color.lightThm.warning,
-         success: BoolHelper.strToBool(darktheme) ? Color.darkThm.success : Color.lightThm.success,
-         error: BoolHelper.strToBool(darktheme) ? Color.darkThm.error : Color.lightThm.error,
-         default: BoolHelper.strToBool(darktheme) ? Color.darkThm.txt : Color.lightThm.txt,
+         warning: BoolHelper.strToBool(darktheme)
+            ? CSS_Color.darkThm.warning
+            : CSS_Color.lightThm.warning,
+         success: BoolHelper.strToBool(darktheme)
+            ? CSS_Color.darkThm.success
+            : CSS_Color.lightThm.success,
+         error: BoolHelper.strToBool(darktheme)
+            ? CSS_Color.darkThm.error
+            : CSS_Color.lightThm.error,
+         default: BoolHelper.strToBool(darktheme) ? CSS_Color.darkThm.txt : CSS_Color.lightThm.txt,
       })[type || 'default']};
 `;

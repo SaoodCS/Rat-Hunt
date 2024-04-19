@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { GlobalTheme } from '../../css/theme/theme';
-import Color from '../../css/utils/colors';
+import CSS_Color from '../../css/utils/colors';
+import { CSS_Media } from '../../css/utils/media';
 import Device from '../../helpers/pwa/deviceHelper';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { ThemeContext } from './ThemeContext';
-import { CSS_Media } from '../../css/utils/media';
 
 interface IThemeContextProvider {
    children: ReactNode;
@@ -30,7 +30,10 @@ export default function ThemeContextProvider(props: IThemeContextProvider): JSX.
    useLayoutEffect(() => {
       const metaThemeColor = document.querySelector(`meta[name=theme-color]`);
       if (metaThemeColor) {
-         metaThemeColor.setAttribute(`content`, isDarkTheme ? Color.darkThm.bg : Color.lightThm.bg);
+         metaThemeColor.setAttribute(
+            `content`,
+            isDarkTheme ? CSS_Color.darkThm.bg : CSS_Color.lightThm.bg,
+         );
       }
    }, [isDarkTheme]);
 

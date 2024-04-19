@@ -14,7 +14,7 @@ import GameContextProvider from '../../global/context/game/GameContextProvider';
 import useThemeContext from '../../global/context/theme/hooks/useThemeContext';
 import HeaderHooks from '../../global/context/widget/header/hooks/HeaderHooks';
 import useHeaderContext from '../../global/context/widget/header/hooks/useHeaderContext';
-import Color from '../../global/css/utils/colors';
+import CSS_Color from '../../global/css/utils/colors';
 import GuideAndLeaveRoom from './components/GuideAndLeaveRoom';
 import RoomIdBtn from './startedGame/components/roomIdBtn/RoomIdBtn';
 
@@ -54,7 +54,7 @@ export default function MainLayout(): JSX.Element {
                   />
                </ConditionalRender>
                <TextColourizer
-                  color={Color.darkThm.accent}
+                  color={CSS_Color.darkThm.accent}
                   fontSize={isPortableDevice ? '1.8em' : '4rem'}
                >
                   {headerTitle}

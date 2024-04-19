@@ -1,6 +1,6 @@
 import { Close } from '@styled-icons/evil/Close';
 import styled from 'styled-components';
-import Color from '../../../css/utils/colors';
+import CSS_Color from '../../../css/utils/colors';
 import { CSS_ZIndex } from '../../../css/utils/zIndex';
 import { SimpleAnimator } from '../animation/simpleAnimator/SimpleAnimator';
 import { FullScreenWrapper } from '../positionModifiers/fullScreenWrapper/FullScreenWrapper';
@@ -13,7 +13,7 @@ export const ModalAnimator = styled(SimpleAnimator)``;
 
 export const ModalHeader = styled.span<{ isDarkTheme: boolean }>`
    text-shadow: ${({ isDarkTheme }) =>
-      isDarkTheme ? Color.darkThm.txtShadowHeaders : Color.lightThm.txtShadowHeaders};
+      isDarkTheme ? CSS_Color.darkThm.txtShadowHeaders : CSS_Color.lightThm.txtShadowHeaders};
 `;
 
 export const ModalBody = styled.div`
@@ -28,7 +28,7 @@ export const ModalHeaderContainer = styled.div<{ isDarkTheme: boolean }>`
    display: flex;
    justify-content: space-between;
    align-items: center;
-   border-bottom: ${Color.setRgbOpacity(Color.darkThm.accent, 0.3)} 1px solid;
+   border-bottom: ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.accent, 0.3)} 1px solid;
    border-radius: 5px;
    font-size: 1em;
    font-weight: 500;
@@ -39,12 +39,12 @@ export const ModalContainer = styled.div<{ isDarkTheme: boolean }>`
    border-radius: 10px;
    background-color: ${({ isDarkTheme }) =>
       isDarkTheme
-         ? Color.setRgbOpacity(Color.darkThm.dialog, 1)
-         : Color.setRgbOpacity(Color.lightThm.dialog, 1)};
-   color: ${Color.darkThm.txt};
+         ? CSS_Color.setRgbOpacity(CSS_Color.darkThm.dialog, 1)
+         : CSS_Color.setRgbOpacity(CSS_Color.lightThm.dialog, 1)};
+   color: ${CSS_Color.darkThm.txt};
    backdrop-filter: blur(50px);
    filter: brightness(1.25);
-   border: ${Color.setRgbOpacity(Color.darkThm.accent, 0.3)} 1px solid;
+   border: ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.accent, 0.3)} 1px solid;
 `;
 
 export const ModalCloseButton = styled(Close)`
@@ -53,7 +53,7 @@ export const ModalCloseButton = styled(Close)`
    font-weight: 1000;
    border-radius: 50%;
    &:active {
-      background-color: ${Color.lightThm.border};
+      background-color: ${CSS_Color.lightThm.border};
       background-position: center;
       transition: background 0.05s;
    }

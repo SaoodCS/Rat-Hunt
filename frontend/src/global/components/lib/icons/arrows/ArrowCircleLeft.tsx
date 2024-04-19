@@ -1,14 +1,14 @@
 import { ArrowCircleLeftOutline } from '@styled-icons/evaicons-outline/ArrowCircleLeftOutline';
 import styled from 'styled-components';
 import BoolHelper from '../../../../../../../shared/lib/helpers/bool/BoolHelper';
-import Color from '../../../../css/utils/colors';
 import CSS_Clickables from '../../../../css/utils/clickables';
+import CSS_Color from '../../../../css/utils/colors';
 
 export const ArrowCircleLeftIcon = styled(ArrowCircleLeftOutline)<{ darktheme: 'true' | 'false' }>`
    ${CSS_Clickables.removeDefaultEffects};
    color: ${({ darktheme }): string =>
-      Color.setRgbOpacity(
-         BoolHelper.strToBool(darktheme) ? Color.darkThm.warning : Color.lightThm.warning,
+      CSS_Color.setRgbOpacity(
+         BoolHelper.strToBool(darktheme) ? CSS_Color.darkThm.warning : CSS_Color.lightThm.warning,
          1,
       )};
    cursor: pointer;

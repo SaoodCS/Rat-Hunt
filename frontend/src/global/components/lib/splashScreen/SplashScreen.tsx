@@ -1,13 +1,13 @@
 import { useLayoutEffect } from 'react';
+import NumberHelper from '../../../../../../shared/lib/helpers/number/NumberHelper';
 import useThemeContext from '../../../context/theme/hooks/useThemeContext';
-import Color from '../../../css/utils/colors';
+import CSS_Color from '../../../css/utils/colors';
 import GradientBgLogo from '../../app/logo/gradientBgLogo/GradientBgLogo';
+import ExitAnimatePresence from '../animation/exitAnimatePresence/ExitAnimatePresence';
+import { SimpleAnimator } from '../animation/simpleAnimator/SimpleAnimator';
 import { FlexColumnWrapper } from '../positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import ConditionalRender from '../renderModifiers/conditionalRender/ConditionalRender';
 import { SplashScreenFooter, SplashScreenWrapper } from './Style';
-import NumberHelper from '../../../../../../shared/lib/helpers/number/NumberHelper';
-import ExitAnimatePresence from '../animation/exitAnimatePresence/ExitAnimatePresence';
-import { SimpleAnimator } from '../animation/simpleAnimator/SimpleAnimator';
 
 interface ISplashScreen {
    component?: JSX.Element;
@@ -31,7 +31,7 @@ export default function SplashScreen(props: ISplashScreen): JSX.Element {
    return (
       <ExitAnimatePresence exitWhen={!isDisplayed}>
          <SimpleAnimator key="splash-screen" animateType={['fadeAndHold']} duration={durationSecs}>
-            <SplashScreenWrapper color={isDarkTheme ? Color.darkThm.bg : Color.lightThm.bg}>
+            <SplashScreenWrapper color={isDarkTheme ? CSS_Color.darkThm.bg : CSS_Color.lightThm.bg}>
                <ConditionalRender condition={component === undefined}>
                   <FlexColumnWrapper
                      justifyContent="center"

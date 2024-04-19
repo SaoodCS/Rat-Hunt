@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { TextColourizer } from '../../../../../../global/components/lib/font/textColorizer/TextColourizer';
-import Color from '../../../../../../global/css/utils/colors';
 import CSS_Clickables from '../../../../../../global/css/utils/clickables';
+import CSS_Color from '../../../../../../global/css/utils/colors';
 
 export const TITLE_HEIGHT = 2.5;
 export const MARQUEE_HEIGHT = 3;
@@ -13,8 +13,8 @@ export const RoundSummaryTitle = styled.div`
    display: flex;
    justify-content: center;
    align-items: center;
-   border-bottom: 2px solid ${Color.darkThm.accentDarkerShade};
-   color: ${Color.setRgbOpacity(Color.darkThm.dialogBright, 1)};
+   border-bottom: 2px solid ${CSS_Color.darkThm.accentDarkerShade};
+   color: ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.dialogBright, 1)};
    filter: brightness(2);
    border-top-left-radius: 1em;
    border-top-right-radius: 1em;
@@ -34,10 +34,10 @@ export const NextPlayAgainBtnContainer = styled.div`
 
 export const NextRoundPlayAgainBtn = styled(TextColourizer)`
    ${CSS_Clickables.removeDefaultEffects};
-   color: ${Color.darkThm.warning};
+   color: ${CSS_Color.darkThm.warning};
    padding: 0em 1em 0.2em 1em;
    font-size: 0.9em;
-   border-bottom: 1px solid ${Color.darkThm.accent};
+   border-bottom: 1px solid ${CSS_Color.darkThm.accent};
    border-bottom-left-radius: 1em;
    border-bottom-right-radius: 1em;
    cursor: pointer;
@@ -58,7 +58,7 @@ export const ScoreboardContainer = styled.div`
 
 export const MarqueeContainer = styled.div`
    height: ${MARQUEE_HEIGHT}em;
-   border-bottom: 2px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.65)};
+   border-bottom: 2px solid ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.accent, 0.65)};
    display: flex;
    justify-content: center;
    align-items: center;

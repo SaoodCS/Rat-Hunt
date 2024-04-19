@@ -12,7 +12,7 @@ import { StyledForm } from '../../../../../../../../global/components/lib/form/s
 import { GameContext } from '../../../../../../../../global/context/game/GameContext';
 import useThemeContext from '../../../../../../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
-import Color from '../../../../../../../../global/css/utils/colors';
+import CSS_Color from '../../../../../../../../global/css/utils/colors';
 import DBConnect from '../../../../../../../../global/database/DBConnect/DBConnect';
 import useForm from '../../../../../../../../global/hooks/useForm';
 import { gameFormStyles, gameInputFieldStyles } from '../style/Style';
@@ -87,7 +87,7 @@ export default function ClueForm(): JSX.Element {
          ))}
 
          <TextBtn isDarkTheme={isDarkTheme} type="submit">
-            <Send size="1.5em" color={Color.darkThm.warning} />
+            <Send size="1.5em" color={CSS_Color.darkThm.warning} />
          </TextBtn>
       </StyledForm>
    );

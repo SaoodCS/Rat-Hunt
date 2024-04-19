@@ -1,6 +1,6 @@
 import { Error } from '@styled-icons/material/Error';
 import styled from 'styled-components';
-import Color from '../../../../css/utils/colors';
+import CSS_Color from '../../../../css/utils/colors';
 
 export const ErrorMsgText = styled.div`
    margin-left: 0.5em;
@@ -10,7 +10,8 @@ export const ErrorMsgText = styled.div`
 
 export const ErrorIcon = styled(Error)<{ darktheme: string }>`
    width: 10%;
-   color: ${({ darktheme }) => (darktheme === 'true' ? Color.darkThm.error : Color.lightThm.error)};
+   color: ${({ darktheme }) =>
+      darktheme === 'true' ? CSS_Color.darkThm.error : CSS_Color.lightThm.error};
 `;
 
 export const ErrorMsgHolder = styled.div`

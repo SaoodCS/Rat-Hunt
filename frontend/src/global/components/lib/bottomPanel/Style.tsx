@@ -1,14 +1,14 @@
 import Sheet from 'react-modal-sheet';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import styled, { css } from 'styled-components';
-import Color from '../../../css/utils/colors';
+import CSS_Color from '../../../css/utils/colors';
 import { ModalCloseButton } from '../modal/Style';
 
-const darkModeColorTop: string = Color.setRgbOpacity(Color.darkThm.bg, 0.95);
-const darkModeColorBottom: string = Color.setRgbOpacity(Color.darkThm.bg, 0.99);
+const darkModeColorTop: string = CSS_Color.setRgbOpacity(CSS_Color.darkThm.bg, 0.95);
+const darkModeColorBottom: string = CSS_Color.setRgbOpacity(CSS_Color.darkThm.bg, 0.99);
 
 const commonHeaderStyles = (darktheme: boolean): FlattenSimpleInterpolation => css`
-   background-color: ${darktheme ? darkModeColorTop : Color.lightThm.bg};
+   background-color: ${darktheme ? darkModeColorTop : CSS_Color.lightThm.bg};
    display: flex;
    justify-content: center;
    align-items: center;
@@ -26,7 +26,7 @@ export const CustomPanelHeader = styled.div<{ darktheme: string }>`
    padding-bottom: 1em;
    font-size: 1em;
    background-color: ${({ darktheme }) =>
-      darktheme === 'true' ? Color.darkThm.bg : Color.lightThm.bg};
+      darktheme === 'true' ? CSS_Color.darkThm.bg : CSS_Color.lightThm.bg};
 `;
 
 export const CustomBottomPanelSheet = styled(Sheet)<{ darktheme: string }>`
@@ -44,7 +44,7 @@ export const CustomBottomPanelSheet = styled(Sheet)<{ darktheme: string }>`
       background: ${({ darktheme }) =>
          darktheme === 'true'
             ? `linear-gradient(${darkModeColorTop}, ${darkModeColorBottom})`
-            : Color.lightThm.bg};
+            : CSS_Color.lightThm.bg};
    }
 `;
 

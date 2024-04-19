@@ -1,16 +1,16 @@
 import styled from 'styled-components';
-import Color from '../../../../css/utils/colors';
+import CSS_Color from '../../../../css/utils/colors';
 
 export const Switcher = styled.div<{ isOn: boolean; isDarkTheme: boolean; size: string }>`
    display: inline-block;
    background-color: ${({ isOn, isDarkTheme }) =>
       isOn
          ? isDarkTheme
-            ? Color.darkThm.accent
-            : Color.lightThm.accent
+            ? CSS_Color.darkThm.accent
+            : CSS_Color.lightThm.accent
          : isDarkTheme
-           ? Color.darkThm.inactive
-           : Color.darkThm.inactive};
+           ? CSS_Color.darkThm.inactive
+           : CSS_Color.darkThm.inactive};
    border-radius: ${({ size }) => size};
    width: ${({ size }) => `calc(${size} * 1.867)`};
    height: ${({ size }) => size};
@@ -23,7 +23,7 @@ export const Switcher = styled.div<{ isOn: boolean; isDarkTheme: boolean; size: 
       position: relative;
       display: block;
       background-color: ${({ isDarkTheme }) =>
-         isDarkTheme ? Color.darkThm.bg : Color.lightThm.bg};
+         isDarkTheme ? CSS_Color.darkThm.bg : CSS_Color.lightThm.bg};
       border-radius: 50%;
       width: ${({ size }) => `calc(${size} * 0.867)`};
       height: ${({ size }) => `calc(${size} * 0.867)`};
@@ -46,7 +46,7 @@ export const Switcher = styled.div<{ isOn: boolean; isDarkTheme: boolean; size: 
       left: ${({ isOn }) => (isOn ? '26%' : '74%')};
       transform: translate(-50%, -50%);
       color: ${({ isDarkTheme }) =>
-         Color.setRgbOpacity(isDarkTheme ? Color.darkThm.bg : Color.lightThm.bg, 0.8)};
+         CSS_Color.setRgbOpacity(isDarkTheme ? CSS_Color.darkThm.bg : CSS_Color.lightThm.bg, 0.8)};
       font-size: ${({ size }) => `calc(${size} * 0.333)`};
       transition: content 0.3s ease;
       font-weight: 600;

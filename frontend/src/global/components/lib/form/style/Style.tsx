@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Color from '../../../../css/utils/colors';
+import CSS_Color from '../../../../css/utils/colors';
 import { CSS_Helper } from '../../../../css/utils/helper';
 
 export interface IGlobalFieldStyles {
@@ -41,7 +41,7 @@ export const StyledForm = styled.form<{
       apiError && {
          '&::before': {
             content: `'${apiError}'`,
-            color: Color.darkThm.error,
+            color: CSS_Color.darkThm.error,
             fontSize: '0.75em',
             position: 'absolute',
             top: 0,
@@ -78,5 +78,6 @@ export const StyledForm = styled.form<{
 export const ErrorLabel = styled.div<{ isDarkTheme: boolean }>`
    font-size: 0.75em;
    margin-top: 0.2em;
-   color: ${({ isDarkTheme }) => (isDarkTheme ? Color.darkThm.error : Color.lightThm.error)};
+   color: ${({ isDarkTheme }) =>
+      isDarkTheme ? CSS_Color.darkThm.error : CSS_Color.lightThm.error};
 `;

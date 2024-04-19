@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import Color from '../../../../css/utils/colors';
 import CSS_Clickables from '../../../../css/utils/clickables';
+import CSS_Color from '../../../../css/utils/colors';
 
 interface IInputAttr {
    isRequired: boolean;
@@ -27,23 +27,23 @@ export const TextInput = styled.input.attrs<IInputAttr>(({ isRequired, isDisable
    transition: all 0.1s ease-in-out;
    ${CSS_Clickables.removeDefaultEffects};
    &::placeholder {
-      color: ${Color.setRgbOpacity(Color.darkThm.txt, 0.5)};
+      color: ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.txt, 0.5)};
    }
    ${({ isDarkTheme, hasError, isDisabled }) => {
-      const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+      const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
       const colorPropColor = isDisabled ? theme.accent : theme.txt;
       const colorPropOpacity = isDisabled ? 0.6 : 1;
       const activeColorPropOpacity = isDisabled ? 0.6 : 1;
       const borderColor = hasError ? theme.error : theme.accent;
       const borderOpacity = hasError ? 1 : 0.5;
       return css`
-         color: ${Color.setRgbOpacity(colorPropColor, colorPropOpacity)};
-         background-color: ${Color.setRgbOpacity(theme.bg, 0.1)};
-         border: 2px solid ${Color.setRgbOpacity(borderColor, borderOpacity)};
+         color: ${CSS_Color.setRgbOpacity(colorPropColor, colorPropOpacity)};
+         background-color: ${CSS_Color.setRgbOpacity(theme.bg, 0.1)};
+         border: 2px solid ${CSS_Color.setRgbOpacity(borderColor, borderOpacity)};
          &:focus,
          &:active {
             border: 2px solid ${borderColor};
-            color: ${Color.setRgbOpacity(colorPropColor, activeColorPropOpacity)};
+            color: ${CSS_Color.setRgbOpacity(colorPropColor, activeColorPropOpacity)};
          }
       `;
    }}

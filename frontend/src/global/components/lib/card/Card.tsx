@@ -1,10 +1,12 @@
 import styled from 'styled-components';
-import Color from '../../../css/utils/colors';
+import CSS_Color from '../../../css/utils/colors';
 import { CSS_Media } from '../../../css/utils/media';
 
 export const Card = styled.div<{ isDarkTheme: boolean }>`
    border: ${({ isDarkTheme }) =>
-      isDarkTheme ? `1px solid ${Color.darkThm.border}` : `1px solid ${Color.lightThm.border}`};
+      isDarkTheme
+         ? `1px solid ${CSS_Color.darkThm.border}`
+         : `1px solid ${CSS_Color.lightThm.border}`};
    margin: 1em;
    border-radius: 10px;
 `;

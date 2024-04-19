@@ -1,9 +1,9 @@
 import type { CSSProperties } from 'react';
 import { getTrackBackground } from 'react-range';
 import styled, { css } from 'styled-components';
-import Color from '../../../../css/utils/colors';
-import { CSS_Helper } from '../../../../css/utils/helper';
 import CSS_Clickables from '../../../../css/utils/clickables';
+import CSS_Color from '../../../../css/utils/colors';
+import { CSS_Helper } from '../../../../css/utils/helper';
 
 export const NumberLineInputWrapper = styled.div`
    position: relative;
@@ -19,12 +19,12 @@ export const StyledLineWrapper = styled.div<{
 }>`
    ${({ propsStyles }) => CSS_Helper.convertInlineToStyledComp(propsStyles)};
    ${({ isDarkTheme, hasError }) => {
-      const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+      const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
       const color = hasError ? theme.error : theme.accent;
       const opacity = hasError ? 1 : 0.5;
       return css`
-         border: 2px solid ${Color.setRgbOpacity(color, opacity)};
-         background-color: ${Color.setRgbOpacity(theme.bg, 0.1)};
+         border: 2px solid ${CSS_Color.setRgbOpacity(color, opacity)};
+         background-color: ${CSS_Color.setRgbOpacity(theme.bg, 0.1)};
       `;
    }};
 
@@ -48,10 +48,10 @@ export const StyledLineWrapper = styled.div<{
 export const Label = styled.div<{ isDragged: boolean; value: number | ''; isDarkTheme: boolean }>`
    position: relative;
    ${({ isDarkTheme, isDragged, value }) => {
-      const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+      const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
       const inputHasValue = value !== '';
       return css`
-         color: ${Color.setRgbOpacity(theme.txt, isDragged || inputHasValue ? 1 : 0.5)};
+         color: ${CSS_Color.setRgbOpacity(theme.txt, isDragged || inputHasValue ? 1 : 0.5)};
       `;
    }}
 `;
@@ -67,9 +67,9 @@ export const StyledLine = styled.div<{
    border-radius: 5px;
    box-sizing: border-box;
    ${({ isDarkTheme, inputHasValue, value, min, max }) => {
-      const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+      const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
       const activeColor = theme.txt;
-      const inactiveColor = Color.setRgbOpacity(theme.txt, 0.5);
+      const inactiveColor = CSS_Color.setRgbOpacity(theme.txt, 0.5);
       return css`
          background: ${getTrackBackground({
             values: [inputHasValue ? (value as number) : 0],
@@ -89,9 +89,9 @@ export const StyledDot = styled.div<{
 }>`
    ${({ propsStyles }) => CSS_Helper.convertInlineToStyledComp(propsStyles)};
    ${({ isDarkTheme, isDragged }) => {
-      const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+      const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
       return css`
-         background-color: ${Color.setRgbOpacity(theme.txt, isDragged ? 1 : 0.5)};
+         background-color: ${CSS_Color.setRgbOpacity(theme.txt, isDragged ? 1 : 0.5)};
       `;
    }}
    backdrop-filter: blur(100px);
@@ -107,9 +107,9 @@ export const StyledDot = styled.div<{
 export const ValueAndRefreshBtnWrapper = styled.div<{ isDarkTheme: boolean }>`
    position: absolute;
    ${({ isDarkTheme }) => {
-      const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+      const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
       return css`
-         border-left: 1px solid ${Color.setRgbOpacity(theme.accent, 0.75)};
+         border-left: 1px solid ${CSS_Color.setRgbOpacity(theme.accent, 0.75)};
       `;
    }}
    right: 0px;
@@ -152,9 +152,9 @@ export const RefreshBtnTransitioner = styled.div<{ inputHasValue: boolean; isDar
    ${CSS_Clickables.desktop.changeBrightnessOnHover(2)};
    ${CSS_Clickables.portable.changeBrightnessOnClick(3, 'revert')};
    ${({ isDarkTheme }) => {
-      const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+      const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
       return css`
-         color: ${Color.setRgbOpacity(theme.txt, 0.5)};
+         color: ${CSS_Color.setRgbOpacity(theme.txt, 0.5)};
       `;
    }}
    padding-left: ${({ inputHasValue }) => (inputHasValue ? '1.65em' : '0em')};

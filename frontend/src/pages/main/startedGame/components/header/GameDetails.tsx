@@ -3,12 +3,12 @@ import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
 import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../global/context/game/GameContext';
-import Color from '../../../../../global/css/utils/colors';
+import CSS_Color from '../../../../../global/css/utils/colors';
 import { CSS_Helper } from '../../../../../global/css/utils/helper';
+import { CSS_Media } from '../../../../../global/css/utils/media';
 import DBConnect from '../../../../../global/database/DBConnect/DBConnect';
 import useScrollFader from '../../../../../global/hooks/useScrollFader';
 import { GameDetailsContainer, GameDetailsItemWrapper, ItemLabel, ItemValue } from './style/Style';
-import { CSS_Media } from '../../../../../global/css/utils/media';
 
 interface IGameHeaderDetails {
    label: string;
@@ -49,10 +49,10 @@ export default function GameDetails(): JSX.Element {
             {gameHeaderDetails.map(({ label, value }, index) => (
                <GameDetailsItemWrapper key={index}>
                   <ConditionalRender condition={!!value && !value.includes('THE RAT')}>
-                     <ItemLabel color={Color.darkThm.error}>{label}</ItemLabel>
+                     <ItemLabel color={CSS_Color.darkThm.error}>{label}</ItemLabel>
                   </ConditionalRender>
                   <ItemValue
-                     color={Color.darkThm.success}
+                     color={CSS_Color.darkThm.success}
                      ratUser={!!value && value.includes('THE RAT')}
                   >
                      {value}

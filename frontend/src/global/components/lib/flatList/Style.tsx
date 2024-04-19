@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import Color from '../../../css/utils/colors';
-import { CSS_Helper } from '../../../css/utils/helper';
 import CSS_Clickables from '../../../css/utils/clickables';
+import CSS_Color from '../../../css/utils/colors';
+import { CSS_Helper } from '../../../css/utils/helper';
 import { CSS_Scrollbar } from '../../../css/utils/scrollbar';
 
 export const FlatListWrapper = styled.div`
@@ -22,8 +22,8 @@ export const FlatListItem = styled.div<{ isDarkTheme: boolean }>`
       ${({ isDarkTheme }) => (isDarkTheme ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)')};
    cursor: pointer;
    ${({ isDarkTheme }) => {
-      const bgColor = Color.setRgbOpacity(
-         isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt,
+      const bgColor = CSS_Color.setRgbOpacity(
+         isDarkTheme ? CSS_Color.darkThm.txt : CSS_Color.lightThm.txt,
          0.1,
       );
       const mobile = CSS_Clickables.portable.changeColorOnClick(

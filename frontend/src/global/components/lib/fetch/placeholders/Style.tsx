@@ -1,21 +1,21 @@
 import type { Keyframes } from 'styled-components';
 import styled, { keyframes } from 'styled-components';
-import Color from '../../../../css/utils/colors';
+import CSS_Color from '../../../../css/utils/colors';
 
 // Define a keyframe animation for the placeholderLine
 const pulse = (isDarkTheme: boolean): Keyframes => keyframes`
   0% {
-    background-color: ${isDarkTheme ? Color.darkThm.border : Color.lightThm.border};
+    background-color: ${isDarkTheme ? CSS_Color.darkThm.border : CSS_Color.lightThm.border};
   }
   50% {
     background-color: ${
        isDarkTheme
-          ? Color.setRgbOpacity(Color.darkThm.txt, 0.3)
-          : Color.setRgbOpacity(Color.lightThm.txt, 0.3)
+          ? CSS_Color.setRgbOpacity(CSS_Color.darkThm.txt, 0.3)
+          : CSS_Color.setRgbOpacity(CSS_Color.lightThm.txt, 0.3)
     };
   }
   100% {
-    background-color: ${isDarkTheme ? Color.darkThm.border : Color.lightThm.border};
+    background-color: ${isDarkTheme ? CSS_Color.darkThm.border : CSS_Color.lightThm.border};
   }
 `;
 

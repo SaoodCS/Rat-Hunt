@@ -16,8 +16,9 @@ import { Wrapper } from '../../../global/components/lib/positionModifiers/wrappe
 import Scroller from '../../../global/components/lib/scroller/Scroller';
 import { GameContext } from '../../../global/context/game/GameContext';
 import { ToastContext } from '../../../global/context/widget/toast/ToastContext';
-import Color from '../../../global/css/utils/colors';
+import CSS_Color from '../../../global/css/utils/colors';
 import { CSS_Helper } from '../../../global/css/utils/helper';
+import { CSS_Media } from '../../../global/css/utils/media';
 import DBConnect from '../../../global/database/DBConnect/DBConnect';
 import Device from '../../../global/helpers/pwa/deviceHelper';
 import useCustomNavigate from '../../../global/hooks/useCustomNavigate';
@@ -29,7 +30,6 @@ import {
    UserListItemContainer,
    WaitingRoomTitle,
 } from './style/Style';
-import { CSS_Media } from '../../../global/css/utils/media';
 
 export default function WaitingRoom(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -132,10 +132,10 @@ export default function WaitingRoom(): JSX.Element {
                onClick={shareRoomCode}
                style={{
                   cursor: 'pointer',
-                  color: Color.setRgbOpacity(Color.darkThm.warning, 1),
+                  color: CSS_Color.setRgbOpacity(CSS_Color.darkThm.warning, 1),
                   marginBottom: '0.15em',
                }}
-               color={Color.darkThm.warning}
+               color={CSS_Color.darkThm.warning}
             />
          </RoomIdTopicItemContainer>
          <RoomIdTopicItemContainer>

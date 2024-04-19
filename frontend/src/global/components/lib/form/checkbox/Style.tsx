@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import Color from '../../../../css/utils/colors';
-import { FlexRowWrapper } from '../../positionModifiers/flexRowWrapper/Style';
 import CSS_Clickables from '../../../../css/utils/clickables';
+import CSS_Color from '../../../../css/utils/colors';
+import { FlexRowWrapper } from '../../positionModifiers/flexRowWrapper/Style';
 
 export interface ICheckInputAttr {
    isRequired: boolean;
@@ -46,7 +46,7 @@ export const StyledCheckbox = styled.input.attrs<ICheckInputAttr>(({ isRequired,
    background-color: #fff;
    border-radius: 2px;
    border: ${({ isDarkTheme, hasError }) =>
-      hasError && `1px solid ${isDarkTheme ? Color.darkThm.error : Color.lightThm.error}`};
+      hasError && `1px solid ${isDarkTheme ? CSS_Color.darkThm.error : CSS_Color.lightThm.error}`};
    width: ${checkboxSizePx}px;
    height: ${checkboxSizePx}px;
    cursor: pointer;
@@ -54,7 +54,7 @@ export const StyledCheckbox = styled.input.attrs<ICheckInputAttr>(({ isRequired,
    transition: background-color 0.2s;
    &:checked {
       background-color: ${({ isDarkTheme }) =>
-         isDarkTheme ? Color.darkThm.accent : Color.lightThm.accent};
+         isDarkTheme ? CSS_Color.darkThm.accent : CSS_Color.lightThm.accent};
       &::after {
          content: '';
          position: absolute;
@@ -63,7 +63,7 @@ export const StyledCheckbox = styled.input.attrs<ICheckInputAttr>(({ isRequired,
          width: 3px;
          height: 10px;
          border: solid
-            ${({ isDarkTheme }) => (isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt)};
+            ${({ isDarkTheme }) => (isDarkTheme ? CSS_Color.darkThm.txt : CSS_Color.lightThm.txt)};
          border-width: 0 2.5px 2.5px 0;
          transform: rotate(45deg);
       }

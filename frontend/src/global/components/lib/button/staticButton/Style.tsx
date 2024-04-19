@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import Color from '../../../../css/utils/colors';
 import CSS_Clickables from '../../../../css/utils/clickables';
+import CSS_Color from '../../../../css/utils/colors';
 
 interface IStaticButtonAttrs {
    isDisabled?: boolean;
@@ -24,7 +24,7 @@ export const StaticButton = styled.button.attrs<IStaticButtonAttrs>(({ isDisable
    text-align: center;
    border-radius: 0.5em;
    ${({ isDarkTheme, isDisabled, isDangerBtn, isWarningBtn }) => {
-      const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+      const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
       const textColor = theme.txt;
       const textOpacity = 0.8;
       const textShadowCol = theme.bg;
@@ -32,9 +32,9 @@ export const StaticButton = styled.button.attrs<IStaticButtonAttrs>(({ isDisable
       const backgroundOpacity = isDisabled ? 0.5 : 1;
       const bgColor = isDangerBtn ? theme.error : isWarningBtn ? theme.warning : theme.accent;
       return css`
-         color: ${Color.setRgbOpacity(textColor, textOpacity)};
-         background-color: ${Color.setRgbOpacity(bgColor, backgroundOpacity)};
-         text-shadow: 0.1em 0.1em 0 ${Color.setRgbOpacity(textShadowCol, textShadowOpacity)};
+         color: ${CSS_Color.setRgbOpacity(textColor, textOpacity)};
+         background-color: ${CSS_Color.setRgbOpacity(bgColor, backgroundOpacity)};
+         text-shadow: 0.1em 0.1em 0 ${CSS_Color.setRgbOpacity(textShadowCol, textShadowOpacity)};
          ${CSS_Clickables.desktop.changeBrightnessOnHover(0.8)};
          ${CSS_Clickables.portable.changeBrightnessOnClick(0.8, 'revert')};
       `;

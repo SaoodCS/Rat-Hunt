@@ -1,6 +1,6 @@
 import { CheckCircle } from '@styled-icons/material/CheckCircle';
 import styled from 'styled-components';
-import Color from '../../../../css/utils/colors';
+import CSS_Color from '../../../../css/utils/colors';
 
 export const SuccessMsgText = styled.div`
    margin-left: 0.5em;
@@ -11,7 +11,7 @@ export const SuccessMsgText = styled.div`
 export const SuccessIcon = styled(CheckCircle)<{ darktheme: string }>`
    width: 10%;
    color: ${({ darktheme }) =>
-      darktheme === 'true' ? Color.darkThm.success : Color.lightThm.success};
+      darktheme === 'true' ? CSS_Color.darkThm.success : CSS_Color.lightThm.success};
 `;
 
 export const SuccessMsgHolder = styled.div`

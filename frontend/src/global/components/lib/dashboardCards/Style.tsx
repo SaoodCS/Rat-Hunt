@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Color from '../../../css/utils/colors';
+import CSS_Color from '../../../css/utils/colors';
 import { CSS_Media } from '../../../css/utils/media';
 
 export const CardHolder = styled.div`
@@ -129,7 +129,7 @@ export const CardContentWrapper = styled.div<{
    border-radius: 10px;
    overflow: hidden;
    background-color: ${({ isDarkTheme }) =>
-      Color.setRgbOpacity(isDarkTheme ? Color.lightThm.bg : Color.darkThm.bg, 0.05)};
+      CSS_Color.setRgbOpacity(isDarkTheme ? CSS_Color.lightThm.bg : CSS_Color.darkThm.bg, 0.05)};
    font-size: 0.9em;
    height: ${({ height }) => height || 'auto'};
    min-height: ${({ minHeight }) => minHeight};

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Color from '../../../../css/utils/colors';
 import CSS_Clickables from '../../../../css/utils/clickables';
+import CSS_Color from '../../../../css/utils/colors';
 
 export const InlineTxtBtn = styled.span<{
    isDarkTheme: boolean;
@@ -13,17 +13,17 @@ export const InlineTxtBtn = styled.span<{
    cursor: pointer;
    color: ${({ isDarkTheme, isDisabled, isDangerBtn, isWarningBtn }) =>
       isDangerBtn
-         ? Color.setRgbOpacity(
-              isDarkTheme ? Color.darkThm.error : Color.lightThm.error,
+         ? CSS_Color.setRgbOpacity(
+              isDarkTheme ? CSS_Color.darkThm.error : CSS_Color.lightThm.error,
               isDisabled ? 0.5 : 1,
            )
          : isWarningBtn
-           ? Color.setRgbOpacity(
-                isDarkTheme ? Color.darkThm.warning : Color.lightThm.warning,
+           ? CSS_Color.setRgbOpacity(
+                isDarkTheme ? CSS_Color.darkThm.warning : CSS_Color.lightThm.warning,
                 isDisabled ? 0.5 : 1,
              )
-           : Color.setRgbOpacity(
-                isDarkTheme ? Color.darkThm.accent : Color.lightThm.accent,
+           : CSS_Color.setRgbOpacity(
+                isDarkTheme ? CSS_Color.darkThm.accent : CSS_Color.lightThm.accent,
                 isDisabled ? 0.5 : 1,
              )};
 `;

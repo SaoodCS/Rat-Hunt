@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import Color from '../../../css/utils/colors';
-import { FlatListWrapper } from '../flatList/Style';
 import CSS_Clickables from '../../../css/utils/clickables';
+import CSS_Color from '../../../css/utils/colors';
+import { FlatListWrapper } from '../flatList/Style';
 
 export const CardListTitle = styled.div`
    margin-bottom: 1em;
@@ -37,7 +37,7 @@ export const ItemTitleAndIconWrapper = styled.div`
 export const CardListItem = styled.div<{ isDarkTheme: boolean; width?: string }>`
    ${CSS_Clickables.removeDefaultEffects};
    display: flex;
-   border: 1px solid ${Color.darkThm.border};
+   border: 1px solid ${CSS_Color.darkThm.border};
    height: 5em;
    box-sizing: border-box;
    padding: 1em;
@@ -46,7 +46,7 @@ export const CardListItem = styled.div<{ isDarkTheme: boolean; width?: string }>
    flex-direction: row;
    justify-content: space-between;
    background-color: ${({ isDarkTheme }) =>
-      Color.setRgbOpacity(isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt, 0.05)};
+      CSS_Color.setRgbOpacity(isDarkTheme ? CSS_Color.darkThm.txt : CSS_Color.lightThm.txt, 0.05)};
    margin-bottom: 1em;
    width: ${({ width }) => width || '100%'};
    cursor: pointer;

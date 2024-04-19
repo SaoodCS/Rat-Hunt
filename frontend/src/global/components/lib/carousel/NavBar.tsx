@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import Color from '../../../css/utils/colors';
-import { CSS_Helper } from '../../../css/utils/helper';
 import CSS_Clickables from '../../../css/utils/clickables';
+import CSS_Color from '../../../css/utils/colors';
+import { CSS_Helper } from '../../../css/utils/helper';
 
 export const CarouselAndNavBarWrapper = styled.div`
    height: 100%;
@@ -21,7 +21,7 @@ export const NavBarContainer = styled.div<{ isDarkTheme: boolean }>`
    align-items: center;
    box-sizing: border-box;
    border-bottom: 1px solid
-      ${({ isDarkTheme }) => (isDarkTheme ? Color.darkThm.border : Color.lightThm.border)};
+      ${({ isDarkTheme }) => (isDarkTheme ? CSS_Color.darkThm.border : CSS_Color.lightThm.border)};
    border-bottom-left-radius: 10px;
    border-bottom-right-radius: 10px;
 `;
@@ -32,21 +32,21 @@ export const NavBarHeading = styled.button<{ isActive: boolean; isDarkTheme: boo
    border-bottom: ${({ isActive, isDarkTheme }) =>
       isActive
          ? isDarkTheme
-            ? `1.75px solid ${Color.darkThm.accent}`
-            : `1.75px solid ${Color.lightThm.accent}`
+            ? `1.75px solid ${CSS_Color.darkThm.accent}`
+            : `1.75px solid ${CSS_Color.lightThm.accent}`
          : 'none'};
    transition: all 0.2s ease-in-out;
    box-sizing: border-box;
 
    cursor: pointer;
    color: ${({ isActive, isDarkTheme }) => {
-      const color = isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt;
-      return isActive ? color : Color.setRgbOpacity(color, 0.6);
+      const color = isDarkTheme ? CSS_Color.darkThm.txt : CSS_Color.lightThm.txt;
+      return isActive ? color : CSS_Color.setRgbOpacity(color, 0.6);
    }};
 
    ${({ isDarkTheme }) => {
-      const changeToColor = Color.setRgbOpacity(
-         isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt,
+      const changeToColor = CSS_Color.setRgbOpacity(
+         isDarkTheme ? CSS_Color.darkThm.txt : CSS_Color.lightThm.txt,
          1,
       );
       const desktop = CSS_Clickables.desktop.changeColorOnHover(changeToColor, 'color');

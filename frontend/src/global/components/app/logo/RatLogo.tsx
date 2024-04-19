@@ -1,4 +1,4 @@
-import Color from '../../../css/utils/colors';
+import CSS_Color from '../../../css/utils/colors';
 
 interface IRatLogo {
    color?: string;
@@ -7,7 +7,7 @@ interface IRatLogo {
 
 export default function RatLogo(props: IRatLogo): JSX.Element {
    const { color, size } = props;
-   const defaultColor = Color.darkThm.accent;
+   const defaultColor = CSS_Color.darkThm.accent;
    const defaultSize = '512px';
    return (
       <svg

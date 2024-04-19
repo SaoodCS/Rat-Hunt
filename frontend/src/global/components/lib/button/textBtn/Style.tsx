@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import Color from '../../../../css/utils/colors';
-import { CSS_Helper } from '../../../../css/utils/helper';
 import CSS_Clickables from '../../../../css/utils/clickables';
+import CSS_Color from '../../../../css/utils/colors';
+import { CSS_Helper } from '../../../../css/utils/helper';
 
 interface ITextBtnAttrs {
    isDisabled?: boolean;
@@ -24,17 +24,17 @@ export const TextBtn = styled.button.attrs<ITextBtnAttrs>(({ isDisabled }) => ({
    border-radius: 10px;
    color: ${({ isDarkTheme, isDisabled, isDangerBtn, isWarningBtn }) =>
       isDangerBtn
-         ? Color.setRgbOpacity(
-              isDarkTheme ? Color.darkThm.error : Color.lightThm.error,
+         ? CSS_Color.setRgbOpacity(
+              isDarkTheme ? CSS_Color.darkThm.error : CSS_Color.lightThm.error,
               isDisabled ? 0.5 : 1,
            )
          : isWarningBtn
-           ? Color.setRgbOpacity(
-                isDarkTheme ? Color.darkThm.warning : Color.lightThm.warning,
+           ? CSS_Color.setRgbOpacity(
+                isDarkTheme ? CSS_Color.darkThm.warning : CSS_Color.lightThm.warning,
                 isDisabled ? 0.5 : 1,
              )
-           : Color.setRgbOpacity(
-                isDarkTheme ? Color.darkThm.accent : Color.lightThm.accent,
+           : CSS_Color.setRgbOpacity(
+                isDarkTheme ? CSS_Color.darkThm.accent : CSS_Color.lightThm.accent,
                 isDisabled ? 0.5 : 1,
              )};
    justify-content: ${({ position }) =>
@@ -43,12 +43,12 @@ export const TextBtn = styled.button.attrs<ITextBtnAttrs>(({ isDisabled }) => ({
 
    ${({ isDarkTheme, isDisabled }) => {
       if (isDisabled) return;
-      const colorMobile = Color.setRgbOpacity(
-         isDarkTheme ? Color.darkThm.accent : Color.lightThm.accent,
+      const colorMobile = CSS_Color.setRgbOpacity(
+         isDarkTheme ? CSS_Color.darkThm.accent : CSS_Color.lightThm.accent,
          0.5,
       );
-      const colorDesktop = Color.setRgbOpacity(
-         isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt,
+      const colorDesktop = CSS_Color.setRgbOpacity(
+         isDarkTheme ? CSS_Color.darkThm.txt : CSS_Color.lightThm.txt,
          0.1,
       );
       const mobile = CSS_Clickables.portable.changeColorOnClick(

@@ -1,5 +1,4 @@
-import { Fragment } from 'react';
-import Color from '../../../css/utils/colors';
+import CSS_Color from '../../../css/utils/colors';
 import Device from '../../../helpers/pwa/deviceHelper';
 import { TextColourizer } from '../../lib/font/textColorizer/TextColourizer';
 import { ListItem, OrderedList } from '../../lib/newList/Style';
@@ -46,27 +45,27 @@ export default function InstallAppSteps(props: IInstallAppSteps): JSX.Element {
             padding="0.5em 0em 1em 1.5em"
             margin="0"
             bulletAndTextSpacing="0.3em"
-            bulletColor={Color.darkThm.accent}
+            bulletColor={CSS_Color.darkThm.accent}
             bulletBold
          >
             <ConditionalRender condition={Device.isIphone()}>
                {iPhoneInstallSteps.map((step) => (
                   <ListItem key={step}>
-                     <TextColourizer color={Color.darkThm.txt}>{step}</TextColourizer>
+                     <TextColourizer color={CSS_Color.darkThm.txt}>{step}</TextColourizer>
                   </ListItem>
                ))}
             </ConditionalRender>
             <ConditionalRender condition={Device.isAndroid()}>
                {androidInstallSteps.map((step) => (
                   <ListItem key={step}>
-                     <TextColourizer color={Color.darkThm.txt}>{step}</TextColourizer>
+                     <TextColourizer color={CSS_Color.darkThm.txt}>{step}</TextColourizer>
                   </ListItem>
                ))}
             </ConditionalRender>
             <ConditionalRender condition={Device.isDesktop()}>
                {desktopInstallSteps.map((step) => (
                   <ListItem key={step}>
-                     <TextColourizer color={Color.darkThm.txt}>{step}</TextColourizer>
+                     <TextColourizer color={CSS_Color.darkThm.txt}>{step}</TextColourizer>
                   </ListItem>
                ))}
             </ConditionalRender>

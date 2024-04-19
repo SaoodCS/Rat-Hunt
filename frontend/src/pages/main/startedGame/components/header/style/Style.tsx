@@ -1,13 +1,13 @@
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import styled from 'styled-components';
-import Color from '../../../../../../global/css/utils/colors';
+import CSS_Color from '../../../../../../global/css/utils/colors';
 
 export const ItemValue = styled.div<{ color?: string; ratUser?: boolean }>`
    box-sizing: border-box;
    padding-left: 1em;
    padding-right: 1em;
    color: ${({ color, ratUser }) =>
-      color && !ratUser ? Color.darkThm.success : Color.darkThm.error};
+      color && !ratUser ? CSS_Color.darkThm.success : CSS_Color.darkThm.error};
    width: ${({ ratUser }) => (ratUser ? '100%' : '80%')};
    filter: ${({ ratUser }) => (ratUser ? 'brightness(0.8)' : 'brightness(0.8)')};
 `;
@@ -17,11 +17,11 @@ export const ItemLabel = styled.div<{ color?: string }>`
    box-sizing: border-box;
    padding-left: 1em;
    filter: brightness(0.8);
-   color: ${({ color }) => color || Color.darkThm.accent};
+   color: ${({ color }) => color || CSS_Color.darkThm.accent};
 `;
 
 export const GameDetailsItemWrapper = styled.div`
-   border-bottom: 1px solid ${Color.darkThm.accentDarkerShade};
+   border-bottom: 1px solid ${CSS_Color.darkThm.accentDarkerShade};
    width: 100%;
    display: flex;
    align-items: center;

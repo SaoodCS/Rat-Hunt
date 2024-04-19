@@ -1,5 +1,5 @@
 import { css } from 'styled-components';
-import Color from './colors';
+import CSS_Color from './colors';
 
 export namespace CSS_Scrollbar {
    export const hide = css`
@@ -28,10 +28,10 @@ export namespace CSS_Scrollbar {
             linear,
             left bottom,
             left top,
-            color-stop(0.44, ${Color.setRgbOpacity(Color.darkThm.accent, 0.7)}),
-            color-stop(0.72, ${Color.setRgbOpacity(Color.darkThm.accent, 0.5)}),
-            color-stop(0.86, ${Color.setRgbOpacity(Color.darkThm.accent, 0.3)}),
-            color-stop(1, ${Color.setRgbOpacity(Color.darkThm.accent, 0.1)})
+            color-stop(0.44, ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.accent, 0.7)}),
+            color-stop(0.72, ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.accent, 0.5)}),
+            color-stop(0.86, ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.accent, 0.3)}),
+            color-stop(1, ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.accent, 0.1)})
          );
          border-radius: 8px;
       }

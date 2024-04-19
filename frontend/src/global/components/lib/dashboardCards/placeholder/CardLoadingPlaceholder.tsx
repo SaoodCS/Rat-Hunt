@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Color from '../../../../css/utils/colors';
+import CSS_Color from '../../../../css/utils/colors';
 
 export const CardLoadingPlaceholder = styled.div<{ isDarkTheme: boolean }>`
    position: relative;
@@ -18,18 +18,18 @@ export const CardLoadingPlaceholder = styled.div<{ isDarkTheme: boolean }>`
          to right,
          ${(props) =>
                props.isDarkTheme
-                  ? Color.setRgbOpacity(Color.lightThm.bg, 0.05)
-                  : Color.setRgbOpacity(Color.darkThm.bg, 0.05)}
+                  ? CSS_Color.setRgbOpacity(CSS_Color.lightThm.bg, 0.05)
+                  : CSS_Color.setRgbOpacity(CSS_Color.darkThm.bg, 0.05)}
             0%,
          ${(props) =>
                props.isDarkTheme
-                  ? Color.setRgbOpacity(Color.lightThm.bg, 0.1)
-                  : Color.setRgbOpacity(Color.darkThm.bg, 0.1)}
+                  ? CSS_Color.setRgbOpacity(CSS_Color.lightThm.bg, 0.1)
+                  : CSS_Color.setRgbOpacity(CSS_Color.darkThm.bg, 0.1)}
             20%,
          ${(props) =>
                props.isDarkTheme
-                  ? Color.setRgbOpacity(Color.lightThm.bg, 0.2)
-                  : Color.setRgbOpacity(Color.darkThm.bg, 0.2)}
+                  ? CSS_Color.setRgbOpacity(CSS_Color.lightThm.bg, 0.2)
+                  : CSS_Color.setRgbOpacity(CSS_Color.darkThm.bg, 0.2)}
             40%
       );
       animation: loading 1.5s infinite;

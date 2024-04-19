@@ -2,7 +2,7 @@ import RatLogo from '../../../../../global/components/app/logo/RatLogo';
 import TargettedRatLogo from '../../../../../global/components/app/logo/targettedRatLogo/TargettedRatLogo';
 import { TextColourizer } from '../../../../../global/components/lib/font/textColorizer/TextColourizer';
 import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
-import Color from '../../../../../global/css/utils/colors';
+import CSS_Color from '../../../../../global/css/utils/colors';
 import { RatOrPlayerSplashWrapper } from './style/Style';
 
 interface IRatOrPlayerSplash {
@@ -19,12 +19,12 @@ export default function RatOrPlayerSplash(props: IRatOrPlayerSplash): JSX.Elemen
             padding="0em 0em 0.25em 0em"
             gradient={{
                deg: '180deg',
-               startColor: Color.setRgbOpacity(
-                  isUserRat ? Color.darkThm.error : Color.darkThm.accent,
+               startColor: CSS_Color.setRgbOpacity(
+                  isUserRat ? CSS_Color.darkThm.error : CSS_Color.darkThm.accent,
                   1,
                ),
-               endColor: Color.setRgbOpacity(
-                  isUserRat ? Color.darkThm.error : Color.darkThm.accent,
+               endColor: CSS_Color.setRgbOpacity(
+                  isUserRat ? CSS_Color.darkThm.error : CSS_Color.darkThm.accent,
                   isUserRat ? 0.75 : 0.5,
                ),
             }}
@@ -35,7 +35,7 @@ export default function RatOrPlayerSplash(props: IRatOrPlayerSplash): JSX.Elemen
             <TargettedRatLogo sizeEm={20} />
          </ConditionalRender>
          <ConditionalRender condition={isUserRat}>
-            <RatLogo size={'12em'} color={Color.setRgbOpacity(Color.darkThm.error, 0.75)} />
+            <RatLogo size={'12em'} color={CSS_Color.setRgbOpacity(CSS_Color.darkThm.error, 0.75)} />
          </ConditionalRender>
       </RatOrPlayerSplashWrapper>
    );

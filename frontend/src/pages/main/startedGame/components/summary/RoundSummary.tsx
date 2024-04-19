@@ -5,8 +5,9 @@ import MiscHelper from '../../../../../../../shared/lib/helpers/miscHelper/MiscH
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { GameContext } from '../../../../../global/context/game/GameContext';
 import { ModalContext } from '../../../../../global/context/widget/modal/ModalContext';
-import Color from '../../../../../global/css/utils/colors';
+import CSS_Color from '../../../../../global/css/utils/colors';
 import { CSS_Helper } from '../../../../../global/css/utils/helper';
+import { CSS_Media } from '../../../../../global/css/utils/media';
 import DBConnect from '../../../../../global/database/DBConnect/DBConnect';
 import RoundEndForm from './components/form/RoundEndForm';
 import PointsMsgsFader from './components/pointsMsgsFader/PointsMsgsFader';
@@ -20,7 +21,6 @@ import {
    RoundSummaryTitle,
    ScoreboardContainer,
 } from './style/Style';
-import { CSS_Media } from '../../../../../global/css/utils/media';
 
 export default function RoundSummary(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);
@@ -93,20 +93,20 @@ const screenStyles = (): FlattenSimpleInterpolation => {
          ${MarqueeContainer} {
             max-width: 45em;
             margin: 0 auto;
-            border-left: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.5)};
-            border-right: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.5)};
+            border-left: 1px solid ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.accent, 0.5)};
+            border-right: 1px solid ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.accent, 0.5)};
          }
          ${PointsMsgsWrapper} {
             max-width: 45em;
             margin: 0 auto;
-            border-left: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.5)};
-            border-right: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.5)};
+            border-left: 1px solid ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.accent, 0.5)};
+            border-right: 1px solid ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.accent, 0.5)};
          }
          ${ScoreboardContainer} {
             max-width: 45em;
             margin: 0 auto;
-            border-left: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.5)};
-            border-right: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.5)};
+            border-left: 1px solid ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.accent, 0.5)};
+            border-right: 1px solid ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.accent, 0.5)};
          }
       }
    `;

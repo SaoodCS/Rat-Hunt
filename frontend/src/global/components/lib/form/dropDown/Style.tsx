@@ -2,7 +2,7 @@ import type { ControlProps } from 'react-select/dist/declarations/src/components
 import type { OptionProps } from 'react-select/dist/declarations/src/components/Option';
 import type { DropdownIndicatorProps } from 'react-select/dist/declarations/src/components/indicators';
 import type { CSSObjectWithLabel, GroupBase } from 'react-select/dist/declarations/src/types';
-import Color from '../../../../css/utils/colors';
+import CSS_Color from '../../../../css/utils/colors';
 import Device from '../../../../helpers/pwa/deviceHelper';
 import type { IDropDownOptions } from './DropDownInput';
 
@@ -12,7 +12,7 @@ export const parentContainerStyles = (
    isDarkTheme: boolean,
    provided: CSSObjectWithLabel,
 ): CSSObjectWithLabel => {
-   const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+   const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
    return {
       ...provided,
       height: '100%',
@@ -30,21 +30,21 @@ export const inputFieldStyles = (
    hasError: boolean,
 ): CSSObjectWithLabel => {
    const { isFocused } = state;
-   const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
-   const borderColor = hasError ? Color.darkThm.error : theme.accent;
+   const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
+   const borderColor = hasError ? CSS_Color.darkThm.error : theme.accent;
    const opacityOne = hasError ? 1 : 0.75;
    const opacityTwo = hasError ? 1 : 0.5;
    return {
       ...provided,
       border: 0,
       boxShadow: isFocused
-         ? `inset 0 0 0 2px ${Color.setRgbOpacity(borderColor, opacityOne)}`
-         : `inset 0 0 0 2px ${Color.setRgbOpacity(borderColor, opacityTwo)}`,
+         ? `inset 0 0 0 2px ${CSS_Color.setRgbOpacity(borderColor, opacityOne)}`
+         : `inset 0 0 0 2px ${CSS_Color.setRgbOpacity(borderColor, opacityTwo)}`,
       WebkitTapHighlightColor: 'transparent',
       minHeight: '0em',
       cursor: 'pointer',
       transition: 'all 0.2s ease',
-      backgroundColor: Color.setRgbOpacity(theme.bg, 0.1),
+      backgroundColor: CSS_Color.setRgbOpacity(theme.bg, 0.1),
       height: '100%',
       width: '100%',
    };
@@ -54,7 +54,7 @@ export const valPlaceholderContainerStyles = (
    isDarkTheme: boolean,
    provided: CSSObjectWithLabel,
 ): CSSObjectWithLabel => {
-   const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+   const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
    return {
       ...provided,
       alignItems: 'center',
@@ -68,7 +68,7 @@ export const inputFieldValueStyles = (
    isDarkTheme: boolean,
    provided: CSSObjectWithLabel,
 ): CSSObjectWithLabel => {
-   const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+   const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
    return {
       ...provided,
       color: theme.txt,
@@ -79,10 +79,10 @@ export const inputFieldPlaceholderStyle = (
    isDarkTheme: boolean,
    provided: CSSObjectWithLabel,
 ): CSSObjectWithLabel => {
-   const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+   const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
    return {
       ...provided,
-      color: Color.setRgbOpacity(theme.txt, 0.5),
+      color: CSS_Color.setRgbOpacity(theme.txt, 0.5),
    };
 };
 
@@ -90,11 +90,11 @@ export const dropDownMenuStyles = (
    isDarkTheme: boolean,
    provided: CSSObjectWithLabel,
 ): CSSObjectWithLabel => {
-   const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+   const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
    return {
       ...provided,
       zIndex: 999,
-      backgroundColor: Color.setRgbOpacity(theme.txt, 0.9),
+      backgroundColor: CSS_Color.setRgbOpacity(theme.txt, 0.9),
       margin: 0,
       backdropFilter: 'blur(100px)',
       animation: 'fadeIn 0.2s ease-in-out',
@@ -119,7 +119,7 @@ export const dropDownOptionsStyles = (
    >,
 ): CSSObjectWithLabel => {
    const { isSelected } = state;
-   const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+   const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
 
    return {
       ...provided,
@@ -127,15 +127,15 @@ export const dropDownOptionsStyles = (
       cursor: 'pointer',
       margin: 0,
       paddingTop: '1em',
-      borderBottom: `1px solid ${Color.setRgbOpacity(theme.bg, 0.1)}`,
-      backgroundColor: Color.setRgbOpacity(theme.txt, isSelected ? 1 : 0),
+      borderBottom: `1px solid ${CSS_Color.setRgbOpacity(theme.bg, 0.1)}`,
+      backgroundColor: CSS_Color.setRgbOpacity(theme.txt, isSelected ? 1 : 0),
       ...(!Device.isTouchScreen() && {
          '&:hover': {
-            backgroundColor: Color.setRgbOpacity(theme.txt, 0.4),
+            backgroundColor: CSS_Color.setRgbOpacity(theme.txt, 0.4),
          },
       }),
       '&:active': {
-         backgroundColor: Color.setRgbOpacity(theme.txt, 0.4),
+         backgroundColor: CSS_Color.setRgbOpacity(theme.txt, 0.4),
       },
       transition: 'color 0.2s ease, background-color 0.2s ease',
    };
@@ -150,13 +150,13 @@ export const iconStyles = (
       GroupBase<IDropDownOptions['options'][0]>
    >,
 ): CSSObjectWithLabel => {
-   const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+   const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
    const { isFocused } = state;
    return {
       ...provided,
       transition: 'all 0.2s ease',
       transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-      color: isFocused ? theme.txt : Color.setRgbOpacity(theme.txt, 0.5),
+      color: isFocused ? theme.txt : CSS_Color.setRgbOpacity(theme.txt, 0.5),
       boxSizing: 'border-box',
       position: 'absolute',
       right: 0,
@@ -172,10 +172,10 @@ export const iconBorderSeperator = (
    isDarkTheme: boolean,
    provided: CSSObjectWithLabel,
 ): CSSObjectWithLabel => {
-   const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
+   const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
    return {
       ...provided,
-      borderRight: `1px solid ${Color.setRgbOpacity(theme.accent, 0.75)}`,
+      borderRight: `1px solid ${CSS_Color.setRgbOpacity(theme.accent, 0.75)}`,
       position: 'absolute',
       boxSizing: 'border-box',
       top: 0,

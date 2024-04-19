@@ -1,5 +1,5 @@
 import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
-import Color from '../../../../css/utils/colors';
+import CSS_Color from '../../../../css/utils/colors';
 import { CSS_ZIndex } from '../../../../css/utils/zIndex';
 import ExitAnimatePresence from '../../animation/exitAnimatePresence/ExitAnimatePresence';
 import { AnimatedOverlay } from '../../animation/overlay/AnimatedOverlay';
@@ -21,7 +21,10 @@ export default function Loader(props: ILoaderProps): JSX.Element {
             animateType={['fade']}
             duration={0.3}
             type="tween"
-            color={Color.setRgbOpacity(isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt, 0.25)}
+            color={CSS_Color.setRgbOpacity(
+               isDarkTheme ? CSS_Color.darkThm.txt : CSS_Color.lightThm.txt,
+               0.25,
+            )}
             zIndex={CSS_ZIndex.get('loader') - 1}
          />
 

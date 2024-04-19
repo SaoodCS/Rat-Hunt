@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import Color from '../../../../../css/utils/colors';
+import CSS_Color from '../../../../../css/utils/colors';
 
 export const RatWrapper = styled.div`
    svg {
-      fill: ${Color.setRgbOpacity(Color.darkThm.error, 1)};
+      fill: ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.error, 1)};
    }
 `;
 
@@ -12,7 +12,7 @@ export const TargetWrapper = styled.div`
    filter: brightness(1);
    svg {
       border-radius: 50%;
-      fill: ${Color.setRgbOpacity(Color.darkThm.bg, 0.5)};
+      fill: ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.bg, 0.5)};
    }
 `;
 
@@ -33,7 +33,7 @@ export const InnerTarget = styled.div`
    width: 79%;
    background: radial-gradient(
       circle at 50% 50%,
-      ${Color.setRgbOpacity(Color.darkThm.accent, 0.5)},
-      ${Color.darkThm.bg}
+      ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.accent, 0.5)},
+      ${CSS_Color.darkThm.bg}
    );
 `;

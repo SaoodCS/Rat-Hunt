@@ -1,17 +1,17 @@
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import styled, { css, keyframes } from 'styled-components';
 import type GameHelper from '../../../../../../../../../../shared/app/GameHelper/GameHelper';
-import Color from '../../../../../../../../global/css/utils/colors';
+import CSS_Color from '../../../../../../../../global/css/utils/colors';
 
 const flash = keyframes`
    0% {
-      background-color: ${Color.setRgbOpacity(Color.darkThm.warning, 1)};
+      background-color: ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.warning, 1)};
    }
    50% {
       background-color: ${'rgba(0,0,0,0)'};
    }
    100% {
-      background-color: ${Color.setRgbOpacity(Color.darkThm.warning, 1)};
+      background-color: ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.warning, 1)};
    }
 
 `;
@@ -25,14 +25,14 @@ export const TableRow = styled.div<{
    spectating?: boolean;
    gamePhase?: ReturnType<typeof GameHelper.Get.gamePhase>;
 }>`
-   border-bottom: 1px solid ${Color.darkThm.accentDarkerShade};
+   border-bottom: 1px solid ${CSS_Color.darkThm.accentDarkerShade};
    display: flex;
    text-align: center;
    color: ${({ thisUser, currentTurn, disconnected, spectating }) => {
-      if (thisUser) return Color.darkThm.error;
+      if (thisUser) return CSS_Color.darkThm.error;
       if (disconnected || spectating) return 'grey';
-      if (currentTurn) return Color.darkThm.success;
-      return Color.darkThm.success;
+      if (currentTurn) return CSS_Color.darkThm.success;
+      return CSS_Color.darkThm.success;
    }};
    ${TableCell}:nth-child(2) {
       animation: ${({ currentTurn, gamePhase }) => {
@@ -68,8 +68,8 @@ export const TableBody = styled.div`
 `;
 
 export const TableHead = styled.div`
-   border-bottom: 2px solid ${Color.darkThm.accentDarkerShade};
-   border-top: 2px solid ${Color.darkThm.accentDarkerShade};
+   border-bottom: 2px solid ${CSS_Color.darkThm.accentDarkerShade};
+   border-top: 2px solid ${CSS_Color.darkThm.accentDarkerShade};
    height: 2em;
    display: flex;
    align-items: center;
@@ -77,8 +77,8 @@ export const TableHead = styled.div`
    padding-left: 0.5em;
    padding-right: 0.5em;
    box-sizing: border-box;
-   color: ${Color.setRgbOpacity(Color.darkThm.dialogBright, 1)};
-   background-color: ${Color.setRgbOpacity(Color.darkThm.bg, 1)};
+   color: ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.dialogBright, 1)};
+   background-color: ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.bg, 1)};
    filter: brightness(1.3);
 `;
 
@@ -99,7 +99,7 @@ export const TableContainer = styled.div<{
       // for every table cell except the last one:
       &:not(:last-child) {
          border-right: ${({ innerBorders }) =>
-            innerBorders ? `1px solid ${Color.darkThm.accentDarkerShade}` : 'none'};
+            innerBorders ? `1px solid ${CSS_Color.darkThm.accentDarkerShade}` : 'none'};
       }
    }
 `;

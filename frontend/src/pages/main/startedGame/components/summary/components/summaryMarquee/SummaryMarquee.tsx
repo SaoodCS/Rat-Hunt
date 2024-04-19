@@ -3,7 +3,7 @@ import Marquee from 'react-fast-marquee';
 import MiscHelper from '../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import { TextColourizer } from '../../../../../../../global/components/lib/font/textColorizer/TextColourizer';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
-import Color from '../../../../../../../global/css/utils/colors';
+import CSS_Color from '../../../../../../../global/css/utils/colors';
 import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
 import { MarqueeItem } from './style/Style';
 
@@ -43,8 +43,8 @@ export default function SummaryMarquee(): JSX.Element {
       <Marquee speed={30}>
          {roundSummaryMap.map((item) => (
             <MarqueeItem key={item.key}>
-               <TextColourizer color={Color.darkThm.error}>{item.key}</TextColourizer>
-               <TextColourizer color={Color.darkThm.success}>{item.value}</TextColourizer>
+               <TextColourizer color={CSS_Color.darkThm.error}>{item.key}</TextColourizer>
+               <TextColourizer color={CSS_Color.darkThm.success}>{item.value}</TextColourizer>
             </MarqueeItem>
          ))}
       </Marquee>

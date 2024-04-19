@@ -1,7 +1,7 @@
 import { TextColourizer } from '../../../global/components/lib/font/textColorizer/TextColourizer';
 import { ListItem, OrderedList } from '../../../global/components/lib/newList/Style';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
-import Color from '../../../global/css/utils/colors';
+import CSS_Color from '../../../global/css/utils/colors';
 
 const helpContent = [
    {
@@ -55,12 +55,12 @@ export default function HelpGuide(): JSX.Element {
                bulletType="decimal"
                padding="0"
                margin="0"
-               bulletColor={Color.darkThm.accent}
+               bulletColor={CSS_Color.darkThm.accent}
                bulletBold
             >
                {helpContent.map((content, index) => (
                   <ListItem key={index}>
-                     <TextColourizer color={Color.darkThm.accent} bold>
+                     <TextColourizer color={CSS_Color.darkThm.accent} bold>
                         {content.listItem}:
                      </TextColourizer>
                      <OrderedList bulletType="disc" padding="0.5em 0em 0.5em 1em">

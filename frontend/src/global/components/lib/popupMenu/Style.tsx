@@ -1,9 +1,9 @@
 import type { Keyframes } from 'styled-components';
 import styled, { keyframes } from 'styled-components';
-import Color from '../../../css/utils/colors';
+import CSS_Clickables from '../../../css/utils/clickables';
+import CSS_Color from '../../../css/utils/colors';
 import { CSS_Helper } from '../../../css/utils/helper';
 import { CSS_ZIndex } from '../../../css/utils/zIndex';
-import CSS_Clickables from '../../../css/utils/clickables';
 
 export type TButtonPos = 'top left' | 'top right' | 'bottom left' | 'bottom right';
 
@@ -50,13 +50,13 @@ export const PopupMenuWrapper = styled.div<{
    width: ${({ widthPx }) => widthPx}px;
    border-radius: 10px;
    backdrop-filter: blur(100px);
-   color: ${({ isDarkTheme }) => (isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt)};
+   color: ${({ isDarkTheme }) => (isDarkTheme ? CSS_Color.darkThm.txt : CSS_Color.lightThm.txt)};
    background-color: ${({ isDarkTheme }) =>
       isDarkTheme
-         ? Color.setRgbOpacity(Color.darkThm.dialog, 1)
-         : Color.setRgbOpacity(Color.darkThm.dialog, 0.08)};
+         ? CSS_Color.setRgbOpacity(CSS_Color.darkThm.dialog, 1)
+         : CSS_Color.setRgbOpacity(CSS_Color.darkThm.dialog, 0.08)};
    box-shadow: ${({ isDarkTheme }) =>
-      !isDarkTheme && `0px 0px 10px ${Color.setRgbOpacity(Color.darkThm.txt, 0.1)}`};
+      !isDarkTheme && `0px 0px 10px ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.txt, 0.1)}`};
 
    animation: ${({ isOpen, clickPos }) =>
          isOpen ? relativeExpander(clickPos) : relativeContractor(clickPos)}
@@ -67,7 +67,8 @@ export const PopupMenuWrapper = styled.div<{
 export const PMItemsListWrapper = styled.div<{ isDarkTheme: boolean }>`
    & > *:not(:last-child) {
       border-bottom: 1px solid
-         ${({ isDarkTheme }) => (isDarkTheme ? Color.darkThm.border : Color.lightThm.border)};
+         ${({ isDarkTheme }) =>
+            isDarkTheme ? CSS_Color.darkThm.border : CSS_Color.lightThm.border};
    }
    & > *:first-child {
       border-top-left-radius: 10px;
@@ -92,27 +93,27 @@ export const PMItemContainer = styled.div<{
    align-items: center;
    background-color: ${({ isDarkTheme, isHeadingItem }) =>
       isHeadingItem &&
-      Color.setRgbOpacity(isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt, 0.09)};
+      CSS_Color.setRgbOpacity(isDarkTheme ? CSS_Color.darkThm.txt : CSS_Color.lightThm.txt, 0.09)};
    color: ${({ isDarkTheme, warningItem, dangerItem }) =>
       isDarkTheme
          ? warningItem
-            ? Color.darkThm.warning
+            ? CSS_Color.darkThm.warning
             : dangerItem
-              ? Color.darkThm.error
-              : Color.darkThm.txt
+              ? CSS_Color.darkThm.error
+              : CSS_Color.darkThm.txt
          : warningItem
-           ? Color.lightThm.warning
+           ? CSS_Color.lightThm.warning
            : dangerItem
-             ? Color.lightThm.error
-             : Color.lightThm.txt};
+             ? CSS_Color.lightThm.error
+             : CSS_Color.lightThm.txt};
 
    & > *:nth-child(2) {
       height: 15px;
    }
    ${({ isHeadingItem, isDarkTheme }) => {
       if (isHeadingItem) return;
-      const bgColor = Color.setRgbOpacity(
-         isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt,
+      const bgColor = CSS_Color.setRgbOpacity(
+         isDarkTheme ? CSS_Color.darkThm.txt : CSS_Color.lightThm.txt,
          0.1,
       );
       const mobile = CSS_Clickables.portable.changeColorOnClick(

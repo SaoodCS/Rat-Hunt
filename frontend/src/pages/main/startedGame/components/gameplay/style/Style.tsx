@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { FlexRowWrapper } from '../../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
-import Color from '../../../../../../global/css/utils/colors';
+import CSS_Color from '../../../../../../global/css/utils/colors';
 
 export const GameStateTableWrapper = styled.div`
    position: absolute;
@@ -16,12 +16,12 @@ export const FormContainer = styled.div`
    filter: brightness(0.8);
    height: 100%;
    width: 100%;
-   color: ${Color.darkThm.accentDarkerShade};
+   color: ${CSS_Color.darkThm.accentDarkerShade};
    z-index: 1;
 `;
 
 export const CurrentTurnAndFormWrapper = styled.div`
-   border-bottom: 1px solid ${Color.darkThm.accentDarkerShade};
+   border-bottom: 1px solid ${CSS_Color.darkThm.accentDarkerShade};
    width: 100%;
    box-sizing: border-box;
    height: 3em;

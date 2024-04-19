@@ -1,17 +1,17 @@
 import { ArrowIosBack } from '@styled-icons/evaicons-solid/ArrowIosBack';
 import styled, { css } from 'styled-components';
 import BoolHelper from '../../../../../../../shared/lib/helpers/bool/BoolHelper';
-import Color from '../../../../css/utils/colors';
+import CSS_Clickables from '../../../../css/utils/clickables';
+import CSS_Color from '../../../../css/utils/colors';
 import { CSS_Helper } from '../../../../css/utils/helper';
 import { CSS_Media } from '../../../../css/utils/media';
-import CSS_Clickables from '../../../../css/utils/clickables';
 
 export const Header = styled.div<{ isDarkTheme: boolean }>`
    position: fixed;
    top: 0;
    height: 10%;
    width: 100dvw;
-   border-bottom: 1px solid ${Color.setRgbOpacity(Color.darkThm.accent, 0.4)};
+   border-bottom: 1px solid ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.accent, 0.4)};
    border-bottom-left-radius: 10px;
    border-bottom-right-radius: 10px;
    display: flex;
@@ -44,8 +44,8 @@ export const StyledBackArr = styled(ArrowIosBack)<{ darktheme: 'true' | 'false' 
    left: 0;
    padding-left: 1em;
    ${({ darktheme }) => {
-      const color = Color.setRgbOpacity(
-         BoolHelper.strToBool(darktheme) ? Color.darkThm.txt : Color.lightThm.txt,
+      const color = CSS_Color.setRgbOpacity(
+         BoolHelper.strToBool(darktheme) ? CSS_Color.darkThm.txt : CSS_Color.lightThm.txt,
          0.3,
       );
       const dekstop = CSS_Clickables.desktop.changeColorOnHover(color, 'color');
@@ -62,7 +62,8 @@ export const StyledBackArr = styled(ArrowIosBack)<{ darktheme: 'true' | 'false' 
 export const HeaderRightElWrapper = styled.div<{ isDarkTheme: boolean }>`
    right: 0px;
    position: fixed;
-   color: ${({ isDarkTheme }) => (isDarkTheme ? Color.darkThm.warning : Color.lightThm.warning)};
+   color: ${({ isDarkTheme }) =>
+      isDarkTheme ? CSS_Color.darkThm.warning : CSS_Color.lightThm.warning};
    & > * {
       height: 1.5em;
    }
@@ -80,7 +81,7 @@ export const HeaderRightElWrapper = styled.div<{ isDarkTheme: boolean }>`
          height: 1.4em;
          padding: 0.2em;
          border-radius: 50%;
-         background-color: ${Color.darkThm.accentDarkerShade};
+         background-color: ${CSS_Color.darkThm.accentDarkerShade};
          -webkit-tap-highlight-color: transparent;
          cursor: pointer;
          :hover {
