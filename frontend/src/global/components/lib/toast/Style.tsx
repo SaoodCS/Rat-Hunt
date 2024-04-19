@@ -2,12 +2,10 @@ import styled, { css } from 'styled-components';
 import Color from '../../../css/utils/colors';
 import { CSS_ZIndex } from '../../../css/utils/zIndex';
 import type { THorizontalPos, TVerticalPos } from './Toast';
-import { CSS_Keyframes } from '../../../css/utils/keyframes';
 
 export const ToastContainer = styled.div<{
    verticalPos: TVerticalPos;
    horizontalPos: THorizontalPos;
-   duration: number;
    isDarkTheme: boolean;
 }>`
    z-index: ${CSS_ZIndex.get('toast')};
@@ -26,7 +24,6 @@ export const ToastContainer = styled.div<{
       return 'center';
    }};
    align-items: center;
-   ${({ duration }) => CSS_Keyframes.fadeInAndOut(duration)};
 `;
 
 export const StyledToast = styled.div<{

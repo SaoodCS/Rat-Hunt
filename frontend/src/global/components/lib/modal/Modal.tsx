@@ -32,7 +32,7 @@ export default function Modal(props: IModal): JSX.Element {
    return (
       <ExitAnimatePresence exitWhen={!isOpen}>
          <AnimatedOverlay
-            key="overlay"
+            key="modal-overlay"
             animateType={['fade']}
             duration={0.5}
             type="tween"
@@ -41,8 +41,8 @@ export default function Modal(props: IModal): JSX.Element {
          />
          <ModalCenterer centerContents>
             <ModalAnimator
-               ref={outsideClickRef}
                key="modal"
+               ref={outsideClickRef}
                animateType={['expand']}
                duration={0.5}
                type="spring"

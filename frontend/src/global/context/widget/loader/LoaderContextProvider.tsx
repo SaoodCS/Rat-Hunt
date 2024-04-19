@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 import { useState } from 'react';
 import Loader from '../../../components/lib/loader/fullScreen/Loader';
 import { LoaderContext } from './LoaderContext';
-import ConditionalRender from '../../../components/lib/renderModifiers/conditionalRender/ConditionalRender';
 
 interface ILoaderContextProvider {
    children: ReactNode;
@@ -12,14 +11,16 @@ export const LoaderContextProvider = (props: ILoaderContextProvider): JSX.Elemen
    const { children } = props;
    const [showLoader, setShowLoader] = useState(false);
 
+   function toggleLoader(show: boolean): void {
+      setShowLoader(show);
+   }
+
    return (
       <>
-         <LoaderContext.Provider value={{ showLoader, setShowLoader }}>
+         <LoaderContext.Provider value={{ showLoader, setShowLoader, toggleLoader }}>
             {children}
          </LoaderContext.Provider>
-         <ConditionalRender condition={showLoader}>
-            <Loader />
-         </ConditionalRender>
+         <Loader isDisplayed={showLoader} />
       </>
    );
 };

@@ -1,7 +1,5 @@
 import type { ReactNode } from 'react';
-import { useLayoutEffect, useMemo, useState } from 'react';
-import NumberHelper from '../../../../../../shared/lib/helpers/number/NumberHelper';
-import ConditionalRender from '../../../components/lib/renderModifiers/conditionalRender/ConditionalRender';
+import { useMemo, useState } from 'react';
 import SplashScreen from '../../../components/lib/splashScreen/SplashScreen';
 import Device from '../../../helpers/pwa/deviceHelper';
 import { SplashScreenContext } from './SplashScreenContext';
@@ -21,21 +19,15 @@ export default function SplashScreenContextProvider(
       undefined,
    );
 
-   useLayoutEffect(() => {
-      if (!isSplashScreenDisplayed) return;
-      const timer = setTimeout(() => {
-         toggleSplashScreen(false);
-      }, NumberHelper.secsToMs(splashDurationSecs));
-      return () => clearTimeout(timer);
-   }, [isSplashScreenDisplayed]);
-
    function toggleSplashScreen(show: boolean): void {
       if (show) setIsSplashScreenDisplayed(true);
-      else {
-         setIsSplashScreenDisplayed(false);
-         setSplashScreenContent(undefined);
-         setSplashDurationSecs(2);
-      }
+      else handleOnClose();
+   }
+
+   function handleOnClose(): void {
+      setIsSplashScreenDisplayed(false);
+      setSplashScreenContent(undefined);
+      setSplashDurationSecs(2);
    }
 
    const contextMemo = useMemo(
@@ -61,6 +53,7 @@ export default function SplashScreenContextProvider(
       <>
          <SplashScreenContext.Provider value={contextMemo}>
             <SimpleAnimator
+               key="splashScreenContent"
                animateType={['fade']}
                duration={splashDurationSecs}
                startWhen={!isSplashScreenDisplayed}
@@ -69,9 +62,12 @@ export default function SplashScreenContextProvider(
                {children}
             </SimpleAnimator>
          </SplashScreenContext.Provider>
-         <ConditionalRender condition={isSplashScreenDisplayed}>
-            <SplashScreen component={splashScreenContent} durationSecs={splashDurationSecs} />
-         </ConditionalRender>
+         <SplashScreen
+            component={splashScreenContent}
+            durationSecs={splashDurationSecs}
+            isDisplayed={isSplashScreenDisplayed}
+            onClose={handleOnClose}
+         />
       </>
    );
 }

@@ -40,6 +40,7 @@ export default function MainLayout(): JSX.Element {
 
    return (
       <SimpleAnimator
+         key="main-layout"
          animateType={['fade']}
          duration={0.2}
          style={{ height: '100dvh', width: '100dvw' }}

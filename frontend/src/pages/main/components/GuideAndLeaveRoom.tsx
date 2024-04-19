@@ -11,6 +11,7 @@ import DBConnect from '../../../global/database/DBConnect/DBConnect';
 import Device from '../../../global/helpers/pwa/deviceHelper';
 import HelpGuide from './HelpGuide';
 import useCustomNavigate from '../../../global/hooks/useCustomNavigate';
+import { LoaderContext } from '../../../global/context/widget/loader/LoaderContext';
 
 interface IGuideAndLeaveRoom {
    currentPath: string;
@@ -28,6 +29,7 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
    const navigation = useCustomNavigate();
    const queryClient = useQueryClient();
+   const { toggleLoader } = useContext(LoaderContext);
 
    useEffect(() => {
       setIsWaitingPage(currentPath.includes('waiting'));
@@ -43,10 +45,12 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
 
    async function handleLeaveRoom(): Promise<void> {
       if (!MiscHelper.isNotFalsyOrEmpty(roomData)) return;
+      toggleLoader(true);
       await DBConnect.RTDB.Delete.user(localDbUser, localDbRoom);
       setLocalDbRoom('');
       setLocalDbUser('');
       queryClient.clear();
+      toggleLoader(false);
       navigation('/main/play');
    }
 

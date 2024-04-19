@@ -1,10 +1,8 @@
 import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { THorizontalPos, TVerticalPos } from '../../../components/lib/toast/Toast';
 import Toast from '../../../components/lib/toast/Toast';
 import { ToastContext } from './ToastContext';
-import ConditionalRender from '../../../components/lib/renderModifiers/conditionalRender/ConditionalRender';
-import NumberHelper from '../../../../../../shared/lib/helpers/number/NumberHelper';
 
 interface IToastContextProvider {
    children: ReactNode;
@@ -20,14 +18,6 @@ export default function ToastContextProvider(props: IToastContextProvider): JSX.
    const [toastTextAlign, setToastTextAlign] = useState<'left' | 'center' | 'right'>('left');
    const [toastType, setToastType] = useState<'info' | 'success' | 'error' | 'warning'>('info');
    const [toastDurationSecs, setToastDurationSecs] = useState(2);
-
-   useEffect(() => {
-      if (!isToastDisplayed) return;
-      const timeout = setTimeout(() => {
-         handleOnClose();
-      }, NumberHelper.secsToMs(toastDurationSecs));
-      return () => clearTimeout(timeout);
-   }, [isToastDisplayed]);
 
    function handleOnClose(): void {
       setIsToastDisplayed(false);
@@ -65,17 +55,17 @@ export default function ToastContextProvider(props: IToastContextProvider): JSX.
          >
             {children}
          </ToastContext.Provider>
-         <ConditionalRender condition={isToastDisplayed}>
-            <Toast
-               message={toastMessage}
-               width={width}
-               horizontalPos={horizontalPos}
-               verticalPos={verticalPos}
-               textAlign={toastTextAlign}
-               type={toastType}
-               duration={toastDurationSecs}
-            />
-         </ConditionalRender>
+         <Toast
+            message={toastMessage}
+            width={width}
+            horizontalPos={horizontalPos}
+            verticalPos={verticalPos}
+            textAlign={toastTextAlign}
+            type={toastType}
+            duration={toastDurationSecs}
+            isDisplayed={isToastDisplayed}
+            onClose={handleOnClose}
+         />
       </>
    );
 }

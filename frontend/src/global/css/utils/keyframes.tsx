@@ -3,7 +3,7 @@ import { css, type FlattenSimpleInterpolation } from 'styled-components';
 export namespace CSS_Keyframes {
    export const fadeInAndOut = (durationSecs: number): FlattenSimpleInterpolation => css`
       animation: fadeInAndOut ${durationSecs}s linear;
-      @keyframes fadeInThenOut {
+      @keyframes fadeInAndOut {
          0% {
             opacity: 0;
          }
