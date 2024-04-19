@@ -5,8 +5,8 @@ import MiscHelper from '../../../../../../../shared/lib/helpers/miscHelper/MiscH
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { GameContext } from '../../../../../global/context/game/GameContext';
 import { ModalContext } from '../../../../../global/context/widget/modal/ModalContext';
-import MyCSS from '../../../../../global/css/MyCSS';
-import Color from '../../../../../global/css/colors';
+import Color from '../../../../../global/css/utils/colors';
+import { CSS_Helper } from '../../../../../global/css/utils/helper';
 import DBConnect from '../../../../../global/database/DBConnect/DBConnect';
 import RoundEndForm from './components/form/RoundEndForm';
 import PointsMsgsFader from './components/pointsMsgsFader/PointsMsgsFader';
@@ -20,12 +20,12 @@ import {
    RoundSummaryTitle,
    ScoreboardContainer,
 } from './style/Style';
+import { CSS_Media } from '../../../../../global/css/utils/media';
 
 export default function RoundSummary(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);
    const [isLastRound, setIsLastRound] = useState(false);
-   const { toggleModal, setModalContent, setModalHeader, setModalZIndex } =
-      useContext(ModalContext);
+   const { toggleModal, setModalContent, setModalHeader } = useContext(ModalContext);
    const { data: roomData } = DBConnect.FSDB.Get.room(localDbRoom);
 
    useEffect(() => {
@@ -41,7 +41,6 @@ export default function RoundSummary(): JSX.Element {
    function handleUpdateGameState(): void {
       setModalHeader(!isLastRound ? 'Next Round' : 'Play Again');
       setModalContent(<RoundEndForm isLastRound={isLastRound} toggleModal={toggleModal} />);
-      setModalZIndex(100);
       toggleModal(true);
    }
 
@@ -78,10 +77,10 @@ const screenStyles = (): FlattenSimpleInterpolation => {
    const forAll = css`
       font-size: 0.8em;
    `;
-   const forDesktop = MyCSS.Media.desktop(css`
+   const forDesktop = CSS_Media.Query.desktop(css`
       font-size: 1em;
    `);
-   const forTablet = MyCSS.Media.tablet(css``);
+   const forTablet = CSS_Media.Query.tablet(css``);
 
    const medium = css`
       @media (min-width: 544px) {
@@ -111,5 +110,5 @@ const screenStyles = (): FlattenSimpleInterpolation => {
          }
       }
    `;
-   return MyCSS.Helper.concatStyles(forAll, forDesktop, forTablet, medium);
+   return CSS_Helper.concatStyles(forAll, forDesktop, forTablet, medium);
 };

@@ -1,7 +1,7 @@
 import { UpArrow } from '@styled-icons/boxicons-solid/UpArrow';
 import styled from 'styled-components';
-import Color from '../../../../css/colors';
 import BoolHelper from '../../../../../../../shared/lib/helpers/bool/BoolHelper';
+import Color from '../../../../css/utils/colors';
 
 export const TriangularArrowIcon = styled(UpArrow)<{
    direction: 'up' | 'down' | 'left' | 'right';

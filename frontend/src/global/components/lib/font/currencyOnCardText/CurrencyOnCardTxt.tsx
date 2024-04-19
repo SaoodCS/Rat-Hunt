@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Color from '../../../../css/colors';
+import Color from '../../../../css/utils/colors';
 
 export const CurrencyOnCardTxt = styled.span<{ isDarkTheme: boolean; color?: string }>`
    display: inline-block;

@@ -1,14 +1,16 @@
 import styled from 'styled-components';
-import MyCSS from '../../../css/MyCSS';
-import Color from '../../../css/colors';
+import Color from '../../../css/utils/colors';
+import { CSS_Helper } from '../../../css/utils/helper';
+import CSS_Clickables from '../../../css/utils/clickables';
+import { CSS_Scrollbar } from '../../../css/utils/scrollbar';
 
 export const FlatListWrapper = styled.div`
    width: 100%;
-   ${MyCSS.Scrollbar.hide};
+   ${CSS_Scrollbar.hide};
 `;
 
 export const FlatListItem = styled.div<{ isDarkTheme: boolean }>`
-   ${MyCSS.Clickables.removeDefaultEffects};
+   ${CSS_Clickables.removeDefaultEffects};
    height: 6em;
    width: 100%;
    box-sizing: border-box;
@@ -24,13 +26,13 @@ export const FlatListItem = styled.div<{ isDarkTheme: boolean }>`
          isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt,
          0.1,
       );
-      const mobile = MyCSS.Clickables.portable.changeColorOnClick(
+      const mobile = CSS_Clickables.portable.changeColorOnClick(
          bgColor,
          'background-color',
          'revert',
       );
-      const desktop = MyCSS.Clickables.desktop.changeColorOnHover(bgColor, 'background-color');
-      return MyCSS.Helper.concatStyles(mobile, desktop);
+      const desktop = CSS_Clickables.desktop.changeColorOnHover(bgColor, 'background-color');
+      return CSS_Helper.concatStyles(mobile, desktop);
    }}
 `;
 

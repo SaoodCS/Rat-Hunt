@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
-import MyCSS from '../../css/MyCSS';
-import Color from '../../css/colors';
-import { GlobalTheme } from '../../css/theme';
+import { GlobalTheme } from '../../css/theme/theme';
+import Color from '../../css/utils/colors';
 import Device from '../../helpers/pwa/deviceHelper';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { ThemeContext } from './ThemeContext';
+import { CSS_Media } from '../../css/utils/media';
 
 interface IThemeContextProvider {
    children: ReactNode;
@@ -15,12 +15,12 @@ export default function ThemeContextProvider(props: IThemeContextProvider): JSX.
    const { children } = props;
    const [isDarkTheme, setIsDarkTheme] = useLocalStorage(`isDarkTheme`, Device.isSystemDarkTheme());
    const [isPortableDevice, setIsPortableDevice] = useState<boolean>(
-      window.innerWidth < MyCSS.PortableBp.asNum,
+      window.innerWidth < CSS_Media.PortableBp.asNum,
    );
 
    useEffect(() => {
       const handleResize = (): void =>
-         setIsPortableDevice(window.innerWidth < MyCSS.PortableBp.asNum);
+         setIsPortableDevice(window.innerWidth < CSS_Media.PortableBp.asNum);
       window.addEventListener(`resize`, handleResize);
       return () => {
          window.removeEventListener(`resize`, handleResize);

@@ -1,15 +1,16 @@
 import styled, { css } from 'styled-components';
-import MyCSS from '../../../css/MyCSS';
-import Color from '../../../css/colors';
+import Color from '../../../css/utils/colors';
+import { CSS_ZIndex } from '../../../css/utils/zIndex';
 import type { THorizontalPos, TVerticalPos } from './Toast';
+import { CSS_Keyframes } from '../../../css/utils/keyframes';
 
 export const ToastContainer = styled.div<{
    verticalPos: TVerticalPos;
    horizontalPos: THorizontalPos;
-   zIndex?: number;
    duration: number;
    isDarkTheme: boolean;
 }>`
+   z-index: ${CSS_ZIndex.get('toast')};
    box-sizing: border-box;
    padding-left: 1em;
    padding-right: 1em;
@@ -24,9 +25,8 @@ export const ToastContainer = styled.div<{
       if (horizontalPos === 'right') return 'flex-end';
       return 'center';
    }};
-   z-index: ${({ zIndex }) => zIndex || 99999};
    align-items: center;
-   ${({ duration }) => MyCSS.Keyframes.fadeInAndOut(duration)};
+   ${({ duration }) => CSS_Keyframes.fadeInAndOut(duration)};
 `;
 
 export const StyledToast = styled.div<{

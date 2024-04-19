@@ -6,9 +6,10 @@ import type AppTypes from '../../../../../../../../../shared/app/types/AppTypes'
 import MiscHelper from '../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import Scroller from '../../../../../../../global/components/lib/scroller/Scroller';
 import { GameContext } from '../../../../../../../global/context/game/GameContext';
-import MyCSS from '../../../../../../../global/css/MyCSS';
+import { CSS_Helper } from '../../../../../../../global/css/utils/helper';
 import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
 import { TableBody, TableCell, TableContainer, TableHead, TableRow } from './style/Style';
+import { CSS_Media } from '../../../../../../../global/css/utils/media';
 
 export default function GameStateTable(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -61,10 +62,10 @@ export default function GameStateTable(): JSX.Element {
 }
 
 const screenStyles = (noOfColumns: number): FlattenSimpleInterpolation => {
-   const forDesktop = MyCSS.Media.desktop(css`
+   const forDesktop = CSS_Media.Query.desktop(css`
       font-size: 1em;
    `);
-   const forTablet = MyCSS.Media.tablet(css``);
+   const forTablet = CSS_Media.Query.tablet(css``);
    const medium = css`
       @media (min-width: 544px) {
          ${TableHead} {
@@ -78,5 +79,5 @@ const screenStyles = (noOfColumns: number): FlattenSimpleInterpolation => {
          }
       }
    `;
-   return MyCSS.Helper.concatStyles(forDesktop, forTablet, medium);
+   return CSS_Helper.concatStyles(forDesktop, forTablet, medium);
 };

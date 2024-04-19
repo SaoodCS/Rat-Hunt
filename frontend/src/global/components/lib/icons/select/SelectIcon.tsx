@@ -1,15 +1,16 @@
 import { MultiSelect } from '@styled-icons/octicons/MultiSelect';
 import styled from 'styled-components';
-import MyCSS from '../../../../css/MyCSS';
-import Color from '../../../../css/colors';
 import BoolHelper from '../../../../../../../shared/lib/helpers/bool/BoolHelper';
+import Color from '../../../../css/utils/colors';
+import { CSS_Helper } from '../../../../css/utils/helper';
+import CSS_Clickables from '../../../../css/utils/clickables';
 
 export const SelectIcon = styled(MultiSelect)<{
    darktheme: 'true' | 'false';
    zindex?: string;
    padding?: string;
 }>`
-   ${MyCSS.Clickables.removeDefaultEffects};
+   ${CSS_Clickables.removeDefaultEffects};
    cursor: pointer;
    color: ${({ darktheme }) =>
       BoolHelper.strToBool(darktheme) ? Color.darkThm.accent : Color.lightThm.accent};
@@ -18,10 +19,10 @@ export const SelectIcon = styled(MultiSelect)<{
          BoolHelper.strToBool(darktheme) ? Color.darkThm.accent : Color.lightThm.accent,
          0.5,
       );
-      const mobile = MyCSS.Clickables.portable.changeColorOnClick(bgColor, 'color', 'persist');
-      const desktop = MyCSS.Clickables.desktop.changeColorOnHover(bgColor, 'color');
-      return MyCSS.Helper.concatStyles(mobile, desktop);
+      const mobile = CSS_Clickables.portable.changeColorOnClick(bgColor, 'color', 'persist');
+      const desktop = CSS_Clickables.desktop.changeColorOnHover(bgColor, 'color');
+      return CSS_Helper.concatStyles(mobile, desktop);
    }};
-   z-index: ${({ zindex }) => (zindex ? Number(zindex) : 0)};
-   padding: ${({ padding }) => (padding ? padding : '0')};
+   z-index: ${({ zindex }) => zindex && Number(zindex)};
+   padding: ${({ padding }) => padding};
 `;

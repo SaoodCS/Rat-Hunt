@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import MyCSS from '../../../../css/MyCSS';
-import Color from '../../../../css/colors';
+import Color from '../../../../css/utils/colors';
+import CSS_Clickables from '../../../../css/utils/clickables';
 
 interface IStaticButtonAttrs {
    isDisabled?: boolean;
@@ -17,7 +17,7 @@ export const StaticButton = styled.button.attrs<IStaticButtonAttrs>(({ isDisable
    disabled: isDisabled,
 }))<IStaticButton>`
    all: unset;
-   ${MyCSS.Clickables.removeDefaultEffects};
+   ${CSS_Clickables.removeDefaultEffects};
    padding-top: 0.6em;
    padding-bottom: 0.6em;
    letter-spacing: 0.1em;
@@ -35,8 +35,8 @@ export const StaticButton = styled.button.attrs<IStaticButtonAttrs>(({ isDisable
          color: ${Color.setRgbOpacity(textColor, textOpacity)};
          background-color: ${Color.setRgbOpacity(bgColor, backgroundOpacity)};
          text-shadow: 0.1em 0.1em 0 ${Color.setRgbOpacity(textShadowCol, textShadowOpacity)};
-         ${MyCSS.Clickables.desktop.changeBrightnessOnHover(0.8)};
-         ${MyCSS.Clickables.portable.changeBrightnessOnClick(0.8, 'revert')};
+         ${CSS_Clickables.desktop.changeBrightnessOnHover(0.8)};
+         ${CSS_Clickables.portable.changeBrightnessOnClick(0.8, 'revert')};
       `;
    }}
    font-size: 0.95em;

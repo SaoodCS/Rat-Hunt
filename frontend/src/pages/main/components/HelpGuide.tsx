@@ -1,7 +1,7 @@
 import { TextColourizer } from '../../../global/components/lib/font/textColorizer/TextColourizer';
-import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
-import Color from '../../../global/css/colors';
 import { ListItem, OrderedList } from '../../../global/components/lib/newList/Style';
+import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
+import Color from '../../../global/css/utils/colors';
 
 const helpContent = [
    {

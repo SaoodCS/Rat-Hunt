@@ -1,14 +1,15 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
-import { ScoreboardWrapper } from './style/Style';
-import { GameContext } from '../../../../../../../global/context/game/GameContext';
-import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
-import type { IProgressBarChartData } from '../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
 import ArrOfObj from '../../../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
-import Scroller from '../../../../../../../global/components/lib/scroller/Scroller';
+import type { IProgressBarChartData } from '../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
 import ProgressBarChart from '../../../../../../../global/components/lib/progressBarChart/ProgressBarChart';
-import MyCSS from '../../../../../../../global/css/MyCSS';
+import Scroller from '../../../../../../../global/components/lib/scroller/Scroller';
+import { GameContext } from '../../../../../../../global/context/game/GameContext';
+import { CSS_Helper } from '../../../../../../../global/css/utils/helper';
+import DBConnect from '../../../../../../../global/database/DBConnect/DBConnect';
+import { ScoreboardWrapper } from './style/Style';
+import { CSS_Media } from '../../../../../../../global/css/utils/media';
 
 export default function Scoreboard(): JSX.Element {
    const { localDbRoom } = useContext(GameContext);
@@ -49,12 +50,12 @@ export default function Scoreboard(): JSX.Element {
 }
 
 const screenStyles = (): FlattenSimpleInterpolation => {
-   const forDesktop = MyCSS.Media.desktop(css``);
+   const forDesktop = CSS_Media.Query.desktop(css``);
 
    const medium = css`
       @media (min-width: 544px) {
          max-width: 45em;
       }
    `;
-   return MyCSS.Helper.concatStyles(forDesktop, medium);
+   return CSS_Helper.concatStyles(forDesktop, medium);
 };

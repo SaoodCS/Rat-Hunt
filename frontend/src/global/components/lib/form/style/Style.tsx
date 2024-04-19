@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import MyCSS from '../../../../css/MyCSS';
-import Color from '../../../../css/colors';
+import Color from '../../../../css/utils/colors';
+import { CSS_Helper } from '../../../../css/utils/helper';
 
 export interface IGlobalFieldStyles {
    width?: string;
@@ -28,7 +28,8 @@ export const StyledForm = styled.form<{
    globalFieldStyles?: IGlobalFieldStyles;
    btnStyles?: IFormBtnStyles;
 }>`
-   ${({ padding }) => MyCSS.LayoutStyle.paddingBorderBox(padding ? `${padding}em` : '0em')};
+   box-sizing: border-box;
+   padding: ${({ padding }) => (padding ? `${padding}em` : '0em')};
    border-radius: 0.7em;
    display: flex;
    flex-direction: column;
@@ -52,7 +53,7 @@ export const StyledForm = styled.form<{
       ${({ globalFieldStyles }) => {
          const { width, fontSize, height, margin, backgroundColor, boxSizing, borderRadius } =
             globalFieldStyles || {};
-         return MyCSS.Helper.convertInlineToStyledComp({
+         return CSS_Helper.convertInlineToStyledComp({
             width: width || '100%',
             fontSize: fontSize || '0.8em',
             height: height || '3em',
@@ -66,7 +67,7 @@ export const StyledForm = styled.form<{
    button {
       ${({ btnStyles }) => {
          const { margin, padding } = btnStyles || {};
-         return MyCSS.Helper.convertInlineToStyledComp({
+         return CSS_Helper.convertInlineToStyledComp({
             margin: margin || undefined,
             padding: padding || undefined,
          });

@@ -1,5 +1,5 @@
-export default class Color {
-   static lightThm = {
+export namespace CSS_Color {
+   export const lightThm = {
       bg: 'rgb(2,8,23)',
       accent: 'rgb(108, 50, 209)',
       accentDarkerShade: 'rgb(39, 18, 76)',
@@ -19,7 +19,7 @@ export default class Color {
       grey: 'rgb(78, 78, 96)',
    };
 
-   static darkThm = {
+   export const darkThm = {
       bg: 'rgb(2,8,23)',
       accent: 'rgb(108, 50, 209)',
       accentDarkerShade: 'rgb(39, 18, 76)',
@@ -39,13 +39,15 @@ export default class Color {
       grey: 'rgb(78, 78, 96)',
    };
 
-   static setRgbOpacity = (color: string, opacity: number): string => {
+   export const setRgbOpacity = (color: string, opacity: number): string => {
       const rgb = color.split(')')[0].split('(')[1];
       return `rgba(${rgb}, ${opacity})`;
    };
 
-   static setHexOpacity = (color: string, opacity: number): string => {
+   export const setHexOpacity = (color: string, opacity: number): string => {
       const hex = color.split('#')[1];
       return `#${hex}${opacity.toString(16)}`;
    };
 }
+
+export default CSS_Color;

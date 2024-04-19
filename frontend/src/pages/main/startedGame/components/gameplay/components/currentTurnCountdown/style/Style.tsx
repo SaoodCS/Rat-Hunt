@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Color from '../../../../../../../../global/css/colors';
+import Color from '../../../../../../../../global/css/utils/colors';
 
 export const TimerBar = styled.div<{ timeRemainingSecs: number; timeGivenSecs: number }>`
    position: absolute;

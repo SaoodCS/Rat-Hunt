@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import Color from '../../../../css/colors';
-import MyCSS from '../../../../css/MyCSS';
+import Color from '../../../../css/utils/colors';
+import CSS_Clickables from '../../../../css/utils/clickables';
 
 interface IInputAttr {
    isRequired: boolean;
@@ -25,7 +25,7 @@ export const TextInput = styled.input.attrs<IInputAttr>(({ isRequired, isDisable
    padding-left: 0.6em;
    border-radius: 0.25em;
    transition: all 0.1s ease-in-out;
-   ${MyCSS.Clickables.removeDefaultEffects};
+   ${CSS_Clickables.removeDefaultEffects};
    &::placeholder {
       color: ${Color.setRgbOpacity(Color.darkThm.txt, 0.5)};
    }

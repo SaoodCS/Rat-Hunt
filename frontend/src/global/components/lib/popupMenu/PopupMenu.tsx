@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import useThemeContext from '../../../context/theme/hooks/useThemeContext';
+import { CSS_ZIndex } from '../../../css/utils/zIndex';
 import { Overlay } from '../overlay/Overlay';
 import ConditionalRender from '../renderModifiers/conditionalRender/ConditionalRender';
 import { PopupMenuWrapper } from './Style';
@@ -78,7 +79,7 @@ export default function PopupMenu(props: IPopupMenu): JSX.Element {
 
    return (
       <ConditionalRender condition={renderMenu}>
-         <Overlay zIndex={99} />
+         <Overlay zIndex={CSS_ZIndex.get('popupMenu') - 1} />
          <PopupMenuWrapper
             ref={popupMenuWrapperRef}
             topPx={setTopPos(openerPosition.y).num}

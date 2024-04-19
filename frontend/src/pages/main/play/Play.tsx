@@ -8,6 +8,7 @@ import { topics } from '../../../../../shared/app/utils/topics/topics';
 import ArrayHelper from '../../../../../shared/lib/helpers/arrayHelper/ArrayHelper';
 import ArrOfObj from '../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../shared/lib/helpers/miscHelper/MiscHelper';
+import GradientBgLogo from '../../../global/components/app/logo/gradientBgLogo/GradientBgLogo';
 import { StaticButton } from '../../../global/components/lib/button/staticButton/Style';
 import type { IDropDownOptions } from '../../../global/components/lib/form/dropDown/DropDownInput';
 import InputCombination from '../../../global/components/lib/form/inputCombination/InputCombination';
@@ -15,12 +16,12 @@ import { StyledForm } from '../../../global/components/lib/form/style/Style';
 import { FlexColumnWrapper } from '../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { GameContext } from '../../../global/context/game/GameContext';
 import useApiErrorContext from '../../../global/context/widget/apiError/hooks/useApiErrorContext';
-import MyCSS from '../../../global/css/MyCSS';
+import { CSS_Helper } from '../../../global/css/utils/helper';
 import DBConnect from '../../../global/database/DBConnect/DBConnect';
 import useCustomNavigate from '../../../global/hooks/useCustomNavigate';
 import useForm from '../../../global/hooks/useForm';
 import PlayFormClass from './class/PlayForm';
-import GradientBgLogo from '../../../global/components/app/logo/gradientBgLogo/GradientBgLogo';
+import { CSS_Media } from '../../../global/css/utils/media';
 
 export default function Play(): JSX.Element {
    const { apiError } = useApiErrorContext();
@@ -157,11 +158,11 @@ export default function Play(): JSX.Element {
 }
 
 const screenStyles = (): FlattenSimpleInterpolation => {
-   const forDesktop = MyCSS.Media.desktop(css`
+   const forDesktop = CSS_Media.Query.desktop(css`
       justify-content: space-evenly;
       & > *:nth-child(2) {
          width: 35em;
       }
    `);
-   return MyCSS.Helper.concatStyles(forDesktop);
+   return CSS_Helper.concatStyles(forDesktop);
 };

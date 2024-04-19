@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Color from '../../../css/colors';
-import MyCSS from '../../../css/MyCSS';
+import Color from '../../../css/utils/colors';
+import { CSS_Media } from '../../../css/utils/media';
 
 export const Card = styled.div<{ isDarkTheme: boolean }>`
    border: ${({ isDarkTheme }) =>
@@ -18,7 +18,7 @@ export const CardWidgetWrapper = styled.div<{ bgColor: string; height?: string }
    display: flex;
    flex-direction: row;
    justify-content: space-between;
-   @media (min-width: ${MyCSS.PortableBp.asPx}) {
+   @media (min-width: ${CSS_Media.PortableBp.asPx}) {
       width: 20em;
    }
 `;

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import MyCSS from '../../../../css/MyCSS';
-import Color from '../../../../css/colors';
+import Color from '../../../../css/utils/colors';
+import { CSS_Helper } from '../../../../css/utils/helper';
+import CSS_Clickables from '../../../../css/utils/clickables';
 
 interface ITextBtnAttrs {
    isDisabled?: boolean;
@@ -17,7 +18,7 @@ export const TextBtn = styled.button.attrs<ITextBtnAttrs>(({ isDisabled }) => ({
    disabled: isDisabled,
 }))<ITextBtn>`
    all: unset;
-   ${MyCSS.Clickables.removeDefaultEffects};
+   ${CSS_Clickables.removeDefaultEffects};
    font-size: 0.95em;
    padding: 0.5em;
    border-radius: 10px;
@@ -50,13 +51,13 @@ export const TextBtn = styled.button.attrs<ITextBtnAttrs>(({ isDisabled }) => ({
          isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt,
          0.1,
       );
-      const mobile = MyCSS.Clickables.portable.changeColorOnClick(
+      const mobile = CSS_Clickables.portable.changeColorOnClick(
          colorMobile,
          'background-color',
          'revert',
       );
-      const desktop = MyCSS.Clickables.desktop.changeColorOnHover(colorDesktop, 'background-color');
+      const desktop = CSS_Clickables.desktop.changeColorOnHover(colorDesktop, 'background-color');
 
-      return MyCSS.Helper.concatStyles(mobile, desktop);
+      return CSS_Helper.concatStyles(mobile, desktop);
    }};
 `;

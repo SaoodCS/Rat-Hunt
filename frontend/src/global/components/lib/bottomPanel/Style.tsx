@@ -1,7 +1,7 @@
 import Sheet from 'react-modal-sheet';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import styled, { css } from 'styled-components';
-import Color from '../../../css/colors';
+import Color from '../../../css/utils/colors';
 import { ModalCloseButton } from '../modal/Style';
 
 const darkModeColorTop: string = Color.setRgbOpacity(Color.darkThm.bg, 0.95);

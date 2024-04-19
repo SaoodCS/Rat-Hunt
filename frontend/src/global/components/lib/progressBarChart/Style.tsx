@@ -1,5 +1,5 @@
 import styled, { keyframes } from 'styled-components';
-import Color from '../../../css/colors';
+import Color from '../../../css/utils/colors';
 
 const slideIn = keyframes`
    from {

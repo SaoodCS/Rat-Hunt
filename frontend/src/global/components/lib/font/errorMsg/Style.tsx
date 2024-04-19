@@ -1,6 +1,6 @@
 import { Error } from '@styled-icons/material/Error';
 import styled from 'styled-components';
-import Color from '../../../../css/colors';
+import Color from '../../../../css/utils/colors';
 
 export const ErrorMsgText = styled.div`
    margin-left: 0.5em;

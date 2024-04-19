@@ -15,20 +15,20 @@ interface IWidgetContextProvidersProps {
 export default function WidgetContextProviders(props: IWidgetContextProvidersProps): JSX.Element {
    const { children } = props;
    return (
-      <LoaderContextProvider>
-         <SplashScreenContextProvider>
-            <ApiErrorContextProvider>
-               <ToastContextProvider>
-                  <ModalContextProvider>
-                     <BottomPanelContextProvider>
-                        <PopupMenuContextProvider>
-                           <HeaderContextProvider>{children}</HeaderContextProvider>
-                        </PopupMenuContextProvider>
-                     </BottomPanelContextProvider>
-                  </ModalContextProvider>
-               </ToastContextProvider>
-            </ApiErrorContextProvider>
-         </SplashScreenContextProvider>
-      </LoaderContextProvider>
+      <SplashScreenContextProvider>
+         <LoaderContextProvider>
+            <ToastContextProvider>
+               <ModalContextProvider>
+                  <BottomPanelContextProvider>
+                     <PopupMenuContextProvider>
+                        <HeaderContextProvider>
+                           <ApiErrorContextProvider>{children} </ApiErrorContextProvider>
+                        </HeaderContextProvider>
+                     </PopupMenuContextProvider>
+                  </BottomPanelContextProvider>
+               </ModalContextProvider>
+            </ToastContextProvider>
+         </LoaderContextProvider>
+      </SplashScreenContextProvider>
    );
 }

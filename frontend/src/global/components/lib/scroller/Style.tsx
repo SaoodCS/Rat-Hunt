@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import MyCSS from '../../../css/MyCSS';
+import { CSS_Scrollbar } from '../../../css/utils/scrollbar';
+import CSS_Clickables from '../../../css/utils/clickables';
 
 export const RelativePositioner = styled.div`
    position: relative;
@@ -16,7 +17,7 @@ export const ChildrenContainer = styled.div<{
       showScrollbar ? `calc(100% - ${scrollbarWidth}px)` : '100%'};
    box-sizing: border-box;
    overflow-y: scroll;
-   ${MyCSS.Scrollbar.hide};
+   ${CSS_Scrollbar.hide};
 `;
 
 export const ScrollbarContainer = styled.div<{
@@ -42,9 +43,9 @@ export const ScrollbarThumb = styled.div<{
    scrollbarWidth: number;
    showScrollbar: boolean;
 }>`
-   ${MyCSS.Clickables.removeDefaultEffects};
-   ${MyCSS.Clickables.desktop.changeBrightnessOnHover(2)};
-   ${MyCSS.Clickables.portable.changeBrightnessOnClick(1.5, 'revert')};
+   ${CSS_Clickables.removeDefaultEffects};
+   ${CSS_Clickables.desktop.changeBrightnessOnHover(2)};
+   ${CSS_Clickables.portable.changeBrightnessOnClick(1.5, 'revert')};
    position: absolute;
    width: ${({ scrollbarWidth }) => `${scrollbarWidth}px`};
    right: 0;

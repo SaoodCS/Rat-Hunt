@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import MyCSS from '../../../css/MyCSS';
-import Color from '../../../css/colors';
+import Color from '../../../css/utils/colors';
+import { CSS_Media } from '../../../css/utils/media';
 
 export const CardHolder = styled.div`
    width: 25em;
@@ -57,7 +57,7 @@ export const CardHolder = styled.div`
       height: 28em;
    }
 
-   @media (min-width: ${MyCSS.PortableBp.asNum + 300}px) {
+   @media (min-width: ${CSS_Media.PortableBp.asNum + 300}px) {
       width: 30em;
       height: 30em;
    }

@@ -1,7 +1,13 @@
 import { Close } from '@styled-icons/evil/Close';
 import styled from 'styled-components';
-import Color from '../../../css/colors';
+import Color from '../../../css/utils/colors';
+import { CSS_ZIndex } from '../../../css/utils/zIndex';
 import { SimpleAnimator } from '../animation/simpleAnimator/SimpleAnimator';
+import { FullScreenWrapper } from '../positionModifiers/fullScreenWrapper/FullScreenWrapper';
+
+export const ModalCenterer = styled(FullScreenWrapper)`
+   z-index: ${CSS_ZIndex.get('modal')};
+`;
 
 export const ModalAnimator = styled(SimpleAnimator)``;
 

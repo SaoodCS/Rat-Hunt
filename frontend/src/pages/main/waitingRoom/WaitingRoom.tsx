@@ -16,8 +16,8 @@ import { Wrapper } from '../../../global/components/lib/positionModifiers/wrappe
 import Scroller from '../../../global/components/lib/scroller/Scroller';
 import { GameContext } from '../../../global/context/game/GameContext';
 import { ToastContext } from '../../../global/context/widget/toast/ToastContext';
-import MyCSS from '../../../global/css/MyCSS';
-import Color from '../../../global/css/colors';
+import Color from '../../../global/css/utils/colors';
+import { CSS_Helper } from '../../../global/css/utils/helper';
 import DBConnect from '../../../global/database/DBConnect/DBConnect';
 import Device from '../../../global/helpers/pwa/deviceHelper';
 import useCustomNavigate from '../../../global/hooks/useCustomNavigate';
@@ -29,6 +29,7 @@ import {
    UserListItemContainer,
    WaitingRoomTitle,
 } from './style/Style';
+import { CSS_Media } from '../../../global/css/utils/media';
 
 export default function WaitingRoom(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -39,7 +40,6 @@ export default function WaitingRoom(): JSX.Element {
       setWidth,
       setVerticalPos,
       setHorizontalPos,
-      setToastZIndex,
       setToastTextAlign,
       setToastType,
       setToastDurationSecs,
@@ -68,7 +68,6 @@ export default function WaitingRoom(): JSX.Element {
 
    async function handleStartGame(): Promise<void> {
       if (disablePlay) {
-         setToastZIndex(100);
          toggleToast(true);
          setToastMessage('3 Players are Required to Start the Game!');
          setWidth('auto');
@@ -102,7 +101,6 @@ export default function WaitingRoom(): JSX.Element {
          setWidth('15em');
          setVerticalPos('bottom');
          setHorizontalPos('center');
-         setToastZIndex(100);
          return;
       }
       await Device.shareContent({
@@ -161,11 +159,11 @@ export default function WaitingRoom(): JSX.Element {
 }
 
 const screenStyles = (): FlattenSimpleInterpolation => {
-   const forDesktop = MyCSS.Media.desktop(css`
+   const forDesktop = CSS_Media.Query.desktop(css`
       width: 30em;
       margin: 0 auto;
       font-size: 1.2em;
    `);
-   const forTablet = MyCSS.Media.tablet(css``);
-   return MyCSS.Helper.concatStyles(forDesktop, forTablet);
+   const forTablet = CSS_Media.Query.tablet(css``);
+   return CSS_Helper.concatStyles(forDesktop, forTablet);
 };

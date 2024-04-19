@@ -1,13 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
-import DBConnect from '../../../../../global/database/DBConnect/DBConnect';
-import { GameContext } from '../../../../../global/context/game/GameContext';
-import useScrollFader from '../../../../../global/hooks/useScrollFader';
-import { GameDetailsContainer, GameDetailsItemWrapper, ItemLabel, ItemValue } from './style/Style';
-import Color from '../../../../../global/css/colors';
-import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
-import MyCSS from '../../../../../global/css/MyCSS';
+import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
+import { GameContext } from '../../../../../global/context/game/GameContext';
+import Color from '../../../../../global/css/utils/colors';
+import { CSS_Helper } from '../../../../../global/css/utils/helper';
+import DBConnect from '../../../../../global/database/DBConnect/DBConnect';
+import useScrollFader from '../../../../../global/hooks/useScrollFader';
+import { GameDetailsContainer, GameDetailsItemWrapper, ItemLabel, ItemValue } from './style/Style';
+import { CSS_Media } from '../../../../../global/css/utils/media';
 
 interface IGameHeaderDetails {
    label: string;
@@ -64,8 +65,8 @@ export default function GameDetails(): JSX.Element {
 }
 
 const screenStyles = (): FlattenSimpleInterpolation => {
-   const forMobile = MyCSS.Media.mobile(css``);
-   const forDesktop = MyCSS.Media.desktop(css`
+   const forMobile = CSS_Media.Query.mobile(css``);
+   const forDesktop = CSS_Media.Query.desktop(css`
       font-size: 1em;
    `);
    const medium = css`
@@ -81,5 +82,5 @@ const screenStyles = (): FlattenSimpleInterpolation => {
          }
       }
    `;
-   return MyCSS.Helper.concatStyles(forDesktop, forMobile, medium);
+   return CSS_Helper.concatStyles(forDesktop, forMobile, medium);
 };

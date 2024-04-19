@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Color from '../../../../css/colors';
+import Color from '../../../../css/utils/colors';
 
 export const Switcher = styled.div<{ isOn: boolean; isDarkTheme: boolean; size: string }>`
    display: inline-block;

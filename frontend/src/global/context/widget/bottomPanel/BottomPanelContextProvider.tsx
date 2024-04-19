@@ -15,14 +15,12 @@ export default function BottomPanelContextProvider(
    const [bottomPanelContent, setBottomPanelContent] = useState(<></>);
    const [bottomPanelHeading, setBottomPanelHeading] = useState<string | undefined>(undefined);
    const [bottomPanelHeightDvh, setBottomPanelHeightDvh] = useState<number | undefined>(undefined);
-   const [bottomPanelZIndex, setBottomPanelZIndex] = useState<number | undefined>(undefined);
 
    function handleCloseBottomPanel(): void {
       setIsBottomPanelOpen(false);
       setBottomPanelContent(<></>);
       setBottomPanelHeading(undefined);
       setBottomPanelHeightDvh(undefined);
-      setBottomPanelZIndex(undefined);
    }
 
    function toggleBottomPanel(show: boolean): void {
@@ -36,8 +34,6 @@ export default function BottomPanelContextProvider(
          bottomPanelContent,
          setBottomPanelHeading,
          setBottomPanelHeightDvh,
-         bottomPanelZIndex,
-         setBottomPanelZIndex,
          isBottomPanelOpen,
          toggleBottomPanel,
       }),
@@ -46,8 +42,6 @@ export default function BottomPanelContextProvider(
          bottomPanelContent,
          setBottomPanelHeading,
          setBottomPanelHeightDvh,
-         bottomPanelZIndex,
-         setBottomPanelZIndex,
          isBottomPanelOpen,
          toggleBottomPanel,
       ],
@@ -61,7 +55,6 @@ export default function BottomPanelContextProvider(
             onClose={() => handleCloseBottomPanel()}
             heading={bottomPanelHeading}
             height={bottomPanelHeightDvh}
-            zIndex={bottomPanelZIndex}
          >
             {bottomPanelContent}
          </BottomPanel>

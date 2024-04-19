@@ -1,12 +1,17 @@
 import styled from 'styled-components';
-import Color from '../../../css/colors';
+import Color from '../../../css/utils/colors';
+import { FullScreenWrapper } from '../positionModifiers/fullScreenWrapper/FullScreenWrapper';
+import CSS_ZIndex from '../../../css/utils/zIndex';
+
+export const CustomSpinnerWrapper = styled(FullScreenWrapper)`
+   z-index: ${CSS_ZIndex.get('loader')};
+`;
 
 export const CustomSpinner = styled.div<{
    isDarkTheme: boolean;
    disableSpin?: boolean;
    sizePx?: string;
 }>`
-   z-index: 999;
    border: ${({ isDarkTheme, sizePx }) =>
       isDarkTheme
          ? `calc(${sizePx || '70px'} / 7 ) solid ${Color.setRgbOpacity(Color.darkThm.txt, 0.5)}`

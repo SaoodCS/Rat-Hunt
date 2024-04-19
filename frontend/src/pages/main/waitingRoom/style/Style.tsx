@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import MyCSS from '../../../../global/css/MyCSS';
-import Color from '../../../../global/css/colors';
+import Color from '../../../../global/css/utils/colors';
+import CSS_Clickables from '../../../../global/css/utils/clickables';
 
 export const WaitingRoomTitle = styled.div`
    font-size: 1.75em;
@@ -9,9 +9,9 @@ export const WaitingRoomTitle = styled.div`
 `;
 
 export const PlayBtnContainer = styled.div<{ disablePlay?: boolean }>`
-   ${MyCSS.Clickables.removeDefaultEffects};
-   ${MyCSS.Clickables.desktop.changeBrightnessOnHover(0.8)};
-   ${MyCSS.Clickables.portable.changeBrightnessOnClick(0.8, 'revert')}
+   ${CSS_Clickables.removeDefaultEffects};
+   ${CSS_Clickables.desktop.changeBrightnessOnHover(0.8)};
+   ${CSS_Clickables.portable.changeBrightnessOnClick(0.8, 'revert')}
    display: flex;
    position: absolute;
    color: ${Color.darkThm.warning};

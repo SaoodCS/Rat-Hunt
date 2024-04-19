@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import MyCSS from '../../../../css/MyCSS';
-import Color from '../../../../css/colors';
+import Color from '../../../../css/utils/colors';
 import { FlexRowWrapper } from '../../positionModifiers/flexRowWrapper/Style';
+import CSS_Clickables from '../../../../css/utils/clickables';
 
 export interface ICheckInputAttr {
    isRequired: boolean;
@@ -35,7 +35,7 @@ export const StyledCheckbox = styled.input.attrs<ICheckInputAttr>(({ isRequired,
    disabled: isDisabled,
    type: 'checkbox',
 }))<{ isDarkTheme: boolean; hasError: boolean }>`
-   ${MyCSS.Clickables.removeDefaultEffects};
+   ${CSS_Clickables.removeDefaultEffects};
    padding: 0;
    margin: 0;
    appearance: none;

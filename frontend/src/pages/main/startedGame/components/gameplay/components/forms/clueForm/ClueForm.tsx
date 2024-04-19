@@ -1,8 +1,10 @@
 import { Send } from '@styled-icons/ionicons-sharp/Send';
+import axios from 'axios';
 import { useContext } from 'react';
 import GameHelper from '../../../../../../../../../../shared/app/GameHelper/GameHelper';
 import ArrayHelper from '../../../../../../../../../../shared/lib/helpers/arrayHelper/ArrayHelper';
 import ArrOfObj from '../../../../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
+import DateHelper from '../../../../../../../../../../shared/lib/helpers/date/DateHelper';
 import MiscHelper from '../../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import { TextBtn } from '../../../../../../../../global/components/lib/button/textBtn/Style';
 import InputCombination from '../../../../../../../../global/components/lib/form/inputCombination/InputCombination';
@@ -10,13 +12,11 @@ import { StyledForm } from '../../../../../../../../global/components/lib/form/s
 import { GameContext } from '../../../../../../../../global/context/game/GameContext';
 import useThemeContext from '../../../../../../../../global/context/theme/hooks/useThemeContext';
 import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
-import Color from '../../../../../../../../global/css/colors';
+import Color from '../../../../../../../../global/css/utils/colors';
 import DBConnect from '../../../../../../../../global/database/DBConnect/DBConnect';
 import useForm from '../../../../../../../../global/hooks/useForm';
 import { gameFormStyles, gameInputFieldStyles } from '../style/Style';
 import ClueFormClass from './class/ClueFormClass';
-import DateHelper from '../../../../../../../../../../shared/lib/helpers/date/DateHelper';
-import axios from 'axios';
 
 export default function ClueForm(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);

@@ -1,7 +1,9 @@
 import type { Keyframes } from 'styled-components';
 import styled, { keyframes } from 'styled-components';
-import MyCSS from '../../../css/MyCSS';
-import Color from '../../../css/colors';
+import Color from '../../../css/utils/colors';
+import { CSS_Helper } from '../../../css/utils/helper';
+import { CSS_ZIndex } from '../../../css/utils/zIndex';
+import CSS_Clickables from '../../../css/utils/clickables';
 
 export type TButtonPos = 'top left' | 'top right' | 'bottom left' | 'bottom right';
 
@@ -40,12 +42,12 @@ export const PopupMenuWrapper = styled.div<{
    heightPx: number;
    isDarkTheme: boolean;
 }>`
+   z-index: ${CSS_ZIndex.get('popupMenu')};
    position: fixed;
    top: ${({ topPx }) => topPx}px;
    left: ${({ leftPx }) => leftPx}px;
    height: ${({ heightPx }) => heightPx}px;
    width: ${({ widthPx }) => widthPx}px;
-   z-index: 100;
    border-radius: 10px;
    backdrop-filter: blur(100px);
    color: ${({ isDarkTheme }) => (isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt)};
@@ -83,7 +85,7 @@ export const PMItemContainer = styled.div<{
    dangerItem?: boolean;
    isHeadingItem?: boolean;
 }>`
-   ${MyCSS.Clickables.removeDefaultEffects};
+   ${CSS_Clickables.removeDefaultEffects};
    padding: 8px;
    display: flex;
    justify-content: ${({ isHeadingItem }) => (isHeadingItem ? 'center' : 'space-between')};
@@ -113,13 +115,13 @@ export const PMItemContainer = styled.div<{
          isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt,
          0.1,
       );
-      const mobile = MyCSS.Clickables.portable.changeColorOnClick(
+      const mobile = CSS_Clickables.portable.changeColorOnClick(
          bgColor,
          'background-color',
          'revert',
       );
-      const desktop = MyCSS.Clickables.desktop.changeColorOnHover(bgColor, 'background-color');
-      return MyCSS.Helper.concatStyles(mobile, desktop);
+      const desktop = CSS_Clickables.desktop.changeColorOnHover(bgColor, 'background-color');
+      return CSS_Helper.concatStyles(mobile, desktop);
    }};
 `;
 

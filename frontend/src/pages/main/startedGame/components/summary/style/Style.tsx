@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { TextColourizer } from '../../../../../../global/components/lib/font/textColorizer/TextColourizer';
-import MyCSS from '../../../../../../global/css/MyCSS';
-import Color from '../../../../../../global/css/colors';
+import Color from '../../../../../../global/css/utils/colors';
+import CSS_Clickables from '../../../../../../global/css/utils/clickables';
 
 export const TITLE_HEIGHT = 2.5;
 export const MARQUEE_HEIGHT = 3;
@@ -33,7 +33,7 @@ export const NextPlayAgainBtnContainer = styled.div`
 `;
 
 export const NextRoundPlayAgainBtn = styled(TextColourizer)`
-   ${MyCSS.Clickables.removeDefaultEffects};
+   ${CSS_Clickables.removeDefaultEffects};
    color: ${Color.darkThm.warning};
    padding: 0em 1em 0.2em 1em;
    font-size: 0.9em;
@@ -41,8 +41,8 @@ export const NextRoundPlayAgainBtn = styled(TextColourizer)`
    border-bottom-left-radius: 1em;
    border-bottom-right-radius: 1em;
    cursor: pointer;
-   ${MyCSS.Clickables.desktop.changeBrightnessOnHover(0.8)};
-   ${MyCSS.Clickables.portable.changeBrightnessOnClick(0.8, 'persist')};
+   ${CSS_Clickables.desktop.changeBrightnessOnHover(0.8)};
+   ${CSS_Clickables.portable.changeBrightnessOnClick(0.8, 'persist')};
 `;
 
 export const ScoreboardContainer = styled.div`
@@ -63,7 +63,7 @@ export const MarqueeContainer = styled.div`
    justify-content: center;
    align-items: center;
    filter: brightness(1);
-   z-index: 999;
+   z-index: 2;
    box-sizing: border-box;
 `;
 

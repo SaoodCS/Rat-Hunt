@@ -9,8 +9,6 @@ interface IToastContext {
    setWidth: Dispatch<SetStateAction<string>>;
    setVerticalPos: Dispatch<SetStateAction<TVerticalPos>>;
    setHorizontalPos: Dispatch<SetStateAction<THorizontalPos>>;
-   toastZIndex: number;
-   setToastZIndex: Dispatch<SetStateAction<number>>;
    toastTextAlign: 'left' | 'center' | 'right';
    setToastTextAlign: Dispatch<SetStateAction<'left' | 'center' | 'right'>>;
    toastType: 'info' | 'success' | 'error' | 'warning';
@@ -26,8 +24,6 @@ export const ToastContext = createContext<IToastContext>({
    setWidth: () => {},
    setVerticalPos: () => {},
    setHorizontalPos: () => {},
-   toastZIndex: 99999,
-   setToastZIndex: () => {},
    toastTextAlign: 'left',
    setToastTextAlign: () => {},
    toastType: 'info',

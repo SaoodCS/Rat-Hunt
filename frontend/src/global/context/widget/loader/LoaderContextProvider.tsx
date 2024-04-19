@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { useState } from 'react';
 import Loader from '../../../components/lib/loader/fullScreen/Loader';
 import { LoaderContext } from './LoaderContext';
+import ConditionalRender from '../../../components/lib/renderModifiers/conditionalRender/ConditionalRender';
 
 interface ILoaderContextProvider {
    children: ReactNode;
@@ -10,16 +11,15 @@ interface ILoaderContextProvider {
 export const LoaderContextProvider = (props: ILoaderContextProvider): JSX.Element => {
    const { children } = props;
    const [showLoader, setShowLoader] = useState(false);
-   const [loaderZIndex, setLoaderZIndex] = useState<number | undefined>(undefined);
 
    return (
       <>
-         <LoaderContext.Provider
-            value={{ showLoader, setShowLoader, loaderZIndex, setLoaderZIndex }}
-         >
+         <LoaderContext.Provider value={{ showLoader, setShowLoader }}>
             {children}
          </LoaderContext.Provider>
-         <Loader isDisplayed={showLoader} zIndex={loaderZIndex} />
+         <ConditionalRender condition={showLoader}>
+            <Loader />
+         </ConditionalRender>
       </>
    );
 };

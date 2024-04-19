@@ -1,14 +1,15 @@
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
+import GameHelper from '../../../../../../../shared/app/GameHelper/GameHelper';
+import { topics } from '../../../../../../../shared/app/utils/topics/topics';
+import MiscHelper from '../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import { GameContext } from '../../../../../global/context/game/GameContext';
-import MyCSS from '../../../../../global/css/MyCSS';
+import { CSS_Helper } from '../../../../../global/css/utils/helper';
 import DBConnect from '../../../../../global/database/DBConnect/DBConnect';
 import { BoardCell, BoardContainer, BoardRow, CellValue } from './style/Style';
-import GameHelper from '../../../../../../../shared/app/GameHelper/GameHelper';
-import MiscHelper from '../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
-import { topics } from '../../../../../../../shared/app/utils/topics/topics';
+import { CSS_Media } from '../../../../../global/css/utils/media';
 
 export default function TopicBoard(): JSX.Element {
    const { localDbRoom, localDbUser, activeTopicWords, setActiveTopicWords } =
@@ -61,9 +62,9 @@ const screenStyles = (): FlattenSimpleInterpolation => {
       height: 100%;
       margin: 0 auto;
    `;
-   const forDesktop = MyCSS.Media.desktop(css`
+   const forDesktop = CSS_Media.Query.desktop(css`
       font-size: 1.15em;
    `);
-   const forTablet = MyCSS.Media.tablet(css``);
-   return MyCSS.Helper.concatStyles(forDesktop, forTablet, allStyles);
+   const forTablet = CSS_Media.Query.tablet(css``);
+   return CSS_Helper.concatStyles(forDesktop, forTablet, allStyles);
 };

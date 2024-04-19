@@ -1,11 +1,12 @@
 import { Trash } from '@styled-icons/bootstrap/Trash';
 import styled from 'styled-components';
-import MyCSS from '../../../../css/MyCSS';
-import Color from '../../../../css/colors';
 import BoolHelper from '../../../../../../../shared/lib/helpers/bool/BoolHelper';
+import Color from '../../../../css/utils/colors';
+import { CSS_Helper } from '../../../../css/utils/helper';
+import CSS_Clickables from '../../../../css/utils/clickables';
 
 export const TrashIcon = styled(Trash)<{ darktheme: 'true' | 'false' }>`
-   ${MyCSS.Clickables.removeDefaultEffects};
+   ${CSS_Clickables.removeDefaultEffects};
    color: ${({ darktheme }): string =>
       Color.setRgbOpacity(
          BoolHelper.strToBool(darktheme) ? Color.darkThm.error : Color.lightThm.error,
@@ -16,8 +17,8 @@ export const TrashIcon = styled(Trash)<{ darktheme: 'true' | 'false' }>`
          BoolHelper.strToBool(darktheme) ? Color.darkThm.error : Color.lightThm.error,
          1,
       );
-      const mobileCol = MyCSS.Clickables.portable.changeColorOnClick(color, 'color', 'revert');
-      const desktopCol = MyCSS.Clickables.desktop.changeColorOnHover(color, 'color');
-      return MyCSS.Helper.concatStyles(mobileCol, desktopCol);
+      const mobileCol = CSS_Clickables.portable.changeColorOnClick(color, 'color', 'revert');
+      const desktopCol = CSS_Clickables.desktop.changeColorOnHover(color, 'color');
+      return CSS_Helper.concatStyles(mobileCol, desktopCol);
    }};
 `;

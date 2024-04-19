@@ -17,7 +17,6 @@ export default function ToastContextProvider(props: IToastContextProvider): JSX.
    const [width, setWidth] = useState('auto');
    const [verticalPos, setVerticalPos] = useState<TVerticalPos>('bottom');
    const [horizontalPos, setHorizontalPos] = useState<THorizontalPos>('left');
-   const [toastZIndex, setToastZIndex] = useState<number>(99999);
    const [toastTextAlign, setToastTextAlign] = useState<'left' | 'center' | 'right'>('left');
    const [toastType, setToastType] = useState<'info' | 'success' | 'error' | 'warning'>('info');
    const [toastDurationSecs, setToastDurationSecs] = useState(2);
@@ -33,7 +32,6 @@ export default function ToastContextProvider(props: IToastContextProvider): JSX.
    function handleOnClose(): void {
       setIsToastDisplayed(false);
       setToastMessage('');
-      setToastZIndex(99999);
       setToastTextAlign('left');
       setToastType('info');
       setWidth('auto');
@@ -57,8 +55,6 @@ export default function ToastContextProvider(props: IToastContextProvider): JSX.
                setWidth,
                setVerticalPos,
                setHorizontalPos,
-               toastZIndex,
-               setToastZIndex,
                toastTextAlign,
                toastType,
                setToastTextAlign,
@@ -75,7 +71,6 @@ export default function ToastContextProvider(props: IToastContextProvider): JSX.
                width={width}
                horizontalPos={horizontalPos}
                verticalPos={verticalPos}
-               zIndex={toastZIndex}
                textAlign={toastTextAlign}
                type={toastType}
                duration={toastDurationSecs}

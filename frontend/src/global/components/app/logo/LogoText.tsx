@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import Color from '../../../css/colors';
+import Color from '../../../css/utils/colors';
 
 export const LogoText = styled.div<{ color?: string; size?: string; wrapAndHyphenate?: boolean }>`
    font-size: ${({ size }) => size || '8em'};

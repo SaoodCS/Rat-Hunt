@@ -1,4 +1,4 @@
-import useThemeContext from '../../../context/theme/hooks/useThemeContext';
+import useThemeContext from '../../../../context/theme/hooks/useThemeContext';
 import { TooltipContent, TooltipWrapper } from './Style';
 
 export type ITooltipPositioning =

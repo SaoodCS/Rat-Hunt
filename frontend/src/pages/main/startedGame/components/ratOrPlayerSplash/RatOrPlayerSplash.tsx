@@ -1,8 +1,8 @@
 import RatLogo from '../../../../../global/components/app/logo/RatLogo';
+import TargettedRatLogo from '../../../../../global/components/app/logo/targettedRatLogo/TargettedRatLogo';
 import { TextColourizer } from '../../../../../global/components/lib/font/textColorizer/TextColourizer';
 import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
-import Color from '../../../../../global/css/colors';
-import TargettedRatLogo from '../../../../../global/components/app/logo/targettedRatLogo/TargettedRatLogo';
+import Color from '../../../../../global/css/utils/colors';
 import { RatOrPlayerSplashWrapper } from './style/Style';
 
 interface IRatOrPlayerSplash {

@@ -1,8 +1,9 @@
 import type { CSSProperties } from 'react';
 import { getTrackBackground } from 'react-range';
 import styled, { css } from 'styled-components';
-import MyCSS from '../../../../css/MyCSS';
-import Color from '../../../../css/colors';
+import Color from '../../../../css/utils/colors';
+import { CSS_Helper } from '../../../../css/utils/helper';
+import CSS_Clickables from '../../../../css/utils/clickables';
 
 export const NumberLineInputWrapper = styled.div`
    position: relative;
@@ -16,7 +17,7 @@ export const StyledLineWrapper = styled.div<{
    isDarkTheme: boolean;
    hasError: boolean;
 }>`
-   ${({ propsStyles }) => MyCSS.Helper.convertInlineToStyledComp(propsStyles)};
+   ${({ propsStyles }) => CSS_Helper.convertInlineToStyledComp(propsStyles)};
    ${({ isDarkTheme, hasError }) => {
       const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
       const color = hasError ? theme.error : theme.accent;
@@ -86,7 +87,7 @@ export const StyledDot = styled.div<{
    value: number | '';
    isDarkTheme: boolean;
 }>`
-   ${({ propsStyles }) => MyCSS.Helper.convertInlineToStyledComp(propsStyles)};
+   ${({ propsStyles }) => CSS_Helper.convertInlineToStyledComp(propsStyles)};
    ${({ isDarkTheme, isDragged }) => {
       const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
       return css`
@@ -133,7 +134,7 @@ export const ValueItemContainer = styled.div`
 `;
 
 export const ValueItem = styled.div<{ inputHasValue: boolean }>`
-   ${MyCSS.Clickables.removeDefaultEffects};
+   ${CSS_Clickables.removeDefaultEffects};
    opacity: ${({ inputHasValue }) => !inputHasValue && '0'};
    padding-top: 0.2em;
    padding-right: ${({ inputHasValue }) => (inputHasValue ? '1.65em' : '0em')};
@@ -147,9 +148,9 @@ export const RefreshBtnContainer = styled.div`
 `;
 
 export const RefreshBtnTransitioner = styled.div<{ inputHasValue: boolean; isDarkTheme: boolean }>`
-   ${MyCSS.Clickables.removeDefaultEffects};
-   ${MyCSS.Clickables.desktop.changeBrightnessOnHover(2)};
-   ${MyCSS.Clickables.portable.changeBrightnessOnClick(3, 'revert')};
+   ${CSS_Clickables.removeDefaultEffects};
+   ${CSS_Clickables.desktop.changeBrightnessOnHover(2)};
+   ${CSS_Clickables.portable.changeBrightnessOnClick(3, 'revert')};
    ${({ isDarkTheme }) => {
       const theme = isDarkTheme ? Color.darkThm : Color.lightThm;
       return css`

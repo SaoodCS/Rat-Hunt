@@ -9,21 +9,19 @@ interface IToast {
    width: string;
    verticalPos: TVerticalPos;
    horizontalPos: THorizontalPos;
-   zIndex: number;
    textAlign: 'left' | 'center' | 'right';
    type: 'info' | 'success' | 'error' | 'warning';
    duration: number;
 }
 
 export default function Toast(props: IToast): JSX.Element {
-   const { message, width, verticalPos, horizontalPos, zIndex, textAlign, type, duration } = props;
+   const { message, width, verticalPos, horizontalPos, textAlign, type, duration } = props;
    const { isDarkTheme } = useThemeContext();
 
    return (
       <ToastContainer
          verticalPos={verticalPos}
          horizontalPos={horizontalPos}
-         zIndex={zIndex}
          duration={duration}
          isDarkTheme={isDarkTheme}
       >

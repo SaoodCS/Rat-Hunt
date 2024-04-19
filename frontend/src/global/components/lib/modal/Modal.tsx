@@ -1,15 +1,16 @@
 import type { ReactNode } from 'react';
 import { useContext } from 'react';
 import { ThemeContext } from '../../../context/theme/ThemeContext';
-import Color from '../../../css/colors';
+import Color from '../../../css/utils/colors';
+import { CSS_ZIndex } from '../../../css/utils/zIndex';
 import useOnOutsideClick from '../../../hooks/useOnOutsideClick';
 import ExitAnimatePresence from '../animation/exitAnimatePresence/ExitAnimatePresence';
 import { AnimatedOverlay } from '../animation/overlay/AnimatedOverlay';
-import { FullScreenWrapper } from '../positionModifiers/fullScreenWrapper/FullScreenWrapper';
 import Scroller from '../scroller/Scroller';
 import {
    ModalAnimator,
    ModalBody,
+   ModalCenterer,
    ModalCloseButton,
    ModalContainer,
    ModalHeader,
@@ -36,9 +37,9 @@ export default function Modal(props: IModal): JSX.Element {
             duration={0.5}
             type="tween"
             color={Color.setRgbOpacity(Color.darkThm.txt, 0.3)}
-            zIndex={1}
+            zIndex={CSS_ZIndex.get('modal') - 1}
          />
-         <FullScreenWrapper centerContents>
+         <ModalCenterer centerContents>
             <ModalAnimator
                ref={outsideClickRef}
                key="modal"
@@ -58,7 +59,7 @@ export default function Modal(props: IModal): JSX.Element {
                   </ModalBody>
                </ModalContainer>
             </ModalAnimator>
-         </FullScreenWrapper>
+         </ModalCenterer>
       </ExitAnimatePresence>
    );
 }

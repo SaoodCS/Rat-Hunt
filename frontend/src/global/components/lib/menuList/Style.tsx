@@ -1,7 +1,8 @@
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import styled, { css } from 'styled-components';
-import MyCSS from '../../../css/MyCSS';
-import Color from '../../../css/colors';
+import Color from '../../../css/utils/colors';
+import { CSS_Media } from '../../../css/utils/media';
+import CSS_Clickables from '../../../css/utils/clickables';
 
 class MenuWrapperStyles {
    static largeScrn = css`
@@ -33,11 +34,11 @@ export const MenuListWrapper = styled.div<{ isDarkTheme: boolean }>`
       display: none;
    }
    height: fit-content;
-   @media (max-width: ${MyCSS.PortableBp.asPx}) {
+   @media (max-width: ${CSS_Media.PortableBp.asPx}) {
       ${({ isDarkTheme }) => MenuWrapperStyles.smallScrn(isDarkTheme)};
    }
 
-   @media (min-width: ${MyCSS.PortableBp.asPx}) {
+   @media (min-width: ${CSS_Media.PortableBp.asPx}) {
       ${MenuWrapperStyles.largeScrn};
    }
 `;
@@ -57,7 +58,7 @@ class ItemContainerStyles {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      ${MyCSS.Clickables.desktop.changeColorOnHover(
+      ${CSS_Clickables.desktop.changeColorOnHover(
          Color.setRgbOpacity(isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt, 0.1),
          'background-color',
       )};
@@ -80,7 +81,7 @@ export const ItemContainer = styled.div<{
    isDarkTheme: boolean;
 }>`
    all: unset;
-   ${MyCSS.Clickables.removeDefaultEffects};
+   ${CSS_Clickables.removeDefaultEffects};
    cursor: pointer;
    color: ${({ dangerItem, warningItem, isDarkTheme }) =>
       dangerItem
@@ -96,10 +97,10 @@ export const ItemContainer = styled.div<{
       background-color: ${({ isDarkTheme }) =>
          Color.setRgbOpacity(isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt, 0.1)};
    }
-   @media (max-width: ${MyCSS.PortableBp.asPx}) {
+   @media (max-width: ${CSS_Media.PortableBp.asPx}) {
       ${({ spaceRow }) => ItemContainerStyles.smallSrn(!!spaceRow)};
    }
-   @media (min-width: ${MyCSS.PortableBp.asPx}) {
+   @media (min-width: ${CSS_Media.PortableBp.asPx}) {
       ${({ isDarkTheme }) => ItemContainerStyles.largeScrn(isDarkTheme)};
    }
 `;
@@ -108,14 +109,14 @@ export const IconAndNameWrapper = styled.div`
    display: flex;
    justify-content: center;
    align-items: center;
-   @media (max-width: ${MyCSS.PortableBp.asPx}) {
+   @media (max-width: ${CSS_Media.PortableBp.asPx}) {
       flex-direction: row;
       & > *:first-child {
          height: 1.5em;
          padding-right: 0.5em;
       }
    }
-   @media (min-width: ${MyCSS.PortableBp.asPx}) {
+   @media (min-width: ${CSS_Media.PortableBp.asPx}) {
       flex-direction: column;
       padding-bottom: 0.5em;
       & > *:first-child {
@@ -128,10 +129,10 @@ export const IconAndNameWrapper = styled.div`
 export const ItemContentWrapper = styled.div`
    display: flex;
    flex-direction: column;
-   @media (max-width: ${MyCSS.PortableBp.asPx}) {
+   @media (max-width: ${CSS_Media.PortableBp.asPx}) {
       align-items: start;
    }
-   @media (min-width: ${MyCSS.PortableBp.asPx}) {
+   @media (min-width: ${CSS_Media.PortableBp.asPx}) {
       align-items: center;
    }
 `;
@@ -146,10 +147,10 @@ export const ItemSubElement = styled.div`
    display: flex;
    align-items: center;
    justify-content: center;
-   @media (max-width: ${MyCSS.PortableBp.asPx}) {
+   @media (max-width: ${CSS_Media.PortableBp.asPx}) {
       height: 100%;
    }
-   @media (min-width: ${MyCSS.PortableBp.asPx}) {
+   @media (min-width: ${CSS_Media.PortableBp.asPx}) {
       padding-top: 0.4em;
    }
 `;

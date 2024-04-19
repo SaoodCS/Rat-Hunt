@@ -1,4 +1,4 @@
-import Color from '../../../css/colors';
+import Color from '../../../css/utils/colors';
 
 interface IRatLogo {
    color?: string;

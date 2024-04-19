@@ -12,13 +12,11 @@ export default function ModalContextProvider(props: IModalContextProvider): JSX.
    const [isModalOpen, setIsModalOpen] = useState(false);
    const [modalContent, setModalContent] = useState(<></>);
    const [modalHeader, setModalHeader] = useState(``);
-   const [modalZIndex, setModalZIndex] = useState<number | undefined>(undefined);
 
    function handleCloseModal(): void {
       setIsModalOpen(false);
       setModalContent(<></>);
       setModalHeader(``);
-      setModalZIndex(undefined);
    }
 
    function toggleModal(show: boolean): void {
@@ -30,32 +28,17 @@ export default function ModalContextProvider(props: IModalContextProvider): JSX.
       () => ({
          setModalContent,
          setModalHeader,
-         setModalZIndex,
          modalContent,
-         modalZIndex,
          isModalOpen,
          toggleModal,
       }),
-      [
-         setModalContent,
-         setModalHeader,
-         modalContent,
-         setModalZIndex,
-         modalZIndex,
-         isModalOpen,
-         toggleModal,
-      ],
+      [setModalContent, setModalHeader, modalContent, isModalOpen, toggleModal],
    );
 
    return (
       <>
          <ModalContext.Provider value={contextMemo}>{children}</ModalContext.Provider>
-         <Modal
-            isOpen={isModalOpen}
-            onClose={() => handleCloseModal()}
-            header={modalHeader}
-            zIndex={modalZIndex}
-         >
+         <Modal isOpen={isModalOpen} onClose={() => handleCloseModal()} header={modalHeader}>
             {modalContent}
          </Modal>
       </>

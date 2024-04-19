@@ -18,16 +18,9 @@ interface IGuideAndLeaveRoom {
 
 export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Element {
    const { currentPath } = props;
-   const { setModalContent, setModalHeader, setModalZIndex, toggleModal } =
-      useContext(ModalContext);
-   const {
-      toggleToast,
-      setToastMessage,
-      setWidth,
-      setVerticalPos,
-      setHorizontalPos,
-      setToastZIndex,
-   } = useContext(ToastContext);
+   const { setModalContent, setModalHeader, toggleModal } = useContext(ModalContext);
+   const { toggleToast, setToastMessage, setWidth, setVerticalPos, setHorizontalPos } =
+      useContext(ToastContext);
    const { localDbRoom, localDbUser, setLocalDbRoom, setLocalDbUser } = useContext(GameContext);
    const [isWaitingPage, setIsWaitingPage] = useState(currentPath.includes('waiting'));
    const [isStartedGamePage, setIsStartedGamePage] = useState(currentPath.includes('started'));
@@ -45,7 +38,6 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
    function handleHelpGuide(): void {
       setModalHeader('How To Play?');
       setModalContent(<HelpGuide />);
-      setModalZIndex(100);
       toggleModal(true);
    }
 
@@ -66,7 +58,6 @@ export default function GuideAndLeaveRoom(props: IGuideAndLeaveRoom): JSX.Elemen
          setWidth('15em');
          setVerticalPos('bottom');
          setHorizontalPos('center');
-         setToastZIndex(100);
          return;
       }
       await Device.shareContent({

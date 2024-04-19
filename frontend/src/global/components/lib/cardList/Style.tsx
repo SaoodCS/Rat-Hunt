@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import MyCSS from '../../../css/MyCSS';
-import Color from '../../../css/colors';
+import Color from '../../../css/utils/colors';
 import { FlatListWrapper } from '../flatList/Style';
+import CSS_Clickables from '../../../css/utils/clickables';
 
 export const CardListTitle = styled.div`
    margin-bottom: 1em;
@@ -35,7 +35,7 @@ export const ItemTitleAndIconWrapper = styled.div`
 `;
 
 export const CardListItem = styled.div<{ isDarkTheme: boolean; width?: string }>`
-   ${MyCSS.Clickables.removeDefaultEffects};
+   ${CSS_Clickables.removeDefaultEffects};
    display: flex;
    border: 1px solid ${Color.darkThm.border};
    height: 5em;

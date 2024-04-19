@@ -1,9 +1,11 @@
 import styled from 'styled-components';
-import MyCSS from '../../../css/MyCSS';
+import { CSS_ZIndex } from '../../../css/utils/zIndex';
 import { Overlay } from '../overlay/Overlay';
+import { CSS_Keyframes } from '../../../css/utils/keyframes';
 
 export const SplashScreenWrapper = styled(Overlay)<{ durationSecs: number }>`
-   ${({ durationSecs }) => MyCSS.Keyframes.fadeInAndOut(durationSecs)};
+   z-index: ${CSS_ZIndex.get('splashScreen')};
+   ${({ durationSecs }) => CSS_Keyframes.fadeInAndOut(durationSecs)};
 `;
 
 export const SplashScreenFooter = styled.div`

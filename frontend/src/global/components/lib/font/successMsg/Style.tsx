@@ -1,6 +1,6 @@
 import { CheckCircle } from '@styled-icons/material/CheckCircle';
 import styled from 'styled-components';
-import Color from '../../../../css/colors';
+import Color from '../../../../css/utils/colors';
 
 export const SuccessMsgText = styled.div`
    margin-left: 0.5em;

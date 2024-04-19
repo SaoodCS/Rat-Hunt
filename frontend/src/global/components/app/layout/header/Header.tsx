@@ -1,8 +1,10 @@
 import { ArrowIosBack } from '@styled-icons/evaicons-solid/ArrowIosBack';
 import styled, { css } from 'styled-components';
-import MyCSS from '../../../../css/MyCSS';
-import Color from '../../../../css/colors';
 import BoolHelper from '../../../../../../../shared/lib/helpers/bool/BoolHelper';
+import Color from '../../../../css/utils/colors';
+import { CSS_Helper } from '../../../../css/utils/helper';
+import { CSS_Media } from '../../../../css/utils/media';
+import CSS_Clickables from '../../../../css/utils/clickables';
 
 export const Header = styled.div<{ isDarkTheme: boolean }>`
    position: fixed;
@@ -15,29 +17,28 @@ export const Header = styled.div<{ isDarkTheme: boolean }>`
    display: flex;
    justify-content: space-evenly;
    align-items: center;
-   @media (min-width: ${MyCSS.PortableBp.asPx}) {
+   @media (min-width: ${CSS_Media.PortableBp.asPx}) {
       height: calc(10% + 20px);
       font-size: 3em;
       align-items: center;
       justify-content: center;
       border-bottom: none;
    }
-   z-index: 1;
 `;
 
 export const HeaderSubtitleWrapper = styled.div`
    position: absolute;
    bottom: 5px;
-   ${MyCSS.Media.mobile(css`
+   ${CSS_Media.Query.mobile(css`
       font-size: 0.8rem;
    `)};
-   ${MyCSS.Media.desktop(css`
+   ${CSS_Media.Query.desktop(css`
       font-size: 1rem;
    `)};
 `;
 
 export const StyledBackArr = styled(ArrowIosBack)<{ darktheme: 'true' | 'false' }>`
-   ${MyCSS.Clickables.removeDefaultEffects};
+   ${CSS_Clickables.removeDefaultEffects};
    height: 1.5em;
    position: fixed;
    left: 0;
@@ -47,11 +48,11 @@ export const StyledBackArr = styled(ArrowIosBack)<{ darktheme: 'true' | 'false' 
          BoolHelper.strToBool(darktheme) ? Color.darkThm.txt : Color.lightThm.txt,
          0.3,
       );
-      const dekstop = MyCSS.Clickables.desktop.changeColorOnHover(color, 'color');
-      const mobile = MyCSS.Clickables.portable.changeColorOnClick(color, 'color', 'persist');
-      return MyCSS.Helper.concatStyles(dekstop, mobile);
+      const dekstop = CSS_Clickables.desktop.changeColorOnHover(color, 'color');
+      const mobile = CSS_Clickables.portable.changeColorOnClick(color, 'color', 'persist');
+      return CSS_Helper.concatStyles(dekstop, mobile);
    }};
-   @media (min-width: ${MyCSS.PortableBp.asPx}) {
+   @media (min-width: ${CSS_Media.PortableBp.asPx}) {
       left: 15%;
       padding-left: 0;
       height: 1.25em;
@@ -73,7 +74,7 @@ export const HeaderRightElWrapper = styled.div<{ isDarkTheme: boolean }>`
       margin-right: 0.25em;
    }
 
-   @media (min-width: ${MyCSS.PortableBp.asPx}) {
+   @media (min-width: ${CSS_Media.PortableBp.asPx}) {
       padding-left: 0.25em;
       & > * {
          height: 1.4em;

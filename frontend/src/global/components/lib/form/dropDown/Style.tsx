@@ -2,7 +2,7 @@ import type { ControlProps } from 'react-select/dist/declarations/src/components
 import type { OptionProps } from 'react-select/dist/declarations/src/components/Option';
 import type { DropdownIndicatorProps } from 'react-select/dist/declarations/src/components/indicators';
 import type { CSSObjectWithLabel, GroupBase } from 'react-select/dist/declarations/src/types';
-import Color from '../../../../css/colors';
+import Color from '../../../../css/utils/colors';
 import Device from '../../../../helpers/pwa/deviceHelper';
 import type { IDropDownOptions } from './DropDownInput';
 

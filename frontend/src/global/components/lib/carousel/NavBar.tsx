@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import MyCSS from '../../../css/MyCSS';
-import Color from '../../../css/colors';
+import Color from '../../../css/utils/colors';
+import { CSS_Helper } from '../../../css/utils/helper';
+import CSS_Clickables from '../../../css/utils/clickables';
 
 export const CarouselAndNavBarWrapper = styled.div`
    height: 100%;
@@ -27,7 +28,7 @@ export const NavBarContainer = styled.div<{ isDarkTheme: boolean }>`
 
 export const NavBarHeading = styled.button<{ isActive: boolean; isDarkTheme: boolean }>`
    all: unset;
-   ${MyCSS.Clickables.removeDefaultEffects};
+   ${CSS_Clickables.removeDefaultEffects};
    border-bottom: ${({ isActive, isDarkTheme }) =>
       isActive
          ? isDarkTheme
@@ -48,8 +49,8 @@ export const NavBarHeading = styled.button<{ isActive: boolean; isDarkTheme: boo
          isDarkTheme ? Color.darkThm.txt : Color.lightThm.txt,
          1,
       );
-      const desktop = MyCSS.Clickables.desktop.changeColorOnHover(changeToColor, 'color');
-      const mobile = MyCSS.Clickables.portable.changeColorOnClick(changeToColor, 'color', 'revert');
-      return MyCSS.Helper.concatStyles(desktop, mobile);
+      const desktop = CSS_Clickables.desktop.changeColorOnHover(changeToColor, 'color');
+      const mobile = CSS_Clickables.portable.changeColorOnClick(changeToColor, 'color', 'revert');
+      return CSS_Helper.concatStyles(desktop, mobile);
    }}
 `;

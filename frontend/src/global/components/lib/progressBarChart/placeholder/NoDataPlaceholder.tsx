@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import MyCSS from '../../../../css/MyCSS';
+import { CSS_Media } from '../../../../css/utils/media';
 
 export const BarChartNoDataPlaceholder = styled.div<{ horizontal?: boolean }>`
    width: 16em;
@@ -14,7 +14,7 @@ export const BarChartNoDataPlaceholder = styled.div<{ horizontal?: boolean }>`
    margin-top: -2.3em;
    margin-left: 13em;
 
-   @media (max-width: ${MyCSS.PortableBp.asPx}) {
+   @media (max-width: ${CSS_Media.PortableBp.asPx}) {
       width: 16em;
       transform: scale(1.25, 3);
       margin-left: -1.5em;

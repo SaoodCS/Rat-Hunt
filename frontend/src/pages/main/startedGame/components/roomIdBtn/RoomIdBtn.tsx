@@ -8,14 +8,8 @@ import { RoomIDBtnContainer } from './Style';
 import useLocalStorage from '../../../../../global/hooks/useLocalStorage';
 
 export default function RoomIdBtn(): JSX.Element {
-   const {
-      toggleToast,
-      setToastMessage,
-      setWidth,
-      setVerticalPos,
-      setHorizontalPos,
-      setToastZIndex,
-   } = useContext(ToastContext);
+   const { toggleToast, setToastMessage, setWidth, setVerticalPos, setHorizontalPos } =
+      useContext(ToastContext);
    const [localDbRoom] = useLocalStorage(DBConnect.Local.STORAGE_KEYS.ROOM, '');
 
    async function shareRoomCode(): Promise<void> {
@@ -26,7 +20,6 @@ export default function RoomIdBtn(): JSX.Element {
          setWidth('15em');
          setVerticalPos('bottom');
          setHorizontalPos('center');
-         setToastZIndex(100);
          return;
       }
       await Device.shareContent({

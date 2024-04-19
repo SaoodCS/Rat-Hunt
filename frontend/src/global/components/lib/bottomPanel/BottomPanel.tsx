@@ -13,6 +13,7 @@ import {
    PanelCloseButton,
    SheetContentWrapper,
 } from './Style';
+import CSS_ZIndex from '../../../css/utils/zIndex';
 
 interface IBottomPanel {
    isOpen: boolean;
@@ -20,11 +21,10 @@ interface IBottomPanel {
    children: ReactNode;
    height?: number;
    heading?: string;
-   zIndex?: number;
 }
 
 export default function BottomPanel(props: IBottomPanel): JSX.Element {
-   const { isOpen, onClose, children, height, heading, zIndex } = props;
+   const { isOpen, onClose, children, height, heading } = props;
    const { isDarkTheme } = useThemeContext();
    const isKeyboardOpen = useDetectKeyboardOpen();
    const wrapperRef = useRef<HTMLDivElement>(null);
@@ -53,7 +53,7 @@ export default function BottomPanel(props: IBottomPanel): JSX.Element {
             darktheme={isDarkTheme.toString()}
             detent={'content-height'}
             prefersReducedMotion={false}
-            style={{ zIndex: zIndex || undefined }}
+            style={{ zIndex: CSS_ZIndex.get('bottomPanel') }}
          >
             <Sheet.Container>
                <ConditionalRender condition={heading !== undefined}>

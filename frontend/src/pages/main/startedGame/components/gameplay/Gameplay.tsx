@@ -1,4 +1,5 @@
 /* eslint-disable no-irregular-whitespace */
+import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 import { css } from 'styled-components';
@@ -8,7 +9,7 @@ import { TextColourizer } from '../../../../../global/components/lib/font/textCo
 import { FlexColumnWrapper } from '../../../../../global/components/lib/positionModifiers/flexColumnWrapper/FlexColumnWrapper';
 import ConditionalRender from '../../../../../global/components/lib/renderModifiers/conditionalRender/ConditionalRender';
 import { GameContext } from '../../../../../global/context/game/GameContext';
-import MyCSS from '../../../../../global/css/MyCSS';
+import { CSS_Helper } from '../../../../../global/css/utils/helper';
 import DBConnect from '../../../../../global/database/DBConnect/DBConnect';
 import CurrentTurnCountdown from './components/currentTurnCountdown/CurrentTurnCountdown';
 import ClueForm from './components/forms/clueForm/ClueForm';
@@ -21,7 +22,7 @@ import {
    FormContainer,
    GameStateTableWrapper,
 } from './style/Style';
-import axios from 'axios';
+import { CSS_Media } from '../../../../../global/css/utils/media';
 
 export default function Gameplay(): JSX.Element {
    const { localDbRoom, localDbUser } = useContext(GameContext);
@@ -115,14 +116,14 @@ export default function Gameplay(): JSX.Element {
 }
 
 const screenStyles = (): FlattenSimpleInterpolation => {
-   const forDesktop = MyCSS.Media.desktop(css`
+   const forDesktop = CSS_Media.Query.desktop(css`
       &:first-child {
          & > * {
             font-size: 1.1em;
          }
       }
    `);
-   const forTablet = MyCSS.Media.tablet(css``);
+   const forTablet = CSS_Media.Query.tablet(css``);
    const medium = css`
       @media (min-width: 544px) {
          max-width: 35em;
@@ -130,5 +131,5 @@ const screenStyles = (): FlattenSimpleInterpolation => {
          align-items: center;
       }
    `;
-   return MyCSS.Helper.concatStyles(forDesktop, forTablet, medium);
+   return CSS_Helper.concatStyles(forDesktop, forTablet, medium);
 };

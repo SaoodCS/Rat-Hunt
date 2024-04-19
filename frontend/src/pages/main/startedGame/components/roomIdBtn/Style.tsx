@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import MyCSS from '../../../../../global/css/MyCSS';
-import Color from '../../../../../global/css/colors';
+import Color from '../../../../../global/css/utils/colors';
+import CSS_Clickables from '../../../../../global/css/utils/clickables';
 
 export const RoomIDBtnContainer = styled.div`
-   ${MyCSS.Clickables.removeDefaultEffects};
-   ${MyCSS.Clickables.desktop.changeBrightnessOnHover(0.5)};
-   ${MyCSS.Clickables.portable.changeBrightnessOnClick(0.5, 'revert')};
+   ${CSS_Clickables.removeDefaultEffects};
+   ${CSS_Clickables.desktop.changeBrightnessOnHover(0.5)};
+   ${CSS_Clickables.portable.changeBrightnessOnClick(0.5, 'revert')};
    color: ${Color.darkThm.warning};
    cursor: pointer;
 `;

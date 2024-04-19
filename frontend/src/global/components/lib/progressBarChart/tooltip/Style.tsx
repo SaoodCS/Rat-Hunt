@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import Color from '../../../css/colors';
+import Color from '../../../../css/utils/colors';
 
 const rightPos = css`
    bottom: calc(-50%);

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { FlexRowWrapper } from '../../../../../../global/components/lib/positionModifiers/flexRowWrapper/Style';
-import Color from '../../../../../../global/css/colors';
+import Color from '../../../../../../global/css/utils/colors';
 
 export const GameStateTableWrapper = styled.div`
    position: absolute;
