@@ -16,7 +16,7 @@ import TextOrNumFieldInput from './textOrNumber/TextOrNumFieldInput';
 export namespace N_Form {
    export namespace Inputs {
       export namespace I {
-         type InputValue = string | number | Date | boolean;
+         type InputValue = Parameters<Components>[0]['value'];
          export type Components =
             // -- UPDATE HERE WHEN ADDING NEW INPUT COMPONENTS (after creating its component) -- //
             | typeof TextOrNumFieldInput
