@@ -59,7 +59,7 @@ export default function DatePickerInput(props: IDatePickerInput): JSX.Element {
             name={name.toString()}
             id={id}
             onChange={amendHandleChange}
-            value={hasValue() ? DateHelper.toYYYYMMDD(value as Date) : ''}
+            value={hasValue() ? DateHelper.toDateInputStr(value as Date) : ''}
             placeholder={label}
             isDarkTheme={isDarkTheme}
             hasError={hasError}

@@ -29,7 +29,6 @@ export const inputFieldStyles = (
    hasError: boolean,
 ): CSSObjectWithLabel => {
    const { isFocused } = state;
-   const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
    const borderColorOne = hasError
       ? CSS_Inputs.errorBorderCol(isDarkTheme)
       : CSS_Inputs.borderCol(isDarkTheme, 0.75);
@@ -81,7 +80,6 @@ export const inputFieldPlaceholderStyle = (
    isDarkTheme: boolean,
    provided: CSSObjectWithLabel,
 ): CSSObjectWithLabel => {
-   const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
    return {
       ...provided,
       color: CSS_Inputs.placeholderCol(isDarkTheme),
@@ -122,7 +120,6 @@ export const dropDownOptionsStyles = (
 ): CSSObjectWithLabel => {
    const { isSelected } = state;
    const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
-
    return {
       ...provided,
       color: theme.bg,
@@ -174,7 +171,6 @@ export const iconBorderSeperator = (
    isDarkTheme: boolean,
    provided: CSSObjectWithLabel,
 ): CSSObjectWithLabel => {
-   const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
    return {
       ...provided,
       borderRight: CSS_Inputs.rightIconBoxBorder(isDarkTheme),
