@@ -1,4 +1,4 @@
-import type { IGlobalFieldStyles } from '../../../../../../../../global/components/lib/form/style/Style';
+import type { IInputWrapperStyles } from '../../../../../../../../global/components/lib/form/style/Style';
 
 export const gameFormStyles: React.CSSProperties = {
    display: 'flex',
@@ -11,8 +11,9 @@ export const gameFormStyles: React.CSSProperties = {
    position: 'relative',
 };
 
-export const gameInputFieldStyles: IGlobalFieldStyles = {
+export const gameInputWrapperStyles: IInputWrapperStyles = {
    height: '2.5em',
    backgroundColor: 'rgba(194, 174, 255, 0.312)',
    borderRadius: '0.25em',
+   margin: '0em',
 };

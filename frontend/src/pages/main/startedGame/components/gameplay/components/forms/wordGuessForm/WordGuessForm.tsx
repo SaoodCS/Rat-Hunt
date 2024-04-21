@@ -7,7 +7,7 @@ import { GameContext } from '../../../../../../../../global/context/game/GameCon
 import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import DBConnect from '../../../../../../../../global/database/DBConnect/DBConnect';
 import useForm from '../../../../../../../../global/hooks/useForm';
-import { gameFormStyles, gameInputFieldStyles } from '../style/Style';
+import { gameFormStyles, gameInputWrapperStyles } from '../style/Style';
 import WordGuessFormClass from './class/WordGuessFormClass';
 import ArrOfObj from '../../../../../../../../../../shared/lib/helpers/arrayOfObjects/arrayOfObjects';
 import MiscHelper from '../../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
@@ -75,7 +75,7 @@ export default function WordGuessForm(): JSX.Element {
          onSubmit={handleSubmit}
          apiError={apiError}
          style={gameFormStyles}
-         globalFieldStyles={gameInputFieldStyles}
+         inputWrapperStyles={gameInputWrapperStyles}
       >
          {WordGuessFormClass.form.inputs.map((input) => (
             <InputCombination

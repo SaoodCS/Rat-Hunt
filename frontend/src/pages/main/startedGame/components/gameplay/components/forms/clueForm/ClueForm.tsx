@@ -15,7 +15,7 @@ import useApiErrorContext from '../../../../../../../../global/context/widget/ap
 import CSS_Color from '../../../../../../../../global/css/utils/colors';
 import DBConnect from '../../../../../../../../global/database/DBConnect/DBConnect';
 import useForm from '../../../../../../../../global/hooks/useForm';
-import { gameFormStyles, gameInputFieldStyles } from '../style/Style';
+import { gameFormStyles, gameInputWrapperStyles } from '../style/Style';
 import ClueFormClass from './class/ClueFormClass';
 
 export default function ClueForm(): JSX.Element {
@@ -64,7 +64,7 @@ export default function ClueForm(): JSX.Element {
          onSubmit={handleSubmit}
          apiError={apiError}
          style={gameFormStyles}
-         globalFieldStyles={gameInputFieldStyles}
+         inputWrapperStyles={gameInputWrapperStyles}
       >
          {ClueFormClass.form.inputs.map((input) => (
             <InputCombination

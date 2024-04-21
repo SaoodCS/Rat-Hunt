@@ -81,7 +81,7 @@ export default function RoundEndForm(props: IRoundEndForm): JSX.Element {
          onSubmit={handleSubmit}
          apiError={apiError}
          padding={1}
-         globalFieldStyles={{
+         inputWrapperStyles={{
             margin: '0.2em 0em 1em 0em',
          }}
          btnStyles={{

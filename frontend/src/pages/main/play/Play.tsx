@@ -117,14 +117,7 @@ export default function Play(): JSX.Element {
          boxSizing="border-box"
       >
          <GradientBgLogo sizeEm={16} />
-         <StyledForm
-            onSubmit={handleSubmit}
-            apiError={apiError}
-            padding={1}
-            globalFieldStyles={{
-               margin: '0em 0em 1em 0em',
-            }}
-         >
+         <StyledForm onSubmit={handleSubmit} apiError={apiError} padding={1}>
             {PlayFormClass.form.inputs
                .filter((input) => input.name !== 'roomId' || showRoomIdField)
                .filter((input) => input.name !== 'topic' || showHostFields)

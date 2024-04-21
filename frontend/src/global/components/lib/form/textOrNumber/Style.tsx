@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import CSS_Clickables from '../../../../css/utils/clickables';
-import CSS_Color from '../../../../css/utils/colors';
+import CSS_Inputs from '../../../../css/utils/inputs';
 
 interface IInputAttr {
    isRequired: boolean;
@@ -18,32 +18,29 @@ export const TextInput = styled.input.attrs<IInputAttr>(({ isRequired, isDisable
 }))<ITextInput>`
    all: unset;
    height: 100%;
-   font-family: inherit;
    width: 100%;
-   border: 1px solid red;
+   font-family: inherit;
    box-sizing: border-box;
-   padding-left: 0.6em;
-   border-radius: 0.25em;
-   transition: all 0.1s ease-in-out;
    ${CSS_Clickables.removeDefaultEffects};
+   transition: ${CSS_Inputs.transition};
+   padding: ${CSS_Inputs.padding};
+   border-radius: ${CSS_Inputs.borderRadius};
    &::placeholder {
-      color: ${CSS_Color.setRgbOpacity(CSS_Color.darkThm.txt, 0.5)};
+      color: ${({ isDarkTheme }) => CSS_Inputs.placeholderCol(isDarkTheme)};
    }
    ${({ isDarkTheme, hasError, isDisabled }) => {
-      const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
-      const colorPropColor = isDisabled ? theme.accent : theme.txt;
-      const colorPropOpacity = isDisabled ? 0.6 : 1;
-      const activeColorPropOpacity = isDisabled ? 0.6 : 1;
-      const borderColor = hasError ? theme.error : theme.accent;
-      const borderOpacity = hasError ? 1 : 0.5;
       return css`
-         color: ${CSS_Color.setRgbOpacity(colorPropColor, colorPropOpacity)};
-         background-color: ${CSS_Color.setRgbOpacity(theme.bg, 0.1)};
-         border: 2px solid ${CSS_Color.setRgbOpacity(borderColor, borderOpacity)};
+         color: ${isDisabled
+            ? CSS_Inputs.disabledCol(isDarkTheme)
+            : CSS_Inputs.valueCol(isDarkTheme)};
+         background-color: ${CSS_Inputs.bgCol(isDarkTheme)};
+         border: ${hasError ? CSS_Inputs.errorBorder(isDarkTheme) : CSS_Inputs.border(isDarkTheme)};
          &:focus,
          &:active {
-            border: 2px solid ${borderColor};
-            color: ${CSS_Color.setRgbOpacity(colorPropColor, activeColorPropOpacity)};
+            border: ${CSS_Inputs.focusedBorder(isDarkTheme)};
+            color: ${isDisabled
+               ? CSS_Inputs.disabledCol(isDarkTheme)
+               : CSS_Inputs.valueCol(isDarkTheme)};
          }
       `;
    }}

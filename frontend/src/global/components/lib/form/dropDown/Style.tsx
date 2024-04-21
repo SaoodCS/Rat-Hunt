@@ -3,10 +3,9 @@ import type { OptionProps } from 'react-select/dist/declarations/src/components/
 import type { DropdownIndicatorProps } from 'react-select/dist/declarations/src/components/indicators';
 import type { CSSObjectWithLabel, GroupBase } from 'react-select/dist/declarations/src/types';
 import CSS_Color from '../../../../css/utils/colors';
+import CSS_Inputs from '../../../../css/utils/inputs';
 import Device from '../../../../helpers/pwa/deviceHelper';
 import type { IDropDownOptions } from './DropDownInput';
-
-const ARROWICON_BOX_WIDTH_PERC = 12;
 
 export const parentContainerStyles = (
    isDarkTheme: boolean,
@@ -31,20 +30,24 @@ export const inputFieldStyles = (
 ): CSSObjectWithLabel => {
    const { isFocused } = state;
    const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
-   const borderColor = hasError ? CSS_Color.darkThm.error : theme.accent;
-   const opacityOne = hasError ? 1 : 0.75;
-   const opacityTwo = hasError ? 1 : 0.5;
+   const borderColorOne = hasError
+      ? CSS_Inputs.errorBorderCol(isDarkTheme)
+      : CSS_Inputs.borderCol(isDarkTheme, 0.75);
+   const borderColorTwo = hasError
+      ? CSS_Inputs.errorBorderCol(isDarkTheme)
+      : CSS_Inputs.borderCol(isDarkTheme, 0.5);
+   const borderWidth = CSS_Inputs.border(isDarkTheme).slice(0, 3);
    return {
       ...provided,
       border: 0,
       boxShadow: isFocused
-         ? `inset 0 0 0 2px ${CSS_Color.setRgbOpacity(borderColor, opacityOne)}`
-         : `inset 0 0 0 2px ${CSS_Color.setRgbOpacity(borderColor, opacityTwo)}`,
+         ? `inset 0 0 0 ${borderWidth} ${borderColorOne}`
+         : `inset 0 0 0 ${borderWidth} ${borderColorTwo}`,
       WebkitTapHighlightColor: 'transparent',
       minHeight: '0em',
       cursor: 'pointer',
-      transition: 'all 0.2s ease',
-      backgroundColor: CSS_Color.setRgbOpacity(theme.bg, 0.1),
+      transition: CSS_Inputs.transition,
+      backgroundColor: CSS_Inputs.bgCol(isDarkTheme),
       height: '100%',
       width: '100%',
    };
@@ -60,7 +63,7 @@ export const valPlaceholderContainerStyles = (
       alignItems: 'center',
       position: 'absolute',
       height: '100%',
-      width: `${100 - ARROWICON_BOX_WIDTH_PERC}%`,
+      width: `calc(100% - ${CSS_Inputs.rightIconBoxWidth})`,
    };
 };
 
@@ -68,10 +71,9 @@ export const inputFieldValueStyles = (
    isDarkTheme: boolean,
    provided: CSSObjectWithLabel,
 ): CSSObjectWithLabel => {
-   const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
    return {
       ...provided,
-      color: theme.txt,
+      color: CSS_Inputs.valueCol(isDarkTheme),
    };
 };
 
@@ -82,7 +84,7 @@ export const inputFieldPlaceholderStyle = (
    const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
    return {
       ...provided,
-      color: CSS_Color.setRgbOpacity(theme.txt, 0.5),
+      color: CSS_Inputs.placeholderCol(isDarkTheme),
    };
 };
 
@@ -137,7 +139,7 @@ export const dropDownOptionsStyles = (
       '&:active': {
          backgroundColor: CSS_Color.setRgbOpacity(theme.txt, 0.4),
       },
-      transition: 'color 0.2s ease, background-color 0.2s ease',
+      transition: 'color 0.1s ease, background-color 0.1s ease',
    };
 };
 
@@ -156,11 +158,11 @@ export const iconStyles = (
       ...provided,
       transition: 'all 0.2s ease',
       transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-      color: isFocused ? theme.txt : CSS_Color.setRgbOpacity(theme.txt, 0.5),
+      color: isFocused ? theme.txt : CSS_Inputs.rightIconColor(isDarkTheme),
       boxSizing: 'border-box',
       position: 'absolute',
       right: 0,
-      left: `${100 - ARROWICON_BOX_WIDTH_PERC}%`,
+      left: `calc(100% - ${CSS_Inputs.rightIconBoxWidth})`,
       top: 0,
       bottom: 0,
       alignItems: 'center',
@@ -175,12 +177,12 @@ export const iconBorderSeperator = (
    const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
    return {
       ...provided,
-      borderRight: `1px solid ${CSS_Color.setRgbOpacity(theme.accent, 0.75)}`,
+      borderRight: CSS_Inputs.rightIconBoxBorder(isDarkTheme),
       position: 'absolute',
       boxSizing: 'border-box',
       top: 0,
       bottom: 0,
-      left: `${100 - ARROWICON_BOX_WIDTH_PERC}%`,
+      left: `calc(100% - ${CSS_Inputs.rightIconBoxWidth})`,
       backgroundColor: 'transparent',
    };
 };

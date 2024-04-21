@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import CSS_Color from '../../../../css/utils/colors';
 import { CSS_Helper } from '../../../../css/utils/helper';
+import CSS_Inputs from '../../../../css/utils/inputs';
 
-export interface IGlobalFieldStyles {
+export interface IInputWrapperStyles {
    width?: string;
    fontSize?: string;
    height?: string;
@@ -17,17 +18,19 @@ export interface IFormBtnStyles {
    padding?: string;
 }
 
+export interface IStyledFormProps {
+   apiError?: string;
+   padding?: number;
+   margin?: string;
+   inputWrapperStyles?: IInputWrapperStyles;
+   btnStyles?: IFormBtnStyles;
+}
+
 export const InputWrapper = styled.div`
    position: relative;
 `;
 
-export const StyledForm = styled.form<{
-   apiError?: string;
-   padding?: number;
-   margin?: string;
-   globalFieldStyles?: IGlobalFieldStyles;
-   btnStyles?: IFormBtnStyles;
-}>`
+export const StyledForm = styled.form<IStyledFormProps>`
    box-sizing: border-box;
    padding: ${({ padding }) => (padding ? `${padding}em` : '0em')};
    border-radius: 0.7em;
@@ -50,17 +53,17 @@ export const StyledForm = styled.form<{
          },
       }}
    ${InputWrapper} {
-      ${({ globalFieldStyles }) => {
+      ${({ inputWrapperStyles }) => {
          const { width, fontSize, height, margin, backgroundColor, boxSizing, borderRadius } =
-            globalFieldStyles || {};
+            inputWrapperStyles || {};
          return CSS_Helper.convertInlineToStyledComp({
-            width: width || '100%',
-            fontSize: fontSize || '0.8em',
-            height: height || '3em',
-            margin: margin || 0,
+            width: width || CSS_Inputs.width,
+            height: height || CSS_Inputs.height,
+            fontSize: fontSize || CSS_Inputs.fontSize,
+            margin: margin || CSS_Inputs.margin,
             backgroundColor: backgroundColor || 'transparent',
             boxSizing: boxSizing || 'border-box',
-            borderRadius: borderRadius || '0.25em',
+            borderRadius: borderRadius || CSS_Inputs.borderRadius,
          });
       }}
    }

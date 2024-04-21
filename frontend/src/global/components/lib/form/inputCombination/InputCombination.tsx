@@ -1,5 +1,6 @@
 import type { N_Form } from '../N_Form';
 import CheckboxInput from '../checkbox/Checkbox';
+import DatePickerInput from '../datePicker/DatePickerInput';
 import DropDownInput from '../dropDown/DropDownInput';
 import NumberLineInput from '../numberLine/NumberLineInp';
 import TextOrNumFieldInput from '../textOrNumber/TextOrNumFieldInput';
@@ -29,6 +30,24 @@ export default function InputCombination(
       return typeof value === 'number' || value === '';
    }
 
+   if (Component === DatePickerInput) {
+      if (!(value instanceof Date || value === '')) {
+         throw new Error(`${name} does not have a value of type Date`);
+      }
+      return (
+         <DatePickerInput
+            label={label}
+            name={name}
+            isRequired={isRequired}
+            value={value}
+            error={error}
+            handleChange={handleChange}
+            id={id}
+            isDisabled={isDisabled}
+         />
+      );
+   }
+
    if (Component === CheckboxInput) {
       if (typeof value !== 'boolean') {
          throw new Error(`${name} does not have a value of type boolean`);
@@ -37,12 +56,12 @@ export default function InputCombination(
          <CheckboxInput
             label={label}
             name={name}
-            isRequired={isRequired || false}
+            isRequired={isRequired}
             value={value}
             error={error}
             handleChange={handleChange}
             id={id}
-            isDisabled={isDisabled || false}
+            isDisabled={isDisabled}
          />
       );
    }
@@ -56,12 +75,12 @@ export default function InputCombination(
          <NumberLineInput
             label={label}
             name={name}
-            isRequired={isRequired || false}
+            isRequired={isRequired}
             value={value}
             error={error}
             handleChange={handleChange}
             id={id}
-            isDisabled={isDisabled || false}
+            isDisabled={isDisabled}
             numberLineOptions={numberLineOptions}
          />
       );
@@ -77,12 +96,12 @@ export default function InputCombination(
             label={label}
             name={name}
             dropDownOptions={dropDownOptions}
-            isRequired={isRequired || false}
+            isRequired={isRequired}
             value={value}
             error={error}
             handleChange={handleChange}
             id={id}
-            isDisabled={isDisabled || false}
+            isDisabled={isDisabled}
          />
       );
    }
@@ -100,14 +119,14 @@ export default function InputCombination(
          label={label}
          type={type}
          name={name}
-         isRequired={isRequired || false}
+         isRequired={isRequired}
          autoComplete={autoComplete}
          capitalize={capitalize}
          handleChange={handleChange}
          value={value}
          error={error}
          id={id}
-         isDisabled={isDisabled || false}
+         isDisabled={isDisabled}
       />
    );
 }

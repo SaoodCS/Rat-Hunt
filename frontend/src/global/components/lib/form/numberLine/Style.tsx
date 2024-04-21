@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import CSS_Clickables from '../../../../css/utils/clickables';
 import CSS_Color from '../../../../css/utils/colors';
 import { CSS_Helper } from '../../../../css/utils/helper';
+import CSS_Inputs from '../../../../css/utils/inputs';
 
 export const NumberLineInputWrapper = styled.div`
    position: relative;
@@ -19,17 +20,14 @@ export const StyledLineWrapper = styled.div<{
 }>`
    ${({ propsStyles }) => CSS_Helper.convertInlineToStyledComp(propsStyles)};
    ${({ isDarkTheme, hasError }) => {
-      const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
-      const color = hasError ? theme.error : theme.accent;
-      const opacity = hasError ? 1 : 0.5;
       return css`
-         border: 2px solid ${CSS_Color.setRgbOpacity(color, opacity)};
-         background-color: ${CSS_Color.setRgbOpacity(theme.bg, 0.1)};
+         border: ${hasError ? CSS_Inputs.errorBorder(isDarkTheme) : CSS_Inputs.border(isDarkTheme)};
+         background-color: ${CSS_Inputs.bgCol(isDarkTheme)};
       `;
    }};
 
    box-sizing: border-box;
-   border-radius: 0.25em;
+   border-radius: ${CSS_Inputs.borderRadius};
    height: 100%;
    width: 100%;
    display: flex;
@@ -48,10 +46,11 @@ export const StyledLineWrapper = styled.div<{
 export const Label = styled.div<{ isDragged: boolean; value: number | ''; isDarkTheme: boolean }>`
    position: relative;
    ${({ isDarkTheme, isDragged, value }) => {
-      const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
       const inputHasValue = value !== '';
       return css`
-         color: ${CSS_Color.setRgbOpacity(theme.txt, isDragged || inputHasValue ? 1 : 0.5)};
+         color: ${inputHasValue
+            ? CSS_Inputs.valueCol(isDarkTheme)
+            : CSS_Inputs.placeholderCol(isDarkTheme)};
       `;
    }}
 `;
@@ -115,8 +114,8 @@ export const ValueAndRefreshBtnWrapper = styled.div<{ isDarkTheme: boolean }>`
    right: 0px;
    width: 4em;
    display: flex;
-   top: 0.6em;
-   bottom: 0.6em;
+   top: ${CSS_Inputs.rightIconBoxMarginTopBottom};
+   bottom: ${CSS_Inputs.rightIconBoxMarginTopBottom};
 `;
 
 export const ValueAndRefreshBtnContainer = styled.div`
@@ -138,7 +137,7 @@ export const ValueItem = styled.div<{ inputHasValue: boolean }>`
    opacity: ${({ inputHasValue }) => !inputHasValue && '0'};
    padding-top: 0.2em;
    padding-right: ${({ inputHasValue }) => (inputHasValue ? '1.65em' : '0em')};
-   transition: all 0.2s ease-in-out;
+   transition: ${CSS_Inputs.transition};
 `;
 
 export const RefreshBtnContainer = styled.div`
@@ -151,12 +150,7 @@ export const RefreshBtnTransitioner = styled.div<{ inputHasValue: boolean; isDar
    ${CSS_Clickables.removeDefaultEffects};
    ${CSS_Clickables.desktop.changeBrightnessOnHover(2)};
    ${CSS_Clickables.portable.changeBrightnessOnClick(3, 'revert')};
-   ${({ isDarkTheme }) => {
-      const theme = isDarkTheme ? CSS_Color.darkThm : CSS_Color.lightThm;
-      return css`
-         color: ${CSS_Color.setRgbOpacity(theme.txt, 0.5)};
-      `;
-   }}
+   color: ${({ isDarkTheme }) => CSS_Inputs.rightIconColor(isDarkTheme)};
    padding-left: ${({ inputHasValue }) => (inputHasValue ? '1.65em' : '0em')};
    cursor: pointer;
 `;

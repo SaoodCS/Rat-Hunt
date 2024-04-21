@@ -7,7 +7,7 @@ import { GameContext } from '../../../../../../../../global/context/game/GameCon
 import useApiErrorContext from '../../../../../../../../global/context/widget/apiError/hooks/useApiErrorContext';
 import DBConnect from '../../../../../../../../global/database/DBConnect/DBConnect';
 import useForm from '../../../../../../../../global/hooks/useForm';
-import { gameFormStyles, gameInputFieldStyles } from '../style/Style';
+import { gameFormStyles, gameInputWrapperStyles } from '../style/Style';
 import RatVoteFormClass from './class/RatVoteFormClass';
 import MiscHelper from '../../../../../../../../../../shared/lib/helpers/miscHelper/MiscHelper';
 import ObjectHelper from '../../../../../../../../../../shared/lib/helpers/objectHelper/ObjectHelper';
@@ -87,7 +87,7 @@ export default function RatVoteForm(): JSX.Element {
          onSubmit={handleSubmit}
          apiError={apiError}
          style={gameFormStyles}
-         globalFieldStyles={gameInputFieldStyles}
+         inputWrapperStyles={gameInputWrapperStyles}
       >
          {RatVoteFormClass.form.inputs.map((input) => (
             <InputCombination
