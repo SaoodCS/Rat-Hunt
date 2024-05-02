@@ -30,7 +30,7 @@ export default function SplashScreen(props: ISplashScreen): JSX.Element {
 
    return (
       <ExitAnimatePresence exitWhen={!isDisplayed}>
-         <SimpleAnimator key="splash-screen" animateType={['fadeAndHold']} duration={durationSecs}>
+         <SimpleAnimator key="splash-screen" animateType={['fade']} duration={durationSecs / 5}>
             <SplashScreenWrapper color={isDarkTheme ? CSS_Color.darkThm.bg : CSS_Color.lightThm.bg}>
                <ConditionalRender condition={component === undefined}>
                   <FlexColumnWrapper
@@ -41,7 +41,7 @@ export default function SplashScreen(props: ISplashScreen): JSX.Element {
                   >
                      <GradientBgLogo sizeEm={18} />
                   </FlexColumnWrapper>
-                  <SplashScreenFooter>{'Rat Hunt'} v0.1.0</SplashScreenFooter>
+                  <SplashScreenFooter>{'Rat Hunt'} v2.1.0</SplashScreenFooter>
                </ConditionalRender>
                <ConditionalRender condition={component !== undefined}>
                   {component}

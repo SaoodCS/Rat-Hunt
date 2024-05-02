@@ -27,7 +27,7 @@ export default function ToastContextProvider(props: IToastContextProvider): JSX.
       setWidth('auto');
       setVerticalPos('bottom');
       setHorizontalPos('left');
-      setToastDurationSecs(2);
+      setToastDurationSecs(1.5);
    }
 
    function toggleToast(show: boolean): void {

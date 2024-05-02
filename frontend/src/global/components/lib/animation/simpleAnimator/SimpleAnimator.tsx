@@ -30,18 +30,19 @@ export const SimpleAnimator = styled(motion.div).attrs((props: ISimpleAnimator) 
    const slideType = animateType.find((type) => typeof type === 'object') as SlideType | undefined;
    const slideTypeVal = slideTypeValues(slideType);
    const fadeTypeVal = fadeTypeValues(animateType);
+   const scaleTypeVal = scaleTypeValues(animateType);
 
    // Animate From:
    const initial: MotionDivParams['initial'] = {
       opacity: fadeTypeVal.initialOpacity,
-      scale: animateType.includes('expand') ? 0 : 1,
+      scale: scaleTypeVal.initialScale,
       x: slideTypeVal.initialX,
       y: slideTypeVal.initialY,
    };
 
    const animate: MotionDivParams['animate'] = {
       opacity: fadeTypeVal.animateOpacity,
-      scale: 1,
+      scale: scaleTypeVal.animateScale,
       x: 0,
       y: 0,
    };
@@ -49,7 +50,7 @@ export const SimpleAnimator = styled(motion.div).attrs((props: ISimpleAnimator) 
    // Animate on Unmount:
    const exit: MotionDivParams['exit'] = {
       opacity: fadeTypeVal.exitOpacity,
-      scale: animateType.includes('expand') ? 0 : 1,
+      scale: scaleTypeVal.exitScale,
       x: slideTypeVal.unmountX,
       y: slideTypeVal.unmountY,
    };
@@ -100,17 +101,29 @@ function slideTypeValues(slideType: SlideType | undefined): {
    return { initialX, initialY, unmountX, unmountY };
 }
 
+function scaleTypeValues(animateType: AnimationType[]): {
+   initialScale: number;
+   animateScale: number | number[];
+   exitScale: number | number[];
+} {
+   const isExpand = animateType.includes('expand');
+   return {
+      initialScale: isExpand ? 0 : 1,
+      animateScale: 1,
+      exitScale: isExpand ? 0 : 1,
+   };
+}
+
 function fadeTypeValues(animateType: AnimationType[]): {
    initialOpacity: number;
    animateOpacity: number | number[];
    exitOpacity: number | number[];
 } {
    const isTypeFade = animateType.includes('fade');
-   const isTypeFadeAndHold = animateType.includes('fadeAndHold');
    return {
-      initialOpacity: isTypeFade || isTypeFadeAndHold ? 0 : 1,
-      animateOpacity: isTypeFadeAndHold ? [0, 1, 1, 1] : 1,
-      exitOpacity: isTypeFadeAndHold ? [1, 0, 0, 0] : isTypeFade ? 0 : 1,
+      initialOpacity: isTypeFade ? 0 : 1,
+      animateOpacity: 1,
+      exitOpacity: isTypeFade ? 0 : 1,
    };
 }
 
@@ -119,5 +132,5 @@ type SlideType = {
    from: 'left' | 'right' | 'top' | 'bottom';
    onUnmount?: 'toLeft' | 'toRight' | 'toTop' | 'toBottom';
 };
-type AnimationType = 'fade' | 'fadeAndHold' | 'expand' | 'rotate' | SlideType;
+type AnimationType = 'fade' | 'expand' | 'rotate' | SlideType;
 type MotionDivParams = Parameters<typeof motion.div>[0];

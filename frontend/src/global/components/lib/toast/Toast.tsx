@@ -44,7 +44,7 @@ export default function Toast(props: IToast): JSX.Element {
 
    return (
       <ExitAnimatePresence exitWhen={!isDisplayed}>
-         <SimpleAnimator key="toast" animateType={['fadeAndHold']} duration={duration}>
+         <SimpleAnimator key="toast" animateType={['fade']} duration={duration / 5}>
             <ToastContainer
                verticalPos={verticalPos}
                horizontalPos={horizontalPos}
