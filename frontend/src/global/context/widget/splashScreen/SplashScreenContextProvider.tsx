@@ -55,7 +55,7 @@ export default function SplashScreenContextProvider(
             <SimpleAnimator
                key="splashScreenContent"
                animateType={['fade']}
-               duration={0.5}
+               duration={0.3}
                startWhen={!isSplashScreenDisplayed}
                style={{ height: '100dvh', width: '100dvw' }}
             >
