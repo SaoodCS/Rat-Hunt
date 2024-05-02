@@ -30,7 +30,7 @@ export default function SplashScreen(props: ISplashScreen): JSX.Element {
 
    return (
       <ExitAnimatePresence exitWhen={!isDisplayed}>
-         <SimpleAnimator key="splash-screen" animateType={['fade']} duration={durationSecs / 5}>
+         <SimpleAnimator key="splash-screen" animateType={['fade']} duration={0.3}>
             <SplashScreenWrapper color={isDarkTheme ? CSS_Color.darkThm.bg : CSS_Color.lightThm.bg}>
                <ConditionalRender condition={component === undefined}>
                   <FlexColumnWrapper

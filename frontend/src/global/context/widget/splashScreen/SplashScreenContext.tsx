@@ -1,6 +1,8 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { createContext } from 'react';
 
+export const SPLASHSCRN_DEFAULT_DURATION_SECS = 2;
+
 export interface ISplashScreenContext {
    toggleSplashScreen: (show: boolean) => void;
    splashScreenContent: JSX.Element | undefined;
@@ -15,6 +17,6 @@ export const SplashScreenContext = createContext<ISplashScreenContext>({
    splashScreenContent: undefined,
    setSplashScreenContent: () => {},
    isSplashScreenDisplayed: false,
-   splashDurationSecs: 2,
+   splashDurationSecs: SPLASHSCRN_DEFAULT_DURATION_SECS,
    setSplashDurationSecs: () => {},
 });

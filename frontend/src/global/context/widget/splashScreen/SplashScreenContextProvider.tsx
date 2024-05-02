@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
 import SplashScreen from '../../../components/lib/splashScreen/SplashScreen';
 import Device from '../../../helpers/pwa/deviceHelper';
-import { SplashScreenContext } from './SplashScreenContext';
+import { SPLASHSCRN_DEFAULT_DURATION_SECS, SplashScreenContext } from './SplashScreenContext';
 import { SimpleAnimator } from '../../../components/lib/animation/simpleAnimator/SimpleAnimator';
 
 interface ISplashScreenContextProvider {
@@ -13,7 +13,7 @@ export default function SplashScreenContextProvider(
    props: ISplashScreenContextProvider,
 ): JSX.Element {
    const { children } = props;
-   const [splashDurationSecs, setSplashDurationSecs] = useState(2);
+   const [splashDurationSecs, setSplashDurationSecs] = useState(SPLASHSCRN_DEFAULT_DURATION_SECS);
    const [isSplashScreenDisplayed, setIsSplashScreenDisplayed] = useState(Device.isPwa());
    const [splashScreenContent, setSplashScreenContent] = useState<JSX.Element | undefined>(
       undefined,
@@ -27,7 +27,7 @@ export default function SplashScreenContextProvider(
    function handleOnClose(): void {
       setIsSplashScreenDisplayed(false);
       setSplashScreenContent(undefined);
-      setSplashDurationSecs(2);
+      setSplashDurationSecs(SPLASHSCRN_DEFAULT_DURATION_SECS);
    }
 
    const contextMemo = useMemo(
@@ -55,7 +55,7 @@ export default function SplashScreenContextProvider(
             <SimpleAnimator
                key="splashScreenContent"
                animateType={['fade']}
-               duration={splashDurationSecs}
+               duration={0.5}
                startWhen={!isSplashScreenDisplayed}
                style={{ height: '100dvh', width: '100dvw' }}
             >
