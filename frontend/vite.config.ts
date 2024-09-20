@@ -21,13 +21,12 @@ export default defineConfig(({ mode }) => {
          },
       },
       esbuild: buildOptions(),
+      test: { globals: true, environment: 'jsdom', setupFiles: ['./src/setupTests.ts'] },
       plugins: [
          react(),
          VitePWA({
             registerType: 'autoUpdate',
-            devOptions: {
-               enabled: true,
-            },
+            devOptions: { enabled: true },
             workbox: {
                disableDevLogs: true,
                cleanupOutdatedCaches: true,
@@ -57,7 +56,7 @@ export default defineConfig(({ mode }) => {
             manifest: {
                name: 'Rat Hunt',
                short_name: 'Rat Hunt',
-               description: 'Find the rat!',
+               categories: ['games', 'social', 'entertainment'],
                display: 'standalone',
                orientation: 'natural',
                start_url: '/?application=true',
@@ -76,13 +75,11 @@ export default defineConfig(({ mode }) => {
                      purpose: 'maskable',
                   },
                ],
+               screenshots: [
+                  // https://developer.mozilla.org/en-US/docs/Web/Manifest/screenshots
+               ],
             },
          }),
       ],
-      test: {
-         globals: true,
-         environment: 'jsdom',
-         setupFiles: ['./src/setupTests.ts'],
-      },
    };
 });

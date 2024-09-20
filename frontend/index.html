@@ -3,10 +3,23 @@
    <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-      <meta name="description" content="Find the rat!" />
-      <meta name="theme-color" />
       <title>Rat Hunt</title>
+      <meta name="description" content="Find the rat!" />
       <link rel="icon" href="/icons/logo-192x192.png" type="image/x-icon" />
+      <!-- Apple pwa tags are available at https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      <style>
+         @media (prefers-color-scheme: dark) {
+            body {
+               background-color: rgb(2, 8, 23); /* Set this to CSS_Color.darkThm.bg value */
+            }
+         }
+         @media (prefers-color-scheme: light) {
+            body {
+               background-color: rgb(255, 255, 255); /* Set this to CSS_Color.lightThm.bg value */
+            }
+         }
+      </style>
    </head>
    <body>
       <div id="root"></div>

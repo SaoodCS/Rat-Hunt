@@ -2,13 +2,11 @@ import { createGlobalStyle, css } from 'styled-components';
 import CSS_Color from '../utils/colors';
 
 const darkThemeDefaults = css`
-   background-color: ${CSS_Color.darkThm.bg};
    color: ${CSS_Color.darkThm.txt};
    text-shadow: ${CSS_Color.darkThm.txtShadow};
 `;
 
 const lightThemeDefaults = css`
-   background-color: ${CSS_Color.lightThm.bg};
    color: ${CSS_Color.lightThm.txt};
    text-shadow: ${CSS_Color.lightThm.txtShadow};
 `;

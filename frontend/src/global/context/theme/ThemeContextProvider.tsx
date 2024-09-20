@@ -28,13 +28,9 @@ export default function ThemeContextProvider(props: IThemeContextProvider): JSX.
    }, []);
 
    useLayoutEffect(() => {
-      const metaThemeColor = document.querySelector(`meta[name=theme-color]`);
-      if (metaThemeColor) {
-         metaThemeColor.setAttribute(
-            `content`,
-            isDarkTheme ? CSS_Color.darkThm.bg : CSS_Color.lightThm.bg,
-         );
-      }
+      document.body.style.backgroundColor = isDarkTheme
+         ? CSS_Color.darkThm.bg
+         : CSS_Color.lightThm.bg;
    }, [isDarkTheme]);
 
    const contextMemo = useMemo(
