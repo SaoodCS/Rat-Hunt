@@ -2,6 +2,12 @@ import styled from 'styled-components';
 import { CSS_Scrollbar } from '../../../css/utils/scrollbar';
 import CSS_Clickables from '../../../css/utils/clickables';
 
+const FADING_GRADIENT =
+   'linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 20%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 80%, rgba(0,0,0,0.9) 100%)';
+const FADING_GRADIENT_BOTTOM =
+   'linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 80%, rgba(0,0,0,0.9) 100%)';
+const FADING_GRADIENT_TOP = 'linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 20%)';
+
 export const RelativePositioner = styled.div`
    position: relative;
    width: 100%;
@@ -18,6 +24,20 @@ export const ChildrenContainer = styled.div<{
    box-sizing: border-box;
    overflow-y: scroll;
    ${CSS_Scrollbar.hide};
+`;
+
+export const FaderOverlay = styled.div<{ reached: 'top' | 'bottom' | null }>`
+   position: absolute;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   pointer-events: none;
+   background: ${({ reached }) => {
+      if (reached === 'top') return FADING_GRADIENT_TOP;
+      if (reached === 'bottom') return FADING_GRADIENT_BOTTOM;
+      return FADING_GRADIENT;
+   }};
 `;
 
 export const ScrollbarContainer = styled.div<{

@@ -1,15 +1,19 @@
 import type { ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { ChildrenContainer, RelativePositioner, ScrollbarContainer, ScrollbarThumb } from './Style';
-
-const FADING_GRADIENT = 'linear-gradient(to bottom, black calc(100% - 48px), transparent 100%)';
+import {
+   ChildrenContainer,
+   FaderOverlay,
+   RelativePositioner,
+   ScrollbarContainer,
+   ScrollbarThumb,
+} from './Style';
 
 interface IScrollBarIOSProps {
    children: ReactNode;
    scrollbarWidth?: number;
    withFader?: boolean;
    offset?: number;
-   dependencies?: unknown[]; // Any dynamic data from an api call should be passed through into the dependency array as e.g. [data]
+   dependencies?: unknown[];
    hideScrollbar?: boolean;
 }
 
@@ -30,6 +34,7 @@ export default function Scrollbar(props: IScrollBarIOSProps): JSX.Element {
    const scrollRef = useRef<HTMLDivElement>(null);
    const wrapperRef = useRef<HTMLDivElement>(null);
    const [parentHeight, setParentHeight] = useState<number | undefined>(undefined);
+   const [reached, setReached] = useState<'top' | 'bottom' | null>('top');
 
    useEffect(() => {
       setShowScrollbar(!hideScrollbar);
@@ -52,9 +57,6 @@ export default function Scrollbar(props: IScrollBarIOSProps): JSX.Element {
          setDivHeight(element.clientHeight);
          setScrollHeight(element.scrollHeight);
          setShowScrollbar(isScrollable && !hideScrollbar);
-         if (!withFader) return;
-         const maskImage = !isScrollable ? 'none' : FADING_GRADIENT;
-         element.style.maskImage = maskImage;
       });
       if (scrollRef.current) {
          resizeObserver.observe(scrollRef.current);
@@ -93,7 +95,8 @@ export default function Scrollbar(props: IScrollBarIOSProps): JSX.Element {
       if (!withFader) return;
       const { scrollTop, clientHeight } = target;
       const reachedBottom = scrollTop + clientHeight >= target.scrollHeight - offset;
-      target.style.maskImage = reachedBottom ? 'none' : FADING_GRADIENT;
+      const reachedTop = scrollTop <= offset;
+      setReached(reachedBottom ? 'bottom' : reachedTop ? 'top' : null);
    }
 
    return (
@@ -105,7 +108,8 @@ export default function Scrollbar(props: IScrollBarIOSProps): JSX.Element {
             showScrollbar={showScrollbar}
          >
             {children}
-         </ChildrenContainer>
+         </ChildrenContainer>{' '}
+         {withFader && <FaderOverlay reached={reached}></FaderOverlay>}
          <ScrollbarContainer scrollbarWidth={scrollbarWidth} showScrollbar={showScrollbar} />
          <ScrollbarThumb
             divHeight={divHeight}
