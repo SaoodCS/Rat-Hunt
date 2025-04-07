@@ -22,6 +22,7 @@ import useCustomNavigate from '../../../global/hooks/useCustomNavigate';
 import useForm from '../../../global/hooks/useForm';
 import PlayFormClass from './class/PlayForm';
 import { CSS_Media } from '../../../global/css/utils/media';
+import { LoaderContext } from '../../../global/context/widget/loader/LoaderContext';
 
 export default function Play(): JSX.Element {
    const { apiError } = useApiErrorContext();
@@ -36,6 +37,7 @@ export default function Play(): JSX.Element {
    const setRoomData = DBConnect.FSDB.Set.room({});
    const [showHostFields, setShowHostFields] = useState(false);
    const [showRoomIdField, setShowRoomIdField] = useState(false);
+   const { setShowLoader } = useContext(LoaderContext);
 
    useEffect(() => {
       setShowRoomIdField(form.joinOrHost === 'join');
@@ -73,6 +75,7 @@ export default function Play(): JSX.Element {
       const generatedRoomId = GameHelper.New.roomUID(allRoomIds ?? ['']);
       const { name, topic, noOfRounds } = form;
       const formName = name;
+      setShowLoader(true);
       const room = await GameHelper.SetRoomState.newRoom(
          generatedRoomId,
          formName,
