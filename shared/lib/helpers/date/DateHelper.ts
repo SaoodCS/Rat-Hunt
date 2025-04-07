@@ -2,9 +2,15 @@ import type { AxiosStatic } from 'axios';
 
 export default class DateHelper {
    static async getCurrentTime(axios: AxiosStatic): Promise<number> {
-      const res = await axios.get('https://worldtimeapi.org/api/ip');
-      const data = await res.data;
-      return data.unixtime;
+      const timeZone = 'Europe/Amsterdam';
+      const res = await axios.get(`https://timeapi.io/api/Time/current/zone?timeZone=${timeZone}`);
+      const data = res.data;
+      const unixTimestamp = DateHelper.iso8601ToUnixTime(data.dateTime);
+      return unixTimestamp;
+   }
+
+   static iso8601ToUnixTime(iso8601: string): number {
+      return Math.floor(new Date(iso8601).getTime() / 1000);
    }
 
    static unixTimeToReadable = (unixTime: number): string => {
