@@ -97,11 +97,11 @@ export default function Gameplay(): JSX.Element {
                            <TextColourizer color={'yellow'} textAlign="center">
                               {text}
                            </TextColourizer>
-                           <CurrentTurnCountdown />
+                           {/* <CurrentTurnCountdown /> */}
                         </ConditionalRender>
                         <ConditionalRender condition={!!component}>
                            <FormContainer>{component}</FormContainer>
-                           <CurrentTurnCountdown />
+                           {/* <CurrentTurnCountdown /> */}
                         </ConditionalRender>
                      </CurrentTurnAndFormItem>
                   </ConditionalRender>
